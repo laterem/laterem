@@ -17,6 +17,10 @@ from django.urls import path
 from .views import *
 
 urlpatterns = [
-    path('', Resp),
-    path('completed/', completed_task_1_1_Resp),
+    path('problem', task_problem),
+    path('compare', task_compare),
+    path('convert', task_convert),
+    path('question', task_question),
+    path('completed', completed),
+    path('failed', failed),
 ]

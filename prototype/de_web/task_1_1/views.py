@@ -1,12 +1,42 @@
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
-
+from tasks import AnswerMatching, BasicProblemSolving, NumberComparison, NumberNotationConvertation
 from task_1_1.forms import *
 
+def base_task_handle(request, task):
+    if request.method == 'POST': 
+        form = AddAnswerForm(request.POST) 
+        if form.is_valid():
+            if task.test(form.cleaned_data['answer']):
+                return HttpResponseRedirect('/completed/')
+            return HttpResponseRedirect('/failed/')
+    else:
+        form = AddAnswerForm()
 
-def Resp(request):
-    form = AddAnswerForm()
-    return render(request, "task_1_1/1_1.html", {'title': 'Задача 1', 'text': 'Текст задачи 1', 'form': form})
+    return render(request, "tasks/task_base.html", {'title': 'Задача 1', 'text': task.render(), 'form': form})
 
-def completed_task_1_1_Resp(request):
+def task_question(request):
+    task = AnswerMatching()
+    task.configure('42', 'Какой ответ на вопрос жизни вселенной и всего такого?')
+    return base_task_handle(request, task)
+
+def task_problem(request):
+    task = BasicProblemSolving()
+    task.configure(10, 5, BasicProblemSolving.Plus, 2, 16, 10)
+    return base_task_handle(request, task)
+
+def task_compare(request):
+    task = NumberComparison()
+    task.configure(10, 10, 16, 16)
+    return base_task_handle(request, task)
+
+def task_convert(request):
+    task = NumberNotationConvertation()
+    task.configure(10, 10, 16)
+    return base_task_handle(request, task)
+
+def completed(request):
     return HttpResponse("<h1>Решение Верно!</h1>")
+
+def failed(request):
+    return HttpResponse("<h1>Решение Неверно, переделывай!</h1>")
