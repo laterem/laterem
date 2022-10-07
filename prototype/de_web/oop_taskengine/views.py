@@ -1,7 +1,7 @@
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
-from tasks import AnswerMatching, BasicProblemSolving, NumberComparison, NumberNotationConvertation
-from task_1_1.forms import *
+from oop_taskengine.tasks import AnswerMatching, BasicProblemSolving, NumberComparison, NumberNotationConvertation
+from oop_taskengine.forms import *
 
 def base_task_handle(request, task):
     if request.method == 'POST': 
@@ -13,7 +13,7 @@ def base_task_handle(request, task):
     else:
         form = AddAnswerForm()
 
-    return render(request, "tasks/task_base.html", {'title': 'Задача 1', 'text': task.render(), 'form': form})
+    return render(request, "task_base.html", {'title': 'Задача 1', 'text': task.render(), 'form': form})
 
 def task_question(request):
     task = AnswerMatching()

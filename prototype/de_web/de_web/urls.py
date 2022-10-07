@@ -15,12 +15,12 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
-from task_1_1.views import failed, completed
+from oop_taskengine.views import failed, completed
 
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('task_1_1/', include('task_1_1.urls')),
+    path('task/', include('oop_taskengine.urls')),
     path('failed/', failed),
     path('completed/', completed)
 ]

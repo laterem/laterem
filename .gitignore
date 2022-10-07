@@ -1,0 +1,4 @@
+prototype/de_web/de_web/settings.py
+**/db.sqlite3
+**/__pycache__/*
+**/venv/*
