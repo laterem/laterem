@@ -1,0 +1,4 @@
+set id1i to 123
+set id2i to GenBit() as gb1
+
+check id0o = Add(123, gb1)
