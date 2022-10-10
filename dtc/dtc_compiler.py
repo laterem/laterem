@@ -89,12 +89,18 @@ class DTCCompiler:
 
 
 if __name__ == '__main__':
+
     test = '''
 set id0 to "Foo" as foo
 set id1 to foo
 set id2 to 42 as num
 set id3 to GenerateLine(5)
-set id4 to GenerateLine(num) as bs
+set id4 to GenerateLine(num) as bs #Big Spidz 
+set id5 to bs
+
+
+# Hello world! 
+
 check input for Equal("foobar")
 check input1 for Equal(123)'''
 

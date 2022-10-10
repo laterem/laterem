@@ -1,6 +1,3 @@
-from numpy import isin
-
-
 class DTCCompileError(Exception):
     pass
 
