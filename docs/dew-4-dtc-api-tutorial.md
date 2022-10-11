@@ -67,7 +67,7 @@ print(dtc.check(field))
 
 ## Описание своих DTC-функций.
 Набор встроенных DTC-функций, не являющихся служебными, описан в модуле `dtc.dtc_builtins`.
-DTC-функции делятся на два значения: 
+DTC-функции делятся на два вида: 
 - Генераторы значений
 - Функции проверки значений
 
@@ -84,7 +84,18 @@ class FunctionName(DTCFunction):
 Чтобы внутри метода получить доступ к I-тому аргументу DTC-функции, необходимо вызвать функцию `self.getarg(ns, I)`. Важно передать ей аргумент `ns`, тот же, который получает метод `DTCFunction.call(self, ns)`.
 Так же классу DTC-функции необходимо задать поле `DTCFunction.expected_argsc`, равное количеству ожидаемых аргументов этой функции.
 
-Пример создания DTC-функции простейшего генератора случайных чисел в модуле `dtc.dtc_builtins`:
+Вид DTC-функции проверки значений аналогичен виду DTC-функции генератора значений, однако имеет существенные отличия.
+```py
+class FunctionName(DTCCheckerFunction):
+    expected_argsc = N    
+    def call(self, field, ns):
+        ... # do something
+        return something
+```
+Во-первых, DTС-функции проверки значений наследуются от класса `DTCCheckerFunction`.
+Во-вторых, метод `DTCCheckerFunction.call(field, ns)` работает с дополнительным аргументом `field`, в котором хранится значение проверяемого поля.
+
+Пример создания DTC-функций простейшего генератора случайных чисел и простейшей проверки на равенство значений в модуле `dtc.dtc_builtins`:
 
 ```py
 from random import randint
@@ -97,11 +108,17 @@ class RandInt(DTCFunction):
     def call(self, ns):
         return randint(self.getarg(ns, 0), self.getarg(ns, 1))
 
+class IsEqual(DTCCheckerFunction):
+    expected_argsc = 1
+    def call(self, field, ns):
+        return field == self.getarg(ns, 0)
+
 ...
 
 KEYWORD_TABLE = { 
     ...
     'Randint': RandInt,
+    'Equal': IsEqual,
     ...
 }
 ```
