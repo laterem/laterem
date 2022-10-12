@@ -3,7 +3,7 @@ from django.shortcuts import render
 from oop_taskengine.tasks import AnswerMatching, BasicProblemSolving, NumberComparison, NumberNotationConvertation
 from oop_taskengine.forms import *
 
-def base_task_handle(request, task):
+def base_task_handle(request, task, template="task_base.html", render_args={'title': 'Задание по ЦЭ', 'text': None, 'form': None}):
     if request.method == 'POST': 
         form = AddAnswerForm(request.POST) 
         if form.is_valid():
@@ -12,8 +12,12 @@ def base_task_handle(request, task):
             return HttpResponseRedirect('/failed/')
     else:
         form = AddAnswerForm()
+    if template == "task_base.html":
+        return render(request, "task_base.html", {'title': 'Задание по ЦЭ', 'text': task.render(), 'form': form})
+    else:
+        template += '.html'
+        return render(request, template, render_args)
 
-    return render(request, "task_base.html", {'title': 'Задача 1', 'text': task.render(), 'form': form})
 
 def task_question(request):
     task = AnswerMatching()
