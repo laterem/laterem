@@ -39,7 +39,10 @@ class DTCCompiler:
 
     def _build_func(txt):
         fname = txt[:txt.find('(')]
-        func = KEYWORD_TABLE[fname]
+        try:
+            func = KEYWORD_TABLE[fname]
+        except KeyError:
+            raise DTCCompileError('Unknown function ' + fname + '. Maybe you forgot to import it?')
         args = txt[txt.find('(') + 1:txt.find(')')].split(',')
         fargs = [DTCCompiler._typevalue(arg) for arg in args]
         return func(*fargs)
@@ -79,18 +82,22 @@ class DTCCompiler:
                     kws[origin] = ff
             kws = [kw for kw in kws if kw]
             if linemode == 'set':
-                assert len(kws) >= 2
-                field = kws[0]
-                value = kws[1]
-                value = DTCCompiler._typevalue(value)
-                field_table[field] = value
-                if 'as' in kws:
-                    allias = kws[kws.index('as') + 1]
-                    namespace[allias] = value
+                try:
+                    field = kws[0]
+                    value = kws[1]
+                    value = DTCCompiler._typevalue(value)
+                    field_table[field] = value
+                    if 'as' in kws:
+                        allias = kws[kws.index('as') + 1]
+                        namespace[allias] = value
+                except IndexError:
+                    raise DTCCompileError('Uncomplete operation: not enough keywords in ' + line)
             elif linemode == 'check':
-                assert len(kws) >= 2
-                field = kws[0]
-                checker_functions.append((field, DTCCompiler._build_func(kws[1])))
+                try:
+                    field = kws[0]
+                    checker_functions.append((field, DTCCompiler._build_func(kws[1])))
+                except IndexError:
+                    raise DTCCompileError('Uncomplete operation: not enough keywords in ' + line)
         
         return DTC(field_table=field_table, 
                    namespace=namespace, 
@@ -122,19 +129,29 @@ class DTCCompiler:
                     kws[origin] = ff
             kws = [kw for kw in kws if kw]
             if kws[0] == 'set':
-                assert 'to' in kws and len(kws) >= 4
-                field = kws[1]
-                value = kws[kws.index('to') + 1]
-                value = DTCCompiler._typevalue(value)
-                field_table[field] = value
-                if 'as' in kws:
-                    allias = kws[kws.index('as') + 1]
-                    namespace[allias] = value
+                try: 
+                    if 'to' not in kws:
+                        raise DTCCompileError('Uncomplete operation: expected "to" keyword in ' + line)
+                    field = kws[1]
+                    value = kws[kws.index('to') + 1]
+                    value = DTCCompiler._typevalue(value)
+                    field_table[field] = value
+                    if 'as' in kws:
+                        allias = kws[kws.index('as') + 1]
+                        namespace[allias] = value
+                except IndexError:
+                    raise DTCCompileError('Uncomplete operation: not enough keywords in ' + line)
             elif kws[0] == 'check':
-                assert 'for' in kws and len(kws) >= 4
-                field = kws[1]
-                checker_functions.append((field, DTCCompiler._build_func(kws[3])))
-        
+                try:
+                    if 'for' not in kws:
+                        raise DTCCompileError('Uncomplete operation: expected "for" keyword in ' + line)
+                    field = kws[1]
+                    checker_functions.append((field, DTCCompiler._build_func(kws[3])))
+                except IndexError:
+                    raise DTCCompileError('Uncomplete operation: not enough keywords in ' + line)
+            else:
+                raise DTCCompileError('Unknown operation ' + kws[0])        
+
         return DTC(field_table=field_table, 
                    namespace=namespace, 
                    checker_functions=checker_functions)
