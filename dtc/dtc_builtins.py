@@ -1,4 +1,7 @@
-from .dtc_core import *
+try:
+    from .dtc_core import *
+except ImportError:
+    from dtc_core import *
 
 class GenerateLine(DTCFunction):
     expected_argsc = 2    

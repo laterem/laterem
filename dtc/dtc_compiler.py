@@ -1,5 +1,9 @@
-from .dtc_builtins import *
-from .dtc_core import *
+try:
+    from .dtc_builtins import *
+    from .dtc_core import *
+except ImportError:
+    from dtc_builtins import *
+    from dtc_core import *
 
 class DTC:
     def __init__(self, field_table, namespace, checker_functions):
@@ -80,6 +84,16 @@ class DTCCompiler:
                         ff += kws[i]
                         kws[i] = None
                     kws[origin] = ff
+                elif '"' in kw:
+                    ffs = [kw]
+                    origin = i
+                    foundpair = False
+                    while not foundpair:
+                        i += 1
+                        ffs.append(kws[i])
+                        foundpair = '"' in ffs[-1]
+                        kws[i] = None
+                    kws[origin] = ' '.join(ffs)
             kws = [kw for kw in kws if kw]
             if linemode == 'set':
                 try:
@@ -127,6 +141,16 @@ class DTCCompiler:
                         ff += kws[i]
                         kws[i] = None
                     kws[origin] = ff
+                elif '"' in kw:
+                    ffs = [kw]
+                    origin = i
+                    foundpair = False
+                    while not foundpair:
+                        i += 1
+                        ffs.append(kws[i])
+                        foundpair = '"' in ffs[-1]
+                        kws[i] = None
+                    kws[origin] = ' '.join(ffs)
             kws = [kw for kw in kws if kw]
             if kws[0] == 'set':
                 try: 
@@ -161,7 +185,7 @@ class DTCCompiler:
 if __name__ == '__main__':
 
     test = '''
-set id0 to "Foo" as foo
+set id0 to "Foo bar" as foo
 set id1 to foo
 set id2 to 42 as num
 set id3 to GenerateLine(5, "a" )
@@ -183,7 +207,7 @@ check input1 for Equal(123)'''
     print(dtc.check({'input': 'foobar', 'input1': "123"}))
 
     test = '''
-id0="Foo"
+id0="Foo bar"
 id2= 43 as F3
 id1 = GenerateLine(F3, "c")
 
