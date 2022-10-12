@@ -27,7 +27,7 @@ class DTC:
 
 class DTCCompiler:
     def _typevalue(txt):
-        if '"' in txt:
+        if txt[-1] == txt[0] == '"':
             txt = txt.strip('"')
             return DTCValue(txt)
         elif txt.isdigit():
@@ -43,6 +43,59 @@ class DTCCompiler:
         args = txt[txt.find('(') + 1:txt.find(')')].split(',')
         fargs = [DTCCompiler._typevalue(arg) for arg in args]
         return func(*fargs)
+
+    def compile_shortstyle(self, txt):
+        namespace = {}
+        field_table = {}
+        checker_functions = []
+        code = txt.split('\n')
+        for line in code:
+            if '#' in line:
+                line = line[:line.find('#')]
+            line = line.strip()
+            if not line:
+                continue
+
+            if '=' in line:
+                linemode = 'set'
+                line = line.replace('=', ' ')
+            elif '?' in line:
+                linemode = 'check'
+                line = line.replace('?', ' ')
+            else:
+                raise DTCCompileError('DTC line has no known operators: ' + line)
+
+            kws = line.strip().split()
+            for i, kw in enumerate(kws):
+                if kw is None:
+                    continue
+                if '(' in kw:
+                    ff = kw
+                    origin = i
+                    while ')' not in ff:
+                        i += 1
+                        ff += kws[i]
+                        kws[i] = None
+                    kws[origin] = ff
+            kws = [kw for kw in kws if kw]
+            if linemode == 'set':
+                assert len(kws) >= 2
+                field = kws[0]
+                value = kws[1]
+                value = DTCCompiler._typevalue(value)
+                field_table[field] = value
+                if 'as' in kws:
+                    allias = kws[kws.index('as') + 1]
+                    namespace[allias] = value
+            elif linemode == 'check':
+                assert len(kws) >= 2
+                field = kws[0]
+                checker_functions.append((field, DTCCompiler._build_func(kws[1])))
+        
+        return DTC(field_table=field_table, 
+                   namespace=namespace, 
+                   checker_functions=checker_functions)
+
 
     def compile(self, txt):
         namespace = {}
@@ -94,8 +147,8 @@ if __name__ == '__main__':
 set id0 to "Foo" as foo
 set id1 to foo
 set id2 to 42 as num
-set id3 to GenerateLine(5)
-set id4 to GenerateLine(num) as bs #Big Spidz 
+set id3 to GenerateLine(5, "a" )
+set id4 to GenerateLine(num, "b" ) as bs #Big Spidz 
 set id5 to bs
 
 
@@ -111,3 +164,18 @@ check input1 for Equal(123)'''
     print(dtc.field_table)
     print(dtc.check({'input': 'baz', 'input1': "123"}))
     print(dtc.check({'input': 'foobar', 'input1': "123"}))
+
+    test = '''
+id0="Foo"
+id2= 43 as F3
+id1 = GenerateLine(F3, "c")
+
+input?Equal(F3)'''
+
+    dtcc = DTCCompiler()
+    dtc = dtcc.compile_shortstyle(test)
+    print(dtc.field_table)
+    dtc.execute()
+    print(dtc.field_table)
+    print(dtc.check({'input': '42'}))
+    print(dtc.check({'input': '43'}))

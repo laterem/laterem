@@ -2,9 +2,9 @@ from random import randint
 from dtc_core import *
 
 class GenerateLine(DTCFunction):
-    expected_argsc = 1    
+    expected_argsc = 2    
     def call(self, ns):
-        return '-' * int(self.getarg(ns, 0))
+        return self.getarg(ns, 1) * int(self.getarg(ns, 0))
 
 class IsEqual(DTCCheckerFunction):
     expected_argsc = 1
