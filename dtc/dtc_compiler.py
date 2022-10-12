@@ -1,5 +1,5 @@
-from dtc_builtins import *
-from dtc_core import *
+from .dtc_builtins import *
+from .dtc_core import *
 
 class DTC:
     def __init__(self, field_table, namespace, checker_functions):

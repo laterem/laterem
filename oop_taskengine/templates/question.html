@@ -4,13 +4,14 @@
         <meta charset="UTF-8"/>
         <title>Текстовая задача по ЦЭ</title>
         <h1>Решите:</h1>
-        {{text}}
+        <h2>{{text}}</h2>
         <br/>
-        Решение задачи:
+        Ваш IQ 6 вы:
         <form method="post">
             {% csrf_token %}
             {{ standart_button.as_p }}
             <button type="submit">Ответить</button>
         </form>
+        (Правильный ответ {{answer}})
     </head>
 </html>

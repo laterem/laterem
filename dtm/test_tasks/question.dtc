@@ -1,2 +1,3 @@
-set text as "Какой ответ на вопрос жизни вселенной и всего такого?"
-set answer as "42"
+set text to "���(Who)?"
+set answer to "�����" as a1
+check answer for Equal(a1)

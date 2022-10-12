@@ -1,5 +1,4 @@
-from random import randint
-from dtc_core import *
+from .dtc_core import *
 
 class GenerateLine(DTCFunction):
     expected_argsc = 2    
