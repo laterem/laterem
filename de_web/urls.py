@@ -14,14 +14,14 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path, include
+from django.urls import path
 from oop_taskengine.views import failed, completed
-from oop_taskengine.question import task_render
+from oop_taskengine.views import task_view
 
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('task/', task_render),
+    path('task/<str:taskname>', task_view),
     path('failed/', failed),
     path('completed/', completed)
 ]

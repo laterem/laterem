@@ -87,7 +87,7 @@ class DTCCompiler:
                 elif '"' in kw:
                     ffs = [kw]
                     origin = i
-                    foundpair = False
+                    foundpair = kw.count('"') >= 2
                     while not foundpair:
                         i += 1
                         ffs.append(kws[i])
@@ -144,7 +144,7 @@ class DTCCompiler:
                 elif '"' in kw:
                     ffs = [kw]
                     origin = i
-                    foundpair = False
+                    foundpair = kw.count('"') >= 2
                     while not foundpair:
                         i += 1
                         ffs.append(kws[i])

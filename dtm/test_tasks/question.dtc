@@ -1,3 +1,0 @@
-set text to "Кто(Who)?"
-set answer to "Марон" as a1
-check answer for Equal(a1)

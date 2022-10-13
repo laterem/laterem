@@ -1,9 +1,60 @@
+from .forms import *
+from .tasks import Task
+from dtc.dtc_compiler import DTCCompiler
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
-from oop_taskengine.tasks import AnswerMatching, BasicProblemSolving, NumberComparison, NumberNotationConvertation
-from oop_taskengine.forms import *
+import os
+import shutil
 
-def base_task_handle(request, task, template="task_base.html", render_args={'title': 'Задание по ЦЭ', 'text': None, 'form': None}):
+def unravel_task_package(name):
+    path = os.path.join( os.getcwd(), 'dtm', name)
+    dtcpath = os.path.join(path, 'config.dtc')
+    viewpath = os.path.join(path, 'view.html')
+    
+    tmpclones = 'oop_taskengine/templates/static_copies/'
+
+    if not os.path.exists(tmpclones):
+        os.makedirs(tmpclones)
+
+    tmpviewpath = name.replace('\\', '_').replace('/', '_') + 'view' + '.html'
+
+    shutil.copyfile(viewpath, tmpclones + tmpviewpath)
+
+    return dtcpath, 'static_copies/' + tmpviewpath
+
+def prepare_dtc(file):
+    if not file.endswith('.dtc'):
+        file += '.dtc'
+
+    with open(file, mode='r') as f:
+        txt = f.read()
+
+    dtcc = DTCCompiler()
+
+    dtc = dtcc.compile(txt)
+    dtc.execute()
+    return dtc
+
+class DTCTask(Task):
+    def configure(self, dtc, template) -> None:
+        self.dtc = dtc
+        self.template = template
+    
+    def test(self, answer: str) -> int:
+        fields = {'answer': answer.strip()}
+        return self.dtc.check(fields)
+
+def task_view(request, taskname):
+    dtcpath, templatepath = unravel_task_package('test_tasks\\' + taskname)
+
+    dtc = prepare_dtc(dtcpath)
+    task = DTCTask()
+    task.configure(dtc=dtc, template=templatepath)
+    dtc.field_table['standart_button'] = AddAnswerForm()
+    return task_handle(request, task)
+
+
+def task_handle(request, task):
     if request.method == 'POST': 
         form = AddAnswerForm(request.POST) 
         if form.is_valid():
@@ -12,32 +63,8 @@ def base_task_handle(request, task, template="task_base.html", render_args={'tit
             return HttpResponseRedirect('/failed/')
     else:
         form = AddAnswerForm()
-    if template == "task_base.html":
-        return render(request, "task_base.html", {'title': 'Задание по ЦЭ', 'text': task.render(), 'form': form})
-    else:
-        template += '.html'
-        return render(request, template, render_args)
+    return render(request, task.template, task.dtc.field_table)
 
-
-def task_question(request):
-    task = AnswerMatching()
-    task.configure('42', 'Какой ответ на вопрос жизни вселенной и всего такого?')
-    return base_task_handle(request, task)
-
-def task_problem(request):
-    task = BasicProblemSolving()
-    task.configure(10, 5, BasicProblemSolving.Plus, 2, 16, 10)
-    return base_task_handle(request, task)
-
-def task_compare(request):
-    task = NumberComparison()
-    task.configure(10, 10, 16, 16)
-    return base_task_handle(request, task)
-
-def task_convert(request):
-    task = NumberNotationConvertation()
-    task.configure(10, 10, 16)
-    return base_task_handle(request, task)
 
 def completed(request):
     return HttpResponse("<h1>Решение Верно!</h1>")

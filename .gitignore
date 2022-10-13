@@ -1,4 +1,5 @@
-prototype/de_web/de_web/settings.py
+de_web/settings.py
+oop_taskengine/templates/static_copies/*
 **/db.sqlite3
 **/__pycache__/*
 **/venv/*

@@ -6,12 +6,11 @@
         <h1>Решите:</h1>
         <h2>{{text}}</h2>
         <br/>
-        Ваш IQ 6 вы:
+        Ваш ответ:
         <form method="post">
             {% csrf_token %}
             {{ standart_button.as_p }}
             <button type="submit">Ответить</button>
         </form>
-        (Правильный ответ {{answer}})
     </head>
 </html>
