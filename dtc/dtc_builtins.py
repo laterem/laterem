@@ -30,10 +30,16 @@ class IsNotEqual(DTCCheckerFunction):
     def call(self, field, ns):
         return field != self.getarg(ns, 0)
 
+class IsReversed(DTCCheckerFunction):
+    expected_argsc = 1
+    def call(self, field, ns):
+        return field == self.getarg(ns, 0)[::-1]
+
 KEYWORD_TABLE = {
     'GenerateLine': GenerateLine,
     'Equal': IsEqual,
     'NotEqual': IsNotEqual,
     'Rand10': RandomNum10,
-    'Sum': IsEqualSum
+    'Sum': IsEqualSum,
+    'Reversed': IsReversed
 }

@@ -1,3 +1,8 @@
 set id1 to Rand10(1, 10) as r1
 set id2 to Rand10(1, 10) as r2
 check answer for Sum(r1, r2)
+
+# Запись той же задачи в DTC 0.1.B:
+# id1=Rand10(1, 10) as r1
+# id2 = Rand10(1, 10) as r2
+# answer?Sum(r1, r2)
