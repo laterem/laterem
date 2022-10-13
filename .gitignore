@@ -1,5 +1,5 @@
 secret_data.py
-oop_taskengine/templates/static_copies/*
+core_app/templates/static_copies/*
 **/db.sqlite3
 **/__pycache__/*
 **/venv/*
