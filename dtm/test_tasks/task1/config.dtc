@@ -1,3 +1,5 @@
+set title to "Текстовая задача по ЦЭ"
+set button_text to "Ответить"
 set text to "Какой ответ на вопрос жизни, вселенной и всего такого?"
 check answer for Equal(42)
 

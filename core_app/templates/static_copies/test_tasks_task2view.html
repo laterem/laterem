@@ -1,14 +1,10 @@
-<!DOCTYPE html>
-<html>
-    <head>
-        <meta charset="UTF-8"/>
-        <title>Задача на сложение по ЦЭ</title>
-        <h1>Решите:</h1>
-        <h2>{{id1}} + {{id2}} = </h2>
-        <form method="post">
-            {% csrf_token %}
-            {{ standart_button.as_p }}
-            <button type="submit">Ответить</button>
-        </form>
-    </head>
-</html>
+{% extends 'base.html' %}
+{% block content %}
+    <h1>Решите:</h1>
+    <h2>{{id1}} + {{id2}} = </h2>
+    <form method="post">
+        {% csrf_token %}
+        {{ standart_button.as_p }}
+        <button type="submit">Ответить</button>
+    </form>
+{% endblock %}

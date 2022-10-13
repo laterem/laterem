@@ -54,7 +54,7 @@ def task_view(request, taskname):
     dtc = prepare_dtc(dtcpath)
     task = DTCTask()
     task.configure(dtc=dtc, template=templatepath)
-    dtc.field_table['standart_button'] = AddAnswerForm()
+    dtc.field_table['button'] = AddAnswerForm()
     return task_handle(request, task)
 
 # Переадресация на страницу отображения результата
@@ -83,4 +83,4 @@ def index_page_render(request):
             return HttpResponseRedirect('/task/' + form.cleaned_data['redirect'])
     else:
         form = AddRedirectForm()
-    return render(request, 'task_base.html', {'title': 'Сайт по ЦЭ', 'text': 'Это базовая страница', 'text2': 'Отсюда вы можете переадресоваться на задачу', 'form': form})
+    return render(request, 'task_base.html', {'title': 'Сайт по ЦЭ', 'text': 'Это базовая страница', 'text2': 'Отсюда вы можете переадресоваться на задачу', 'button': form, 'button_text': 'Вперёд!'})

@@ -3,11 +3,6 @@
 {% block content %}
     <h2>{{text}}</h2>
     <h3>{{text2}}</h3>
-    <br/>
-    <form method="post">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit">ТЫК</button>
-    </form>
+    {% include "button.html" %}
         
 {% endblock %}

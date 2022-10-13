@@ -1,3 +1,5 @@
+set title to "Задача на сложение по ЦЭ"
+set button_text to "Ответить"
 set id1 to Rand10(1, 10) as r1
 set id2 to Rand10(1, 10) as r2
 check answer for Sum(r1, r2)
