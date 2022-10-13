@@ -1,17 +1,18 @@
 from .forms import *
-from .tasks import Task
+from .abstracts import Task
 from dtc.dtc_compiler import DTCCompiler
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
 import os
 import shutil
 
+# Клонирует шаблоны из dtm в папку django
 def unravel_task_package(name):
     path = os.path.join( os.getcwd(), 'dtm', name)
     dtcpath = os.path.join(path, 'config.dtc')
     viewpath = os.path.join(path, 'view.html')
     
-    tmpclones = 'oop_taskengine/templates/static_copies/'
+    tmpclones = 'core_app/templates/static_copies/'
 
     if not os.path.exists(tmpclones):
         os.makedirs(tmpclones)
@@ -22,19 +23,21 @@ def unravel_task_package(name):
 
     return dtcpath, 'static_copies/' + tmpviewpath
 
-def prepare_dtc(file):
-    if not file.endswith('.dtc'):
-        file += '.dtc'
+# Вытаскивает из файла готовый dtc - объект
+def prepare_dtc(path):
+    if not path.endswith('.dtc'):
+        path += '.dtc'
 
-    with open(file, mode='r') as f:
-        txt = f.read()
+    with open(path, mode='r', encoding='UTF-8') as f:
+        data = f.read()
 
     dtcc = DTCCompiler()
 
-    dtc = dtcc.compile(txt)
+    dtc = dtcc.compile(data)
     dtc.execute()
     return dtc
 
+# Функция по работе с задачей
 class DTCTask(Task):
     def configure(self, dtc, template) -> None:
         self.dtc = dtc
@@ -44,6 +47,7 @@ class DTCTask(Task):
         fields = {'answer': answer.strip()}
         return self.dtc.check(fields)
 
+# Функция рендера (обработки и конечного представления на сайте) задачи по имени (имя берётся из адресной строки)
 def task_view(request, taskname):
     dtcpath, templatepath = unravel_task_package('test_tasks\\' + taskname)
 
@@ -53,7 +57,7 @@ def task_view(request, taskname):
     dtc.field_table['standart_button'] = AddAnswerForm()
     return task_handle(request, task)
 
-
+# Переадресация на страницу отображения результата
 def task_handle(request, task):
     if request.method == 'POST': 
         form = AddAnswerForm(request.POST) 
@@ -65,7 +69,7 @@ def task_handle(request, task):
         form = AddAnswerForm()
     return render(request, task.template, task.dtc.field_table)
 
-
+# отображение результата решения (страницы, на которые мы переадресовываем после проверки)
 def completed(request):
     return HttpResponse("<h1>Решение Верно!</h1>")
 

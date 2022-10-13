@@ -15,8 +15,8 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from oop_taskengine.views import failed, completed
-from oop_taskengine.views import task_view
+from core_app.views import failed, completed
+from core_app.views import task_view
 
 
 urlpatterns = [

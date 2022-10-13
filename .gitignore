@@ -1,4 +1,4 @@
-de_web/settings.py
+secret_data.py
 oop_taskengine/templates/static_copies/*
 **/db.sqlite3
 **/__pycache__/*

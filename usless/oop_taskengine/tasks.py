@@ -1,26 +1,6 @@
-from abc import ABCMeta, abstractmethod
 from typing import List, Set
 from random import randint, choice
-
-class Task():
-    __metaclass__ = ABCMeta
-
-    @abstractmethod
-    def render(self) -> str:
-        ...
-
-    @abstractmethod
-    def configure(self, *args) -> None:
-        ...
-
-    @abstractmethod
-    def generate(self) -> None:
-        ...
-    
-    @abstractmethod
-    def test(self, *args) -> int:
-        ...
-
+from core_app.abstracts import Task
 
 class AnswerMatching(Task):
     def configure(self, correct_answers: List[str], description: str) -> None:
@@ -44,7 +24,7 @@ class NumberNotationConvertation(Task):
         self.destination_base = destination_base
     
     def render(self) -> str:
-        from custommath import int2str
+        from usless.custommath import int2str
         return f"{int2str(self.source, self.source_base)} по основанию {self.source_base} = ___ по основанию {self.destination_base}"
     
     def test(self, answer: str) -> int:
@@ -81,7 +61,7 @@ class NumberComparison(Task):
         return 0
     
     def render(self) -> str:
-        from custommath import int2str
+        from usless.custommath import int2str
         return f"{int2str(self.a, self.a_base)} по основанию {self.a_base} ___ чем {int2str(self.b, self.b_base)} по основанию {self.b_base}"
     
     def generate(self, a:int=0, b:int=2**9, bases:Set[int]={2, 10, 16}) -> None:
@@ -127,5 +107,5 @@ class BasicProblemSolving(Task):
             return answer == (self.a + self.b)
     
     def render(self) -> str:
-        from custommath import int2str
+        from usless.custommath import int2str
         return f"{int2str(self.a, self.a_base)} по основанию {self.a_base} {'+' if self.op == BasicProblemSolving.Plus else '-'} {int2str(self.b, self.b_base)} по основанию {self.b_base} = ___ по основанию {self.sol_base}"
