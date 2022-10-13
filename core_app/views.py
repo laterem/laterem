@@ -75,3 +75,12 @@ def completed(request):
 
 def failed(request):
     return HttpResponse("<h1>Решение Неверно, переделывай!</h1>")
+
+def index_page_render(request):
+    if request.method == 'POST': 
+        form = AddRedirectForm(request.POST)
+        if form.is_valid():
+            return HttpResponseRedirect('/task/' + form.cleaned_data['redirect'])
+    else:
+        form = AddRedirectForm()
+    return render(request, 'task_base.html', {'title': 'Сайт по ЦЭ', 'text': 'Это базовая страница', 'text2': 'Отсюда вы можете переадресоваться на задачу', 'form': form})
