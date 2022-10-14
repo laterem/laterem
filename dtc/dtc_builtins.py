@@ -35,11 +35,17 @@ class IsReversed(DTCCheckerFunction):
     def call(self, field, ns):
         return field == self.getarg(ns, 0)[::-1]
 
+class ReverseList(DTCCheckerFunction):
+    expected_argsc = 1
+    def call(self, ns):
+        return reversed(self.getarg(ns, 0))
+
 KEYWORD_TABLE = {
     'GenerateLine': GenerateLine,
     'Equal': IsEqual,
     'NotEqual': IsNotEqual,
     'Rand10': RandomNum10,
     'Sum': IsEqualSum,
-    'Reversed': IsReversed
+    'Reversed': IsReversed,
+    'Reverse': ReverseList
 }

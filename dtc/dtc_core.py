@@ -2,11 +2,10 @@ class DTCCompileError(Exception):
     pass
 
 class DTCObject:
-    # Временно: каждый объект хранится в виде строки
     def __init__(self, value):
         self.value = value
 
-    def __str__(self):
+    def __call__(self):
         return self.value
 
 NResult = object()
@@ -25,6 +24,8 @@ class DTCFunction:
         arg = self.args[n]
         if isinstance(arg, str):
             return arg
+        elif isinstance(arg, list):
+            return [a(ns) for a in arg]
         else:
             return arg(ns)
 

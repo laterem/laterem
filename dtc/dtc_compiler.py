@@ -5,6 +5,11 @@ except ImportError:
     from dtc_builtins import *
     from dtc_core import *
 
+VERSION = 0.2
+# List objects work incorrectly within function arguments. Neither do
+# having functions as list items work. Needs fixing
+
+
 class DTC:
     def __init__(self, field_table, namespace, checker_functions):
         self.field_table = field_table
@@ -31,6 +36,7 @@ class DTC:
 
 class DTCCompiler:
     def _typevalue(txt):
+        txt = txt.strip()
         if txt[-1] == txt[0] == '"':
             txt = txt.strip('"')
             return DTCValue(txt)
@@ -38,6 +44,10 @@ class DTCCompiler:
             return DTCValue(txt)
         elif '(' in txt and ')' in txt:
             return DTCCompiler._build_func(txt)
+        elif '[' in txt and ']' in txt:
+            args = txt[txt.find('[') + 1:txt.find(']')].split(',')
+            args = [DTCCompiler._typevalue(arg) for arg in args]
+            return DTCValue(args)
         else:
             return DTCAllias(txt)
 
@@ -51,18 +61,53 @@ class DTCCompiler:
         fargs = [DTCCompiler._typevalue(arg) for arg in args]
         return func(*fargs)
 
-    def compile_shortstyle(self, txt):
+    def _line_to_kws(self, line):
+        kws = line.strip().split()
+        for i, kw in enumerate(kws):
+            if kw is None:
+                continue
+            if '(' in kw:
+                self._combine_kw(i, '(', ')', kws)
+            elif '"' in kw:
+                self._combine_kw(i, '"', '"', kws)
+            elif '[' in kw:
+                self._combine_kw(i, '[', ']', kws)
+        kws = [kw for kw in kws if kw]
+        return kws
+
+    def _combine_kw(self, origin, opener, closer, kws):
+        kw = kws[origin]
+        ff = kw
+        if opener != closer:
+            runf = lambda _: ff.count(opener) != ff.count(closer) 
+        else:
+            runf = lambda _: ff.count(opener) % 2 != 0
+        i = origin
+        while runf(...):
+            i += 1
+            ff += ' ' + kws[i]
+            kws[i] = None
+        kws[origin] = ff
+
+    def compile(self, txt):
+        COMPILER_VERSION = 0.2
+        if COMPILER_VERSION != VERSION:
+            raise NotImplemented
+
         namespace = {}
         field_table = {}
         checker_functions = []
+        if txt[:9] == '[VERBAL]\n':
+            return self.compile_alt(txt[9:])
+
         code = txt.split('\n')
+
         for line in code:
             if '#' in line:
                 line = line[:line.find('#')]
             line = line.strip()
             if not line:
                 continue
-
             if '=' in line:
                 linemode = 'set'
                 line = line.replace('=', ' ')
@@ -71,30 +116,7 @@ class DTCCompiler:
                 line = line.replace('?', ' ')
             else:
                 raise DTCCompileError('DTC line has no known operators: ' + line)
-
-            kws = line.strip().split()
-            for i, kw in enumerate(kws):
-                if kw is None:
-                    continue
-                if '(' in kw:
-                    ff = kw
-                    origin = i
-                    while ')' not in ff:
-                        i += 1
-                        ff += kws[i]
-                        kws[i] = None
-                    kws[origin] = ff
-                elif '"' in kw:
-                    ffs = [kw]
-                    origin = i
-                    foundpair = kw.count('"') >= 2
-                    while not foundpair:
-                        i += 1
-                        ffs.append(kws[i])
-                        foundpair = '"' in ffs[-1]
-                        kws[i] = None
-                    kws[origin] = ' '.join(ffs)
-            kws = [kw for kw in kws if kw]
+            kws = self._line_to_kws(line)
             if linemode == 'set':
                 try:
                     field = kws[0]
@@ -118,7 +140,11 @@ class DTCCompiler:
                    checker_functions=checker_functions)
 
 
-    def compile(self, txt):
+    def compile_alt(self, txt):
+        COMPILER_VERSION = 0.2
+        if COMPILER_VERSION != VERSION:
+            raise NotImplemented
+
         namespace = {}
         field_table = {}
         checker_functions = []
@@ -129,29 +155,7 @@ class DTCCompiler:
             line = line.strip()
             if not line:
                 continue
-            kws = line.strip().split()
-            for i, kw in enumerate(kws):
-                if kw is None:
-                    continue
-                if '(' in kw:
-                    ff = kw
-                    origin = i
-                    while ')' not in ff:
-                        i += 1
-                        ff += kws[i]
-                        kws[i] = None
-                    kws[origin] = ff
-                elif '"' in kw:
-                    ffs = [kw]
-                    origin = i
-                    foundpair = kw.count('"') >= 2
-                    while not foundpair:
-                        i += 1
-                        ffs.append(kws[i])
-                        foundpair = '"' in ffs[-1]
-                        kws[i] = None
-                    kws[origin] = ' '.join(ffs)
-            kws = [kw for kw in kws if kw]
+            kws = self._line_to_kws(line)
             if kws[0] == 'set':
                 try: 
                     if 'to' not in kws:
@@ -184,13 +188,13 @@ class DTCCompiler:
 
 if __name__ == '__main__':
 
-    test = '''
+    test = '''[VERBAL]
 set id0 to "Foo bar" as foo
 set id1 to foo
 set id2 to 42 as num
 set id3 to GenerateLine(5, "a" )
 set id4 to GenerateLine(num, "b" ) as bs #Big Spidz 
-set id5 to bs
+set id5 to [bs, "ay", "ayy"]
 
 
 # Hello world! 
@@ -210,11 +214,12 @@ check input1 for Equal(123)'''
 id0="Foo bar"
 id2= 43 as F3
 id1 = GenerateLine(F3, "c")
+id3 = [1, 2, 3, 4, 5]
 
 input?Equal(F3)'''
 
     dtcc = DTCCompiler()
-    dtc = dtcc.compile_shortstyle(test)
+    dtc = dtcc.compile(test)
     print(dtc.field_table)
     dtc.execute()
     print(dtc.field_table)
