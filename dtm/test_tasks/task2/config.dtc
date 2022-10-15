@@ -1,5 +1,5 @@
 title = "Задача на сложение по ЦЭ"
-button_text = "Ответить"
+button1_text = "Ответить"
 id1 = Rand10(1, 10) as r1
 id2 = Rand10(1, 10) as r2
 answer?Sum(r1, r2)
