@@ -6,8 +6,7 @@ except ImportError:
     from dtc_core import *
 
 VERSION = 0.2
-# List objects work incorrectly within function arguments. Neither do
-# having functions as list items work. Needs fixing
+# Set objects cannot be part of another set objects. Needs fixing?
 
 
 class DTC:
@@ -42,12 +41,13 @@ class DTCCompiler:
             return DTCValue(txt)
         elif txt.isdigit():
             return DTCValue(txt)
-        elif '(' in txt and ')' in txt:
-            return DTCCompiler._build_func(txt)
-        elif '[' in txt and ']' in txt:
-            args = txt[txt.find('[') + 1:txt.find(']')].split(',')
+        elif txt[0] == '[' and txt[-1] == ']':
+            args = txt[1:-1].split(',')
+            args = DTCCompiler._combine_kws(args, ',')
             args = {DTCCompiler._typevalue(arg) for arg in args}
             return DTCValue(args)
+        elif '(' in txt and txt[-1] == ')':
+            return DTCCompiler._build_func(txt)
         else:
             return DTCAllias(txt)
 
@@ -57,27 +57,28 @@ class DTCCompiler:
             func = KEYWORD_TABLE[fname]
         except KeyError:
             raise DTCCompileError('Unknown function ' + fname + '. Maybe you forgot to import it?')
-        args = txt[txt.find('(') + 1:txt.find(')')].split(',')
+        args = txt[txt.find('(') + 1:-1].split(',')
+        args = DTCCompiler._combine_kws(args, ',')
         fargs = [DTCCompiler._typevalue(arg) for arg in args]
         return func(*fargs)
 
-    def _line_to_kws(self, line):
-        kws = line.strip().split()
+    def _combine_kws(kws, joiner=' '):
         for i, kw in enumerate(kws):
             if kw is None:
                 continue
             kw = kw.strip()
             if kw.startswith('['):
-                self._combine_kw(i, '[', ']', kws)
+                DTCCompiler._combine_kw(i, '[', ']', kws, joiner)
             elif kw.startswith('"'):
-                self._combine_kw(i, '"', '"', kws)
+                DTCCompiler._combine_kw(i, '"', '"', kws, joiner)
             elif '(' in kw:
-                self._combine_kw(i, '(', ')', kws)
+                DTCCompiler._combine_kw(i, '(', ')', kws, joiner)
             
         kws = [kw for kw in kws if kw]
         return kws
 
-    def _combine_kw(self, origin, opener, closer, kws):
+    def _combine_kw(origin, opener, closer, kws, joiner=' '):
+        print(kws)
         kw = kws[origin]
         ff = kw
         if opener != closer:
@@ -87,7 +88,7 @@ class DTCCompiler:
         i = origin
         while runf(...):
             i += 1
-            ff += ' ' + kws[i]
+            ff += joiner + kws[i]
             kws[i] = None
         kws[origin] = ff
 
@@ -118,7 +119,7 @@ class DTCCompiler:
                 line = line.replace('?', ' ')
             else:
                 raise DTCCompileError('DTC line has no known operators: ' + line)
-            kws = self._line_to_kws(line)
+            kws = DTCCompiler._combine_kws(line.strip().split())
             if linemode == 'set':
                 try:
                     field = kws[0]
@@ -157,7 +158,7 @@ class DTCCompiler:
             line = line.strip()
             if not line:
                 continue
-            kws = self._line_to_kws(line)
+            kws = DTCCompiler._combine_kws(line.strip().split())
             if kws[0] == 'set':
                 try: 
                     if 'to' not in kws:
@@ -189,36 +190,13 @@ class DTCCompiler:
 
 
 if __name__ == '__main__':
-
-    test = '''[VERBAL]
-set id0 to "Foo bar" as foo
-set id1 to foo
-set id2 to 42 as num
-set id3 to GenerateLine(5, "a" )
-set id4 to GenerateLine(num, "b" ) as bs #Big Spidz 
-set id5 to [bs, "ay", "ayy"]
-
-
-# Hello world! 
-
-check input for Equal("foobar")
-check input1 for Equal(123)'''
-
-    dtcc = DTCCompiler()
-    dtc = dtcc.compile(test)
-    print(dtc.field_table)
-    dtc.execute()
-    print(dtc.field_table)
-    print(dtc.check({'input': 'baz', 'input1': "123"}))
-    print(dtc.check({'input': 'foobar', 'input1': "123"}))
-
     test = '''
-id0="Foo bar"
-id2= 43 as F3
-id1 = GenerateLine(F3, "c")
-id3 = [1, 2, 3, 4, 5]
+id0 = "Foo bar"
+id2 = 43 as F3
+id1 = GenerateLine(F3, GenerateLine(3, "b"))
+id3 = [GenerateLine(3, "b"), GenerateLine(4, "c"), "[я делаю вид, что я список]", 5]
 
-input?Equal(F3)'''
+input ? Equal(F3)'''
 
     dtcc = DTCCompiler()
     dtc = dtcc.compile(test)
