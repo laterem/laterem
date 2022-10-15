@@ -44,7 +44,7 @@ class DTCCompiler:
         elif txt[0] == '[' and txt[-1] == ']':
             args = txt[1:-1].split(',')
             args = DTCCompiler._combine_kws(args, ',')
-            args = {DTCCompiler._typevalue(arg) for arg in args}
+            args = [DTCCompiler._typevalue(arg) for arg in args]
             return DTCValue(args)
         elif '(' in txt and txt[-1] == ')':
             return DTCCompiler._build_func(txt)
@@ -78,7 +78,6 @@ class DTCCompiler:
         return kws
 
     def _combine_kw(origin, opener, closer, kws, joiner=' '):
-        print(kws)
         kw = kws[origin]
         ff = kw
         if opener != closer:
@@ -213,7 +212,7 @@ aaa := "bbb"
 id0 = aaa
 id2 = 43 as F3
 id1 = GenerateLine(F3, GenerateLine(3, "b"))
-id3 = [GenerateLine(3, "b"), GenerateLine(4, "c"), "[я делаю вид, что я список]", 5]
+id3 = [["я", "список"], GenerateLine(4, "c"), "[я делаю вид, что я список]", 5]
 
 input ? Equal(F3)'''
 

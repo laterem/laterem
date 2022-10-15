@@ -24,8 +24,8 @@ class DTCFunction:
         arg = self.args[n]
         if isinstance(arg, str):
             return arg
-        elif isinstance(arg, tuple):
-            return tuple([a(ns) for a in arg])
+        elif isinstance(arg, list):
+            return [a(ns) for a in arg]
         else:
             return arg(ns)
 
