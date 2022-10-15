@@ -55,7 +55,6 @@ def task_view(request, taskname):
     task = DTCTask()
     task.configure(dtc=dtc, template=templatepath)
     dtc.field_table['button'] = AddAnswerForm()
-    dtc.field_table['checkbox_list'] = {"42", "Китай?", "Быть", "Не быть"}
     return task_handle(request, task)
 
 # Переадресация на страницу отображения результата

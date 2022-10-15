@@ -44,8 +44,8 @@ class DTCCompiler:
             return DTCValue(txt)
         elif '(' in txt and ')' in txt:
             return DTCCompiler._build_func(txt)
-        elif '{' in txt and '}' in txt:
-            args = txt[txt.find('{') + 1:txt.find('}')].split(',')
+        elif '[' in txt and ']' in txt:
+            args = txt[txt.find('[') + 1:txt.find(']')].split(',')
             args = {DTCCompiler._typevalue(arg) for arg in args}
             return DTCValue(args)
         else:
@@ -66,12 +66,14 @@ class DTCCompiler:
         for i, kw in enumerate(kws):
             if kw is None:
                 continue
-            if '(' in kw:
-                self._combine_kw(i, '(', ')', kws)
-            elif '"' in kw:
+            kw = kw.strip()
+            if kw.startswith('['):
+                self._combine_kw(i, '[', ']', kws)
+            elif kw.startswith('"'):
                 self._combine_kw(i, '"', '"', kws)
-            elif '{' in kw:
-                self._combine_kw(i, '{', '}', kws)
+            elif '(' in kw:
+                self._combine_kw(i, '(', ')', kws)
+            
         kws = [kw for kw in kws if kw]
         return kws
 
