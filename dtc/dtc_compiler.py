@@ -111,7 +111,10 @@ class DTCCompiler:
             line = line.strip()
             if not line:
                 continue
-            if '=' in line:
+            if ':=' in line:
+                linemode = 'contain'
+                line = line.replace(':=', ' ')
+            elif '=' in line:
                 linemode = 'set'
                 line = line.replace('=', ' ')
             elif '?' in line:
@@ -137,7 +140,11 @@ class DTCCompiler:
                     checker_functions.append((field, DTCCompiler._build_func(kws[1])))
                 except IndexError:
                     raise DTCCompileError('Uncomplete operation: not enough keywords in ' + line)
-        
+            elif linemode == 'contain':
+                allias = kws[0]
+                value = kws[1]
+                value = DTCCompiler._typevalue(value)
+                namespace[allias] = value
         return DTC(field_table=field_table, 
                    namespace=namespace, 
                    checker_functions=checker_functions)
@@ -180,6 +187,17 @@ class DTCCompiler:
                     checker_functions.append((field, DTCCompiler._build_func(kws[3])))
                 except IndexError:
                     raise DTCCompileError('Uncomplete operation: not enough keywords in ' + line)
+            elif kws[0] == 'contain':
+                try: 
+                    if 'as' not in kws:
+                        raise DTCCompileError('Uncomplete operation: expected "as" keyword in ' + line)
+                    allias = kws[1]
+                    value = kws[kws.index('as') + 1]
+                    value = DTCCompiler._typevalue(value)
+                    namespace[allias] = value
+                except IndexError:
+                    raise DTCCompileError('Uncomplete operation: not enough keywords in ' + line)
+            
             else:
                 raise DTCCompileError('Unknown operation ' + kws[0])        
 
@@ -191,7 +209,8 @@ class DTCCompiler:
 
 if __name__ == '__main__':
     test = '''
-id0 = "Foo bar"
+aaa := "bbb"
+id0 = aaa
 id2 = 43 as F3
 id1 = GenerateLine(F3, GenerateLine(3, "b"))
 id3 = [GenerateLine(3, "b"), GenerateLine(4, "c"), "[я делаю вид, что я список]", 5]
