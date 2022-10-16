@@ -7,38 +7,38 @@ from random import randint
 
 class GenerateLine(DTCFunction):
     expected_argsc = 2    
-    def call(self, ns):
-        return self.getarg(ns, 1) * int(self.getarg(ns, 0))
+    def call(self):
+        return self.args[1] * int(self.args[0])
 
 class RandomNum10(DTCFunction):
     expected_argsc = 2    
-    def call(self, ns):
-        return randint(int(self.getarg(ns, 0)), int(self.getarg(ns, 1)))
+    def call(self):
+        return randint(int(self.args[0]), int(self.args[1]))
 
 class IsEqual(DTCCheckerFunction):
     expected_argsc = 1
-    def call(self, field, ns):
-        return field == self.getarg(ns, 0)
+    def call(self, field):
+        return field == self.args[0]
 
 class IsEqualSum(DTCCheckerFunction):
     expected_argsc = 2
-    def call(self, field, ns):
-        return int(field) == int(self.getarg(ns, 0)) + int(self.getarg(ns, 1))
+    def call(self, field):
+        return int(field) == int(self.args[0]) + int(self.args[1])
 
 class IsNotEqual(DTCCheckerFunction):
     expected_argsc = 1
-    def call(self, field, ns):
-        return field != self.getarg(ns, 0)
+    def call(self, field):
+        return field != self.args[0]
 
 class IsReversed(DTCCheckerFunction):
     expected_argsc = 1
-    def call(self, field, ns):
-        return field == self.getarg(ns, 0)[::-1]
+    def call(self, field):
+        return field == self.args[0][::-1]
 
 class ReverseList(DTCCheckerFunction):
     expected_argsc = 1
-    def call(self, ns):
-        return reversed(self.getarg(ns, 0))
+    def call(self):
+        return reversed(self.args[0])
 
 KEYWORD_TABLE = {
     'GenerateLine': GenerateLine,
@@ -49,3 +49,5 @@ KEYWORD_TABLE = {
     'Reversed': IsReversed,
     'Reverse': ReverseList
 }
+
+INVERSE_TABLE = dict((v,k) for k,v in KEYWORD_TABLE.items())

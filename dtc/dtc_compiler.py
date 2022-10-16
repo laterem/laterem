@@ -6,7 +6,6 @@ except ImportError:
     from dtc_core import *
 
 VERSION = 0.2
-# Set objects cannot be part of another set objects. Needs fixing?
 
 
 class DTC:
@@ -16,6 +15,33 @@ class DTC:
         self.namespace = namespace
         self.executed = False
     
+    @classmethod
+    def from_dict(cls, data):
+        executed = True
+        namespace = {}
+        field_table = data['field_values']
+        checker_functions = []
+        for checkerobj in data['checkers']:
+            function = KEYWORD_TABLE[checkerobj['function']](*checkerobj['args'])
+            field = checkerobj['field']
+            checker_functions.append((field, function))
+        dtc = cls(field_table, namespace, checker_functions)
+        dtc.executed = executed 
+        return dtc
+
+    def to_dict(self):
+        if not self.executed: self.execute()
+        mainobj = {}
+        mainobj['field_values'] = self.field_table
+        mainobj['checkers'] = []
+        for field, checker in self.checker_functions:
+            checkerobj = {}
+            checkerobj['function'] = INVERSE_TABLE[checker.__class__]
+            checkerobj['args'] = checker.args
+            checkerobj['field'] = field
+            mainobj['checkers'].append(checkerobj)
+        return mainobj
+    
     def execute(self):
         if self.executed:
             raise Warning('Trying to execute an already executed DTC')
@@ -24,12 +50,14 @@ class DTC:
         items = list(self.field_table.items())
         for key, value in items:
             self.field_table[key] = value(ns=self.namespace)
+        for _, value in self.checker_functions:
+            value.compile(self.namespace)
         self.executed = True
     
     def check(self, fields):
         valid = True
         for field, checker in self.checker_functions:
-            valid = valid and checker(fields[field], self.namespace)
+            valid = valid and checker(fields[field])
         return valid
     
 
@@ -214,7 +242,7 @@ id2 = 43 as F3
 id1 = GenerateLine(F3, GenerateLine(3, "b"))
 id3 = [["я", "список"], GenerateLine(4, "c"), "[я делаю вид, что я список]", 5]
 
-input ? Equal(F3)'''
+input ? Equal(GenerateLine(F3, GenerateLine(3, "b")))'''
 
     dtcc = DTCCompiler()
     dtc = dtcc.compile(test)
@@ -222,4 +250,5 @@ input ? Equal(F3)'''
     dtc.execute()
     print(dtc.field_table)
     print(dtc.check({'input': '42'}))
-    print(dtc.check({'input': '43'}))
+    print(dtc.check({'input': 'bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb'}))
+    print(dtc.to_dict())

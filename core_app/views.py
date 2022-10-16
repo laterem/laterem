@@ -1,10 +1,11 @@
 from .forms import *
 from .abstracts import Task
-from dtc.dtc_compiler import DTCCompiler
+from dtc.dtc_compiler import DTCCompiler, DTC
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
 import os
 import shutil
+import json
 
 # Клонирует шаблоны из dtm в папку django
 def unravel_task_package(name):
@@ -46,23 +47,44 @@ class DTCTask(Task):
     def test(self, answer: str) -> int:
         fields = {'answer': answer.strip()}
         return self.dtc.check(fields)
+    
+    def as_JSON(self):
+        d = self.dtc.to_dict()
+        print(d)
+        d['template'] = self.template
+        print(d)
+        return json.dumps(d, indent=4)
+    
+    def from_JSON(self, data):
+       # print(data)
+        d = json.loads(data)
+        self.dtc = DTC.from_dict(d)
+        self.template = d['template']
 
 # Функция рендера (обработки и конечного представления на сайте) задачи по имени (имя берётся из адресной строки)
 def task_view(request, taskname):
+    additional_render_args = {}
+    additional_render_args['button1'] = AddAnswerForm()
     if request.session.get(taskname) == None:
         dtcpath, templatepath = unravel_task_package('test_tasks\\' + taskname)
 
         dtc = prepare_dtc(dtcpath)
         task = DTCTask()
         task.configure(dtc=dtc, template=templatepath)
-        dtc.field_table['button1'] = AddAnswerForm()
-        request.session[taskname] = task
-        return task_handle(request, task)
+
+        request.session[taskname] = task.as_JSON() # !! Изменить ключ с таскнейма на таскнейм+соль
+        return task_handle(request, task, additional_render_args)
     else:
-        return task_handle(request, request.session[taskname])
+        task = DTCTask()
+        task.from_JSON(request.session[taskname])
+        return task_handle(request, task, additional_render_args)
 
 # Переадресация на страницу отображения результата
-def task_handle(request, task):
+# (СПайд) Оповещаю о своих граблях, чтобы никто другой не наступил: request.session, каким-то 
+# образом, сохраняет значение между запусками сервера, поэтому там может лежать мусор с прошлых нерабочих версий.
+# его надо как-то его очищать.
+
+def task_handle(request, task, additional_render_args):
     if request.method == 'POST': 
         if request.POST.getlist('checks'):
             ... # Проверка корректности ответа из нескольких элементов
@@ -73,7 +95,10 @@ def task_handle(request, task):
             return HttpResponseRedirect('/failed/')
     else:
         form = AddAnswerForm()
-    return render(request, task.template, task.dtc.field_table)
+    rargs = additional_render_args
+    for k, v in task.dtc.field_table.items():
+        rargs[k] = v
+    return render(request, task.template, rargs)
 
 # отображение результата решения (страницы, на которые мы переадресовываем после проверки)
 def completed(request):
