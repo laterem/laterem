@@ -49,13 +49,17 @@ class DTCTask(Task):
 
 # Функция рендера (обработки и конечного представления на сайте) задачи по имени (имя берётся из адресной строки)
 def task_view(request, taskname):
-    dtcpath, templatepath = unravel_task_package('test_tasks\\' + taskname)
+    if request.session.get(taskname) == None:
+        dtcpath, templatepath = unravel_task_package('test_tasks\\' + taskname)
 
-    dtc = prepare_dtc(dtcpath)
-    task = DTCTask()
-    task.configure(dtc=dtc, template=templatepath)
-    dtc.field_table['button1'] = AddAnswerForm()
-    return task_handle(request, task)
+        dtc = prepare_dtc(dtcpath)
+        task = DTCTask()
+        task.configure(dtc=dtc, template=templatepath)
+        dtc.field_table['button1'] = AddAnswerForm()
+        request.session[taskname] = task
+        return task_handle(request, task)
+    else:
+        return task_handle(request, request.session[taskname])
 
 # Переадресация на страницу отображения результата
 def task_handle(request, task):
