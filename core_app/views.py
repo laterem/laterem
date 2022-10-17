@@ -63,6 +63,7 @@ class DTCTask(Task):
 
 # Функция рендера (обработки и конечного представления на сайте) задачи по имени (имя берётся из адресной строки)
 def task_view(request, taskname):
+    del request.session[taskname] # дебага ради
     additional_render_args = {}
     additional_render_args['button1'] = AddAnswerForm()
     if request.session.get(taskname) == None:

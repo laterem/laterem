@@ -1,7 +1,9 @@
 {% extends 'base.html' %}
+{% load static %}
 {% block content %}
     <h1>Решите:</h1>
     <h2>{{id1}} + {{id2}} = </h2>
+    <img src='/dtm/cord-4.png' alt="Spidz's nose">
     {% with button=button1 button_text=button1_text %}
     {% include "button.html" %}
     {% endwith %}
