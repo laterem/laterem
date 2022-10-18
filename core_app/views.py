@@ -23,7 +23,7 @@ def render_work(request, work_name):
 def work_handle(request, text, work_name):
     if request.method == 'POST':
         return redirect('/task/' + work_name + '_id' + request.POST['combobox_choosed'])
-    return render(request, 'work_base.html', {"title": text["title"], "task_names": text['tasks'].keys()})
+    return render(request, 'work_base.html', {"title": text["title"], 'work_title': 'Тестовая Работа №1', 'additional_text': 'Выберите номер задания:', "task_names": text['tasks'].keys()})
 
 
 # Клонирует шаблоны из dtm в папку django
@@ -131,7 +131,7 @@ def index_page_render(request):
     if request.method == 'POST': 
         form = AddRedirectForm(request.POST)
         if form.is_valid():
-            return HttpResponseRedirect('/task/' + form.cleaned_data['redirect'])
+            return HttpResponseRedirect('/works/' + form.cleaned_data['redirect'])
     else:
         form = AddRedirectForm()
-    return render(request, 'task_base.html', {'title': 'Сайт по ЦЭ', 'text': 'Это базовая страница', 'text2': 'Отсюда вы можете переадресоваться на задачу', 'button': form, 'button_text': 'Вперёд!'})
+    return render(request, 'task_base.html', {'title': 'Сайт по ЦЭ', 'text': 'Это базовая страница', 'text2': 'Отсюда вы можете переадресоваться на работу', 'button': form, 'button_text': 'Вперёд!'})
