@@ -1,0 +1,9 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <h1>{{work_title}}</h1>
+    {{additional_text}}
+    {% with combobox_items=task_names base_arg="Выберите задание:" button_text="Перейти" %}
+        {% include "combobox.html" %}
+    {% endwith %}
+{% endblock %}
