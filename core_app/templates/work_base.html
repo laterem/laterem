@@ -1,9 +1,7 @@
 {% extends 'base.html' %}
 
 {% block content %}
-    {% for el in task_names %}
-        {% with button_text=el %}
-            {% include "button.html" %}
-        {% endwith %}
-    {% endfor %}
+    {% with combobox_items=task_names base_arg="Выберите задание:" button_text="Перейти" %}
+        {% include "combobox.html" %}
+    {% endwith %}
 {% endblock %}

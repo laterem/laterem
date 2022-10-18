@@ -22,12 +22,8 @@ def render_work(request, work_name):
 
 def work_handle(request, text, work_name):
     if request.method == 'POST':
-        button = AddTaskButton(request.POST)
-        if button.is_valid():
-            return redirect('/task/' + work_name + '_id' + button.cleaned_data['task'])
-    else:
-        button = AddTaskButton()
-    return render(request, 'work_base.html', {"title": text["title"], "task_names": text['tasks'].keys(), "button": button})
+        return redirect('/task/' + work_name + '_id' + request.POST['combobox_choosed'])
+    return render(request, 'work_base.html', {"title": text["title"], "task_names": text['tasks'].keys()})
 
 
 # Клонирует шаблоны из dtm в папку django
