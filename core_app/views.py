@@ -1,4 +1,3 @@
-from turtle import title
 from .forms import *
 from .abstracts import Task
 from dtc.dtc_compiler import DTCCompiler, DTC
@@ -7,16 +6,19 @@ from django.shortcuts import render, redirect
 import os
 import shutil
 import json
-from .global_containers import tasks
+from .global_containers import TASKS # Временно (Временно?)
 
 # Рендер страницы работы
 def render_work(request, work_name):
     with open('dtm/works/' + work_name + '.json', 'r', encoding='UTF-8') as f:
         text = json.load(f)
     
-    global tasks
+    #global tasks
     for el in text['tasks'].keys():
-        tasks[str(work_name + '_id' + el)] = text['tasks'][el]
+        task_key = str(work_name + '_id' + el)
+        TASKS[task_key] = text['tasks'][el]
+
+        if task_key in request.session: del request.session[task_key] # Наспайдено
     
     return work_handle(request, text, work_name)
 
@@ -63,8 +65,8 @@ class DTCTask(Task):
         self.dtc = dtc
         self.template = template
     
-    def test(self, answer: str) -> int:
-        fields = {'answer': answer.strip()}
+    def test(self, answer) -> int:
+        fields = {'answer': answer}
         return self.dtc.check(fields)
     
     def as_JSON(self):
@@ -82,11 +84,12 @@ class DTCTask(Task):
 
 # Функция рендера (обработки и конечного представления на сайте) задачи по имени (имя берётся из адресной строки)
 def task_view(request, taskname):
-    del request.session[taskname] # дебага ради
+   # del request.session[taskname] # дебага ради
+    print(TASKS)
     additional_render_args = {}
     additional_render_args['button1'] = AddAnswerForm()
     if request.session.get(taskname) == None:
-        taskname1 = tasks[taskname]
+        taskname1 = TASKS[taskname]
         dtcpath, templatepath = unravel_task_package('test_tasks\\' + taskname1)
 
         dtc = prepare_dtc(dtcpath)
@@ -106,14 +109,17 @@ def task_view(request, taskname):
 
 # Переадресация на страницу отображения результата
 def task_handle(request, task, additional_render_args):
-    if request.method == 'POST': 
+    if request.method == 'POST':  # Расхардкодить!!!
+        answer = None
         if request.POST.getlist('checks'):
-            ... # Проверка корректности ответа из нескольких элементов
-        form = AddAnswerForm(request.POST) 
-        if form.is_valid():
-            if task.test(form.cleaned_data['answer']):
-                return HttpResponseRedirect('/completed/')
-            return HttpResponseRedirect('/failed/')
+            answer = request.POST.getlist('checks')
+        else:
+            form = AddAnswerForm(request.POST) 
+            if form.is_valid():
+                answer = form.cleaned_data['answer'].strip()
+        if task.test(answer):
+            return HttpResponseRedirect('/completed/')
+        return HttpResponseRedirect('/failed/')
     else:
         form = AddAnswerForm()
     rargs = additional_render_args

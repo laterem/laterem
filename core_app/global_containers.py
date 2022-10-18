@@ -1,1 +1,1 @@
-tasks = dict()
+TASKS = dict()
