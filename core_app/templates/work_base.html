@@ -1,0 +1,9 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    {% for el in task_names %}
+        {% with button_text=el %}
+            {% include "button.html" %}
+        {% endwith %}
+    {% endfor %}
+{% endblock %}

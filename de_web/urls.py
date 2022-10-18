@@ -16,12 +16,13 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from core_app.views import failed, completed, index_page_render
-from core_app.views import task_view
+from core_app.views import task_view, render_work
 
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('task/<str:taskname>', task_view),
+    path('works/<str:work_name>', render_work),
     path('failed/', failed),
     path('completed/', completed),
     path('', index_page_render)

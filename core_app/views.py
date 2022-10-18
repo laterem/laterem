@@ -1,11 +1,34 @@
+from turtle import title
 from .forms import *
 from .abstracts import Task
 from dtc.dtc_compiler import DTCCompiler, DTC
 from django.http import HttpResponse, HttpResponseRedirect
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 import os
 import shutil
 import json
+from .global_containers import tasks
+
+# Рендер страницы работы
+def render_work(request, work_name):
+    with open('dtm/works/' + work_name + '.json', 'r', encoding='UTF-8') as f:
+        text = json.load(f)
+    
+    global tasks
+    for el in text['tasks'].keys():
+        tasks[str(work_name + '_id' + el)] = text['tasks'][el]
+    
+    return work_handle(request, text, work_name)
+
+def work_handle(request, text, work_name):
+    if request.method == 'POST':
+        button = AddTaskButton(request.POST)
+        if button.is_valid():
+            return redirect('/task/' + work_name + '_id' + button.cleaned_data['task'])
+    else:
+        button = AddTaskButton()
+    return render(request, 'work_base.html', {"title": text["title"], "task_names": text['tasks'].keys(), "button": button})
+
 
 # Клонирует шаблоны из dtm в папку django
 def unravel_task_package(name):
@@ -66,7 +89,8 @@ def task_view(request, taskname):
     additional_render_args = {}
     additional_render_args['button1'] = AddAnswerForm()
     if request.session.get(taskname) == None:
-        dtcpath, templatepath = unravel_task_package('test_tasks\\' + taskname)
+        taskname1 = tasks[taskname]
+        dtcpath, templatepath = unravel_task_package('test_tasks\\' + taskname1)
 
         dtc = prepare_dtc(dtcpath)
         task = DTCTask()
@@ -79,11 +103,11 @@ def task_view(request, taskname):
         task.from_JSON(request.session[taskname])
         return task_handle(request, task, additional_render_args)
 
-# Переадресация на страницу отображения результата
 # (СПайд) Оповещаю о своих граблях, чтобы никто другой не наступил: request.session, каким-то 
 # образом, сохраняет значение между запусками сервера, поэтому там может лежать мусор с прошлых нерабочих версий.
 # его надо как-то его очищать.
 
+# Переадресация на страницу отображения результата
 def task_handle(request, task, additional_render_args):
     if request.method == 'POST': 
         if request.POST.getlist('checks'):
