@@ -1,7 +1,0 @@
-set id1i to 123
-set id2i to GenBit() as gb1
-check id0o for Add(123, gb1)
-
-# id1i=123 
-# id2i=GenBit() as gb1
-# id0o?Add(123,gb1)
