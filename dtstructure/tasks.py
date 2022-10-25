@@ -2,13 +2,13 @@ import os
 import shutil
 import json
 from dtc.dtc_compiler import DTCCompiler, DTC
-from .fileid import Scanner
+from .fileutils import Scanner
 
 TEMPLATE_CLONING_PATH = 'core_app/templates/static_copies/'
 if not os.path.exists(TEMPLATE_CLONING_PATH):
     os.makedirs(TEMPLATE_CLONING_PATH)
 
-SCANNING_FOLDER = 'dtm/'
+SCANNING_FOLDER = 'dtm/tasks/'
 
 SCANNER = Scanner(SCANNING_FOLDER)
 

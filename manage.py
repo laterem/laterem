@@ -2,10 +2,22 @@
 """Django's command-line utility for administrative tasks."""
 import os
 import sys
+from core_app.global_containers import WORKSDIR
+from dtstructure.fileutils import rdir_to_tree
 
+def update_global_dict(container: dict, value):
+    container.clear()
+    for k, v in value.items():
+        container[k] = v
+
+def dew_init():
+    update_global_dict(WORKSDIR, rdir_to_tree('dtm\\works'))
+    print('Works directory snapshot:', WORKSDIR)
 
 def main():
     """Run administrative tasks."""
+    dew_init()
+
     os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'de_web.settings')
     try:
         from django.core.management import execute_from_command_line

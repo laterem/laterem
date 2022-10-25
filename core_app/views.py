@@ -1,9 +1,9 @@
 from .forms import *
-from .tasks import TaskData
+from dtstructure.tasks import TaskData
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render, redirect
 import json
-from .global_containers import TASKS # Временно (Временно?)
+from .global_containers import TASKS, WORKSDIR # Временно (Временно?)
 
 # Рендер страницы работы
 def render_work(request, work_name):
@@ -27,8 +27,7 @@ def work_handle(request, text, work_name):
 
 # Функция рендера (обработки и конечного представления на сайте) задачи по имени (имя берётся из адресной строки)
 def task_view(request, taskname):
-   # del request.session[taskname] # дебага ради
-    print(TASKS)
+  # del request.session[taskname] # дебага ради
     additional_render_args = {}
     additional_render_args['button1'] = AddAnswerForm()
     if request.session.get(taskname) == None:
@@ -73,6 +72,7 @@ def failed(request):
     return HttpResponse("<h1>Решение Неверно, переделывай!</h1>")
 
 def index_page_render(request):
+    print('Works directory snapshot:', WORKSDIR)
     if request.method == 'POST': 
         form = AddRedirectForm(request.POST)
         if form.is_valid():
