@@ -67,6 +67,9 @@ class DTCCompiler:
         if txt[-1] == txt[0] == '"':
             txt = txt.strip('"')
             return DTCValue(txt)
+        elif txt[-1] == txt[0] == "'":
+            txt = txt.strip("'")
+            return DTCValue(txt)
         elif txt.isdigit():
             return DTCValue(txt)
         elif txt[0] == '[' and txt[-1] == ']':
@@ -99,6 +102,8 @@ class DTCCompiler:
                 DTCCompiler._combine_kw(i, '[', ']', kws, joiner)
             elif kw.startswith('"'):
                 DTCCompiler._combine_kw(i, '"', '"', kws, joiner)
+            elif kw.startswith("'"):
+                DTCCompiler._combine_kw(i, "'", "'", kws, joiner)
             elif '(' in kw:
                 DTCCompiler._combine_kw(i, '(', ')', kws, joiner)
             
@@ -236,7 +241,7 @@ class DTCCompiler:
 
 if __name__ == '__main__':
     test = '''
-aaa := "bbb"
+aaa := 'bbb'
 id0 = aaa
 id2 = 43 as F3
 id1 = GenerateLine(F3, GenerateLine(3, "b"))
