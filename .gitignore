@@ -3,3 +3,5 @@ core_app/templates/static_copies/*
 **/db.sqlite3
 **/__pycache__/*
 **/venv/*
+
+10_1-dew.md
