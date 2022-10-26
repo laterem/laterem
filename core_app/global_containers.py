@@ -1,3 +1,1 @@
 TASKS = dict()
-
-WORKSDIR = dict()

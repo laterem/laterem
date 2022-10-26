@@ -3,7 +3,7 @@ from dtstructure.tasks import TaskData
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render, redirect
 import json
-from .global_containers import TASKS, WORKSDIR # Временно (Временно?)
+from .global_containers import TASKS # Временно (Временно?)
 
 # Рендер страницы работы
 def render_work(request, work_name):
@@ -40,10 +40,6 @@ def task_view(request, taskname):
         task = TaskData.from_JSON(request.session[taskname])
         return task_handle(request, task, additional_render_args)
 
-# (СПайд) Оповещаю о своих граблях, чтобы никто другой не наступил: request.session, каким-то 
-# образом, сохраняет значение между запусками сервера, поэтому там может лежать мусор с прошлых нерабочих версий.
-# его надо как-то его очищать.
-
 # Переадресация на страницу отображения результата
 def task_handle(request, task, additional_render_args):
     if request.method == 'POST':  # Расхардкодить!!!
@@ -72,5 +68,4 @@ def failed(request):
     return HttpResponse("<h1>Решение Неверно, переделывай!</h1>")
 
 def index_page_render(request):
-    print('Works directory snapshot:', WORKSDIR)
     return render(request, 'task_base.html', {'title': 'Сайт по ЦЭ', 'text': 'Это базовая страница', 'text2': 'Перейдите на нужную работу по ссылке слева'})
