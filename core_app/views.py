@@ -7,7 +7,7 @@ from .global_containers import TASKS, WORKSDIR # Временно (Времен�
 
 # Рендер страницы работы
 def render_work(request, work_name):
-    with open('dtm/works/' + work_name + '.json', 'r', encoding='UTF-8') as f:
+    with open('dtm/works/' + work_name.replace('.', '/') + '.json', 'r', encoding='UTF-8') as f:
         text = json.load(f)
     
     #global tasks
@@ -73,10 +73,4 @@ def failed(request):
 
 def index_page_render(request):
     print('Works directory snapshot:', WORKSDIR)
-    if request.method == 'POST': 
-        form = AddRedirectForm(request.POST)
-        if form.is_valid():
-            return HttpResponseRedirect('/works/' + form.cleaned_data['redirect'])
-    else:
-        form = AddRedirectForm()
-    return render(request, 'task_base.html', {'title': 'Сайт по ЦЭ', 'text': 'Это базовая страница', 'text2': 'Отсюда вы можете переадресоваться на работу', 'button': form, 'button_text': 'Вперёд!'})
+    return render(request, 'task_base.html', {'title': 'Сайт по ЦЭ', 'text': 'Это базовая страница', 'text2': 'Перейдите на нужную работу по ссылке слева'})

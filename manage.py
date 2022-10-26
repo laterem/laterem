@@ -2,17 +2,10 @@
 """Django's command-line utility for administrative tasks."""
 import os
 import sys
-from core_app.global_containers import WORKSDIR
-from dtstructure.fileutils import rdir_to_tree
-
-def update_global_dict(container: dict, value):
-    container.clear()
-    for k, v in value.items():
-        container[k] = v
+from dtstructure.translate_to_html import translate_to_html
 
 def dew_init():
-    update_global_dict(WORKSDIR, rdir_to_tree('dtm\\works'))
-    print('Works directory snapshot:', WORKSDIR)
+    translate_to_html()
 
 def main():
     """Run administrative tasks."""

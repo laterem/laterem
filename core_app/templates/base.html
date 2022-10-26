@@ -1,17 +1,58 @@
 {% load static %}
-
-
-
 <!DOCTYPE html>
 <html>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous"> -->
     <head>
         <meta charset="UTF-8"/>
         <title>{{title}}</title>
+        <style type="text/css">
+            body {
+             margin: 0; /* Обнуляем отступы браузера */
+            }
+            h1 {
+             margin: 10px 10px 20px 5px; /* Убираем отступы */
+            }
+            h2 {
+             margin-top: 0; /* Убираем отступ сверху */
+            }
+            #menu { /* Левая колонка */
+             float: left; /* Обтекание справа */
+             border: 1px solid #333; /* Параметры рамки вокруг */
+             padding: 5px; /* Поля вокруг текста */
+             margin: 10px 10px 20px 5px; /* Значения отступов */
+            }
+            #menu div {
+             padding: 2px; /* Поля вокруг ссылок */
+            }
+            #menu a { 
+             display: block; /* Отображать ссылку как блок */
+             padding: 2px; /* Поля вокруг ссылок */
+             margin: 1px; /* Отступы вокруг */
+             font-size: 0.9em; /* Размер текста */
+             text-decoration: none; /* Убираем подчеркивание текста */
+            }
+            #menu a:hover { 
+             margin: 0; /* Убираем поля */
+            }
+            #content { /* Правая колонка */
+             margin: 10px 5px 20px 225px; /* Значения отступов */
+             padding: 5px; /* Поля вокруг текста */
+            }
+            .line {
+             border-bottom: 1px groove #333; /* Линия между ссылками */
+            }
+            #foot { /* Нижний блок */
+             padding: 5px; /* Поля вокруг текста */
+             clear: both; /* Отменяем обтекание */
+            }
+           </style>
     </head>
     <body>
         <h1>Тестовый вариант сайта по ЦЭ от Спайда и Журы</h1>
-        <div class="content">
+        <div id="menu">
+            {% include "menu.html" %}
+        </div>
+        <div id="content">
             {% block content %}
             {% endblock %}
         </div>
