@@ -1,3 +1,4 @@
+from tkinter import LEFT
 from .forms import *
 from dtstructure.tasks import TaskData
 from django.http import HttpResponse, HttpResponseRedirect
@@ -30,6 +31,7 @@ def task_view(request, taskname):
   # del request.session[taskname] # дебага ради
     additional_render_args = {}
     additional_render_args['button1'] = AddAnswerForm()
+    additional_render_args['left_menu'] = LEFT_MENU_CODE.value
     if request.session.get(taskname) == None:
         taskname1 = TASKS[taskname]
         task = TaskData.open(taskname1)
