@@ -242,7 +242,7 @@ class DTCCompiler:
 if __name__ == '__main__':
     test = '''
 aaa := 'bbb'
-id0 = aaa
+0 = NaN
 id2 = 43 as F3
 id1 = GenerateLine(F3, GenerateLine(3, "b"))
 id3 = [["я", "список"], GenerateLine(4, "c"), "[я делаю вид, что я список]", 5]
