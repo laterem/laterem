@@ -3,7 +3,7 @@ from dtstructure.tasks import TaskData
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render, redirect
 import json
-from .global_containers import TASKS # Временно (Временно?)
+from .global_containers import TASKS, LEFT_MENU_CODE # Временно (Временно?)
 
 # Рендер страницы работы
 def render_work(request, work_name):
@@ -22,7 +22,7 @@ def render_work(request, work_name):
 def work_handle(request, text, work_name):
     if request.method == 'POST':
         return redirect('/task/' + work_name + '_id' + request.POST['combobox_choosed'])
-    return render(request, 'work_base.html', {"title": text["title"], 'work_title': 'Тестовая Работа №1', 'additional_text': 'Выберите номер задания:', "task_names": text['tasks'].keys()})
+    return render(request, 'work_base.html', {"title": text["title"], 'work_title': 'Тестовая Работа №1', 'additional_text': 'Выберите номер задания:', "task_names": text['tasks'].keys(), 'left_menu': LEFT_MENU_CODE.value})
 
 
 # Функция рендера (обработки и конечного представления на сайте) задачи по имени (имя берётся из адресной строки)
@@ -68,4 +68,4 @@ def failed(request):
     return HttpResponse("<h1>Решение Неверно, переделывай!</h1>")
 
 def index_page_render(request):
-    return render(request, 'task_base.html', {'title': 'Сайт по ЦЭ', 'text': 'Это базовая страница', 'text2': 'Перейдите на нужную работу по ссылке слева'})
+    return render(request, 'task_base.html', {'title': 'Сайт по ЦЭ', 'text': 'Это базовая страница', 'text2': 'Перейдите на нужную работу по ссылке слева', 'left_menu': LEFT_MENU_CODE.value})
