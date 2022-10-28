@@ -1,10 +1,4 @@
-from dtstructure.fileutils import rdir_to_tree
-from core_app.global_containers import LEFT_MENU_CODE
-
-def update_global_dict(container: dict, value):
-    container.clear()
-    for k, v in value.items():
-        container[k] = v
+from context_objects import LEFT_MENU_CODE, WORK_DIR
 
 def make_html(inp):
     output = ['<ul>', '</ul>']
@@ -25,6 +19,4 @@ def make_html(inp):
     return ''.join(output)
 
 def translate_to_html():
-    work_dir = dict()
-    update_global_dict(work_dir, rdir_to_tree('dtm/works'))
-    LEFT_MENU_CODE.value = make_html(work_dir)
+    LEFT_MENU_CODE.value = make_html(WORK_DIR)

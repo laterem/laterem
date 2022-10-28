@@ -2,15 +2,11 @@ import os
 import shutil
 import json
 from dtc.dtc_compiler import DTCCompiler, DTC
-from .fileutils import Scanner
+from context_objects import DTM_SCANNER
 
 TEMPLATE_CLONING_PATH = 'core_app/templates/static_copies/'
 if not os.path.exists(TEMPLATE_CLONING_PATH):
     os.makedirs(TEMPLATE_CLONING_PATH)
-
-SCANNING_FOLDER = 'dtm/tasks/'
-
-SCANNER = Scanner(SCANNING_FOLDER)
 
 
 def open_dtc(path):
@@ -38,7 +34,7 @@ class TaskData():
 
     @classmethod
     def open(cls, taskname):
-        path = SCANNER.id_to_path(taskname)
+        path = DTM_SCANNER.id_to_path(taskname)
         dtcpath = os.path.join(path, 'config.dtc')
         viewpath = os.path.join(path, 'view.html')
         tmpviewpath = taskname + '_view' + '.html'

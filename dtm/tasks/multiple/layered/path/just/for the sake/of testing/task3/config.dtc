@@ -1,3 +1,3 @@
-title = "Просто перепечатайте текст"
-text = "Питон - это язык будущего, и я могу это доказать." as prompt
-answer?Equal(prompt)
+title = "Сосчитайте количество глаз спайдика на прикреплённой фотокарточке"
+correct_answer := 2
+answer?Equal(correct_answer)

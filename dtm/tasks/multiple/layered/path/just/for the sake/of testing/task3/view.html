@@ -1,9 +1,10 @@
 {% extends 'base.html' %}
 {% load static %}
+{% load taskview_tags %}
 {% block content %}
-    <h1>Просто перепечатайте:</h1>
-    <h2>{{text}}</h2>
+    <h1>{{title}}:</h1>
+    <img src="{% asset 'spidz.bmp' %}"> 
     {% with button=button1 button_text="Я справился?" %}
-    {% include "button.html" %}
+        {% include "button.html" %}
     {% endwith %}
 {% endblock %}

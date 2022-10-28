@@ -1,10 +1,11 @@
-from tkinter import LEFT
 from .forms import *
 from dtstructure.tasks import TaskData
-from django.http import HttpResponse, HttpResponseRedirect
+from django.http import HttpResponse, HttpResponseRedirect, FileResponse
 from django.shortcuts import render, redirect
 import json
-from .global_containers import TASKS, LEFT_MENU_CODE # Временно (Временно?)
+from django.core.exceptions import PermissionDenied
+from context_objects import TASKS, LEFT_MENU_CODE, DTM_SCANNER
+from os.path import join as pathjoin
 
 # Рендер страницы работы
 def render_work(request, work_name):
@@ -26,12 +27,20 @@ def work_handle(request, text, work_name):
     return render(request, 'work_base.html', {"title": text["title"], 'work_title': 'Тестовая Работа №1', 'additional_text': 'Выберите номер задания:', "task_names": text['tasks'].keys(), 'left_menu': LEFT_MENU_CODE.value})
 
 
+def getasset(request, taskname, filename):
+    if filename == 'view.html' or filename == 'config.dtc':
+        raise PermissionDenied()
+    path = DTM_SCANNER.id_to_path(taskname)
+    path = pathjoin(path, filename)
+    return FileResponse(open(path, 'rb'))
+
 # Функция рендера (обработки и конечного представления на сайте) задачи по имени (имя берётся из адресной строки)
+# ОЧЕНЬ КРИВО
 def task_view(request, taskname):
-  # del request.session[taskname] # дебага ради
     additional_render_args = {}
     additional_render_args['button1'] = AddAnswerForm()
     additional_render_args['left_menu'] = LEFT_MENU_CODE.value
+    additional_render_args['meta_taskname'] = TASKS[taskname]
     if request.session.get(taskname) == None:
         taskname1 = TASKS[taskname]
         task = TaskData.open(taskname1)

@@ -122,11 +122,9 @@ USE_TZ = True
 
 STATIC_URL = 'static/'
 
-print(BASE_DIR, '!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!')
 
 STATICFILES_DIRS = [
     BASE_DIR / "static",
-    os.path.join(BASE_DIR, "dtm"),
 ]
 
 STATICFILES_FINDERS = [
