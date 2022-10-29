@@ -23,7 +23,9 @@ def render_work(request, work_name):
 
 def work_handle(request, text, work_name):
     if request.method == 'POST':
-        return redirect('/task/' + work_name + '_id' + request.POST['combobox_choosed'])
+        for el in request.POST:
+            if el in text['tasks'].keys():
+                return redirect('/task/' + work_name + '_id' + el)
     return render(request, 'work_base.html', {"title": text["title"], 'work_title': 'Тестовая Работа №1', 'additional_text': 'Выберите номер задания:', "task_names": text['tasks'].keys(), 'workdir': WORK_DIR})
 
 

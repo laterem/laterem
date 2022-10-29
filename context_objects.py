@@ -15,10 +15,14 @@ class Literal():
     def __str__(self):
         return str(self.value)
 
-
+from sys import platform
+if platform == 'darwin':
+    SEPARATOR = '/'
+else:
+    SEPARATOR = '\\'
 TASKS = dict()
-DTM_SCANNER = Scanner('dtm\\tasks\\')
-WORK_DIR = rdir_to_tree('dtm\\works\\')
+DTM_SCANNER = Scanner('dtm' + SEPARATOR + 'tasks' + SEPARATOR)
+WORK_DIR = rdir_to_tree('dtm' + SEPARATOR + 'works' + SEPARATOR)
 
 
 
