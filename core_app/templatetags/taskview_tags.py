@@ -2,6 +2,8 @@ from django import template
 from django.utils.safestring import SafeString
 from os.path import join as pathjoin
 
+from context_objects import SEPARATOR
+
 register = template.Library()
 
 @register.simple_tag(takes_context=True)
@@ -13,7 +15,6 @@ def asset(context, format_string):
 def _submenu(inp):
     output = ['<ul>', '</ul>']
     pointer = 1
-    separator = '\\'
     for el in inp.keys():
         if type(inp[el]) == type(dict()):
             output.insert(pointer, '<li>' + el + _submenu(inp[el]) + '</li>')
@@ -23,8 +24,8 @@ def _submenu(inp):
             pointer += 1
             output.insert(pointer, '</ul></li>')
             for elel in inp[el]:
-                element = elel[elel.find(separator, elel.find(separator) + 1) + 1:elel.rfind('.')]
-                output.insert(pointer, '<li><a href="' + 'http://localhost:8000/works/' + element.replace(separator, '.') + '">' + element[element.rfind(separator) + 1:] + '</a></li>')
+                element = elel[elel.find(SEPARATOR, elel.find(SEPARATOR) + 1) + 1:elel.rfind('.')]
+                output.insert(pointer, '<li><a href="' + 'http://localhost:8000/works/' + element.replace(SEPARATOR, '.') + '">' + element[element.rfind(SEPARATOR) + 1:] + '</a></li>')
                 pointer += 1
             pointer += 1
     return ''.join(output)

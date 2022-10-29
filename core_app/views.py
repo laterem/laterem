@@ -4,7 +4,7 @@ from django.http import HttpResponse, HttpResponseRedirect, FileResponse
 from django.shortcuts import render, redirect
 import json
 from django.core.exceptions import PermissionDenied
-from context_objects import TASKS, DTM_SCANNER, WORK_DIR
+from context_objects import TASKS, DTM_SCANNER, WORK_DIR, SPACE_REPLACER
 from os.path import join as pathjoin
 
 # Рендер страницы работы
@@ -22,11 +22,16 @@ def render_work(request, work_name):
     return work_handle(request, text, work_name)
 
 def work_handle(request, text, work_name):
+    button_list = list(text['tasks'].keys())
+    ids = list()
+    for i in range(len(button_list)):
+        button_list[i] = [button_list[i], button_list[i].replace(' ', SPACE_REPLACER)]
+        ids.append(button_list[i][1])
     if request.method == 'POST':
         for el in request.POST:
-            if el in text['tasks'].keys():
+            if el in ids:
                 return redirect('/task/' + work_name + '_id' + el)
-    return render(request, 'work_base.html', {"title": text["title"], 'work_title': 'Тестовая Работа №1', 'additional_text': 'Выберите номер задания:', "task_names": text['tasks'].keys(), 'workdir': WORK_DIR})
+    return render(request, 'work_base.html', {"title": text["title"], 'work_title': 'Тестовая Работа №1', 'additional_text': 'Выберите номер задания:', "task_names": button_list, 'workdir': WORK_DIR})
 
 
 def getasset(request, taskname, filename):
@@ -39,6 +44,7 @@ def getasset(request, taskname, filename):
 # Функция рендера (обработки и конечного представления на сайте) задачи по имени (имя берётся из адресной строки)
 # ОЧЕНЬ КРИВО
 def task_view(request, taskname):
+    taskname  = taskname.replace(SPACE_REPLACER, ' ')
     additional_render_args = {}
     additional_render_args['button1'] = AddAnswerForm()
     additional_render_args['workdir'] = WORK_DIR

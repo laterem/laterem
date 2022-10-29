@@ -23,7 +23,7 @@ else:
 TASKS = dict()
 DTM_SCANNER = Scanner('dtm' + SEPARATOR + 'tasks' + SEPARATOR)
 WORK_DIR = rdir_to_tree('dtm' + SEPARATOR + 'works' + SEPARATOR)
-
+SPACE_REPLACER = '§'
 
 
 def update_global_dict(container: dict, value):
