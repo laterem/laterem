@@ -1,4 +1,4 @@
-from context_objects import LEFT_MENU_CODE, WORK_DIR
+from context_objects import LEFT_MENU_CODE, WORK_DIR, SEPARATOR
 
 def make_html(inp):
     output = ['<ul>', '</ul>']
@@ -12,8 +12,8 @@ def make_html(inp):
             pointer += 1
             output.insert(pointer, '</ul></li>')
             for elel in inp[el]:
-                element = elel[elel.find('/', elel.find('/') + 1) + 1:elel.rfind('.')]
-                output.insert(pointer, '<li><a href="' + 'http://localhost:8000/works/' + element.replace('/', '.') + '">' + element[element.rfind('/') + 1:] + '</a></li>')
+                element = elel[elel.find(SEPARATOR, elel.find(SEPARATOR) + 1) + 1:elel.rfind('.')]
+                output.insert(pointer, '<li><a href="' + 'http://localhost:8000/works/' + element.replace(SEPARATOR, '.') + '">' + element[element.rfind(SEPARATOR) + 1:] + '</a></li>')
                 pointer += 1
             pointer += 1
     return ''.join(output)

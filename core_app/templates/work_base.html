@@ -3,7 +3,7 @@
 {% block content %}
     <h1>{{work_title}}</h1>
     {{additional_text}}
-    {% with combobox_items=task_names base_arg="Выберите задание:" button_text="Перейти" %}
-        {% include "combobox.html" %}
+    {% with button_list_items=task_names %}
+        {% include "button_list.html" %}
     {% endwith %}
 {% endblock %}
