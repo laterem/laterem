@@ -2,15 +2,9 @@
 """Django's command-line utility for administrative tasks."""
 import os
 import sys
-from dtstructure.translate_to_html import translate_to_html
-
-def dew_init():
-    translate_to_html()
 
 def main():
     """Run administrative tasks."""
-    dew_init()
-
     os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'de_web.settings')
     try:
         from django.core.management import execute_from_command_line

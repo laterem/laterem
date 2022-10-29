@@ -17,7 +17,6 @@ class Literal():
 
 
 TASKS = dict()
-LEFT_MENU_CODE  = Literal()
 DTM_SCANNER = Scanner('dtm\\tasks\\')
 WORK_DIR = rdir_to_tree('dtm\\works\\')
 
