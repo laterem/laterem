@@ -2,13 +2,15 @@
 {% load taskview_tags %}
 <!DOCTYPE html>
 <html>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous"> -->
     <head>
         <meta charset="UTF-8"/>
-        <!-- <link rel="shortcut icon" type="image/png" href="{% static 'favicon.ico' %}"/> -->
+        <link rel="shortcut icon" type="image/png" href="{% static 'outline.svg' %}"/>
         <title>{{title}}</title>
         <style type="text/css">
             body {
+                background: #333; /* Цвет фона */
+                color: #fff; /* Цвет текста */
              margin: 0; /* Обнуляем отступы браузера */
             }
             h1 {
@@ -59,11 +61,15 @@
                 cursor: pointer;
                 border-radius: 16px;
             }
+            #foot { /* Нижний блок */
+                padding: 5px; /* Поля вокруг текста */
+                clear: both; /* Отменяем обтекание */
+            }
            </style>
     </head>
     <body>
         <img src="{% static 'main.svg' %}" width="50"/>
-        <h1>Тестовый вариант сайта по ЦЭ от Спайда и Журы</h1>
+        <h1 align="center">Тестовый вариант сайта по ЦЭ от Спайда и Журы</h1>
         <div id="menu">
             {% tree "workdir" %}
         </div>
@@ -71,5 +77,10 @@
             {% block content %}
             {% endblock %}
         </div>
+        <div id="foot" style="position: absolute; bottom: 0">
+            {% block foot %}
+            {% endblock %}
+        </div>
+
     </body>
 </html>
