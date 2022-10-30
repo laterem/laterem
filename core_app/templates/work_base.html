@@ -1,11 +1,9 @@
 {% extends 'base.html' %}
 
 {% block content %}
-    <h1>{{work_title}}</h1>
-    {{additional_text}}
 {% endblock %}
 {% block foot %}
-    {% with button_list_items=task_names %}
+    {% with button_list_items=task_list %}
         {% include "button_list.html" %}
     {% endwith %}
 {% endblock %}
