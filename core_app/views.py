@@ -1,28 +1,10 @@
-from .forms import *
 from dtstructure.tasks import TaskData
 from django.http import HttpResponse, HttpResponseRedirect, FileResponse
 from django.shortcuts import render, redirect
-import json
 from django.core.exceptions import PermissionDenied
-from context_objects import TASKS, DTM_SCANNER, TASKS_IN_WORKS, WORK_DIR, SPACE_REPLACER, WORKS
+from context_objects import TASKS, DTM_SCANNER, TASKS_IN_WORKS, WORK_DIR, SPACE_REPLACER
 from os.path import join as pathjoin
-
-def fill_work_dicts(request, work_name):
-    # Считывание состава работы из json
-    with open('dtm/works/' + work_name.replace('.', '/') + '.json', 'r', encoding='UTF-8') as f:
-        text = json.load(f)
-    
-    # Заполнение словарей работы, необходимо для системы навигации
-    WORKS[work_name] = list()
-    for el in text['tasks'].keys():
-        task_key = str(work_name + '_id' + el)
-        TASKS[task_key] = text['tasks'][el]
-        WORKS[work_name].append([el, el.replace(' ', SPACE_REPLACER)])
-        TASKS_IN_WORKS[task_key] = work_name
-
-        if task_key in request.session: del request.session[task_key] # Наспайдено
-    
-    return list(text['tasks'].keys())[0].replace(' ', SPACE_REPLACER)
+from .views_functions import *
 
 # Рендер страницы работы
 def render_work(request, work_name):
@@ -35,15 +17,6 @@ def getasset(request, taskname, filename):
     path = DTM_SCANNER.id_to_path(taskname)
     path = pathjoin(path, filename)
     return FileResponse(open(path, 'rb'))
-
-def fill_additional_args(taskname):
-    ret = {}
-    ret['button1'] = AddAnswerForm()
-    ret['workdir'] = WORK_DIR
-    ret['meta_taskname'] = TASKS[taskname]
-    ret['task_list'] = WORKS[TASKS_IN_WORKS[taskname]]
-    ret['task_name'] = taskname[taskname.rfind('_id') + 3:]
-    return ret
 
 # Функция рендера (обработки и конечного представления на сайте) задачи по имени (имя берётся из адресной строки)
 # ОЧЕНЬ КРИВО
