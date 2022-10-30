@@ -12,15 +12,18 @@ def asset(context, format_string):
     path = '/taskasset' + '/' + taskname + '/' + format_string
     return path
 
-def _submenu(inp):
-    output = ['<ul>', '</ul>']
+def _submenu(inp, deep=0):
+    if deep == 0:
+        output = ['<ul id="myUL">', '</ul>']
+    else:
+        output = ['<ul class="nested">', '</ul>']
     pointer = 1
     for el in inp.keys():
         if type(inp[el]) == type(dict()):
-            output.insert(pointer, '<li>' + el + _submenu(inp[el]) + '</li>')
+            output.insert(pointer, '<li><span class="caret">' + el + '</span>' + _submenu(inp[el], deep=deep + 1) + '</li>')
             pointer += 1
         else:
-            output.insert(pointer, '<li>' + el + '<ul>')
+            output.insert(pointer, '<li><span class="caret">' + el + '</span><ul class="nested">')
             pointer += 1
             output.insert(pointer, '</ul></li>')
             for elel in inp[el]:
