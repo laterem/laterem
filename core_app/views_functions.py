@@ -21,9 +21,11 @@ def fill_work_dicts(request, work_name):
 
 def fill_additional_args(taskname):
     ret = {}
+    work_name = TASKS_IN_WORKS[taskname]
     ret['button1'] = AddAnswerForm()
     ret['workdir'] = WORK_DIR
     ret['meta_taskname'] = TASKS[taskname]
-    ret['task_list'] = WORKS[TASKS_IN_WORKS[taskname]]
+    ret['task_list'] = WORKS[work_name]
     ret['task_name'] = taskname[taskname.rfind('_id') + 3:]
+    ret['work_name'] = work_name[work_name.rfind('.') + 1:]
     return ret

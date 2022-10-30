@@ -40,8 +40,9 @@
              margin: 0; /* Убираем поля */
             }
             #content { /* Правая колонка */
-             margin: 10px 5px 20px 225px; /* Значения отступов */
+             margin: 10px 5px 20px 10px; /* Значения отступов */
              padding: 5px; /* Поля вокруг текста */
+             overflow:hidden;
             }
             .line {
              border-bottom: 1px groove #333; /* Линия между ссылками */
@@ -88,7 +89,7 @@
 
             .caret::before {
             content: "\25B6";
-            color: black;
+            color: rgb(255, 245, 230);
             display: inline-block;
             margin-right: 6px;
             }
@@ -115,10 +116,10 @@
         <div id="content">
             {% block content %}
             {% endblock %}
-        </div>
-        <div id="foot" style="position: absolute; bottom: 10px; left: 255px">
-            {% block foot %}
-            {% endblock %}
+            <div id="foot" style="position: absolute; bottom: 10px; left: 50%">
+                {% block foot %}
+                {% endblock %}
+            </div>
         </div>
 
 
