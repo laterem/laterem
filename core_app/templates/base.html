@@ -28,9 +28,9 @@
              /* border: 1px solid #292929; Параметры рамки вокруг */
              background: #292929;
              width: 20%;
-             height: 100%;
+             min-height: 95vh;
              padding: 5px; /* Поля вокруг текста */
-             margin: 30px 10px 20px 5px; /* Значения отступов */
+             margin: 2.5vh 10px 0 5px; /* Значения отступов */
              border-radius: 5px;
             }
             #menu div {
@@ -131,14 +131,14 @@
            </style>
     </head>
     <body>
+        <div id="menu">
+            {% tree "workdir" %}
+        </div>
         <!-- <div id="main-icon">
             <img src="{% static 'main.svg' %}" width="28px"/>
         </div> -->
         <br/>
         <h1 align="center">Тестовый вариант сайта по ЦЭ от Спайда и Журы</h1>
-        <div id="menu">
-            {% tree "workdir" %}
-        </div>
         <div id="content">
             <h2>{{ work_name }}</h2>
             {% if task_name %}
