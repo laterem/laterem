@@ -1,0 +1,12 @@
+{% extends 'work_base.html' %}
+{% load taskview_tags %}
+
+{% block content %}
+    <h2>На рисунке изображена траектория тела:</h2>
+    <img src="{% asset 'Полет тела.png' %}" width="50%" style="border-radius: 5px">
+    <br/>
+    <h2>Выберите из следующих утверждений верные:</h2>
+    {% with checkbox_items=answer_variants button_text='Проверить' %}
+        {% include "checkbox.html" %}
+    {% endwith %}
+{% endblock %}

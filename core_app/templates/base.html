@@ -11,19 +11,27 @@
             body {
                 background: #333; /* Цвет фона */
                 color: rgb(255, 245, 230); /* Цвет текста */
+                font-family: Arial, Helvetica, sans-serif;
              margin: 0; /* Обнуляем отступы браузера */
             }
             h1 {
-             margin: 10px 10px 20px 5px; /* Убираем отступы */
+             margin: 0px 5px 5px 0px; /* Убираем отступы */
+             font-size: 28px;
             }
             h2 {
              margin-top: 0; /* Убираем отступ сверху */
+             margin: 0px 5px 5px 0px; /* Убираем отступы */
+             font-size: 20px;
             }
             #menu { /* Левая колонка */
              float: left; /* Обтекание справа */
-             border: 1px solid #111; /* Параметры рамки вокруг */
+             /* border: 1px solid #292929; Параметры рамки вокруг */
+             background: #292929;
+             width: 20%;
+             height: 100%;
              padding: 5px; /* Поля вокруг текста */
-             margin: 10px 10px 20px 5px; /* Значения отступов */
+             margin: 30px 10px 20px 5px; /* Значения отступов */
+             border-radius: 5px;
             }
             #menu div {
              padding: 2px; /* Поля вокруг ссылок */
@@ -40,9 +48,15 @@
              margin: 0; /* Убираем поля */
             }
             #content { /* Правая колонка */
-             margin: 10px 5px 20px 10px; /* Значения отступов */
+             margin: 30px 5px 20px 10px; /* Значения отступов */
+             margin-bottom: 60px;
+             margin-left: 22%;
+             width: 56%;
              padding: 5px; /* Поля вокруг текста */
              overflow:hidden;
+             background: #373737;
+             padding: 10px;
+             border-radius: 20px;
             }
             .line {
              border-bottom: 1px groove #333; /* Линия между ссылками */
@@ -105,18 +119,35 @@
             .active {
             display: block;
             }
+
+            #main-icon {
+                margin: 10px 10px 10px 10px;
+                width: 28px;
+                padding: 5px;
+                padding-bottom: 2px;
+                border-radius: 30%;
+                background: #353535;
+            }
            </style>
     </head>
     <body>
-        <img src="{% static 'main.svg' %}" width="50"/>
+        <!-- <div id="main-icon">
+            <img src="{% static 'main.svg' %}" width="28px"/>
+        </div> -->
+        <br/>
         <h1 align="center">Тестовый вариант сайта по ЦЭ от Спайда и Журы</h1>
         <div id="menu">
             {% tree "workdir" %}
         </div>
         <div id="content">
+            <h2>{{ work_name }}</h2>
+            {% if task_name %}
+                <h2>Задача: {{task_name}}</h2>
+                <br/>
+            {% endif %}
             {% block content %}
             {% endblock %}
-            <div id="foot" style="position: absolute; bottom: 10px; left: 50%">
+            <div id="foot" style="position: fixed; bottom: 10px">
                 {% block foot %}
                 {% endblock %}
             </div>

@@ -2,10 +2,9 @@
 {% load taskview_tags %}
 
 {% block content %}
-    <h1>{{work_name}}</h1>
-    <h1>Задача: {{task_name}}</h1>
     <h1>{{title}}:</h1>
     <img src="{% asset 'spidz.bmp' %}"> 
+    <br/>
     {% with button=button1 button_text="Я справился?" %}
         {% include "button.html" %}
     {% endwith %}

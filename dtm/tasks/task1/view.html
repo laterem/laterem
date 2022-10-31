@@ -1,10 +1,8 @@
 {% extends 'work_base.html' %}
 
 {% block content %}
-    <h1>{{work_name}}</h1>
-    <h1>Задача: {{task_name}}</h1>
-    <h1>Решите:</h1>
     <h2>{{text}}</h2>
+    <br/>
     Ваш ответ:
     {% with checkbox_items=checkbox1_items button_text=button1_text %}
         {% include "checkbox.html" %}
