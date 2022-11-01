@@ -6,7 +6,7 @@ def rdir_to_tree(sourcepath, layers=-1):
     dirlist = listdir(sourcepath)
     if dirlist:
         if layers == 0 or (layers < 0 and dirlist[0].endswith('.json')): # Костыль, но учителю нужно постараться чтобы его заабузить
-            return [join(sourcepath, path) for path in dirlist if path.endswith('.json')]
+            return sorted([join(sourcepath, path) for path in dirlist if path.endswith('.json')])
         else:
             output = {}
             for key in dirlist:
