@@ -2,7 +2,7 @@ from dtstructure.tasks import TaskData
 from django.http import HttpResponse, HttpResponseRedirect, FileResponse
 from django.shortcuts import render, redirect
 from django.core.exceptions import PermissionDenied
-from context_objects import TASK_TYPES, DTM_SCANNER, TASKS_IN_WORKS, WORK_DIR, SPACE_REPLACER
+from context_objects import TASK_TYPES, DTM_SCANNER, WORK_DIR, SPACE_REPLACER
 from os.path import join as pathjoin
 from .views_functions import *
 
@@ -52,7 +52,7 @@ def task_handle(request, task, taskname, additional_render_args):
         for el in request.POST:
             if el in ids:
                 # Переадрессация на задачу
-                return redirect('/task/' + TASKS_IN_WORKS[taskname] + '_id' + el)
+                return redirect('/task/' + count_work(taskname) + '_id' + el)
 
         # Анализ ответа
         answer = None

@@ -1,5 +1,6 @@
+from itertools import count
 import json
-from context_objects import WORKS, SPACE_REPLACER, TASK_TYPES, TASKS_IN_WORKS, WORK_DIR
+from context_objects import WORKS, SPACE_REPLACER, TASK_TYPES, WORK_DIR
 from .forms import *
 
 def fill_work_dicts(request, work_name):
@@ -13,7 +14,6 @@ def fill_work_dicts(request, work_name):
         task_key = str(work_name + '_id' + el)
         TASK_TYPES[task_key] = text['tasks'][el]
         WORKS[work_name].append([el, el.replace(' ', SPACE_REPLACER)])
-        TASKS_IN_WORKS[task_key] = work_name
 
     # Наспайдено
     if 'compiled_tasks' in request.session: 
@@ -22,9 +22,12 @@ def fill_work_dicts(request, work_name):
     
     return list(text['tasks'].keys())[0].replace(' ', SPACE_REPLACER)
 
+def count_work(taskname):
+    return taskname[taskname.rfind('/') + 1 : taskname[taskname.rfind('/') + 1 : ].find('_id')]
+
 def fill_additional_args(taskname):
     ret = {}
-    work_name = TASKS_IN_WORKS[taskname]
+    work_name = count_work(taskname)
     ret['button1'] = AddAnswerForm()
     ret['workdir'] = WORK_DIR
     ret['meta_taskname'] = TASK_TYPES[taskname]
