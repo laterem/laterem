@@ -1,26 +1,15 @@
 from dtstructure.fileutils import Scanner
 from dtstructure.fileutils import rdir_to_tree
+from extratypes import Literal
 
 # Модуль инициализации и расположения объектов, общих для всех модулей системы
-
-class Literal():
-    value = None
-
-    def set(self, value):
-        self.value = value
-    
-    def get(self):
-        return self.value
-
-    def __str__(self):
-        return str(self.value)
 
 from sys import platform
 if platform == 'darwin':
     SEPARATOR = '/'
 else:
     SEPARATOR = '\\'
-TASKS = dict()
+TASK_TYPES = dict()
 WORKS = dict()
 TASKS_IN_WORKS = dict()
 DTM_SCANNER = Scanner('dtm' + SEPARATOR + 'tasks' + SEPARATOR)

@@ -2,7 +2,7 @@ from dtstructure.tasks import TaskData
 from django.http import HttpResponse, HttpResponseRedirect, FileResponse
 from django.shortcuts import render, redirect
 from django.core.exceptions import PermissionDenied
-from context_objects import TASKS, DTM_SCANNER, TASKS_IN_WORKS, WORK_DIR, SPACE_REPLACER
+from context_objects import TASK_TYPES, DTM_SCANNER, TASKS_IN_WORKS, WORK_DIR, SPACE_REPLACER
 from os.path import join as pathjoin
 from .views_functions import *
 
@@ -21,20 +21,24 @@ def getasset(request, taskname, filename):
 # Функция рендера (обработки и конечного представления на сайте) задачи по имени (имя берётся из адресной строки)
 # ОЧЕНЬ КРИВО
 def task_view(request, taskname):
+    session = request.session
+    if 'compiled_tasks' not in session: session['compiled_tasks'] = {}
+
     # Добавление пробелов в taskname
     taskname  = taskname.replace(SPACE_REPLACER, ' ')
 
     # Заполнение Дополнительных аргументов (Костыль?)
     additional_render_args = fill_additional_args(taskname)
-    # Вызов функции рендера (Если задание зранится в сессии, то берем оттуда, иначе рендерим с 0)
-    if request.session.get(taskname) == None:
-        task = TaskData.open(TASKS[taskname])
+    # Вызов функции рендера (Если задание хранится в сессии, то берем оттуда, иначе рендерим с 0)
+    if taskname not in session['compiled_tasks']:
+        task = TaskData.open(TASK_TYPES[taskname])
 
-        request.session[taskname] = task.as_JSON()
+        session['compiled_tasks'][taskname] = task.as_JSON()
+        request.session.modified = True
         return task_handle(request, task, taskname, additional_render_args)
     
     # Рендер из сессии
-    return task_handle(request, TaskData.from_JSON(request.session[taskname]), taskname, additional_render_args)
+    return task_handle(request, TaskData.from_JSON(session['compiled_tasks'][taskname]), taskname, additional_render_args)
 
 # Переадресация на страницу отображения результата
 def task_handle(request, task, taskname, additional_render_args):
