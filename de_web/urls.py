@@ -15,8 +15,8 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from core_app.views import failed, completed, index_page_render
-from core_app.views import task_view, render_work, getasset
+from core_app.views import failed, completed, index_page_render, login_view
+from core_app.views import task_view, render_work, getasset, logout_view
 
 
 urlpatterns = [
@@ -26,5 +26,7 @@ urlpatterns = [
     path('works/<str:work_name>', render_work),
     path('failed/', failed),
     path('completed/', completed),
+    path('login/', login_view),
+    path('logout/', logout_view),
     path('', index_page_render)
 ]

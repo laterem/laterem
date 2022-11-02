@@ -8,6 +8,13 @@ TEMPLATE_CLONING_PATH = 'core_app/templates/static_copies/'
 if not os.path.exists(TEMPLATE_CLONING_PATH):
     os.makedirs(TEMPLATE_CLONING_PATH)
 
+class Verdicts:
+    OK = 'OK'
+    SENT = 'ST'
+    WRONG_ANSWER = 'WA'
+    PARTIALLY_SOLVED = 'PS'
+    NO_ANSWER = 'NA'
+
 
 def open_dtc(path):
     if not path.endswith('.dtc'):

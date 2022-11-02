@@ -1,3 +1,4 @@
+from cProfile import label
 from django import forms
 from .models import *
 
@@ -9,3 +10,7 @@ class AddRedirectForm(forms.Form):
 
 class AddTaskButton(forms.Form):
     task = forms.CharField(max_length='255', help_text="", label='')
+
+class LoginForm(forms.Form):
+    email = forms.EmailField(label='Email')
+    password = forms.CharField(widget=forms.PasswordInput, label='Пароль')

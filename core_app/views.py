@@ -1,10 +1,47 @@
 from dtm.tasks import TaskData
 from django.http import HttpResponse, HttpResponseRedirect, FileResponse
 from django.shortcuts import render, redirect
+from django.contrib.auth import authenticate, login, logout
 from django.core.exceptions import PermissionDenied
-from context_objects import TASK_TYPES, DTM_SCANNER, WORK_DIR, SPACE_REPLACER
+from context_objects import SEPARATOR, TASK_TYPES, DTM_SCANNER, WORK_DIR, SPACE_REPLACER, HASH_FUNCTION
 from os.path import join as pathjoin
 from .views_functions import *
+from django.contrib.auth.models import User
+
+def logout_view(request):
+    logout(request)
+    return HttpResponse('<h1>Успешный выход из аккаунта</h1>')
+
+# Сделано в спешке, всё очень криво
+def login_view(request):
+    if request.method == 'POST':
+        email = request.POST['email']
+        password = request.POST['password']
+        user = authenticate(username=email, password=password)
+        print('>>>', user)
+        if user is not None:
+            login(request, user)
+            return redirect('/')
+        else:
+            with open('data' + SEPARATOR + 'userdata' + SEPARATOR + 'auth.txt', mode='r') as file:
+                for line in file:
+                    remail, rpassword = line.split('\\')
+                    if remail == email:
+                        user = User.objects.create_user(email=email, password=rpassword, username=email)
+                        if password == rpassword:
+                            user = authenticate(username=email, password=password)
+                            login(request, user)
+                            return redirect('/')
+                        else:
+                            return HttpResponse('<h1>Такого аккаунта не существует! или данные некорректные</h1>')
+                else:
+                    # Пользователь не найден ни в файле auth.txt, ни в базе данных
+                    return HttpResponse('<h1>Такого аккаунта не существует! или данные некорректные</h1>')
+    else:
+        form = LoginForm()
+        return render(request, 'login.html', {'form': form})
+
+
 
 # Рендер страницы работы
 def render_work(request, work_name):
@@ -28,7 +65,7 @@ def task_view(request, taskname):
     taskname  = taskname.replace(SPACE_REPLACER, ' ')
 
     # Заполнение Дополнительных аргументов (Костыль?)
-    additional_render_args = fill_additional_args(taskname, request.session.get('color-theme'))
+    additional_render_args = fill_additional_args(request, taskname, request.session.get('color-theme'))
     # Вызов функции рендера (Если задание хранится в сессии, то берем оттуда, иначе рендерим с 0)
     if taskname not in session['compiled_tasks']:
         task = TaskData.open(TASK_TYPES[taskname])
@@ -83,6 +120,8 @@ def task_handle(request, task, taskname, additional_render_args):
         if task.test(answer):
             # Тут надо записывать что ученик правильно сдал задачу 
             return HttpResponseRedirect('/completed/')
+
+
         return HttpResponseRedirect('/failed/')
     else:
         form = AddAnswerForm()
@@ -103,4 +142,5 @@ def failed(request):
 def index_page_render(request):
     if not request.session.get('theme'):
         request.session['theme'] = 'dark'
-    return render(request, 'task_base.html', {'title': 'Сайт по ЦЭ', 'text': 'Это базовая страница', 'text2': 'Перейдите на нужную работу по ссылке слева', 'workdir': WORK_DIR, 'theme': request.session['theme']})
+    return render(request, 'task_base.html', {'title': 'Сайт по ЦЭ', 'text': 'Это базовая страница', 'text2': 'Перейдите на нужную работу по ссылке слева', 'workdir': WORK_DIR, 'theme': request.session['theme'],
+                                              'user': request.user})

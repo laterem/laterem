@@ -25,7 +25,7 @@ def fill_work_dicts(request, work_name):
 def count_work(taskname):
     return taskname[taskname.rfind('/') + 1 : taskname[taskname.rfind('/') + 1 : ].find('_id')]
 
-def fill_additional_args(taskname, theme):
+def fill_additional_args(request, taskname, theme):
     ret = {}
     work_name = count_work(taskname)
     ret['button1'] = AddAnswerForm()
@@ -34,6 +34,7 @@ def fill_additional_args(taskname, theme):
     ret['task_list'] = WORKS[work_name]
     ret['task_name'] = taskname[taskname.rfind('_id') + 3:]
     ret['work_name'] = work_name[work_name.rfind('.') + 1:]
+    ret['user'] = request.user
     if not theme:
         theme = 'dark'
     ret['theme'] = theme

@@ -16,6 +16,8 @@ DTM_SCANNER = Scanner('data' + SEPARATOR + 'tasks' + SEPARATOR)
 WORK_DIR = rdir_to_tree('data' + SEPARATOR + 'works' + SEPARATOR)
 SPACE_REPLACER = '§'
 
+HASH_FUNCTION = hash # Временно!
+
 
 def update_global_dict(container: dict, value):
     container.clear()
