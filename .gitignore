@@ -4,5 +4,5 @@ core_app/templates/static_copies/*
 **/__pycache__/*
 **/venv/*
 **/menu.html
-
+data/userdata/auth.txt
 10_1-dew.md

@@ -51,7 +51,5 @@ class TaskData():
     
     def as_JSON(self):
         d = self.dtc.to_dict()
-        print(d)
         d['template'] = self.template
-        print(d)
         return json.dumps(d, indent=4)

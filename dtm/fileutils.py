@@ -41,9 +41,3 @@ class Scanner:
         if id not in self.table:
             self.table[id] = Scanner._scan([self.root], id)
         return self.table[id]
-
-
-if __name__ == '__main__':
-    SCANNER = Scanner("D:\\SP1DZMAIN")
-    path = SCANNER.id_to_path('task1')
-    print(path)

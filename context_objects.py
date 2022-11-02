@@ -1,5 +1,5 @@
-from dtstructure.fileutils import Scanner
-from dtstructure.fileutils import rdir_to_tree
+from dtm.fileutils import Scanner
+from dtm.fileutils import rdir_to_tree
 from extratypes import Literal
 
 # Модуль инициализации и расположения объектов, общих для всех модулей системы
@@ -9,10 +9,11 @@ if platform == 'darwin':
     SEPARATOR = '/'
 else:
     SEPARATOR = '\\'
+
 TASK_TYPES = dict()
 WORKS = dict()
-DTM_SCANNER = Scanner('dtm' + SEPARATOR + 'tasks' + SEPARATOR)
-WORK_DIR = rdir_to_tree('dtm' + SEPARATOR + 'works' + SEPARATOR)
+DTM_SCANNER = Scanner('data' + SEPARATOR + 'tasks' + SEPARATOR)
+WORK_DIR = rdir_to_tree('data' + SEPARATOR + 'works' + SEPARATOR)
 SPACE_REPLACER = '§'
 
 

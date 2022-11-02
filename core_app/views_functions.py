@@ -5,7 +5,7 @@ from .forms import *
 
 def fill_work_dicts(request, work_name):
     # Считывание состава работы из json
-    with open('dtm/works/' + work_name.replace('.', '/') + '.json', 'r', encoding='UTF-8') as f:
+    with open('data/works/' + work_name.replace('.', '/') + '.json', 'r', encoding='UTF-8') as f:
         text = json.load(f)
     
     # Заполнение словарей работы, необходимо для системы навигации

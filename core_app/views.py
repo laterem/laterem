@@ -1,4 +1,4 @@
-from dtstructure.tasks import TaskData
+from dtm.tasks import TaskData
 from django.http import HttpResponse, HttpResponseRedirect, FileResponse
 from django.shortcuts import render, redirect
 from django.core.exceptions import PermissionDenied

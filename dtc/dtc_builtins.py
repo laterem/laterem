@@ -18,8 +18,6 @@ class RandomNum10(DTCFunction):
 class IsEqual(DTCCheckerFunction):
     expected_argsc = 1
     def call(self, field):
-        print(self.args[0], field)
-
         if isinstance(self.args[0], list):
             return sorted(field) == sorted(self.args[0])
         return field == self.args[0]
