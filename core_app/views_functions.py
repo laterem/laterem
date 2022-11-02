@@ -38,3 +38,12 @@ def fill_additional_args(taskname, theme):
         theme = 'dark'
     ret['theme'] = theme
     return ret
+
+def change_color_theme(request):
+    if 'color-theme' not in request.session:
+        request.session['color-theme'] = 'dark'
+    
+    if request.session['color-theme'] == 'dark':
+        request.session['color-theme'] = 'light'
+    elif request.session['color-theme'] == 'light':
+        request.session['color-theme'] = 'dark'
