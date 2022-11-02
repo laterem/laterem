@@ -1,22 +1,22 @@
 /* Общий стиль */
 body {
-    background: rgb(245, 245, 245); /* Цвет фона */ 
-    color: rgb(0, 10, 25); /* Цвет текста */
+    background: rgb(51, 51, 51); /* Цвет фона */ 
+    color: rgb(255, 245, 230); /* Цвет текста */
 }
 /* Боковое меню */
 #menu {
-    background: rgb(235, 235, 235);
+    background: rgb(41, 41, 41);
 }
 /* Ссылки в меню */
 #menu a { 
-    color: rgb(0, 20, 45);
+    color: rgb(255, 235, 210);
 }
 /* Блок с заданием */
 #content {
-    background: rgb(249, 249, 249);
+    background: rgb(55, 55, 55);
 }
 .line {
-    border-bottom: 1px groove rgb(249, 249, 249); /* Линия между ссылками */
+    border-bottom: 1px groove rgb(51, 51, 51); /* Линия между ссылками */
 }
 /* Стиль кнопок */
 .button {
@@ -26,10 +26,10 @@ body {
 
 /* Скрывающееся дерево */
 .caret::before {
-    color: rgb(0, 10, 25);
+    color: rgb(255, 245, 230);
 }
 
 /* Иконка сайта */
 #main-icon {
-    background: rgb(243, 243, 243);
+    background: rgb(53, 53, 53);
 }
