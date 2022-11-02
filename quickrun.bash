@@ -3,11 +3,15 @@ if [[ "$OSTYPE" == "darwin"* ]]; then
     source venv/bin/activate
     python3 -m pip install -r requirements.txt
     python3 setup.py
+    python3 manage.py makemigrations
+    python3 manage.py migrate
     python3 manage.py runserver
 else
     py -m venv venv
     source venv/Scripts/activate
     py -m pip install -r requirements.txt
     py setup.py
+    py manage.py makemigrations
+    py manage.py migrate
     py manage.py runserver
 fi

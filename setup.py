@@ -7,7 +7,8 @@ COLORS = {
     'GREEN': '#befb61', #'#00ff43'
     'LIGHT_BLUE': '#60a3f8',
     'ABRICOT_DARK': '#ee754a',  #'#f17a54'
-    'ABRICOT_LIGHT': '#ee8f6d' #'#ffa573'
+    'ABRICOT_LIGHT': '#ee8f6d', #'#ffa573'
+    'GRAY': '#000a19'
 } 
 
 

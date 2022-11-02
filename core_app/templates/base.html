@@ -7,11 +7,11 @@
         <meta charset="UTF-8"/>
         <link rel="shortcut icon" type="image/png" href="{% static 'outline.svg' %}"/>
         <title>{{title}}</title>
-        <link rel="stylesheet" href="{% static 'stylesheet.css' %}"/>
+        <link rel="stylesheet" href="{% static 'css/stylesheet.css' %}"/>
         {% if theme == 'light' %}
-            <link rel="stylesheet" href="{% static 'stylesheet-light.css' %}"/>
+            <link rel="stylesheet" href="{% static 'css/stylesheet-light.css' %}"/>
         {% else %}
-            <link rel="stylesheet" href="{% static 'stylesheet-dark.css' %}"/>
+            <link rel="stylesheet" href="{% static 'css/stylesheet-dark.css' %}"/>
         {% endif %}
     </head>
     <body>
