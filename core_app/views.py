@@ -1,4 +1,5 @@
-from dtm.tasks import TaskData
+from dtm.tasks import TaskData, Verdicts
+from dtm.users import User as LateremUser
 from django.http import HttpResponse, HttpResponseRedirect, FileResponse
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
@@ -109,8 +110,18 @@ def task_handle(request, task, taskname, additional_render_args):
 
 # Проверка ответа -> переадрессация на нужную страницу
             if task.test(answer):
-                # Тут надо записывать что ученик правильно сдал задачу 
+                with LateremUser(request.user.email) as user:
+                    print(taskname)
+                    argtaskname = taskname[taskname.find('_id') + 3:]
+                    argworkpath = taskname[:taskname.find('_id')]
+                    argworkpath = argworkpath.replace('.', SEPARATOR)
+                    user.set_verdict(argworkpath, argtaskname, Verdicts.OK)
                 return HttpResponseRedirect('/completed/')
+            with LateremUser(request.user.email) as user:
+                argtaskname = taskname[taskname.find('_id') + 3:]
+                argworkpath = taskname[:taskname.find('_id')]
+                argworkpath = argworkpath.replace('.', SEPARATOR)
+                user.set_verdict(argworkpath, argtaskname, Verdicts.WRONG_ANSWER)
             return HttpResponseRedirect('/failed/')
     else:
         form = AddAnswerForm()
