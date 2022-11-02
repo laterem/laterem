@@ -7,7 +7,11 @@
         <meta charset="UTF-8"/>
         <link rel="shortcut icon" type="image/png" href="{% static 'outline.svg' %}"/>
         <title>{{title}}</title>
-        <link rel="stylesheet" href="{% static 'stylesheet.css' %}"/>
+        {% if theme == 'light' %}
+            <link rel="stylesheet" href="{% static 'stylesheet-light.css' %}"/>
+        {% else %}
+            <link rel="stylesheet" href="{% static 'stylesheet.css' %}"/>
+        {% endif %}
     </head>
     <body>
         <div id="menu">
@@ -20,7 +24,7 @@
         <h1 align="center">Тестовый вариант сайта по ЦЭ от Спайда и Журы</h1>
         <form method="post">
             {% csrf_token %}
-            <button type="button" class="button" name="change-color-theme" style="position: fixed; right: 5px; top: 5px"></button>
+            <button type="submit" class="button" name="change-color-theme" style="position: fixed; right: 5px; top: 5px"></button>
         </form>
         <div id="content">
             <h2>{{ work_name }}</h2>
@@ -30,7 +34,7 @@
             {% endif %}
             {% block content %}
             {% endblock %}
-            <div id="foot" style="position: fixed; bottom: 10px">
+            <div id="foot">
                 {% block foot %}
                 {% endblock %}
             </div>

@@ -1,7 +1,7 @@
 /* Общий стиль */
 body {
-    background: rgb(51, 51, 51); /* Цвет фона */ 
-    color: rgb(255, 245, 230); /* Цвет текста */
+    background: rgb(204, 204, 204); /* Цвет фона */ 
+    color: rgb(0, 10, 25); /* Цвет текста */
     font-family: Arial, Helvetica, sans-serif;
  margin: 0; /* Обнуляем отступы браузера */
 }
@@ -19,7 +19,7 @@ h2 {
 #menu { /* Левая колонка */
  float: left; /* Обтекание справа */
  /* border: 1px solid #292929; Параметры рамки вокруг */
- background: rgb(41, 41, 41);
+ background: rgb(194, 194, 194);
  width: 20%;
  min-height: 95vh;
  padding: 5px; /* Поля вокруг текста */
@@ -30,7 +30,7 @@ h2 {
  padding: 2px; /* Поля вокруг ссылок */
 }
 #menu a { 
-    color: rgb(255, 235, 210); /* Цвет текста */
+    color: rgb(0, 20, 45); /* Цвет текста */
  display: block; /* Отображать ссылку как блок */
  padding: 2px; /* Поля вокруг ссылок */
  margin: 1px; /* Отступы вокруг */
@@ -48,12 +48,12 @@ h2 {
  width: 56%;
  padding: 5px; /* Поля вокруг текста */
  overflow:hidden;
- background: rgb(55, 55, 55);
+ background: rgb(208, 208, 208);
  padding: 10px;
  border-radius: 20px;
 }
 .line {
- border-bottom: 1px groove rgb(51, 51, 51); /* Линия между ссылками */
+ border-bottom: 1px groove rgb(208, 208, 208); /* Линия между ссылками */
 }
 /* Нижняя часть сайта */
 #foot { /* Нижний блок */
@@ -97,7 +97,7 @@ user-select: none;
 
 .caret::before {
 content: "\25B6";
-color: rgb(255, 245, 230);
+color: rgb(0, 10, 25);
 display: inline-block;
 margin-right: 6px;
 }
@@ -121,5 +121,5 @@ display: block;
     padding: 5px;
     padding-bottom: 2px;
     border-radius: 30%;
-    background: rgb(53, 53, 53);
+    background: rgb(202, 202, 202);
 }

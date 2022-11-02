@@ -1,3 +1,4 @@
+from traceback import print_tb
 from dtm.tasks import TaskData
 from django.http import HttpResponse, HttpResponseRedirect, FileResponse
 from django.shortcuts import render, redirect
@@ -101,6 +102,18 @@ def failed(request):
 
 # Базовая страница сайта
 def index_page_render(request):
-    if not request.session.get('theme'):
-        request.session['theme'] = 'dark'
-    return render(request, 'task_base.html', {'title': 'Сайт по ЦЭ', 'text': 'Это базовая страница', 'text2': 'Перейдите на нужную работу по ссылке слева', 'workdir': WORK_DIR, 'theme': request.session['theme']})
+    if request.method == 'POST':  # Расхардкодить!!!
+        # Обработка кнопки смены темы
+        if 'change-color-theme' in request.POST:
+            if 'color-theme' not in request.session:
+                request.session['color-theme'] = 'dark'
+            
+            if request.session['color-theme'] == 'dark':
+                request.session['color-theme'] = 'light'
+                print('Light')
+            elif request.session['color-theme'] == 'light':
+                request.session['color-theme'] = 'dark'
+                print('Dark')
+    if not request.session.get('color-theme'):
+        request.session['color-theme'] = 'dark'
+    return render(request, 'task_base.html', {'title': 'Сайт по ЦЭ', 'text': 'Это базовая страница', 'text2': 'Перейдите на нужную работу по ссылке слева', 'workdir': WORK_DIR, 'theme': request.session['color-theme']})
