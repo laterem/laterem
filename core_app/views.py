@@ -1,4 +1,3 @@
-from traceback import print_tb
 from dtm.tasks import TaskData
 from django.http import HttpResponse, HttpResponseRedirect, FileResponse
 from django.shortcuts import render, redirect
@@ -8,6 +7,7 @@ from context_objects import SEPARATOR, TASK_TYPES, DTM_SCANNER, WORK_DIR, SPACE_
 from os.path import join as pathjoin
 from .views_functions import *
 from django.contrib.auth.models import User
+from django.contrib.auth.decorators import login_required
 
 def logout_view(request):
     logout(request)
@@ -22,7 +22,7 @@ def login_view(request):
         print('>>>', user)
         if user is not None:
             login(request, user)
-            return redirect('/')
+            return redirect(request.GET.get('next'))
         else:
             with open('data' + SEPARATOR + 'userdata' + SEPARATOR + 'auth.txt', mode='r') as file:
                 for line in file:
@@ -32,7 +32,7 @@ def login_view(request):
                         if password == rpassword:
                             user = authenticate(username=email, password=password)
                             login(request, user)
-                            return redirect('/')
+                            return redirect(request.GET.get('next'))
                         else:
                             return HttpResponse('<h1>Такого аккаунта не существует! или данные некорректные</h1>')
                 else:
@@ -45,6 +45,7 @@ def login_view(request):
 
 
 # Рендер страницы работы
+@login_required
 def render_work(request, work_name):
     return redirect('/task/' + work_name + '_id' + fill_work_dicts(request, work_name))
 
@@ -58,6 +59,7 @@ def getasset(request, taskname, filename):
 
 # Функция рендера (обработки и конечного представления на сайте) задачи по имени (имя берётся из адресной строки)
 # ОЧЕНЬ КРИВО
+@login_required
 def task_view(request, taskname):
     session = request.session
     if 'compiled_tasks' not in session: session['compiled_tasks'] = {}
@@ -126,6 +128,7 @@ def failed(request):
     return HttpResponse("<h1>Решение Неверно, переделывай!</h1>")
 
 # Базовая страница сайта
+@login_required
 def index_page_render(request):
     if request.method == 'POST':  # Расхардкодить!!!
         # Обработка кнопки смены темы
