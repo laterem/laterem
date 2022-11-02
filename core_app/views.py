@@ -2,7 +2,7 @@ from dtstructure.tasks import TaskData
 from django.http import HttpResponse, HttpResponseRedirect, FileResponse
 from django.shortcuts import render, redirect
 from django.core.exceptions import PermissionDenied
-from context_objects import TASK_TYPES, DTM_SCANNER, TASKS_IN_WORKS, WORK_DIR, SPACE_REPLACER
+from context_objects import TASK_TYPES, DTM_SCANNER, WORK_DIR, SPACE_REPLACER
 from os.path import join as pathjoin
 from .views_functions import *
 
@@ -28,7 +28,7 @@ def task_view(request, taskname):
     taskname  = taskname.replace(SPACE_REPLACER, ' ')
 
     # Заполнение Дополнительных аргументов (Костыль?)
-    additional_render_args = fill_additional_args(taskname)
+    additional_render_args = fill_additional_args(taskname, request.session.get('color-theme'))
     # Вызов функции рендера (Если задание хранится в сессии, то берем оттуда, иначе рендерим с 0)
     if taskname not in session['compiled_tasks']:
         task = TaskData.open(TASK_TYPES[taskname])
@@ -43,6 +43,22 @@ def task_view(request, taskname):
 # Переадресация на страницу отображения результата
 def task_handle(request, task, taskname, additional_render_args):
     if request.method == 'POST':  # Расхардкодить!!!
+        # Обработка кнопки смены темы
+        if 'change-color-theme' in request.POST:
+            if 'color-theme' not in request.session:
+                request.session['color-theme'] = 'dark'
+            
+            if request.session['color-theme'] == 'dark':
+                request.session['color-theme'] = 'light'
+            elif request.session['color-theme'] == 'light':
+                request.session['color-theme'] = 'dark'
+            
+            rargs = additional_render_args
+            # Что-то на спайдовом
+            for k, v in task.dtc.field_table.items():
+                rargs[k] = v
+            return render(request, task.template, rargs)
+
         # Заполнение списка с id задач (нужно для последующей переадрессации)
         ids = list()
         for _, i in additional_render_args['task_list']:
@@ -52,7 +68,7 @@ def task_handle(request, task, taskname, additional_render_args):
         for el in request.POST:
             if el in ids:
                 # Переадрессация на задачу
-                return redirect('/task/' + TASKS_IN_WORKS[taskname] + '_id' + el)
+                return redirect('/task/' + count_work(taskname) + '_id' + el)
 
         # Анализ ответа
         answer = None
@@ -85,4 +101,6 @@ def failed(request):
 
 # Базовая страница сайта
 def index_page_render(request):
-    return render(request, 'task_base.html', {'title': 'Сайт по ЦЭ', 'text': 'Это базовая страница', 'text2': 'Перейдите на нужную работу по ссылке слева', 'workdir': WORK_DIR})
+    if not request.session.get('theme'):
+        request.session['theme'] = 'dark'
+    return render(request, 'task_base.html', {'title': 'Сайт по ЦЭ', 'text': 'Это базовая страница', 'text2': 'Перейдите на нужную работу по ссылке слева', 'workdir': WORK_DIR, 'theme': request.session['theme']})

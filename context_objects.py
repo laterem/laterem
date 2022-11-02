@@ -11,7 +11,6 @@ else:
     SEPARATOR = '\\'
 TASK_TYPES = dict()
 WORKS = dict()
-TASKS_IN_WORKS = dict()
 DTM_SCANNER = Scanner('dtm' + SEPARATOR + 'tasks' + SEPARATOR)
 WORK_DIR = rdir_to_tree('dtm' + SEPARATOR + 'works' + SEPARATOR)
 SPACE_REPLACER = '§'
