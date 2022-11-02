@@ -1,0 +1,35 @@
+/* Общий стиль */
+body {
+    background: rgb(245, 245, 245); /* Цвет фона */ 
+    color: rgb(0, 10, 25); /* Цвет текста */
+}
+/* Боковое меню */
+#menu {
+    background: rgb(235, 235, 235);
+}
+/* Ссылки в меню */
+#menu a { 
+    color: rgb(0, 20, 45);
+}
+/* Блок с заданием */
+#content {
+    background: rgb(249, 249, 249);
+}
+.line {
+    border-bottom: 1px groove rgb(249, 249, 249); /* Линия между ссылками */
+}
+/* Стиль кнопок */
+.button {
+    background-color: rgb(221, 221, 221);
+    color: black;
+}
+
+/* Скрывающееся дерево */
+.caret::before {
+    color: rgb(0, 10, 25);
+}
+
+/* Иконка сайта */
+#main-icon {
+    background: rgb(243, 243, 243);
+}

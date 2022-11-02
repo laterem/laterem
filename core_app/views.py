@@ -1,3 +1,4 @@
+from traceback import print_tb
 from dtm.tasks import TaskData
 from django.http import HttpResponse, HttpResponseRedirect, FileResponse
 from django.shortcuts import render, redirect
@@ -82,47 +83,33 @@ def task_handle(request, task, taskname, additional_render_args):
     if request.method == 'POST':  # Расхардкодить!!!
         # Обработка кнопки смены темы
         if 'change-color-theme' in request.POST:
-            if 'color-theme' not in request.session:
-                request.session['color-theme'] = 'dark'
-            
-            if request.session['color-theme'] == 'dark':
-                request.session['color-theme'] = 'light'
-            elif request.session['color-theme'] == 'light':
-                request.session['color-theme'] = 'dark'
-            
-            rargs = additional_render_args
-            # Что-то на спайдовом
-            for k, v in task.dtc.field_table.items():
-                rargs[k] = v
-            return render(request, task.template, rargs)
-
-        # Заполнение списка с id задач (нужно для последующей переадрессации)
-        ids = list()
-        for _, i in additional_render_args['task_list']:
-            ids.append(i)
-
-        # Проверка - есть ли нажатая нами кнопка в списке задач (нужно для переадрессации на другие задачи)
-        for el in request.POST:
-            if el in ids:
-                # Переадрессация на задачу
-                return redirect('/task/' + count_work(taskname) + '_id' + el)
-
-        # Анализ ответа
-        answer = None
-        if request.POST.getlist('checks'):
-            answer = request.POST.getlist('checks')
+            change_color_theme(request)
         else:
-            form = AddAnswerForm(request.POST) 
-            if form.is_valid():
-                answer = form.cleaned_data['answer'].strip()
+            # Заполнение списка с id задач (нужно для последующей переадрессации)
+            ids = list()
+            for _, i in additional_render_args['task_list']:
+                ids.append(i)
 
-        # Проверка ответа -> переадрессация на нужную страницу
-        if task.test(answer):
-            # Тут надо записывать что ученик правильно сдал задачу 
-            return HttpResponseRedirect('/completed/')
+            # Проверка - есть ли нажатая нами кнопка в списке задач (нужно для переадрессации на другие задачи)
+            for el in request.POST:
+                if el in ids:
+                    # Переадрессация на задачу
+                    return redirect('/task/' + count_work(taskname) + '_id' + el)
 
+            # Анализ ответа
+            answer = None
+            if request.POST.getlist('checks'):
+                answer = request.POST.getlist('checks')
+            else:
+                form = AddAnswerForm(request.POST) 
+                if form.is_valid():
+                    answer = form.cleaned_data['answer'].strip()
 
-        return HttpResponseRedirect('/failed/')
+# Проверка ответа -> переадрессация на нужную страницу
+            if task.test(answer):
+                # Тут надо записывать что ученик правильно сдал задачу 
+                return HttpResponseRedirect('/completed/')
+            return HttpResponseRedirect('/failed/')
     else:
         form = AddAnswerForm()
     rargs = additional_render_args
@@ -140,7 +127,10 @@ def failed(request):
 
 # Базовая страница сайта
 def index_page_render(request):
-    if not request.session.get('theme'):
-        request.session['theme'] = 'dark'
-    return render(request, 'task_base.html', {'title': 'Сайт по ЦЭ', 'text': 'Это базовая страница', 'text2': 'Перейдите на нужную работу по ссылке слева', 'workdir': WORK_DIR, 'theme': request.session['theme'],
-                                              'user': request.user})
+    if request.method == 'POST':  # Расхардкодить!!!
+        # Обработка кнопки смены темы
+        change_color_theme(request)
+    if not request.session.get('color-theme'):
+        request.session['color-theme'] = 'dark'
+    return render(request, 'task_base.html', {'title': 'Сайт по ЦЭ', 'text': 'Это базовая страница', 'text2': 'Перейдите на нужную работу по ссылке слева', 'workdir': WORK_DIR, 'theme': request.session['color-theme'], 'user': request.user})
+

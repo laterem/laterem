@@ -1,64 +1,65 @@
+/* Общий стиль */
 body {
-    background: #333; /* Цвет фона */ 
-    color: rgb(255, 245, 230); /* Цвет текста */
     font-family: Arial, Helvetica, sans-serif;
- margin: 0; /* Обнуляем отступы браузера */
+    margin: 0; /* Обнуляем отступы браузера */
 }
+/* Стили заголовков */
 h1 {
- margin: 0px 5px 5px 0px; /* Убираем отступы */
- font-size: 28px;
+    margin: 0px 5px 5px 0px; /* Убираем отступы */
+    font-size: 28px;
 }
 h2 {
- margin-top: 0; /* Убираем отступ сверху */
- margin: 0px 5px 5px 0px; /* Убираем отступы */
- font-size: 20px;
+    margin-top: 0; /* Убираем отступ сверху */
+    margin: 0px 5px 5px 0px; /* Убираем отступы */
+    font-size: 20px;
 }
+/* Боковое меню */
 #menu { /* Левая колонка */
- float: left; /* Обтекание справа */
- /* border: 1px solid #292929; Параметры рамки вокруг */
- background: #292929;
- width: 20%;
- min-height: 95vh;
- padding: 5px; /* Поля вокруг текста */
- margin: 2.5vh 10px 0 5px; /* Значения отступов */
- border-radius: 5px;
+    float: left; /* Обтекание справа */
+    width: 20%;
+    min-height: 95vh;
+    padding: 5px; /* Поля вокруг текста */
+    margin: 2.5vh 10px 0 5px; /* Значения отступов */
+    border-radius: 5px;
 }
 #menu div {
- padding: 2px; /* Поля вокруг ссылок */
+    padding: 2px; /* Поля вокруг ссылок */
 }
 #menu a { 
-    color: rgb(255, 235, 210); /* Цвет текста */
- display: block; /* Отображать ссылку как блок */
- padding: 2px; /* Поля вокруг ссылок */
- margin: 1px; /* Отступы вокруг */
- font-size: 0.9em; /* Размер текста */
- text-decoration: none; /* Убираем подчеркивание текста */
+    display: block; /* Отображать ссылку как блок */
+    padding: 2px; /* Поля вокруг ссылок */
+    margin: 1px; /* Отступы вокруг */
+    font-size: 0.9em; /* Размер текста */
+    text-decoration: none; /* Убираем подчеркивание текста */
 }
 #menu a:hover { 
- margin: 0; /* Убираем поля */
+    margin: 0; /* Убираем поля */
 }
+/* Блок с заданием */
 #content { /* Правая колонка */
- margin: 30px 5px 20px 10px; /* Значения отступов */
- margin-bottom: 60px;
- margin-left: 22%;
- width: 56%;
- padding: 5px; /* Поля вокруг текста */
- overflow:hidden;
- background: #373737;
- padding: 10px;
- border-radius: 20px;
+    margin: 30px 5px 20px 10px; /* Значения отступов */
+    margin-bottom: 60px;
+    margin-left: 22%;
+    width: 56%;
+    padding: 5px; /* Поля вокруг текста */
+    overflow:hidden;
+    padding: 10px;
+    border-radius: 20px;
 }
 .line {
- border-bottom: 1px groove #333; /* Линия между ссылками */
+    border-bottom: 1px groove rgb(51, 51, 51); /* Линия между ссылками */
 }
+/* Нижняя часть сайта */
 #foot { /* Нижний блок */
- padding: 5px; /* Поля вокруг текста */
- clear: both; /* Отменяем обтекание */
+    padding: 5px; /* Поля вокруг текста */
+    clear: both; /* Отменяем обтекание */
+    align-self: center;
+    position: fixed;
+    bottom: 10px
 }
+/* Стиль кнопок */
 .button {
-    background-color: #ddd;
     border: none;
-    color: black;
     padding: 10px 20px;
     text-align: center;
     text-decoration: none;
@@ -67,54 +68,48 @@ h2 {
     cursor: pointer;
     border-radius: 16px;
 }
-#foot { /* Нижний блок */
-    padding: 5px; /* Поля вокруг текста */
-    clear: both; /* Отменяем обтекание */
-    align-self: center;
-}
 
-
+/* Скрывающееся дерево */
 ul, #myUL {
-list-style-type: none;
+    list-style-type: none;
 }
 
 #myUL {
-margin: 0;
-padding: 0;
+    margin: 0;
+    padding: 0;
 }
 
 .caret {
-cursor: pointer;
--webkit-user-select: none; /* Safari 3.1+ */
--moz-user-select: none; /* Firefox 2+ */
--ms-user-select: none; /* IE 10+ */
-user-select: none;
+    cursor: pointer;
+    -webkit-user-select: none; /* Safari 3.1+ */
+    -moz-user-select: none; /* Firefox 2+ */
+    -ms-user-select: none; /* IE 10+ */
+    user-select: none;
 }
 
 .caret::before {
-content: "\25B6";
-color: rgb(255, 245, 230);
-display: inline-block;
-margin-right: 6px;
+    content: "\25B6";
+    display: inline-block;
+    margin-right: 6px;
 }
 
 .caret-down::before {
-transform: rotate(90deg);  
+    transform: rotate(90deg);  
 }
 
 .nested {
-display: none;
+    display: none;
 }
 
 .active {
-display: block;
+    display: block;
 }
 
+/* Иконка сайта */
 #main-icon {
     margin: 10px 10px 10px 10px;
     width: 28px;
     padding: 5px;
     padding-bottom: 2px;
     border-radius: 30%;
-    background: #353535;
 }
