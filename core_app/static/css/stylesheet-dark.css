@@ -33,3 +33,20 @@ body {
 #main-icon {
     background: rgb(53, 53, 53);
 }
+
+/* Стиль отметки сделанных работ */
+#correct_work {
+    background: #198754;
+}
+
+#wrong_work {
+    background: #dc3545;
+}
+
+#unchecked_work {
+    background: #ffc107;
+}
+
+#no-answer_work {
+    background: rgb(40, 40, 40);
+}

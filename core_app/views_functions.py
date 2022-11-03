@@ -70,6 +70,15 @@ def init_personal_tree(tree):
                 ret[el][i] = Verdicts.NO_ANSWER
     return ret
 
+def set_work_verdict(answers):
+    if answers[Verdicts.NO_ANSWER] == 0:
+        if (answers[Verdicts.WRONG_ANSWER] == answers[Verdicts.PARTIALLY_SOLVED] == 0):
+            return Verdicts.OK
+    elif (answers[Verdicts.OK] > 0) or (answers[Verdicts.SENT] > 0) or (answers[Verdicts.PARTIALLY_SOLVED] > 0):
+        return Verdicts.PARTIALLY_SOLVED
+    else:
+        return Verdicts.NO_ANSWER
+
 def merge_tree(tree1, tree2, user):
     # tree1 - WORKDIR; tree2 - Дерево ученика; ret - результат
     ret = dict()
@@ -94,13 +103,8 @@ def merge_tree(tree1, tree2, user):
                 else:
                     answers[Verdicts.NO_ANSWER] += 1
 
-            if answers[Verdicts.NO_ANSWER] == 0:
-                if (answers[Verdicts.WRONG_ANSWER] == answers[Verdicts.PARTIALLY_SOLVED] == 0):
-                    ret[k] = Verdicts.OK
-            elif (answers[Verdicts.OK] > 0) or (answers[Verdicts.SENT] > 0) or (answers[Verdicts.PARTIALLY_SOLVED] > 0):
-                ret[k] = Verdicts.PARTIALLY_SOLVED
-            else:
-                ret[k] = Verdicts.NO_ANSWER
+            # Функция, определяющая вердикт работы от количества вердиктов по задачам
+            ret[k] = set_work_verdict(answers)
     else:
         for k in list(tree1.keys()):
             if k in list(tree2.keys()):

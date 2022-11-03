@@ -34,15 +34,15 @@ def _submenu(inp, deep=0):
             for elel in inp[el].keys():
                 element = elel[elel.find(SEPARATOR, elel.find(SEPARATOR) + 1) + 1:elel.rfind('.')]
                 if inp[el][elel] == Verdicts.NO_ANSWER:
-                    output.insert(pointer, '<li id="no-answer_work"><a href="' + 'http://localhost:8000/works/' + element.replace(SEPARATOR, '.') + '">' + element[element.rfind(SEPARATOR) + 1:] + '</a></li>')
+                    output.insert(pointer, '<li><a href="' + 'http://localhost:8000/works/' + element.replace(SEPARATOR, '.') + '" id="no-answer_work">' + element[element.rfind(SEPARATOR) + 1:] + '</a></li>')
                 else:
                     # Оперделение состояния задания
                     if inp[el][elel] == Verdicts.OK:
-                        output.insert(pointer, '<li id="correct_work"><a href="' + 'http://localhost:8000/works/' + element.replace(SEPARATOR, '.') + '">' + element[element.rfind(SEPARATOR) + 1:] + '</a></li>')
+                        output.insert(pointer, '<li><a href="' + 'http://localhost:8000/works/' + element.replace(SEPARATOR, '.') + '" id="correct_work">' + element[element.rfind(SEPARATOR) + 1:] + '</a></li>')
                     elif inp[el][elel] == Verdicts.WRONG_ANSWER:
-                        output.insert(pointer, '<li id="wrong_work"><a href="' + 'http://localhost:8000/works/' + element.replace(SEPARATOR, '.') + '">' + element[element.rfind(SEPARATOR) + 1:] + '</a></li>')
+                        output.insert(pointer, '<li><a href="' + 'http://localhost:8000/works/' + element.replace(SEPARATOR, '.') + '" id="wrong_work">' + element[element.rfind(SEPARATOR) + 1:] + '</a></li>')
                     else:
-                        output.insert(pointer, '<li id="unchecked_work"><a href="' + 'http://localhost:8000/works/' + element.replace(SEPARATOR, '.') + '">' + element[element.rfind(SEPARATOR) + 1:] + '</a></li>')
+                        output.insert(pointer, '<li><a href="' + 'http://localhost:8000/works/' + element.replace(SEPARATOR, '.') + '" id="unchecked_work">' + element[element.rfind(SEPARATOR) + 1:] + '</a></li>')
                 pointer += 1
             pointer += 1
     return ''.join(output)
