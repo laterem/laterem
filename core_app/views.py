@@ -1,9 +1,9 @@
-from dtm.tasks import TaskData
+from ltm.tasks import TaskData
 from django.http import HttpResponse, FileResponse
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
 from django.core.exceptions import PermissionDenied
-from context_objects import SEPARATOR, TASK_TYPES, DTM_SCANNER, WORK_DIR, SPACE_REPLACER, HASH_FUNCTION
+from context_objects import SEPARATOR, TASK_TYPES, LTM_SCANNER, WORK_DIR, SPACE_REPLACER, HASH_FUNCTION
 from os.path import join as pathjoin
 from .views_functions import *
 from django.contrib.auth.models import User
@@ -52,9 +52,9 @@ def render_work(request, work_name):
 
 
 def getasset(request, taskname, filename):
-    if filename == 'view.html' or filename == 'config.dtc':
+    if filename == 'view.html' or filename == 'config.ltc':
         raise PermissionDenied()
-    path = DTM_SCANNER.id_to_path(taskname)
+    path = LTM_SCANNER.id_to_path(taskname)
     path = pathjoin(path, filename)
     return FileResponse(open(path, 'rb'))
 
@@ -104,7 +104,7 @@ def task_handle(request, task, taskname, additional_render_args):
 
     rargs = additional_render_args
     # Что-то на спайдовом
-    for k, v in task.dtc.field_table.items():
+    for k, v in task.ltc.field_table.items():
         rargs[k] = v
     return render(request, task.template, rargs)
 

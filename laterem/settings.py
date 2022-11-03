@@ -52,7 +52,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-ROOT_URLCONF = 'de_web.urls'
+ROOT_URLCONF = 'laterem.urls'
 
 TEMPLATES = [
     {
@@ -70,7 +70,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'de_web.wsgi.application'
+WSGI_APPLICATION = 'laterem.wsgi.application'
 
 
 # Database

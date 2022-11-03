@@ -1,8 +1,8 @@
 import os
 import shutil
 import json
-from dtc.dtc_compiler import DTCCompiler, DTC
-from context_objects import DTM_SCANNER
+from ltc.ltc_compiler import LTCCompiler, LTC
+from context_objects import LTM_SCANNER
 
 TEMPLATE_CLONING_PATH = 'core_app/templates/static_copies/'
 if not os.path.exists(TEMPLATE_CLONING_PATH):
@@ -16,47 +16,47 @@ class Verdicts:
     NO_ANSWER = 'NA'
 
 
-def open_dtc(path):
-    if not path.endswith('.dtc'):
-        path += '.dtc'
+def open_ltc(path):
+    if not path.endswith('.ltc'):
+        path += '.ltc'
     with open(path, mode='r', encoding='UTF-8') as f:
         data = f.read()
-    dtcc = DTCCompiler()
-    dtc = dtcc.compile(data)
-    dtc.execute()
-    return dtc
+    ltcc = LTCCompiler()
+    ltc = ltcc.compile(data)
+    ltc.execute()
+    return ltc
 
 
 class TaskData():
-    def __init__(self, dtc, template) -> None:
-        self.dtc = dtc
+    def __init__(self, ltc, template) -> None:
+        self.ltc = ltc
         self.template = template
 
     @classmethod
     def from_JSON(cls, data):
         d = json.loads(data)
-        dtc = DTC.from_dict(d)
+        ltc = LTC.from_dict(d)
         template = d['template']
-        return cls(dtc, template)
+        return cls(ltc, template)
 
     @classmethod
     def open(cls, taskname):
-        path = DTM_SCANNER.id_to_path(taskname)
-        dtcpath = os.path.join(path, 'config.dtc')
+        path = LTM_SCANNER.id_to_path(taskname)
+        ltcpath = os.path.join(path, 'config.ltc')
         viewpath = os.path.join(path, 'view.html')
         tmpviewpath = taskname + '_view' + '.html'
 
         shutil.copyfile(viewpath, TEMPLATE_CLONING_PATH + tmpviewpath)
         
-        dtc = open_dtc(dtcpath)
+        ltc = open_ltc(ltcpath)
         template = 'static_copies/' + tmpviewpath
-        return cls(dtc, template)
+        return cls(ltc, template)
     
     def test(self, answer) -> int:
         fields = {'answer': answer}
-        return self.dtc.check(fields)
+        return self.ltc.check(fields)
     
     def as_JSON(self):
-        d = self.dtc.to_dict()
+        d = self.ltc.to_dict()
         d['template'] = self.template
         return json.dumps(d, indent=4)

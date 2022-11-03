@@ -1,11 +1,8 @@
-from http.client import PARTIAL_CONTENT
 import json
-from ssl import VERIFY_DEFAULT
-from termios import PARENB
 from context_objects import WORKS, SPACE_REPLACER, TASK_TYPES, WORK_DIR, SEPARATOR
 from .forms import *
-from dtm.users import User as LateremUser
-from dtm.tasks import Verdicts
+from ltm.users import User as LateremUser
+from ltm.tasks import Verdicts
 from django.http import HttpResponseRedirect
 
 def fill_work_dicts(request, work_name):

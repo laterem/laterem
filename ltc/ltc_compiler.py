@@ -1,14 +1,14 @@
 try:
-    from .dtc_builtins import *
-    from .dtc_core import *
+    from .ltc_builtins import *
+    from .ltc_core import *
 except ImportError:
-    from dtc_builtins import *
-    from dtc_core import *
+    from Ltc_builtins import *
+    from Ltc_core import *
 
 VERSION = 0.2
 
 
-class DTC:
+class LTC:
     def __init__(self, field_table, namespace, checker_functions):
         self.field_table = field_table
         self.checker_functions = checker_functions
@@ -25,9 +25,9 @@ class DTC:
             function = KEYWORD_TABLE[checkerobj['function']](*checkerobj['args'])
             field = checkerobj['field']
             checker_functions.append((field, function))
-        dtc = cls(field_table, namespace, checker_functions)
-        dtc.executed = executed 
-        return dtc
+        ltc = cls(field_table, namespace, checker_functions)
+        ltc.executed = executed 
+        return ltc
 
     def to_dict(self):
         if not self.executed: self.execute()
@@ -44,7 +44,7 @@ class DTC:
     
     def execute(self):
         if self.executed:
-            raise Warning('Trying to execute an already executed DTC')
+            raise Warning('Trying to execute an already executed LTC')
             return
 
         items = list(self.field_table.items())
@@ -61,36 +61,36 @@ class DTC:
         return valid
     
 
-class DTCCompiler:
+class LTCCompiler:
     def _typevalue(txt):
         txt = txt.strip()
         if txt[-1] == txt[0] == '"':
             txt = txt.strip('"')
-            return DTCValue(txt)
+            return LTCValue(txt)
         elif txt[-1] == txt[0] == "'":
             txt = txt.strip("'")
-            return DTCValue(txt)
+            return LTCValue(txt)
         elif txt.isdigit():
-            return DTCValue(txt)
+            return LTCValue(txt)
         elif txt[0] == '[' and txt[-1] == ']':
             args = txt[1:-1].split(',')
-            args = DTCCompiler._combine_kws(args, ',')
-            args = [DTCCompiler._typevalue(arg) for arg in args]
-            return DTCValue(args)
+            args = LTCCompiler._combine_kws(args, ',')
+            args = [LTCCompiler._typevalue(arg) for arg in args]
+            return LTCValue(args)
         elif '(' in txt and txt[-1] == ')':
-            return DTCCompiler._build_func(txt)
+            return LTCCompiler._build_func(txt)
         else:
-            return DTCAllias(txt)
+            return LTCAllias(txt)
 
     def _build_func(txt):
         fname = txt[:txt.find('(')]
         try:
             func = KEYWORD_TABLE[fname]
         except KeyError:
-            raise DTCCompileError('Unknown function ' + fname + '. Maybe you forgot to import it?')
+            raise LTCCompileError('Unknown function ' + fname + '. Maybe you forgot to import it?')
         args = txt[txt.find('(') + 1:-1].split(',')
-        args = DTCCompiler._combine_kws(args, ',')
-        fargs = [DTCCompiler._typevalue(arg) for arg in args]
+        args = LTCCompiler._combine_kws(args, ',')
+        fargs = [LTCCompiler._typevalue(arg) for arg in args]
         return func(*fargs)
 
     def _combine_kws(kws, joiner=' '):
@@ -99,13 +99,13 @@ class DTCCompiler:
                 continue
             kw = kw.strip()
             if kw.startswith('['):
-                DTCCompiler._combine_kw(i, '[', ']', kws, joiner)
+                LTCCompiler._combine_kw(i, '[', ']', kws, joiner)
             elif kw.startswith('"'):
-                DTCCompiler._combine_kw(i, '"', '"', kws, joiner)
+                LTCCompiler._combine_kw(i, '"', '"', kws, joiner)
             elif kw.startswith("'"):
-                DTCCompiler._combine_kw(i, "'", "'", kws, joiner)
+                LTCCompiler._combine_kw(i, "'", "'", kws, joiner)
             elif '(' in kw:
-                DTCCompiler._combine_kw(i, '(', ')', kws, joiner)
+                LTCCompiler._combine_kw(i, '(', ')', kws, joiner)
             
         kws = [kw for kw in kws if kw]
         return kws
@@ -153,31 +153,31 @@ class DTCCompiler:
                 linemode = 'check'
                 line = line.replace('?', ' ')
             else:
-                raise DTCCompileError('DTC line has no known operators: ' + line)
-            kws = DTCCompiler._combine_kws(line.strip().split())
+                raise LTCCompileError('LTC line has no known operators: ' + line)
+            kws = LTCCompiler._combine_kws(line.strip().split())
             if linemode == 'set':
                 try:
                     field = kws[0]
                     value = kws[1]
-                    value = DTCCompiler._typevalue(value)
+                    value = LTCCompiler._typevalue(value)
                     field_table[field] = value
                     if 'as' in kws:
                         allias = kws[kws.index('as') + 1]
                         namespace[allias] = value
                 except IndexError:
-                    raise DTCCompileError('Uncomplete operation: not enough keywords in ' + line)
+                    raise LTCCompileError('Uncomplete operation: not enough keywords in ' + line)
             elif linemode == 'check':
                 try:
                     field = kws[0]
-                    checker_functions.append((field, DTCCompiler._build_func(kws[1])))
+                    checker_functions.append((field, LTCCompiler._build_func(kws[1])))
                 except IndexError:
-                    raise DTCCompileError('Uncomplete operation: not enough keywords in ' + line)
+                    raise LTCCompileError('Uncomplete operation: not enough keywords in ' + line)
             elif linemode == 'contain':
                 allias = kws[0]
                 value = kws[1]
-                value = DTCCompiler._typevalue(value)
+                value = LTCCompiler._typevalue(value)
                 namespace[allias] = value
-        return DTC(field_table=field_table, 
+        return LTC(field_table=field_table, 
                    namespace=namespace, 
                    checker_functions=checker_functions)
 
@@ -197,43 +197,43 @@ class DTCCompiler:
             line = line.strip()
             if not line:
                 continue
-            kws = DTCCompiler._combine_kws(line.strip().split())
+            kws = LTCCompiler._combine_kws(line.strip().split())
             if kws[0] == 'set':
                 try: 
                     if 'to' not in kws:
-                        raise DTCCompileError('Uncomplete operation: expected "to" keyword in ' + line)
+                        raise LTCCompileError('Uncomplete operation: expected "to" keyword in ' + line)
                     field = kws[1]
                     value = kws[kws.index('to') + 1]
-                    value = DTCCompiler._typevalue(value)
+                    value = LTCCompiler._typevalue(value)
                     field_table[field] = value
                     if 'as' in kws:
                         allias = kws[kws.index('as') + 1]
                         namespace[allias] = value
                 except IndexError:
-                    raise DTCCompileError('Uncomplete operation: not enough keywords in ' + line)
+                    raise LTCCompileError('Uncomplete operation: not enough keywords in ' + line)
             elif kws[0] == 'check':
                 try:
                     if 'for' not in kws:
-                        raise DTCCompileError('Uncomplete operation: expected "for" keyword in ' + line)
+                        raise LTCCompileError('Uncomplete operation: expected "for" keyword in ' + line)
                     field = kws[1]
-                    checker_functions.append((field, DTCCompiler._build_func(kws[3])))
+                    checker_functions.append((field, LTCCompiler._build_func(kws[3])))
                 except IndexError:
-                    raise DTCCompileError('Uncomplete operation: not enough keywords in ' + line)
+                    raise LTCCompileError('Uncomplete operation: not enough keywords in ' + line)
             elif kws[0] == 'contain':
                 try: 
                     if 'as' not in kws:
-                        raise DTCCompileError('Uncomplete operation: expected "as" keyword in ' + line)
+                        raise LTCCompileError('Uncomplete operation: expected "as" keyword in ' + line)
                     allias = kws[1]
                     value = kws[kws.index('as') + 1]
-                    value = DTCCompiler._typevalue(value)
+                    value = LTCCompiler._typevalue(value)
                     namespace[allias] = value
                 except IndexError:
-                    raise DTCCompileError('Uncomplete operation: not enough keywords in ' + line)
+                    raise LTCCompileError('Uncomplete operation: not enough keywords in ' + line)
             
             else:
-                raise DTCCompileError('Unknown operation ' + kws[0])        
+                raise LTCCompileError('Unknown operation ' + kws[0])        
 
-        return DTC(field_table=field_table, 
+        return LTC(field_table=field_table, 
                    namespace=namespace, 
                    checker_functions=checker_functions)
 
@@ -249,11 +249,11 @@ id3 = [["я", "список"], GenerateLine(4, "c"), "[я делаю вид, ч�
 
 input ? Equal(GenerateLine(F3, GenerateLine(3, "b")))'''
 
-    dtcc = DTCCompiler()
-    dtc = dtcc.compile(test)
-    print(dtc.field_table)
-    dtc.execute()
-    print(dtc.field_table)
-    print(dtc.check({'input': '42'}))
-    print(dtc.check({'input': 'bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb'}))
-    print(dtc.to_dict())
+    ltcc = LTCCompiler()
+    ltc = ltcc.compile(test)
+    print(ltc.field_table)
+    ltc.execute()
+    print(ltc.field_table)
+    print(ltc.check({'input': '42'}))
+    print(ltc.check({'input': 'bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb'}))
+    print(ltc.to_dict())

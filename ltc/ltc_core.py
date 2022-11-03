@@ -1,7 +1,7 @@
-class DTCCompileError(Exception):
+class LTCCompileError(Exception):
     pass
 
-class DTCObject:
+class LTCObject:
     def __init__(self, value):
         self.value = value
 
@@ -10,7 +10,7 @@ class DTCObject:
 
 NResult = object()
 
-class DTCFunction:
+class LTCFunction:
     expected_argsc = 0
     result = NResult
     compiled = False
@@ -18,7 +18,7 @@ class DTCFunction:
     def __init__(self, *args):
         argsc = len(args)
         if argsc != self.expected_argsc:
-            raise DTCCompileError(f'{type(self).__name__} expected {self.expected_argsc} arguments, {argsc} were given.')
+            raise LTCCompileError(f'{type(self).__name__} expected {self.expected_argsc} arguments, {argsc} were given.')
         self.args = list(args)
 
     def __call__(self, ns):
@@ -37,16 +37,16 @@ class DTCFunction:
                 self.args[i] = arg(ns)
         self.compiled = True
 
-class DTCCheckerFunction(DTCFunction):
+class LTCCheckerFunction(LTCFunction):
     def __call__(self, field):
         return self.call(field)
 
-class DTCValue(DTCFunction):
+class LTCValue(LTCFunction):
     expected_argsc = 1    
     def call(self):
         return self.args[0]
 
-class DTCAllias:
+class LTCAllias:
     def __init__(self, name):
         self.name = name
     

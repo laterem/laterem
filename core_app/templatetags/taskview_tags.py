@@ -1,6 +1,6 @@
 from django import template
 from django.utils.safestring import SafeString
-from dtm.tasks import Verdicts
+from ltm.tasks import Verdicts
 
 from context_objects import SEPARATOR
 

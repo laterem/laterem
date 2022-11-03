@@ -1,45 +1,45 @@
 try:
-    from .dtc_core import *
+    from .ltc_core import *
 except ImportError:
-    from dtc_core import *
+    from ltc_core import *
 
 from random import randint
 
-class GenerateLine(DTCFunction):
+class GenerateLine(LTCFunction):
     expected_argsc = 2    
     def call(self):
         return self.args[1] * int(self.args[0])
 
-class RandomNum10(DTCFunction):
+class RandomNum10(LTCFunction):
     expected_argsc = 2    
     def call(self):
         return randint(int(self.args[0]), int(self.args[1]))
 
-class IsEqual(DTCCheckerFunction):
+class IsEqual(LTCCheckerFunction):
     expected_argsc = 1
     def call(self, field):
         if isinstance(self.args[0], list):
             return sorted(field) == sorted(self.args[0])
         return field == self.args[0]
 
-class IsEqualSum(DTCCheckerFunction):
+class IsEqualSum(LTCCheckerFunction):
     expected_argsc = 2
     def call(self, field):
         return int(field) == int(self.args[0]) + int(self.args[1])
 
-class IsNotEqual(DTCCheckerFunction):
+class IsNotEqual(LTCCheckerFunction):
     expected_argsc = 1
     def call(self, field):
         if isinstance(self.args[0], list):
             return sorted(field) != sorted(self.args[0])
         return field != self.args[0]
 
-class IsReversed(DTCCheckerFunction):
+class IsReversed(LTCCheckerFunction):
     expected_argsc = 1
     def call(self, field):
         return field == self.args[0][::-1]
 
-class ReverseList(DTCCheckerFunction):
+class ReverseList(LTCCheckerFunction):
     expected_argsc = 1
     def call(self):
         return reversed(self.args[0])
