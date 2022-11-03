@@ -1,6 +1,5 @@
-from dtm.tasks import TaskData, Verdicts
-from dtm.users import User as LateremUser
-from django.http import HttpResponse, HttpResponseRedirect, FileResponse
+from dtm.tasks import TaskData
+from django.http import HttpResponse, FileResponse
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
 from django.core.exceptions import PermissionDenied
@@ -15,6 +14,7 @@ def logout_view(request):
     return HttpResponse('<h1>Успешный выход из аккаунта</h1>')
 
 # Сделано в спешке, всё очень криво
+# Ничего, Жура переделает!
 def login_view(request):
     if request.method == 'POST':
         email = request.POST['email']
@@ -100,31 +100,8 @@ def task_handle(request, task, taskname, additional_render_args):
                     return redirect('/task/' + count_work(taskname) + '_id' + el)
 
             # Анализ ответа
-            answer = None
-            if request.POST.getlist('checks'):
-                answer = request.POST.getlist('checks')
-            else:
-                form = AddAnswerForm(request.POST) 
-                if form.is_valid():
-                    answer = form.cleaned_data['answer'].strip()
+            return analyze_answer(request, task, taskname)
 
-# Проверка ответа -> переадрессация на нужную страницу
-            if task.test(answer):
-                with LateremUser(request.user.email) as user:
-                    print(taskname)
-                    argtaskname = taskname[taskname.find('_id') + 3:]
-                    argworkpath = taskname[:taskname.find('_id')]
-                    argworkpath = argworkpath.replace('.', SEPARATOR)
-                    user.set_verdict(argworkpath, argtaskname, Verdicts.OK)
-                return HttpResponseRedirect('/completed/')
-            with LateremUser(request.user.email) as user:
-                argtaskname = taskname[taskname.find('_id') + 3:]
-                argworkpath = taskname[:taskname.find('_id')]
-                argworkpath = argworkpath.replace('.', SEPARATOR)
-                user.set_verdict(argworkpath, argtaskname, Verdicts.WRONG_ANSWER)
-            return HttpResponseRedirect('/failed/')
-    else:
-        form = AddAnswerForm()
     rargs = additional_render_args
     # Что-то на спайдовом
     for k, v in task.dtc.field_table.items():
@@ -146,5 +123,17 @@ def index_page_render(request):
         change_color_theme(request)
     if not request.session.get('color-theme'):
         request.session['color-theme'] = 'dark'
-    return render(request, 'task_base.html', {'title': 'Сайт по ЦЭ', 'text': 'Это базовая страница', 'text2': 'Перейдите на нужную работу по ссылке слева', 'workdir': WORK_DIR, 'theme': request.session['color-theme'], 'user': request.user})
+    if not request.session.get('personal_tree'):
+        request.session['personal_tree'] = init_personal_tree(WORK_DIR)
+    return render(request,
+                'task_base.html',
+                {
+                    'title': 'Сайт по ЦЭ',
+                    'text': 'Это базовая страница',
+                    'text2': 'Перейдите на нужную работу по ссылке слева',
+                    'workdir': request.session['personal_tree'],
+                    'theme': request.session['color-theme'],
+                    'user': request.user
+                }
+                )
 
