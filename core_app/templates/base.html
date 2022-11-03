@@ -27,7 +27,7 @@
         <br/> Привет, {{user.email}}
         <form method="post">
             {% csrf_token %}
-            <button type="submit" class="button" name="change-color-theme" style="position: fixed; right: 5px; top: 5px"></button>
+            <button type="submit" class="button" name="change-color-theme" style="position: fixed; right: 5px; top: 5px; padding: 5px 10px;"><img src="{% static 'change-color.svg' %}" style="width: 10px"/></button>
         </form>
         <div id="content">
             <h2>{{ work_name }}</h2>

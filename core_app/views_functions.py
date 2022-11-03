@@ -80,7 +80,7 @@ def set_work_verdict(answers):
         return Verdicts.NO_ANSWER
 
 def merge_tree(tree1, tree2, user):
-    # tree1 - WORKDIR; tree2 - Дерево ученика; ret - результат
+    # tree1 - WORKDIR или его ветка; tree2 - Дерево ученика; ret - результат
     ret = dict()
     if type(tree1) != type(dict()):
         # Обработка листьев (работ)
