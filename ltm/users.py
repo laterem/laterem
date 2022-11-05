@@ -4,6 +4,10 @@ from context_objects import SEPARATOR
 from .tasks import Verdicts
 from .works import Work, GroupVerdict
 
+DEFAULT_SETTINGS = {'theme': 'dark',
+                    }
+
+
 class User:
     def __init__(self, login):
         self.login = login
@@ -32,6 +36,14 @@ class User:
     def _load_dummy(self):
         self.raw_available_branches = {}
         self.raw_verdicts = {}
+        self.raw_settings = {}
+    
+    def get_setting(self, setting):
+        return self.raw_settings[setting] if setting in self.raw_settings else DEFAULT_SETTINGS[setting]
+    
+    def set_setting(self, setting, value):
+        self.raw_settings[setting] = value
+        self.modified = True
     
     def load_json(self):
         if not isfile(self._jsonpath):
@@ -41,6 +53,7 @@ class User:
                 d = json.load(f)
                 self.raw_available_branches = d['available_branches']
                 self.raw_verdicts = d['verdicts']
+                self.raw_settings = d['settings']
             
             self.loaded = True
             return d
@@ -49,7 +62,8 @@ class User:
     def dump_json(self):
         with open(self._jsonpath, 'w', encoding='utf-8') as f:
             data = {'available_branches': self.raw_available_branches,
-                    'verdicts': self.raw_verdicts}
+                    'verdicts': self.raw_verdicts,
+                    'settings': self.raw_settings}
             json.dump(data, f, sort_keys=True, indent=4,
                       ensure_ascii=False)
         self.modified = False

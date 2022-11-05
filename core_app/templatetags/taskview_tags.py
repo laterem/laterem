@@ -23,7 +23,7 @@ def mask_tree(source, mask):
             output[key] = mask_tree(value, mask[key])
     return output
 
-
+# Кол-во вызовов = кол-во словарей в mask_tree(WORK_DIR, user.raw_available_branches)
 def _submenu(inp, user: User, path=[], outer=False):
     if outer:
         output = ['<ul id="myUL">']

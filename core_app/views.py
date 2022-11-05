@@ -71,7 +71,7 @@ def getasset(request, taskname, filename):
 # ОЧЕНЬ КРИВО
 @login_required
 def task_view(request, taskname):
-    additional_render_args = fill_additional_args(request, taskname, request.session.get('color-theme'))
+    additional_render_args = fill_additional_args(request, taskname)
     if 'compiled_tasks' not in request.session: request.session['compiled_tasks'] = {}
 
     work_name, taskid = taskname.split('_id')
@@ -91,7 +91,8 @@ def task_handle(request, taskobject, workobject, taskid, additional_render_args)
     if request.method == 'POST':  
         # Обработка кнопки смены темы
         if 'change-color-theme' in request.POST:
-            change_color_theme(request)
+            with LateremUser(request.user.email) as user:
+                change_color_theme(user, request)
         else:
             # Проверка - есть ли нажатая нами кнопка в списке задач (нужно для переадрессации на другие задачи)
             for el in request.POST:
@@ -132,20 +133,21 @@ def failed(request):
 # Базовая страница сайта
 @login_required
 def index_page_render(request):
-    if request.method == 'POST':  # Расхардкодить!!!
-        # Обработка кнопки смены темы
-        change_color_theme(request)
-    if not request.session.get('color-theme'):
-        request.session['color-theme'] = 'dark'
-    return render(request,
-                'task_base.html',
-                {
-                    'title': 'Сайт по ЦЭ',
-                    'text': 'Это базовая страница',
-                    'text2': 'Перейдите на нужную работу по ссылке слева',
-                    'workdir': WORK_DIR,
-                    'theme': request.session['color-theme'],
-                    'user': LateremUser(request.user.email).open()
-                }
-                )
+    with LateremUser(request.user.email) as user:
+        if request.method == 'POST':  # Расхардкодить!!!
+            # Обработка кнопки смены темы
+            change_color_theme(user, request)
+        if not request.session.get('color-theme'):
+            request.session['color-theme'] = user.get_setting('theme')
+        return render(request,
+                    'task_base.html',
+                    {
+                        'title': 'Сайт по ЦЭ',
+                        'text': 'Это базовая страница',
+                        'text2': 'Перейдите на нужную работу по ссылке слева',
+                        'workdir': WORK_DIR,
+                        'theme': user.get_setting('theme'),
+                        'user': LateremUser(request.user.email).open()
+                    }
+                    )
 
