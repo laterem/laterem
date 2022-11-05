@@ -107,9 +107,32 @@ ul, #myUL {
 
 /* Иконка сайта */
 #main-icon {
-    margin: 10px 10px 10px 10px;
+    margin: 10px;
     width: 28px;
     padding: 5px;
     padding-bottom: 2px;
     border-radius: 30%;
+}
+
+.header {
+    display: inline-block;
+    vertical-align: middle;
+}
+    
+header.header {
+    width: 100%;
+    padding: 0;
+    white-space: nowrap;
+    position: fixed;
+    background: inherit;
+    display: block;
+}
+    
+button.header {
+    border-radius: 20px;
+    padding: 5px 10px;
+}
+    
+h1.header {
+    font-family:'Agency FB';
 }

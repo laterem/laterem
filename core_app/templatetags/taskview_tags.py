@@ -58,3 +58,4 @@ def tree(context, treename):
     user = context['user']
     rtree = mask_tree(context[treename], user.raw_available_branches)
     return SafeString(_submenu(rtree, user, outer=True))
+

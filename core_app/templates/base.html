@@ -16,30 +16,37 @@
         <script src="{% static 'js/caret-manager.js' %}"></script>
     </head>
     <body>
-        <div id="menu">
-            {% tree "workdir" %}
-        </div>
-        <!-- <div id="main-icon">
-            <img src="{% static 'main.svg' %}" width="28px"/>
-        </div> -->
-        <br/>
-        <h1 align="center">Тестовый вариант сайта по ЦЭ от Спайда и Журы</h1>
-        <br/> Привет, {{user.email}}
-        <form method="post">
-            {% csrf_token %}
-            <button type="submit" class="button" name="change-color-theme" style="position: fixed; right: 5px; top: 5px; padding: 5px 10px;"><img src="{% static 'change-color.svg' %}" style="width: 10px"/></button>
-        </form>
-        <div id="content">
-            <h2>{{ work_name }}</h2>
-            {% if task_name %}
-                <h2>Задача: {{task_name}}</h2>
-                <br/>
-            {% endif %}
-            {% block content %}
-            {% endblock %}
-            <div id="foot">
-                {% block foot %}
-                {% endblock %}
+        <header role="banner" class="header">
+            <div id="main-icon" class="header">
+                <img src="{% static 'main.svg' %}" width="28px" class="header"/>
+            </div>
+            <h1 class="header">| Laterem</h1>
+            <div style="float: right; clear:left" class="header">
+                {{user.username}} | 
+                <form method="post" class="header">
+                    {% csrf_token %}
+                    <button type="submit" class="button, header" name="change-color-theme"><img src="{% static 'change-color.svg' %}" style="height: 10px;"/></button>
+                </form>
+            </div>
+        </header>
+        <div style="padding-top: 60px">
+            <div style="height: 100vh">
+                <div id="menu">
+                    {% tree "workdir" %}
+                </div>
+                <div id="content">
+                    <h2>{{ work_name }}</h2>
+                    {% if task_name %}
+                        <h2>Задача: {{task_name}}</h2>
+                        <br/>
+                    {% endif %}
+                    {% block content %}
+                    {% endblock %}
+                    <div id="foot">
+                        {% block foot %}
+                        {% endblock %}
+                    </div>
+                </div>
             </div>
         </div>
 
