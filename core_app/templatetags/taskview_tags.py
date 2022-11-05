@@ -19,11 +19,6 @@ def _submenu(inp, deep=0):
         output = ['<ul class="nested">', '</ul>']
     pointer = 1
     for el in inp.keys():
-        # print('§§§§§§')
-        # print(deep)
-        # print(inp[el])
-        # print(list(inp[el].items())[0])
-        # print()
         if type(list(inp[el].values())[0]) == type(dict()):
             output.insert(pointer, '<li><span class="caret">' + el + '</span>' + _submenu(inp[el], deep=deep + 1) + '</li>')
             pointer += 1
@@ -49,5 +44,9 @@ def _submenu(inp, deep=0):
 
 @register.simple_tag(takes_context=True)
 def tree(context, treename):
-    rtree = context[treename]
-    return SafeString(_submenu(rtree))
+    try:
+        rtree = context[treename]
+        return SafeString(_submenu(rtree))
+    except KeyError:
+        print('!ERROR! no workdir')
+        return SafeString()
