@@ -2,10 +2,12 @@ import json
 from os.path import isfile
 from context_objects import SEPARATOR
 from .tasks import Verdicts
+from .works import Work, GroupVerdict
 
 class User:
     def __init__(self, login):
         self.login = login
+        self.username = login
         self.loaded = False
         self.modified = False
     
@@ -15,6 +17,10 @@ class User:
     
     def __exit__(self, exc_type, exc_val, exc_tb):
         self.close()
+    
+    def open(self):
+        self.load_json()
+        return self
     
     def close(self):
         self.dump_json()
@@ -48,17 +54,46 @@ class User:
                       ensure_ascii=False)
         self.modified = False
     
-    def get_task_verdict(self, workpath, taskname):
-        worklayers = workpath.split(SEPARATOR)
+    def get_task_verdict(self, worklayers, taskname):
         cd = self.raw_verdicts
         for layer in worklayers:
             if layer not in cd:
-                return False
+                return Verdicts.NO_ANSWER
             cd = cd[layer]
         return cd[taskname] if taskname in cd else Verdicts.NO_ANSWER
+    
+    def get_work_verdict(self, worklayers):
+        cd = self.raw_verdicts
+        for layer in worklayers:
+            if layer not in cd:
+                return GroupVerdict.NOT_STARTED
+            cd = cd[layer]
+        work = Work(worklayers)
 
-    def set_verdict(self, workpath, taskname, verdict):
-        worklayers = workpath.split(SEPARATOR)
+        na = False
+        wa = False
+        ps = False
+        ok = False
+        for task in work.tasks.keys():
+            if task not in cd: 
+                na = True
+                continue
+            verdict = cd[task]
+            if verdict == Verdicts.WRONG_ANSWER:
+                wa = True
+            elif verdict == Verdicts.PARTIALLY_SOLVED:
+                ps = True
+            elif verdict == Verdicts.SENT or verdict == Verdicts.OK:
+                ok = True
+        # Нечитабельная булевошизия, знаю, но кароче это то же самое, что set_work_verdict
+        if (ok and ((not na) and (not wa) and (not ps))):
+            return GroupVerdict.ALL_CORRECT
+        elif (ok or ps):
+            return GroupVerdict.PARTIALLY_SOLVED
+        else:
+            return GroupVerdict.NOT_STARTED
+
+    def set_verdict(self, worklayers, taskname, verdict):
         cd = self.raw_verdicts
         for layer in worklayers:
             if layer not in cd:

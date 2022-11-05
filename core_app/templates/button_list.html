@@ -1,6 +1,6 @@
 <form method="post">
     {% csrf_token %}
-    {% for caption, name in button_list_items %}
-        <button type="submit" name={{name}} class="button">{{caption}}</button>
+    {% for name in button_list_items %}
+        <button type="submit" name="{{name}}" class="button">{{name}}</button>
     {% endfor %}
 </form>
