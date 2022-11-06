@@ -2,6 +2,7 @@ from django import template
 from django.utils.safestring import SafeString
 from ltm.tasks import Verdicts
 from ltm.users import User
+from ltm.works import Work
 from context_objects import SEPARATOR
 
 register = template.Library()
@@ -39,10 +40,8 @@ def _submenu(inp, user: User, path=[], outer=False):
                 element = work[work.find(SEPARATOR, work.find(SEPARATOR) + 1) + 1:work.rfind('.')]
                 name = element[element.rfind(SEPARATOR) + 1:]
                 addr = element.replace(SEPARATOR, '.')
-                verdict = user.get_work_verdict(path + [key] + [name])
-                
                 stats = user.get_work_stats(path + [key] + [name], True)
-
+                verdict = Work.stat_to_average_verdict(stats)
                 line_len = 0 # Придумай циферку жура 
                 # Ниже - значения от 0 до 1, обозначающие пропорции. 
                 # Для получения длины сегмента линии конкретного цвета достаточно

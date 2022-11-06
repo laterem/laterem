@@ -80,30 +80,31 @@ class User:
         cd = self.raw_verdicts
         for layer in worklayers:
             if layer not in cd:
-                return Verdicts.NO_ANSWER
+                return [Verdicts.NO_ANSWER for _ in tasknames]
             cd = cd[layer]
         return [(cd[taskname] if taskname in cd else Verdicts.NO_ANSWER)
                 for taskname in tasknames]
     
     def get_work_stats(self, worklayers, normalize=False):
         cd = self.raw_verdicts
+        work = Work(worklayers)
+        tasks = work.tasks.keys()
         for layer in worklayers:
             if layer not in cd:
-                # !!! Беда. Ниже - случай normalize=True, потому что иначе тут очень сложно
+                na = 1 if normalize else len(tasks)
                 return {Verdicts.OK: 0,
                         Verdicts.PARTIALLY_SOLVED: 0,
                         Verdicts.SENT: 0,
                         Verdicts.WRONG_ANSWER: 0,
-                        Verdicts.NO_ANSWER: 1}
+                        Verdicts.NO_ANSWER: na}
             cd = cd[layer]
-        work = Work(worklayers)
 
         na = 0
         wa = 0
         ps = 0
         ok = 0
         st = 0
-        for task in work.tasks.keys():
+        for task in tasks:
             if task not in cd: 
                 na += 1
                 continue
@@ -133,19 +134,9 @@ class User:
                 Verdicts.WRONG_ANSWER: wa,
                 Verdicts.NO_ANSWER: na}
 
-    def get_work_verdict(self, worklayers):
-        stat = self.get_work_stats(worklayers)
-        ok = stat[Verdicts.OK] or stat[Verdicts.SENT]
-        na = stat[Verdicts.NO_ANSWER]
-        wa = stat[Verdicts.WRONG_ANSWER]
-        ps = stat[Verdicts.PARTIALLY_SOLVED]
-        # Нечитабельная булевошизия, знаю, но кароче это то же самое, что set_work_verdict
-        if (ok and ((not na) and (not wa) and (not ps))):
-            return GroupVerdict.ALL_CORRECT
-        elif (ok or ps):
-            return GroupVerdict.PARTIALLY_SOLVED
-        else:
-            return GroupVerdict.NOT_STARTED
+    def get_work_verdict(self, worklayers=None):
+        stats = self.get_work_stats(worklayers)
+        return Work.stat_to_average_verdict(stats)
 
     def set_verdict(self, worklayers, taskname, verdict):
         cd = self.raw_verdicts
