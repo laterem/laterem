@@ -1,6 +1,6 @@
 <form method="post">
     {% csrf_token %}
     {% for name, verdict_style in button_list_items %}
-        <button type="submit" name="{{name}}" class="button,{{verdict_style}}">{{name}}</button>
+        <button type="submit" name="{{name}}" class="button, {{verdict_style}}">{{name}}</button>
     {% endfor %}
 </form>

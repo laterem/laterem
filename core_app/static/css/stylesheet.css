@@ -19,7 +19,7 @@ h2 {
     width: 20%;
     min-height: 95vh;
     padding: 5px; /* Поля вокруг текста */
-    margin: 2.5vh 10px 0 5px; /* Значения отступов */
+    margin: 0px 10px 0 5px; /* Значения отступов */
     border-radius: 5px;
 }
 #menu div {
@@ -58,7 +58,9 @@ h2 {
     bottom: 10px
 }
 /* Стиль кнопок */
-.button {
+.button, button.no_answer,
+button.ok, button.partial,
+button.wrong {
     border: none;
     padding: 10px 20px;
     text-align: center;
@@ -133,6 +135,11 @@ button.header {
     padding: 5px 10px;
 }
     
+@font-face {
+    font-family: 'Agency FB';
+    src: url(fonts/AgencyFB-Bold.ttf);
+}
+
 h1.header {
     font-family:'Agency FB';
 }
