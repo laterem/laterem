@@ -51,5 +51,6 @@ a.unchecked_work {
 }
 
 a.no-answer_work {
+    color: rgb(255, 235, 210);
     background: rgb(40, 40, 40);
 }
