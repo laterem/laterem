@@ -54,7 +54,7 @@ def _submenu(inp, user: User, path=[], outer=False):
 
     output += '</ul>'
     return output
-
+    
 @register.simple_tag(takes_context=True)
 def tree(context, treename):
     try:

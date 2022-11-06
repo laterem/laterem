@@ -76,6 +76,16 @@ class User:
             cd = cd[layer]
         return cd[taskname] if taskname in cd else Verdicts.NO_ANSWER
     
+    def get_task_verdicts(self, worklayers, tasknames):
+        cd = self.raw_verdicts
+        for layer in worklayers:
+            if layer not in cd:
+                return Verdicts.NO_ANSWER
+            cd = cd[layer]
+        return [cd[taskname] 
+                for taskname in tasknames
+                if taskname in cd else Verdicts.NO_ANSWER]
+    
     def get_work_verdict(self, worklayers):
         cd = self.raw_verdicts
         for layer in worklayers:
