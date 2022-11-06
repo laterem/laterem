@@ -54,15 +54,15 @@ def _submenu(inp, user: User, path=[], outer=False):
                 print(green_len, orange_len, red_len, gray_len)
 
                 if verdict == Verdicts.NO_ANSWER:
-                    output += '<li><a href="' + 'http://localhost:8000/works/' + addr + '" class="no-answer_work">' + name + '</a></li>'
+                    output += '<li><a href="' + 'http://localhost:8000/works/' + addr + '" class="no-answer">' + name + '</a></li>'
                 else:
                     # Оперделение состояния задания
                     if verdict == Verdicts.OK:
-                        output += '<li><a href="' + 'http://localhost:8000/works/' + addr + '" class="correct_work">' + name + '</a></li>'
+                        output += '<li><a href="' + 'http://localhost:8000/works/' + addr + '" class="correct">' + name + '</a></li>'
                     elif verdict == Verdicts.WRONG_ANSWER:
-                        output += '<li><a href="' + 'http://localhost:8000/works/' + addr + '" class="wrong_work">' + name + '</a></li>'
+                        output += '<li><a href="' + 'http://localhost:8000/works/' + addr + '" class="wrong">' + name + '</a></li>'
                     else:
-                        output += '<li><a href="' + 'http://localhost:8000/works/' + addr + '" class="unchecked_work">' + name + '</a></li>'
+                        output += '<li><a href="' + 'http://localhost:8000/works/' + addr + '" class="unchecked">' + name + '</a></li>'
             output += '</ul></li>'
 
     output += '</ul>'

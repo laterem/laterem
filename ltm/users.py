@@ -67,7 +67,7 @@ class User:
             json.dump(data, f, sort_keys=True, indent=4,
                       ensure_ascii=False)
         self.modified = False
-    
+
     def get_task_verdict(self, worklayers, taskname):
         cd = self.raw_verdicts
         for layer in worklayers:

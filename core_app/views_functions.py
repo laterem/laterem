@@ -15,8 +15,8 @@ def fill_additional_args(request, taskname):
     ret['button1'] = AddAnswerForm()
     ret['workdir'] = WORK_DIR
     ret['meta_tasktype'] = workobject.tasks[taskid]
-    _colors = {Verdicts.NO_ANSWER: 'no_answer',
-                Verdicts.OK: 'ok',
+    _colors = {Verdicts.NO_ANSWER: 'no-answer',
+                Verdicts.OK: 'correct',
                 Verdicts.PARTIALLY_SOLVED: 'partial',
                 Verdicts.SENT: 'partial',
                 Verdicts.WRONG_ANSWER: 'wrong'}
