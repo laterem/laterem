@@ -85,7 +85,7 @@ class User:
         return [(cd[taskname] if taskname in cd else Verdicts.NO_ANSWER)
                 for taskname in tasknames]
     
-    def get_work_stats(self, worklayers):
+    def get_work_stats(self, worklayers, normalize=False):
         cd = self.raw_verdicts
         for layer in worklayers:
             if layer not in cd:
@@ -113,6 +113,14 @@ class User:
                 ok += 1
             else:
                 na += 1
+
+        if normalize:
+            s = na + wa + ps + ok + st
+            na = na / s
+            wa = wa / s
+            ps = ps / s
+            ok = ok / s
+            st = st / s
 
         return {Verdicts.OK: ok,
                 Verdicts.PARTIALLY_SOLVED: ps,

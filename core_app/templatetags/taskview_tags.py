@@ -40,6 +40,20 @@ def _submenu(inp, user: User, path=[], outer=False):
                 name = element[element.rfind(SEPARATOR) + 1:]
                 addr = element.replace(SEPARATOR, '.')
                 verdict = user.get_work_verdict(path + [key] + [name])
+                
+                stats = user.get_work_stats(path + [key] + [name], True)
+
+                line_len = 0 # Придумай циферку жура 
+                # Ниже - значения от 0 до 1, обозначающие пропорции. 
+                # Для получения длины сегмента линии конкретного цвета достаточно
+                # Домножить штуки ниже на line_len
+                green_len = stats[Verdicts.OK]
+                orange_len = stats[Verdicts.SENT] + stats[Verdicts.PARTIALLY_SOLVED]
+                red_len = stats[Verdicts.WRONG_ANSWER]
+                gray_len = stats[Verdicts.NO_ANSWER]
+
+                print(green_len, orange_len, red_len, gray_len)
+
                 if verdict == Verdicts.NO_ANSWER:
                     output += '<li><a href="' + 'http://localhost:8000/works/' + addr + '" class="no-answer_work">' + name + '</a></li>'
                 else:
@@ -54,7 +68,7 @@ def _submenu(inp, user: User, path=[], outer=False):
 
     output += '</ul>'
     return output
-    
+
 @register.simple_tag(takes_context=True)
 def tree(context, treename):
     try:
