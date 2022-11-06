@@ -35,18 +35,21 @@ body {
 }
 
 /* Стиль отметки сделанных работ */
-#correct_work {
+a.correct_work {
     background: #198754;
+    color: rgb(0, 10, 25);
 }
 
-#wrong_work {
+a.wrong_work {
     background: #dc3545;
+    color: rgb(0, 10, 25);
 }
 
-#unchecked_work {
+a.unchecked_work {
     background: #ffc107;
+    color: rgb(0, 10, 25);
 }
 
-#no-answer_work {
+a.no-answer_work {
     background: rgb(40, 40, 40);
 }

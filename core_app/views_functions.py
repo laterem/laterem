@@ -1,9 +1,7 @@
 from context_objects import SPACE_REPLACER, WORK_DIR, SEPARATOR
 from .forms import *
 from ltm.users import User as LateremUser
-from ltm.tasks import Verdicts
 from ltm.works import Work
-from django.http import HttpResponseRedirect
 
 def fill_additional_args(request, taskname):
     work_name, taskid = taskname.split('_id')

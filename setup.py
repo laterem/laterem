@@ -1,4 +1,4 @@
-from context_objects import SEPARATOR, HASH_FUNCTION
+from context_objects import SEPARATOR
 from os import listdir
 from os.path import isfile
 

@@ -128,7 +128,7 @@ LOGIN_URL = '/login/'
 
 
 STATICFILES_DIRS = [
-    BASE_DIR / "static",
+    BASE_DIR / "core_app/static",
 ]
 
 STATICFILES_FINDERS = [

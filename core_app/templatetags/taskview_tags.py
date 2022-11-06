@@ -26,36 +26,42 @@ def mask_tree(source, mask):
 # Кол-во вызовов = кол-во словарей в mask_tree(WORK_DIR, user.raw_available_branches)
 def _submenu(inp, user: User, path=[], outer=False):
     if outer:
-        output = ['<ul id="myUL">']
+        output = '<ul id="myUL">'
     else:
-        output = ['<ul class="nested">']
+        output = '<ul class="nested">'
     
     for key, value in inp.items():
         if isinstance(value, dict):
-            output.append('<li><span class="caret">' + key + '</span>' + _submenu(value, user, path=path + [key]) + '</li>')
+            output += '<li><span class="caret">' + key + '</span>' + _submenu(value, user, path=path + [key]) + '</li>'
         else:
+            output += '<li><span class="caret">' + key + '</span><ul class="nested">'
             for work in value:
                 element = work[work.find(SEPARATOR, work.find(SEPARATOR) + 1) + 1:work.rfind('.')]
                 name = element[element.rfind(SEPARATOR) + 1:]
                 addr = element.replace(SEPARATOR, '.')
                 verdict = user.get_work_verdict(path + [key] + [name])
                 if verdict == Verdicts.NO_ANSWER:
-                    output.append('<li><a href="' + 'http://localhost:8000/works/' + addr + '" id="no-answer_work">' + name + '</a></li>')
+                    output += '<li><a href="' + 'http://localhost:8000/works/' + addr + '" class="no-answer_work">' + name + '</a></li>'
                 else:
                     # Оперделение состояния задания
                     if verdict == Verdicts.OK:
-                        output.append('<li><a href="' + 'http://localhost:8000/works/' + addr + '" id="correct_work">' + name + '</a></li>')
+                        output += '<li><a href="' + 'http://localhost:8000/works/' + addr + '" class="correct_work">' + name + '</a></li>'
                     elif verdict == Verdicts.WRONG_ANSWER:
-                        output.append('<li><a href="' + 'http://localhost:8000/works/' + addr + '" id="wrong_work">' + name + '</a></li>')
+                        output += '<li><a href="' + 'http://localhost:8000/works/' + addr + '" class="wrong_work">' + name + '</a></li>'
                     else:
-                        output.append('<li><a href="' + 'http://localhost:8000/works/' + addr + '" id="unchecked_work">' + name + '</a></li>')
+                        output += '<li><a href="' + 'http://localhost:8000/works/' + addr + '" class="unchecked_work">' + name + '</a></li>'
+            output += '</ul></li>'
 
-    output.append('</ul>')
-    return ''.join(output)
+    output += '</ul>'
+    return output
 
 @register.simple_tag(takes_context=True)
 def tree(context, treename):
-    user = context['user']
-    rtree = mask_tree(context[treename], user.raw_available_branches)
-    return SafeString(_submenu(rtree, user, outer=True))
+    try:
+        user = context['user']
+        rtree = mask_tree(context[treename], user.raw_available_branches) 
+        print(_submenu(rtree, user, outer=True) )
+        return SafeString(_submenu(rtree, user, outer=True))
+    except KeyError:
+        return ''
 
