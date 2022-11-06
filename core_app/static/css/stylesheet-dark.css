@@ -8,9 +8,9 @@ body {
     background: rgb(41, 41, 41);
 }
 /* Ссылки в меню */
-#menu a { 
+/* #menu a { 
     color: rgb(255, 235, 210);
-}
+} */
 /* Блок с заданием */
 #content {
     background: rgb(55, 55, 55);
@@ -35,21 +35,21 @@ body {
 }
 
 /* Стиль отметки сделанных работ */
-a.correct_work:hover {
+a.correct_work {
     background: #198754;
     color: rgb(0, 10, 25);
 }
 
-a.wrong_work:hover {
+a.wrong_work {
     background: #dc3545;
     color: rgb(0, 10, 25);
 }
 
-a.unchecked_work:hover {
+a.unchecked_work {
     background: #ffc107;
     color: rgb(0, 10, 25);
 }
 
-a.no-answer_work:hover {
+a.no-answer_work {
     background: rgb(40, 40, 40);
 }
