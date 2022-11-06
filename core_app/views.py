@@ -93,6 +93,7 @@ def task_handle(request, taskobject, workobject, taskid, additional_render_args)
         if 'change-color-theme' in request.POST:
             with LateremUser(request.user.email) as user:
                 change_color_theme(user, request)
+                return redirect(request.path)
         else:
             # Проверка - есть ли нажатая нами кнопка в списке задач (нужно для переадрессации на другие задачи)
             for el in request.POST:
@@ -112,10 +113,10 @@ def task_handle(request, taskobject, workobject, taskid, additional_render_args)
             if taskobject.test(answer):
                 with LateremUser(request.user.email) as user:
                     user.set_verdict(workobject.path, taskid, Verdicts.OK)
-                return HttpResponseRedirect('/completed/')
+                return redirect(request.path)
             with LateremUser(request.user.email) as user:
                 user.set_verdict(workobject.path, taskid, Verdicts.WRONG_ANSWER)
-            return HttpResponseRedirect('/failed/')
+            return redirect(request.path)
 
     rargs = additional_render_args
     # Что-то на спайдовом

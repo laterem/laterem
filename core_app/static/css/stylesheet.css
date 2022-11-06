@@ -19,7 +19,7 @@ h2 {
 #menu { /* Левая колонка */
     float: left; /* Обтекание справа */
     width: 20%;
-    min-height: 95vh;
+    min-height: calc(100vh - 100px);
     padding: 5px; /* Поля вокруг текста */
     margin: 0px 10px 0 5px; /* Значения отступов */
     border-radius: 5px;

@@ -7,9 +7,9 @@
     --icon-background-color: rgb(225, 226, 228);
     --header-gradient-top: rgb(237, 238, 240);
     --header-gradient-bottom: rgb(231, 232, 234);
-    --correct-color: #198754;
-    --unchecked-color: #ffc107;
-    --wrong-color: #dc3545;
-    --no-answer-background-color: rgb(116,116,116);
+    --correct-color: rgb(44, 235, 146);
+    --unchecked-color: rgb(255, 193, 7);
+    --wrong-color: rgb(240, 57, 63);
+    --no-answer-background-color: rgb(197,197,197);
     --dark-font-color: rgb(0, 10, 25);
 }
