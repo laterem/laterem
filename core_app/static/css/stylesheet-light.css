@@ -54,3 +54,23 @@ a.no-answer_work {
     color: rgb(0, 20, 45);
     background: rgb(245, 245, 245);
 }
+
+button.no_answer {
+    background: rgb(116,116,116);
+    color: rgb(0, 10, 25);
+}
+
+button.ok {
+    background: #198754;
+    color: rgb(0, 10, 25);
+}
+
+button.partial {
+    background: #ffc107;
+    color: rgb(0, 10, 25);
+}
+
+button.wrong {
+    background: #dc3545;
+    color: rgb(0, 10, 25);
+}
