@@ -35,21 +35,21 @@ body {
 }
 
 /* Стиль отметки сделанных работ */
-a.correct_work {
+a.correct_work:hover {
     background: #198754;
     color: rgb(0, 10, 25);
 }
 
-a.wrong_work {
+a.wrong_work:hover {
     background: #dc3545;
     color: rgb(0, 10, 25);
 }
 
-a.unchecked_work {
+a.unchecked_work:hover {
     background: #ffc107;
     color: rgb(0, 10, 25);
 }
 
-a.no-answer_work {
+a.no-answer_work:hover {
     background: rgb(40, 40, 40);
 }

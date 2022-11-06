@@ -33,3 +33,23 @@ body {
 #main-icon {
     background: rgb(243, 243, 243);
 }
+
+/* Стиль отметки сделанных работ */
+a.correct_work:hover {
+    background: #198754;
+    color: rgb(0, 10, 25);
+}
+
+a.wrong_work:hover {
+    background: #dc3545;
+    color: rgb(0, 10, 25);
+}
+
+a.unchecked_work:hover {
+    background: #ffc107;
+    color: rgb(0, 10, 25);
+}
+
+a.no-answer_work:hover {
+    background: rgb(245, 245, 245);
+}
