@@ -89,7 +89,12 @@ class User:
         cd = self.raw_verdicts
         for layer in worklayers:
             if layer not in cd:
-                return GroupVerdict.NOT_STARTED
+                # !!! Беда. Ниже - случай normalize=True, потому что иначе тут очень сложно
+                return {Verdicts.OK: 0,
+                        Verdicts.PARTIALLY_SOLVED: 0,
+                        Verdicts.SENT: 0,
+                        Verdicts.WRONG_ANSWER: 0,
+                        Verdicts.NO_ANSWER: 1}
             cd = cd[layer]
         work = Work(worklayers)
 
