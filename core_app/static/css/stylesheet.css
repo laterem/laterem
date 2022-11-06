@@ -2,6 +2,8 @@
 body {
     font-family: Arial, Helvetica, sans-serif;
     margin: 0; /* Обнуляем отступы браузера */
+    background: var(--body-background-color); /* Цвет фона */ 
+    color: var(--body-font-color); /* Цвет текста */
 }
 /* Стили заголовков */
 h1 {
@@ -21,6 +23,7 @@ h2 {
     padding: 5px; /* Поля вокруг текста */
     margin: 0px 10px 0 5px; /* Значения отступов */
     border-radius: 5px;
+    background: var(--menu-background-color);
 }
 #menu div {
     padding: 2px; /* Поля вокруг ссылок */
@@ -45,9 +48,10 @@ h2 {
     overflow:hidden;
     padding: 10px;
     border-radius: 20px;
+    background: var(--content-background-color);
 }
 .line {
-    border-bottom: 1px groove rgb(51, 51, 51); /* Линия между ссылками */
+    border-bottom: 1px groove var(--body-background-color); /* Линия между ссылками */
 }
 /* Нижняя часть сайта */
 #foot { /* Нижний блок */
@@ -58,9 +62,9 @@ h2 {
     bottom: 10px
 }
 /* Стиль кнопок */
-.button, button.no_answer,
+button.button, button.no_answer,
 button.ok, button.partial,
-button.wrong {
+button.wrong, button {
     border: none;
     padding: 10px 20px;
     text-align: center;
@@ -69,6 +73,11 @@ button.wrong {
     margin: 4px 2px;
     cursor: pointer;
     border-radius: 16px;
+}
+
+button.button, button {
+    background-color: var(--button-background-color);
+    color: var(--dark-font-color);
 }
 
 /* Скрывающееся дерево */
@@ -93,6 +102,7 @@ ul, #myUL {
     content: "\25B6";
     display: inline-block;
     margin-right: 6px;
+    color: var(--body-font-color);
 }
 
 .caret-down::before {
@@ -114,6 +124,7 @@ ul, #myUL {
     padding: 5px;
     padding-bottom: 2px;
     border-radius: 30%;
+    background: var(--icon-background-color);
 }
 
 .header {
@@ -128,6 +139,7 @@ header.header {
     position: fixed;
     background: inherit;
     display: block;
+    background-image: linear-gradient(var(--header-gradient-top), var(--header-gradient-bottom));
 }
     
 button.header {
@@ -142,4 +154,34 @@ button.header {
 
 h1.header {
     font-family:'Agency FB';
+}
+
+/* Стиль отметки сделанных работ */
+a.no-answer {
+    color: var(--body-font-color);
+    background: var(--menu-background-color);
+}
+
+button.no-answer {
+    background: var(--no-answer-background-color);
+    color: var(--dark-font-color);
+}
+
+.correct, .partial,
+.wrong {
+    color: var(--dark-font-color);
+}
+
+.correct {
+    background: var(--correct-color);
+    color: var(--dark-font-color);
+}
+
+.unchecked {
+    background: var(--unchecked-color);
+    color: var(--dark-font-color);
+}
+
+.wrong {
+    background: var(--wrong-color);
 }

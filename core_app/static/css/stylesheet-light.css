@@ -1,76 +1,15 @@
-/* Общий стиль */
-body {
-    background: rgb(245, 245, 245); /* Цвет фона */ 
-    color: rgb(0, 10, 25); /* Цвет текста */
-}
-/* Боковое меню */
-#menu {
-    background: rgb(235, 235, 235);
-}
-/* Ссылки в меню */
-/* #menu a { 
-    color: rgb(0, 20, 45);
-} */
-/* Блок с заданием */
-#content {
-    background: rgb(249, 249, 249);
-}
-.line {
-    border-bottom: 1px groove rgb(249, 249, 249); /* Линия между ссылками */
-}
-/* Стиль кнопок */
-.button {
-    background-color: rgb(221, 221, 221);
-    color: black;
-}
-
-/* Скрывающееся дерево */
-.caret::before {
-    color: rgb(0, 10, 25);
-}
-
-/* Иконка сайта */
-#main-icon {
-    background: rgb(243, 243, 243);
-}
-
-/* Стиль отметки сделанных работ */
-a.correct_work {
-    background: #198754;
-    color: rgb(0, 10, 25);
-}
-
-a.wrong_work {
-    background: #dc3545;
-    color: rgb(0, 10, 25);
-}
-
-a.unchecked_work {
-    background: #ffc107;
-    color: rgb(0, 10, 25);
-}
-
-a.no-answer_work {
-    color: rgb(0, 20, 45);
-    background: rgb(245, 245, 245);
-}
-
-button.no_answer {
-    background: rgb(116,116,116);
-    color: rgb(0, 10, 25);
-}
-
-button.ok {
-    background: #198754;
-    color: rgb(0, 10, 25);
-}
-
-button.partial {
-    background: #ffc107;
-    color: rgb(0, 10, 25);
-}
-
-button.wrong {
-    background: #dc3545;
-    color: rgb(0, 10, 25);
+:root {
+    --body-background-color: rgb(227, 228, 230); /* Цвет фона */
+    --body-font-color: rgb(0, 10, 25); /* Цвет текста */
+    --menu-background-color: rgb(217, 218, 220);
+    --content-background-color: rgb(231, 232, 234);
+    --button-background-color: rgb(203, 204, 206);
+    --icon-background-color: rgb(225, 226, 228);
+    --header-gradient-top: rgb(237, 238, 240);
+    --header-gradient-bottom: rgb(231, 232, 234);
+    --correct-color: #198754;
+    --unchecked-color: #ffc107;
+    --wrong-color: #dc3545;
+    --no-answer-background-color: rgb(116,116,116);
+    --dark-font-color: rgb(0, 10, 25);
 }
