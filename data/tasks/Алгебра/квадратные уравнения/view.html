@@ -1,0 +1,11 @@
+{% extends 'work_base.html' %}
+{% load taskview_tags %}
+
+{% block content %}
+    <h2>Найдите x:</h2>
+    <br/>
+    <h2>{{eq}}</h2>
+    {% with button=button1 button_text="Ответить" %}
+        {% include "button.html" %}
+    {% endwith %}
+{% endblock %}
