@@ -31,6 +31,7 @@ h2 {
 #menu a { 
     display: block; /* Отображать ссылку как блок */
     padding: 2px; /* Поля вокруг ссылок */
+    padding-bottom: 0px;
     margin: 1px; /* Отступы вокруг */
     font-size: 0.9em; /* Размер текста */
     text-decoration: none; /* Убираем подчеркивание текста */
@@ -194,30 +195,24 @@ hr.header {
     display: block;
 }
 
-hr.correct, hr.partial,
-hr.wrong {
-    vertical-align: top;
-}
-
 table.progress_line {
     width: 100%;
+    border: 0px;
+    margin-bottom: 3px;
 }
 
-.progress_line {
-    text-align: top;
+td.no-answer {
+    background-color: var(--no-answer-background-color);
 }
 
-hr.correct {
+td.correct {
     background-color: var(--correct-color);
-    border-color: var(--correct-color);
 }
 
-hr.partial {
+td.partial {
     background-color: var(--unchecked-color);
-    border-color: var(--unchecked-color);
 }
 
-hr.wrong {
+td.wrong {
     background-color: var(--wrong-color);
-    border-color: var(--wrong-color);
 }
