@@ -25,10 +25,10 @@ def mask_tree(source, mask):
     return output
 
 def draw_progress_line(args):
-    ret = '<table class="progress_line"><tr class="progress_line">'
+    ret = '<table class="progress_line" cellpadding="0px"><tr>'
     for verdict, l in args:
         if l > 0:
-            ret += '<td class="progress_line" width=' + str(round(l * 100))  + '%><hr class="' + verdict + '"/></td>'
+            ret += '<td class="' + verdict + '" height="4px" width=' + str(l * 100).replace('.', ',')  + '%></td>'
     ret += '</tr></table>'
     return ret
 
