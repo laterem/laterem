@@ -34,6 +34,7 @@ h2 {
     margin: 1px; /* Отступы вокруг */
     font-size: 0.9em; /* Размер текста */
     text-decoration: none; /* Убираем подчеркивание текста */
+    color: var(--body-font-color);
 }
 #menu a:hover { 
     margin: 0; /* Убираем поля */
@@ -184,4 +185,39 @@ button.no-answer {
 
 .wrong {
     background: var(--wrong-color);
+}
+
+hr.header {
+    background-color: var(--header-gradient-bottom);
+    border-color: var(--header-gradient-bottom);
+    width: 100%;
+    display: block;
+}
+
+hr.correct, hr.partial,
+hr.wrong {
+    vertical-align: top;
+}
+
+table.progress_line {
+    width: 100%;
+}
+
+.progress_line {
+    text-align: top;
+}
+
+hr.correct {
+    background-color: var(--correct-color);
+    border-color: var(--correct-color);
+}
+
+hr.partial {
+    background-color: var(--unchecked-color);
+    border-color: var(--unchecked-color);
+}
+
+hr.wrong {
+    background-color: var(--wrong-color);
+    border-color: var(--wrong-color);
 }
