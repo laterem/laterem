@@ -13,7 +13,6 @@
         {% else %}
             <link rel="stylesheet" href="{% static 'css/stylesheet-dark.css' %}"/>
         {% endif %}
-        <script src="{% static 'js/caret-manager.js' %}"></script>
     </head>
     <body>
         <header role="banner" class="header">
@@ -22,6 +21,9 @@
             </div>
             <h1 class="header">| Laterem</h1>
             <div style="float: right; clear:left" class="header">
+                <div id="main-icon" class="header" style="padding-right:0px;">
+                    <img src="{% static 'user-icon.svg' %}" width="20px" class="header"/>
+                </div>: 
                 {{user.username}} | 
                 <form method="post" class="header">
                     {% csrf_token %}
@@ -49,18 +51,7 @@
                 </div>
             </div>
         </div>
-
-
-        <script>
-            var toggler = document.getElementsByClassName("caret");
-            var i;
-            
-            for (i = 0; i < toggler.length; i++) {
-              toggler[i].addEventListener("click", function() {
-                this.parentElement.querySelector(".nested").classList.toggle("active");
-                this.classList.toggle("caret-down");
-              });
-            }
-        </script>
+        
+        <script src="{% static 'js/caret-manager.js' %}"></script>
     </body>
 </html>
