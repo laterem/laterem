@@ -24,15 +24,12 @@ class ReverseList(LTCFunction):
 class Veclen(LTCFunction):
     expected_argsc = 2
     def call(self):
-        print('\t Я ЖИВОЕ')
         r = sqrt(self.args[0] ** 2 + self.args[1] ** 2)
-        print(r)
         return sqrt(self.args[0] ** 2 + self.args[1] ** 2)
 
 class QuadEquation(LTCFunction):
     expected_argsc = 3
     def call(self):
-        print(self.args)
         a, b, c = self.args
         out = ''
         if a:
@@ -62,14 +59,12 @@ class QuadEquation(LTCFunction):
 class IsMetricEqual(LTCCheckerFunction):
     expected_argsc = 2
     def call(self, field):
-        print(self.args,)
         return field.endswith(self.args[1]) and float(field.strip(self.args[1])) == self.args[0]
 
 class Round(LTCFunction):
     expected_argsc = 2
     def call(self):
         r = round(float(self.args[0]), int(self.args[1]))
-        print(r)
         return r
 
 class IsEqual(LTCCheckerFunction):

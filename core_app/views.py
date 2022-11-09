@@ -101,7 +101,6 @@ def task_handle(request, taskobject, workobject, taskid, additional_render_args)
                     return redirect('/task/' + workobject.get_full_name(separator='.', space_replacement=SPACE_REPLACER) + '_id' + el.replace(' ', SPACE_REPLACER))
 
             # Анализ ответа
-            print(dict(request.POST))
             if taskobject.test(dict(request.POST)):
                 with LateremUser(request.user.email) as user:
                     user.set_verdict(workobject.path, taskid, Verdicts.OK)
