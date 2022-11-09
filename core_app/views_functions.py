@@ -12,7 +12,6 @@ def fill_additional_args(request, taskname):
     userobject = LateremUser(request.user.email).open()
 
     ret = {}
-    ret['button1'] = AddAnswerForm()
     ret['workdir'] = WORK_DIR
     ret['meta_tasktype'] = workobject.tasks[taskid]
     _colors = {Verdicts.NO_ANSWER: 'no-answer',

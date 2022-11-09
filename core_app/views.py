@@ -1,7 +1,7 @@
 from ltm.tasks import TaskData, Verdicts
 from ltm.works import Work as Work
 from ltm.users import User as LateremUser
-from django.http import HttpResponse, FileResponse, HttpResponseRedirect
+from django.http import HttpResponse, FileResponse
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
 from django.core.exceptions import PermissionDenied
@@ -10,7 +10,7 @@ from os.path import join as pathjoin
 from .views_functions import fill_additional_args, change_color_theme
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
-from .forms import LoginForm, AddAnswerForm
+from .forms import LoginForm
 
 def logout_view(request):
     logout(request)
