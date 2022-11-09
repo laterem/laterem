@@ -1,5 +1,5 @@
-a := Rand10(1, 20)
-b := Rand10(1, 20)
-c := Rand10(1, 20)
+a := Rand10(-5, 5)
+b := Rand10(-10, 10)
+c := Rand10(-10, 10)
 eq = QuadEquation(a, b, c)
 answer?Roots(a, b, c)

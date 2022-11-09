@@ -24,7 +24,6 @@ def login_view(request):
         email = request.POST['email']
         password = request.POST['password']
         user = authenticate(username=email, password=password)
-        print('>>>', user)
         if user is not None:
             login(request, user)
             return redirect(request.GET.get('next'))
@@ -102,15 +101,8 @@ def task_handle(request, taskobject, workobject, taskid, additional_render_args)
                     return redirect('/task/' + workobject.get_full_name(separator='.', space_replacement=SPACE_REPLACER) + '_id' + el.replace(' ', SPACE_REPLACER))
 
             # Анализ ответа
-            answer = None
-            if request.POST.getlist('checks'):
-                answer = request.POST.getlist('checks')
-            else:
-                form = AddAnswerForm(request.POST) 
-                if form.is_valid():
-                    answer = form.cleaned_data['answer'].strip()
-            # Проверка ответа -> переадрессация на нужную страницу
-            if taskobject.test(answer):
+            print(dict(request.POST))
+            if taskobject.test(dict(request.POST)):
                 with LateremUser(request.user.email) as user:
                     user.set_verdict(workobject.path, taskid, Verdicts.OK)
                 return redirect(request.path)

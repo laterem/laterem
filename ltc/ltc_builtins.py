@@ -24,6 +24,7 @@ class ReverseList(LTCFunction):
 class Veclen(LTCFunction):
     expected_argsc = 2
     def call(self):
+        print('\t Я ЖИВОЕ')
         r = sqrt(self.args[0] ** 2 + self.args[1] ** 2)
         print(r)
         return sqrt(self.args[0] ** 2 + self.args[1] ** 2)
@@ -61,7 +62,8 @@ class QuadEquation(LTCFunction):
 class IsMetricEqual(LTCCheckerFunction):
     expected_argsc = 2
     def call(self, field):
-        return field.endswith(self.args[1]) and field.strip(self.args[1]) == self.args[0]
+        print(self.args,)
+        return field.endswith(self.args[1]) and float(field.strip(self.args[1])) == self.args[0]
 
 class Round(LTCFunction):
     expected_argsc = 2
@@ -80,7 +82,7 @@ class IsEqual(LTCCheckerFunction):
 class IsEqualSum(LTCCheckerFunction):
     expected_argsc = 2
     def call(self, field):
-        return int(field) == int(self.args[0]) + int(self.args[1])
+        return float(field) == float(self.args[0]) + float(self.args[1])
 
 class IsNotEqual(LTCCheckerFunction):
     expected_argsc = 1
@@ -96,21 +98,18 @@ class IsReversed(LTCCheckerFunction):
 
 class Roots(LTCCheckerFunction):
     expected_argsc = 3
-    def __init__(self, *args):
-        super().__init__(*args)
-        a, b, c = args
+    def call(self, field):
+        a, b, c = self.args
         D = b*b - 4 * a * c
         if D >= 0:
             sqrtd = sqrt(D)
             a2 = 2*a
             x1 = (sqrtd-b)/a2
             x2 = (-sqrtd-b)/a2
-            self._roots = (str(x1), str(x2))
+            _roots = (str(x1), str(x2))
         else:
-            self._roots = ("нет корней",)
-
-    def call(self, field):
-        return field in self._roots
+            _roots = ("нет корней",)
+        return field in _roots
 
 
 KEYWORD_TABLE = {

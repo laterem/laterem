@@ -59,7 +59,6 @@ def _submenu(inp, user: User, path=[], outer=False):
                 red_len = stats[Verdicts.WRONG_ANSWER]
                 gray_len = stats[Verdicts.NO_ANSWER]
 
-                print(green_len, orange_len, red_len, gray_len)
 
                 line_args = [("correct", green_len), ("unchecked", orange_len), ("wrong", red_len), ("no-answer", gray_len)]
 
@@ -83,7 +82,6 @@ def tree(context, treename):
     try:
         user = context['user']
         rtree = mask_tree(context[treename], user.raw_available_branches) 
-        print(_submenu(rtree, user, outer=True) )
         return SafeString(_submenu(rtree, user, outer=True))
     except KeyError:
         return ''

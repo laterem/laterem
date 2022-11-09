@@ -52,8 +52,9 @@ class TaskData():
         template = 'static_copies/' + tmpviewpath
         return cls(ltc, template)
     
-    def test(self, answer) -> int:
-        fields = {'answer': answer}
+    def test(self, fields) -> int:
+        fields = {key: (value if (len(value) - 1) else value[0])
+                  for key, value in fields.items()}
         return self.ltc.check(fields)
     
     def as_JSON(self):
