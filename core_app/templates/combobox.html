@@ -1,10 +1,6 @@
-<form method="post">
-    {% csrf_token %}
-    <select name="combobox_choosed">
-        <option selected="selected">{{base_arg}}</option>
-        {% for el in combobox_items %}
-            <option>{{el}}</option>
-        {% endfor %}
-    </select>
-    <button type="submit">{{button_text}}</button>
-</form>
+<select name="{{id}}">
+    <option selected="selected">{{base_arg}}</option>
+    {% for el in combobox_items %}
+        <option>{{el}}</option>
+    {% endfor %}
+</select>
