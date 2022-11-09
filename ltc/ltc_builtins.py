@@ -51,8 +51,7 @@ class QuadEquation(LTCFunction):
                 out += ' + '
             else:
                 out += ' - '
-            if abs(c) != 1:
-                out += str(abs(c))
+            out += str(abs(c))
         out += ' = 0'
         return out
         
@@ -96,6 +95,7 @@ class Roots(LTCCheckerFunction):
     def call(self, field):
         a, b, c = self.args
         D = b*b - 4 * a * c
+        print(a, b, c, D)
         if D >= 0:
             sqrtd = sqrt(D)
             a2 = 2*a
