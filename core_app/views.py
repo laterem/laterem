@@ -132,7 +132,7 @@ def index_page_render(request):
         if not request.session.get('color-theme'):
             request.session['color-theme'] = user.get_setting('theme')
         return render(request,
-                    'task_base.html',
+                    'index.html',
                     {
                         'title': 'Сайт по ЦЭ',
                         'text': 'Это базовая страница',

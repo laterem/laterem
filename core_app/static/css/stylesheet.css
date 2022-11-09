@@ -216,3 +216,11 @@ td.partial {
 td.wrong {
     background-color: var(--wrong-color);
 }
+
+.vl {
+    height: 30px;
+    margin-bottom: -10px;
+    width: 2px;
+    background-color: var(--button-background-color);
+    display: inline-block;
+}
