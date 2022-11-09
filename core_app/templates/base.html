@@ -20,19 +20,20 @@
                 <img src="{% static 'main.svg' %}" width="28px" class="header"/>
             </div>
             <h1 class="header">| Laterem</h1>
-            <div style="float: right; clear:left" class="header">
-                <div id="main-icon" class="header" style="padding-right:0px;">
+            <div style="float: right; clear:left; vertical-align: middle;" class="header">
+                <div id="main-icon" class="header" style="padding-right:0px; margin-right: 0px;">
                     <img src="{% static 'user-icon.svg' %}" width="20px" class="header"/>
-                </div>: 
-                {{user.username}} | 
-                <form method="post" class="header">
-                    {% csrf_token %}
-                    <button type="submit" class="button, header" name="change-color-theme"><img src="{% static 'change-color.svg' %}" style="height: 10px;"/></button>
-                </form>
+                </div>
+                <div style="vertical-align: -4px; margin-left: 0px;" class="header">{{user.username}} | 
+                    <form method="post" class="header">
+                        {% csrf_token %}
+                        <button type="submit" class="button, header" name="change-color-theme"><img src="{% static 'change-color.svg' %}" style="height: 10px;"/></button>
+                    </form>
+                </div>
             </div>
             <hr class="header"/>
         </header>
-        <div style="padding-top: 40px">
+        <div style="padding-top: 40px;">
             <div>
                 <div id="menu">
                     {% tree "workdir" %}
