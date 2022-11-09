@@ -3,6 +3,8 @@
 {% block content %}
 {% endblock %}
 {% block foot %}
+    <button type="submit" class="button">Проверить</button>
+    <div class="vl"></div>
     {% with button_list_items=task_list %}
         {% include "button_list.html" %}
     {% endwith %}
