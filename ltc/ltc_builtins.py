@@ -33,23 +33,23 @@ class QuadEquation(LTCFunction):
         a, b, c = self.args
         out = ''
         if a:
+            if a < 0:
+                out += '-'
             if abs(a) != 1:
                 out += str(abs(a))
-            elif a == -1:
-                out += '-'
             out += 'x²'
-        if b:
             if b > 0:
                 out += ' + '
-            else:
+        if b:
+            if b < 0:
                 out += ' - '
             if abs(b) != 1:
                 out += str(abs(b))
             out += 'x'
-        if c:
             if c > 0:
                 out += ' + '
-            else:
+        if c:
+            if c < 0:
                 out += ' - '
             out += str(abs(c))
         out += ' = 0'
@@ -91,9 +91,12 @@ class IsReversed(LTCCheckerFunction):
         return field == self.args[0][::-1]
 
 class Roots(LTCCheckerFunction):
-    expected_argsc = 3
+    expected_argsc = 4
     def call(self, field):
-        a, b, c = self.args
+        a, b, c, accuracy = self.args
+        accuracy = int(accuracy)
+        if not a:
+            return float(field) == round(-b/c, accuracy)
         D = b*b - 4 * a * c
         print(a, b, c, D)
         if D >= 0:
@@ -101,10 +104,10 @@ class Roots(LTCCheckerFunction):
             a2 = 2*a
             x1 = (sqrtd-b)/a2
             x2 = (-sqrtd-b)/a2
-            _roots = (str(x1), str(x2))
+            _roots = (round(x1, accuracy), round(x2, accuracy))
+            return float(field) in _roots
         else:
-            _roots = ("нет корней",)
-        return field in _roots
+            return field.strip().lower() == 'нет корней'
 
 
 KEYWORD_TABLE = {
