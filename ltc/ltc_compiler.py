@@ -57,7 +57,6 @@ class LTC:
     def check(self, fields):
         valid = True
         for field, checker in self.checker_functions:
-            print(field, checker.args, fields[field], checker(fields[field]), checker.__dict__)
             valid = valid and checker(fields[field])
         return valid
     
@@ -71,7 +70,7 @@ class LTCCompiler:
         elif txt[-1] == txt[0] == "'":
             txt = txt.strip("'")
             return LTCValue(txt)
-        elif txt.isdigit():
+        elif txt.lstrip('-').isdigit():
             return LTCValue(txt)
         elif txt[0] == '[' and txt[-1] == ']':
             args = txt[1:-1].split(',')
