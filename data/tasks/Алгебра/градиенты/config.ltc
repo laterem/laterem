@@ -1,0 +1,7 @@
+a = Rand10(1, 20) as a 
+b = Rand10(1, 20) as b
+c = Rand10(1, 20) as c 
+
+answerx?Equal(a)
+answery?Equal(b)
+answerz?Equal(c)
