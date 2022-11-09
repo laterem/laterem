@@ -72,7 +72,7 @@ class IsEqual(LTCCheckerFunction):
     def call(self, field):
         if isinstance(self.args[0], list):
             return sorted(field) == sorted(self.args[0])
-        return field == self.args[0]
+        return field == str(self.args[0])
 
 class IsEqualSum(LTCCheckerFunction):
     expected_argsc = 2

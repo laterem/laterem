@@ -38,17 +38,20 @@
                     {% tree "workdir" %}
                 </div>
                 <div id="content">
-                    <h2>{{ work_name }}</h2>
-                    {% if task_name %}
-                        <h2>Задача: {{task_name}}</h2>
-                        <br/>
-                    {% endif %}
-                    {% block content %}
-                    {% endblock %}
-                    <div id="foot">
-                        {% block foot %}
+                    <form method="post">
+                        {% csrf_token %}
+                        <h2>{{ work_name }}</h2>
+                        {% if task_name %}
+                            <h2>Задача: {{task_name}}</h2>
+                            <br/>
+                        {% endif %}
+                        {% block content %}
                         {% endblock %}
-                    </div>
+                        <div id="foot">
+                            {% block foot %}
+                            {% endblock %}
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>

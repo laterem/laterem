@@ -5,7 +5,6 @@
     <h1>{{title}}:</h1>
     <img src="{% asset 'spidz.bmp' %}"> 
     <br/>
-    {% with button=button1 button_text="Я справился?" %}
-        {% include "button.html" %}
-    {% endwith %}
+    <input name="answer"/>
+    <button type="submit" class="button">Ответить</button>
 {% endblock %}

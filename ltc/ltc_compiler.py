@@ -2,8 +2,8 @@ try:
     from .ltc_builtins import *
     from .ltc_core import *
 except ImportError:
-    from Ltc_builtins import *
-    from Ltc_core import *
+    from ltc_builtins import *
+    from ltc_core import *
 
 VERSION = 0.2
 
@@ -57,6 +57,7 @@ class LTC:
     def check(self, fields):
         valid = True
         for field, checker in self.checker_functions:
+            print(field, checker.args, fields[field], checker(fields[field]), checker.__dict__)
             valid = valid and checker(fields[field])
         return valid
     

@@ -6,7 +6,6 @@
     <img src="{% asset 'tri.png' %}" width="50%" style="border-radius: 5px">
     <br/>
     <h2>Известно, что AC = {{a}}см, BC = {{b}}см. <br/>Чему равно AB? Ответ дайте в сантиметрах и округлите до сотых</h2>
-    {% with button=button1 button_text="Ответить" %}
-        {% include "button.html" %}
-    {% endwith %}
+    <input name="answer"/>
+    <button type="submit" class="button">Ответить</button>
 {% endblock %}

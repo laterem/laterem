@@ -1,9 +1,7 @@
-<form method="post">
-    {% csrf_token %}
-    {% for el in checkbox_items %}
-        <label><input type="checkbox" name="checks" value="{{el}}"> {{el}}</label>
-        <br/>
-    {% endfor %}
+<br/>
+{% for el in checkbox_items %}
+    <label><input type="checkbox" name="checks" value="{{el}}"> {{el}}</label>
     <br/>
-    <button type="submit" class="button">{{button_text}}</button>
-</form>
+{% endfor %}
+<br/>
+<button type="submit" class="button">{{button_text}}</button>

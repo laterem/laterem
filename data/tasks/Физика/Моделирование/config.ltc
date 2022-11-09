@@ -1,3 +1,3 @@
 answer_variants = ['Тело было брошено с земли', 'Тело летит в вакууме', 'Угол броска тела около 30°']
 correct_answer := ['Тело было брошено с земли', 'Угол броска тела около 30°']
-answer?Equal(correct_answer)
+checks?Equal(correct_answer)
