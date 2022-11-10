@@ -21,8 +21,8 @@ h2 {
     width: 20%;
     min-height: calc(100vh - 100px);
     padding: 5px; /* Поля вокруг текста */
-    margin: 0px 10px 0 5px; /* Значения отступов */
-    border-radius: 5px;
+    margin: 30px 10px 0 5px; /* Значения отступов */
+    border-radius: 10px;
     background: var(--menu-background-color);
 }
 #menu div {
@@ -37,20 +37,32 @@ h2 {
     text-decoration: none; /* Убираем подчеркивание текста */
     color: var(--body-font-color);
 }
-#menu a:hover { 
-    margin: 0; /* Убираем поля */
-}
 /* Блок с заданием */
-#content { /* Правая колонка */
-    margin: 30px 5px 20px 10px; /* Значения отступов */
-    margin-bottom: 60px;
-    margin-left: 22%;
-    width: 56%;
-    padding: 5px; /* Поля вокруг текста */
+#content {
+    margin: 0;
     overflow:hidden;
+    background: var(--content-background-color);
+}
+aside#content { /* Основная колонка */
+    margin: 30px 10px 20px 5px; /* Значения отступов */
+    margin-bottom: 60px;
+    width: 60%;
     padding: 10px;
     border-radius: 20px;
-    background: var(--content-background-color);
+}
+aside#right-side { /* Правая колонка */
+    float: right;
+    width: 20%;
+    min-height: calc(100vh - 100px);
+    margin: 30px 10px 0px 5px; /* Значения отступов */
+    border-radius: 5px;
+    background: var(--body-background-color);
+}
+button#right-side {
+    height: 100%;
+    width: 100%;
+    background-color: var(--menu-background-color);
+    color: var(--body-font-color);
 }
 .line {
     border-bottom: 1px groove var(--body-background-color); /* Линия между ссылками */

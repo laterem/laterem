@@ -35,11 +35,12 @@
             <hr class="header"/>
         </header>
         <div style="padding-top: 40px;">
-            <div>
-                <div id="menu">
+            <div style="display: flex;
+            justify-content: space-between;">
+                <aside id="menu">
                     {% tree "workdir" %}
-                </div>
-                <div id="content">
+                </aside>
+                <aside id="content">
                     <form method="post">
                         {% csrf_token %}
                         <h2>{{ work_name }}</h2>
@@ -54,7 +55,11 @@
                             {% endblock %}
                         </div>
                     </form>
-                </div>
+                </aside>
+                <aside id="right-side">
+                    {% block right-side %}
+                    {% endblock %}
+                </aside>
             </div>
         </div>
         
