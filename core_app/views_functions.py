@@ -4,7 +4,7 @@ from ltm.users import User as LateremUser
 from ltm.tasks import Verdicts
 from ltm.works import Work
 
-def fill_additional_args(request, taskname):
+def fill_additional_args(request, taskname, template):
     work_name, taskid = taskname.split('_id')
     taskid = taskid.replace(SPACE_REPLACER, ' ')
     work_path = Work.split_full_name(work_name, separator='.', space_replacement=SPACE_REPLACER)
@@ -25,6 +25,7 @@ def fill_additional_args(request, taskname):
     ret['work_name'] = work_path[-1]
     ret['user'] = userobject
     ret['theme'] = userobject.get_setting('theme')
+    ret['task_template'] = template
     return ret
 
 def change_color_theme(user, request):

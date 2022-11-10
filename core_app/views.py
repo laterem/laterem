@@ -70,7 +70,6 @@ def getasset(request, taskname, filename):
 # ОЧЕНЬ КРИВО
 @login_required
 def task_view(request, taskname):
-    additional_render_args = fill_additional_args(request, taskname)
     if 'compiled_tasks' not in request.session: request.session['compiled_tasks'] = {}
 
     work_name, taskid = taskname.split('_id')
@@ -84,6 +83,7 @@ def task_view(request, taskname):
         request.session.modified = True
     else:
         taskobject = TaskData.from_JSON(request.session['compiled_tasks'][taskname])
+    additional_render_args = fill_additional_args(request, taskname, taskobject.template)
     return task_handle(request, taskobject, workobject, taskid, additional_render_args)
     
 def task_handle(request, taskobject, workobject, taskid, additional_render_args):
@@ -113,7 +113,7 @@ def task_handle(request, taskobject, workobject, taskid, additional_render_args)
     # Что-то на спайдовом
     for k, v in taskobject.ltc.field_table.items():
         rargs[k] = v
-    return render(request, taskobject.template, rargs)
+    return render(request, "work_base.html", rargs)
 
 # отображение результата решения (страницы, на которые мы переадресовываем после проверки)
 def completed(request):

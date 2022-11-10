@@ -20,9 +20,9 @@ h2 {
     float: left; /* Обтекание справа */
     width: 20%;
     min-height: calc(100vh - 100px);
-    padding: 5px; /* Поля вокруг текста */
+    padding: 10px; /* Поля вокруг текста */
     margin: 30px 10px 0 5px; /* Значения отступов */
-    border-radius: 10px;
+    border-radius: 20px;
     background: var(--menu-background-color);
 }
 #menu div {
@@ -51,9 +51,9 @@ aside#content { /* Основная колонка */
     border-radius: 20px;
 }
 aside#right-side { /* Правая колонка */
-    float: right;
+    float: right;   
     width: 20%;
-    min-height: calc(100vh - 100px);
+    min-height: 90vh;
     margin: 30px 10px 0px 5px; /* Значения отступов */
     border-radius: 5px;
     background: var(--body-background-color);
@@ -61,7 +61,7 @@ aside#right-side { /* Правая колонка */
 button#right-side {
     height: 100%;
     width: 100%;
-    background-color: var(--menu-background-color);
+    background-color: var(--body-background-color);
     color: var(--body-font-color);
 }
 .line {
@@ -73,7 +73,7 @@ button#right-side {
     clear: both; /* Отменяем обтекание */
     align-self: center;
     position: fixed;
-    bottom: 10px
+    bottom: 10px;
 }
 /* Стиль кнопок */
 button.button, button.no_answer,
