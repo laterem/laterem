@@ -15,15 +15,34 @@ h2 {
     margin: 0px 5px 5px 0px; /* Убираем отступы */
     font-size: 20px;
 }
+
+/* Блоки */
+aside#menu, aside#content,
+aside#right-side {
+    position: absolute;
+    top: 65px;
+    bottom: 10px;
+
+    overflow: scroll;
+}
+
+#menu::-webkit-scrollbar, #content::-webkit-scrollbar,
+#foot::-webkit-scrollbar, #right-side::-webkit-scrollbar {
+    width: 0;
+    height: 0;
+}
+
 /* Боковое меню */
-#menu { /* Левая колонка */
-    float: left; /* Обтекание справа */
-    width: 20%;
-    min-height: calc(100vh - 100px);
-    padding: 10px; /* Поля вокруг текста */
-    margin: 30px 10px 0 5px; /* Значения отступов */
+aside#menu { /* Левая колонка */
+    left: 10px;
+
+    width: calc(20% - 20px);
+
+    padding: 10px;
     border-radius: 20px;
-    background: var(--menu-background-color);
+
+    background: var(--content-background-color);
+    box-shadow: 4px 4px 4px var(--content-shadow-color);
 }
 #menu div {
     padding: 2px; /* Поля вокруг ссылок */
@@ -37,44 +56,57 @@ h2 {
     text-decoration: none; /* Убираем подчеркивание текста */
     color: var(--body-font-color);
 }
+
 /* Блок с заданием */
 #content {
-    margin: 0;
-    overflow:hidden;
     background: var(--content-background-color);
+    box-shadow: 4px 4px 4px var(--content-shadow-color);
 }
+
 aside#content { /* Основная колонка */
-    margin: 30px 10px 20px 5px; /* Значения отступов */
-    margin-bottom: 60px;
-    width: 60%;
+    left: calc(20% + 20px);
+
+    width: calc(75% - 40px);
+
     padding: 10px;
+    padding-bottom: 30px;
     border-radius: 20px;
 }
+
 aside#right-side { /* Правая колонка */
-    float: right;   
-    width: 20%;
-    min-height: 90vh;
-    margin: 30px 10px 0px 5px; /* Значения отступов */
-    border-radius: 5px;
-    background: var(--body-background-color);
+    right: 10px;
+
+    width: calc(5% - 20px);
+    
+    border-radius: 20px;
+    background: rgba(0, 0, 0, 0);
 }
+
 button#right-side {
     height: 100%;
     width: 100%;
-    background-color: var(--body-background-color);
+
+    background: rgba(0, 0, 0, 0);
     color: var(--body-font-color);
 }
-.line {
-    border-bottom: 1px groove var(--body-background-color); /* Линия между ссылками */
-}
 /* Нижняя часть сайта */
-#foot { /* Нижний блок */
-    padding: 5px; /* Поля вокруг текста */
-    clear: both; /* Отменяем обтекание */
-    align-self: center;
-    position: fixed;
+aside#foot { /* Нижний блок */
+    position: absolute;
+    top: calc(100% - 62px);
     bottom: 10px;
+    left: calc(20% + 30px);
+
+    max-width: calc(75% - 60px);
+    padding: 5px;
+
+    background-color: var(--foot-background-color);
+    box-shadow: 4px 4px 4px var(--foot-shadow-color);
+    border-radius: 40px;
+    border: 1px solid var(--foot-border-color);
+
+    overflow: scroll;
 }
+
 /* Стиль кнопок */
 button.button, button.no_answer,
 button.ok, button.partial,
@@ -148,6 +180,7 @@ ul, #myUL {
     
 header.header {
     width: 100%;
+    height: 60px;
     padding: 0;
     white-space: nowrap;
     position: fixed;

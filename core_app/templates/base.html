@@ -32,37 +32,40 @@
                 </div>
                 <div style="width: 5px;" class="header"></div>
             </div>
-            <hr class="header"/>
-        </header>
-        <div style="padding-top: 40px;">
-            <div style="display: flex;
-            justify-content: space-between;">
-                <aside id="menu">
-                    {% tree "workdir" %}
-                </aside>
-                <aside id="content">
-                    <form method="post">
-                        {% csrf_token %}
-                        <h2>{{ work_name }}</h2>
-                        {% if task_name %}
-                            <h2>Задача: {{task_name}}</h2>
-                            <br/>
-                        {% endif %}
-                        {% block content %}
-                        {% endblock %}
-                        <div id="foot">
-                            {% block foot %}
-                            {% endblock %}
-                        </div>
-                    </form>
-                </aside>
-                <aside id="right-side">
-                    {% block right-side %}
-                    {% endblock %}
-                </aside>
+            <div width="100vh" style="background-color: var(--header-gradient-bottom); height: 1px; position: fixxed; bottom: 0px;">
             </div>
+        </header>
+        <div>
+            <aside id="menu">
+                {% tree "workdir" %}
+            </aside>
+            {% if task_list %}
+                <aside id="content" style="bottom: 30px;">
+            {% else %}
+                <aside id="content">
+            {% endif %}
+                <form method="post">
+                    {% csrf_token %}
+                    <h2>{{ work_name }}</h2>
+                    {% if task_name %}
+                        <h2>Задача: {{task_name}}</h2>
+                        <br/>
+                    {% endif %}
+                    {% block content %}
+                    {% endblock %}
+                </form>
+            </aside>
+            {% if task_list %}
+            <aside id="foot">
+                {% block foot %}
+                {% endblock %}
+            </aside>
+            {% endif %}
+            <aside id="right-side">
+                {% block right-side %}
+                {% endblock %}
+            </aside>
         </div>
-        
         <script src="{% static 'js/caret-manager.js' %}"></script>
     </body>
 </html>

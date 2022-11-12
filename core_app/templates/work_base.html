@@ -1,11 +1,12 @@
 {% extends 'base.html' %}
 
 {% block content %}
-    {% include task_template %}
+    <div style="text-align: left;">
+        {% include task_template %}
+        <button type="submit" class="button">Проверить</button>
+    </div>
 {% endblock %}
 {% block foot %}
-    <button type="submit" class="button">Проверить</button>
-    <div class="vl"></div>
     {% with button_list_items=task_list %}
         {% include "button_list.html" %}
     {% endwith %}
