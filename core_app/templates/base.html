@@ -5,7 +5,7 @@
     <!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous"> -->
     <head>
         <meta charset="UTF-8"/>
-        <link rel="shortcut icon" type="image/png" href="{% static 'outline.svg' %}"/>
+        <link rel="shortcut icon" type="image/png" href="outline-icon.html"/>
         <title>{{title}}</title>
         <link rel="stylesheet" href="{% static 'css/stylesheet.css' %}"/>
         {% if theme == 'light' %}
@@ -17,52 +17,55 @@
     <body>
         <header role="banner" class="header">
             <div id="main-icon" class="header">
-                <img src="{% static 'main.svg' %}" width="28px" class="header"/>
+                {% include "main-icon.html" %}
             </div>
             <h1 class="header">| Laterem</h1>
             <div style="float: right; clear:left; vertical-align: middle;" class="header">
                 <div id="main-icon" class="header" style="padding-right:0px; margin-right: 0px;">
-                    <img src="{% static 'user-icon.svg' %}" width="20px" class="header"/>
+                    {% include "user-icon.html" %}
                 </div>
-                <div style="vertical-align: -4px; margin-left: 0px;" class="header">{{user.username}} | 
+                <div style="vertical-align: -6px; margin-left: 0px;" class="header">{{user.username}} | 
                     <form method="post" class="header">
                         {% csrf_token %}
-                        <button type="submit" class="button, header" name="change-color-theme"><img src="{% static 'change-color.svg' %}" style="height: 10px;"/></button>
+                        <button type="submit" class="button, header" name="change-color-theme">{% include "change-color-icon.html" %}</button>
                     </form>
                 </div>
                 <div style="width: 5px;" class="header"></div>
             </div>
-            <hr class="header"/>
-        </header>
-        <div style="padding-top: 40px;">
-            <div style="display: flex;
-            justify-content: space-between;">
-                <aside id="menu">
-                    {% tree "workdir" %}
-                </aside>
-                <aside id="content">
-                    <form method="post">
-                        {% csrf_token %}
-                        <h2>{{ work_name }}</h2>
-                        {% if task_name %}
-                            <h2>Задача: {{task_name}}</h2>
-                            <br/>
-                        {% endif %}
-                        {% block content %}
-                        {% endblock %}
-                        <div id="foot">
-                            {% block foot %}
-                            {% endblock %}
-                        </div>
-                    </form>
-                </aside>
-                <aside id="right-side">
-                    {% block right-side %}
-                    {% endblock %}
-                </aside>
+            <div width="100vh" style="background-color: var(--header-gradient-bottom); height: 1px; position: fixxed; bottom: 0px;">
             </div>
+        </header>
+        <div>
+            <aside id="menu">
+                {% tree "workdir" %}
+            </aside>
+            {% if task_list %}
+                <aside id="content" style="bottom: 30px;">
+            {% else %}
+                <aside id="content">
+            {% endif %}
+                <form method="post">
+                    {% csrf_token %}
+                    <h2>{{ work_name }}</h2>
+                    {% if task_name %}
+                        <h2>Задача: {{task_name}}</h2>
+                        <br/>
+                    {% endif %}
+                    {% block content %}
+                    {% endblock %}
+                </form>
+            </aside>
+            {% if task_list %}
+            <aside id="foot">
+                {% block foot %}
+                {% endblock %}
+            </aside>
+            {% endif %}
+            <aside id="right-side">
+                {% block right-side %}
+                {% endblock %}
+            </aside>
         </div>
-        
         <script src="{% static 'js/caret-manager.js' %}"></script>
     </body>
 </html>

@@ -1,80 +1,117 @@
 /* Общий стиль */
 body {
-    font-family: Arial, Helvetica, sans-serif;
-    margin: 0; /* Обнуляем отступы браузера */
-    background: var(--body-background-color); /* Цвет фона */ 
-    color: var(--body-font-color); /* Цвет текста */
-}
-/* Стили заголовков */
-h1 {
-    margin: 0px 5px 5px 0px; /* Убираем отступы */
-    font-size: 28px;
-}
-h2 {
-    margin-top: 0; /* Убираем отступ сверху */
-    margin: 0px 5px 5px 0px; /* Убираем отступы */
-    font-size: 20px;
-}
-/* Боковое меню */
-#menu { /* Левая колонка */
-    float: left; /* Обтекание справа */
-    width: 20%;
-    min-height: calc(100vh - 100px);
-    padding: 10px; /* Поля вокруг текста */
-    margin: 30px 10px 0 5px; /* Значения отступов */
-    border-radius: 20px;
-    background: var(--menu-background-color);
-}
-#menu div {
-    padding: 2px; /* Поля вокруг ссылок */
-}
-#menu a { 
-    display: block; /* Отображать ссылку как блок */
-    padding: 2px; /* Поля вокруг ссылок */
-    padding-bottom: 0px;
-    margin: 1px; /* Отступы вокруг */
-    font-size: 0.9em; /* Размер текста */
-    text-decoration: none; /* Убираем подчеркивание текста */
-    color: var(--body-font-color);
-}
-/* Блок с заданием */
-#content {
     margin: 0;
-    overflow:hidden;
-    background: var(--content-background-color);
+
+    background: var(--body-background-color);
+    color: var(--body-font-color);
+
+    font-family: Arial, Helvetica, sans-serif;
 }
-aside#content { /* Основная колонка */
-    margin: 30px 10px 20px 5px; /* Значения отступов */
-    margin-bottom: 60px;
-    width: 60%;
+
+    /* Блоки */
+aside#menu, aside#content,
+aside#right-side {
+    position: absolute;
+    top: 65px;
+    bottom: 10px;
+
+    overflow: scroll;
+}
+
+            /* Скрытие скроллбаров в блоках */
+#menu::-webkit-scrollbar, #content::-webkit-scrollbar,
+#foot::-webkit-scrollbar, #right-side::-webkit-scrollbar {
+    width: 0;
+    height: 0;
+}
+
+        /* Боковое меню */
+aside#menu {
+    left: 10px;
+
+    width: calc(20% - 20px);
+
     padding: 10px;
     border-radius: 20px;
+
+    background: var(--content-background-color);
+    box-shadow: 4px 4px 4px var(--content-shadow-color);
 }
-aside#right-side { /* Правая колонка */
-    float: right;   
-    width: 20%;
-    min-height: 90vh;
-    margin: 30px 10px 0px 5px; /* Значения отступов */
-    border-radius: 5px;
-    background: var(--body-background-color);
+#menu div {
+    padding: 2px;
+}
+#menu a { 
+    display: block;
+
+    padding: 2px;
+    padding-bottom: 0px;
+    margin: 1px;
+
+    font-size: 0.9em;
+    text-decoration: none;
+    color: var(--body-font-color);
+}
+
+        /* Блок с заданием */
+aside#content {
+    left: calc(20% + 20px);
+
+    width: calc(75% - 40px);
+
+    padding: 10px;
+    padding-bottom: 35px;
+
+    border-radius: 20px;
+    box-shadow: 4px 4px 4px var(--content-shadow-color);
+    background: var(--content-background-color);
+}
+
+        /* Правая часть сайта */
+aside#right-side {
+    right: 10px;
+
+    width: calc(5% - 20px);
+    
+    border-radius: 20px;
+    background: rgba(0, 0, 0, 0);
 }
 button#right-side {
     height: 100%;
     width: 100%;
-    background-color: var(--body-background-color);
+
+    background: rgba(0, 0, 0, 0);
     color: var(--body-font-color);
 }
-.line {
-    border-bottom: 1px groove var(--body-background-color); /* Линия между ссылками */
-}
-/* Нижняя часть сайта */
-#foot { /* Нижний блок */
-    padding: 5px; /* Поля вокруг текста */
-    clear: both; /* Отменяем обтекание */
-    align-self: center;
-    position: fixed;
+
+        /* Нижняя часть сайта */
+aside#foot {
+    position: absolute;
+    top: calc(100% - 62px);
     bottom: 10px;
+    left: calc(20% + 30px);
+
+    max-width: calc(75% - 60px);
+    padding: 5px;
+
+    background-color: var(--foot-background-color);
+    border: 1px solid var(--foot-border-color);
+    border-radius: 40px;
+    box-shadow: 4px 4px 4px var(--foot-shadow-color);
+
+    overflow: scroll;
 }
+
+/* Стили заголовков */
+h1 {
+    margin: 0px 5px 5px 0px;
+    font-size: 28px;
+}
+h2 {
+    margin-top: 0;
+    margin: 0px 5px 5px 0px;
+    font-size: 20px;
+}
+
 /* Стиль кнопок */
 button.button, button.no_answer,
 button.ok, button.partial,
@@ -92,6 +129,14 @@ button.wrong, button {
 button.button, button {
     background-color: var(--button-background-color);
     color: var(--dark-font-color);
+
+    box-shadow: 2px 2px 2px var(--button-shadow-color);
+}
+
+button.no_answer,
+button.ok, button.partial,
+button.wrong {
+    box-shadow: none;
 }
 
 /* Скрывающееся дерево */
@@ -141,6 +186,7 @@ ul, #myUL {
     background: var(--icon-background-color);
 }
 
+/* Шапка сайта */
 .header {
     display: inline-block;
     vertical-align: middle;
@@ -148,6 +194,7 @@ ul, #myUL {
     
 header.header {
     width: 100%;
+    height: 60px;
     padding: 0;
     white-space: nowrap;
     position: fixed;
@@ -229,6 +276,7 @@ td.wrong {
     background-color: var(--wrong-color);
 }
 
+/* Вертикальная линия (юзлесс) */
 .vl {
     height: 30px;
     margin-bottom: -10px;
