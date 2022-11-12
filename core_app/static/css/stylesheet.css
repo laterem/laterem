@@ -1,22 +1,14 @@
 /* Общий стиль */
 body {
+    margin: 0;
+
+    background: var(--body-background-color);
+    color: var(--body-font-color);
+
     font-family: Arial, Helvetica, sans-serif;
-    margin: 0; /* Обнуляем отступы браузера */
-    background: var(--body-background-color); /* Цвет фона */ 
-    color: var(--body-font-color); /* Цвет текста */
-}
-/* Стили заголовков */
-h1 {
-    margin: 0px 5px 5px 0px; /* Убираем отступы */
-    font-size: 28px;
-}
-h2 {
-    margin-top: 0; /* Убираем отступ сверху */
-    margin: 0px 5px 5px 0px; /* Убираем отступы */
-    font-size: 20px;
 }
 
-/* Блоки */
+    /* Блоки */
 aside#menu, aside#content,
 aside#right-side {
     position: absolute;
@@ -26,14 +18,15 @@ aside#right-side {
     overflow: scroll;
 }
 
+            /* Скрытие скроллбаров в блоках */
 #menu::-webkit-scrollbar, #content::-webkit-scrollbar,
 #foot::-webkit-scrollbar, #right-side::-webkit-scrollbar {
     width: 0;
     height: 0;
 }
 
-/* Боковое меню */
-aside#menu { /* Левая колонка */
+        /* Боковое меню */
+aside#menu {
     left: 10px;
 
     width: calc(20% - 20px);
@@ -45,35 +38,36 @@ aside#menu { /* Левая колонка */
     box-shadow: 4px 4px 4px var(--content-shadow-color);
 }
 #menu div {
-    padding: 2px; /* Поля вокруг ссылок */
+    padding: 2px;
 }
 #menu a { 
-    display: block; /* Отображать ссылку как блок */
-    padding: 2px; /* Поля вокруг ссылок */
+    display: block;
+
+    padding: 2px;
     padding-bottom: 0px;
-    margin: 1px; /* Отступы вокруг */
-    font-size: 0.9em; /* Размер текста */
-    text-decoration: none; /* Убираем подчеркивание текста */
+    margin: 1px;
+
+    font-size: 0.9em;
+    text-decoration: none;
     color: var(--body-font-color);
 }
 
-/* Блок с заданием */
-#content {
-    background: var(--content-background-color);
-    box-shadow: 4px 4px 4px var(--content-shadow-color);
-}
-
-aside#content { /* Основная колонка */
+        /* Блок с заданием */
+aside#content {
     left: calc(20% + 20px);
 
     width: calc(75% - 40px);
 
     padding: 10px;
-    padding-bottom: 30px;
+    padding-bottom: 35px;
+
     border-radius: 20px;
+    box-shadow: 4px 4px 4px var(--content-shadow-color);
+    background: var(--content-background-color);
 }
 
-aside#right-side { /* Правая колонка */
+        /* Правая часть сайта */
+aside#right-side {
     right: 10px;
 
     width: calc(5% - 20px);
@@ -81,7 +75,6 @@ aside#right-side { /* Правая колонка */
     border-radius: 20px;
     background: rgba(0, 0, 0, 0);
 }
-
 button#right-side {
     height: 100%;
     width: 100%;
@@ -89,8 +82,9 @@ button#right-side {
     background: rgba(0, 0, 0, 0);
     color: var(--body-font-color);
 }
-/* Нижняя часть сайта */
-aside#foot { /* Нижний блок */
+
+        /* Нижняя часть сайта */
+aside#foot {
     position: absolute;
     top: calc(100% - 62px);
     bottom: 10px;
@@ -100,11 +94,22 @@ aside#foot { /* Нижний блок */
     padding: 5px;
 
     background-color: var(--foot-background-color);
-    box-shadow: 4px 4px 4px var(--foot-shadow-color);
-    border-radius: 40px;
     border: 1px solid var(--foot-border-color);
+    border-radius: 40px;
+    box-shadow: 4px 4px 4px var(--foot-shadow-color);
 
     overflow: scroll;
+}
+
+/* Стили заголовков */
+h1 {
+    margin: 0px 5px 5px 0px;
+    font-size: 28px;
+}
+h2 {
+    margin-top: 0;
+    margin: 0px 5px 5px 0px;
+    font-size: 20px;
 }
 
 /* Стиль кнопок */
@@ -124,6 +129,14 @@ button.wrong, button {
 button.button, button {
     background-color: var(--button-background-color);
     color: var(--dark-font-color);
+
+    box-shadow: 2px 2px 2px var(--button-shadow-color);
+}
+
+button.no_answer,
+button.ok, button.partial,
+button.wrong {
+    box-shadow: none;
 }
 
 /* Скрывающееся дерево */
@@ -173,6 +186,7 @@ ul, #myUL {
     background: var(--icon-background-color);
 }
 
+/* Шапка сайта */
 .header {
     display: inline-block;
     vertical-align: middle;
@@ -262,6 +276,7 @@ td.wrong {
     background-color: var(--wrong-color);
 }
 
+/* Вертикальная линия (юзлесс) */
 .vl {
     height: 30px;
     margin-bottom: -10px;

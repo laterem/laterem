@@ -1,15 +1,21 @@
 :root {
-    --body-background-color: rgb(51, 51, 51); /* Цвет фона */
-    --body-font-color: rgb(255, 245, 230); /* Цвет текста */
+    --body-background-color: rgb(51, 51, 51);
+    --body-font-color: rgb(255, 245, 230);
+
     --foot-background-color: rgba(41, 41, 41, 0.9);
     --foot-shadow-color: rgba(37, 37, 37, 0.25);
     --foot-border-color: rgba(31, 31, 31, 0.6);
+
     --content-background-color: rgb(55, 55, 55);
     --content-shadow-color: rgba(45, 45, 45, 0.25);
-    --button-background-color: rgb(221, 221, 221);
+
+    --button-background-color: rgb(218, 218, 218);
+    --button-shadow-color: rgba(200, 200, 200, 0.25);
+
     --icon-background-color: rgb(53, 53, 53);
     --header-gradient-top: rgb(54, 54, 54);
     --header-gradient-bottom: rgb(48, 48, 48);
+
     --correct-color: rgb(25, 135, 84);
     --unchecked-color: rgb(255, 193, 7);
     --wrong-color: rgb(220, 53, 69);
