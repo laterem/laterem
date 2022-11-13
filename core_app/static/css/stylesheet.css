@@ -1,3 +1,20 @@
+:root {
+    --body-background-color: rgb(var(--base-r), var(--base-g), var(--base-b));
+    --body-font-color: rgb(var(--font-r), var(--font-g), var(--font-b));
+
+    --foot-background-color: rgba(calc(var(--base-r) * 0.8), calc(var(--base-g) * 0.8), calc(var(--base-b) * 0.8), 0.9);
+    --foot-shadow-color: rgba(calc(var(--base-r) * 0.73), calc(var(--base-g) * 0.73), calc(var(--base-b) * 0.73), 0.25);
+    --foot-border-color: rgba(calc(var(--base-r) * 0.6), calc(var(--base-g) * 0.6), calc(var(--base-b) * 0.6), 0.6);
+
+    --content-background-color: rgb(calc(var(--base-r) * 1.1), calc(var(--base-g) * 1.1), calc(var(--base-b) * 1.1));
+    --content-shadow-color: rgba(calc(var(--base-r) * 0.88), calc(var(--base-g) * 0.88), calc(var(--base-b) * 0.88), 0.25);
+
+
+    --icon-background-color: rgb(calc(var(--base-r) * 1.06), calc(var(--base-g) * 1.06), calc(var(--base-b) * 1.06));
+    --header-gradient-top: rgb(calc(var(--base-r) + 5), calc(var(--base-g) + 5), calc(var(--base-b) + 5));
+    --header-gradient-bottom: rgb(calc(var(--base-r) - 5), calc(var(--base-g) - 5), calc(var(--base-b) - 5));
+}
+
 /* Общий стиль */
 body {
     margin: 0;
