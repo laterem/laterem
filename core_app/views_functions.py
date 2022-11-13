@@ -22,6 +22,10 @@ def fill_additional_args(request, taskname, template):
     verdicts = (_colors[ver] for ver in userobject.get_task_verdicts(work_path, workobject.tasks.keys()))
     ret['task_list'] = zip(workobject.tasks.keys(), verdicts)
     ret['task_name'] = taskid
+    if (list(workobject.tasks.keys()).index(taskid) >= 0) and list(workobject.tasks.keys()).index(taskid) + 1 < len(list(workobject.tasks.keys())):
+        ret['next_task'] = list(workobject.tasks.keys())[list(workobject.tasks.keys()).index(taskid) + 1]
+    else:
+        ret['next_task'] = list(workobject.tasks.keys())[0]
     ret['work_name'] = work_path[-1]
     ret['user'] = userobject
     ret['theme'] = userobject.get_setting('theme')

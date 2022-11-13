@@ -36,10 +36,10 @@ aside#right-side {
 }
 
         /* Скрытие скроллбаров в блоках */
-#menu::-webkit-scrollbar, #content::-webkit-scrollbar,
-#foot::-webkit-scrollbar, #right-side::-webkit-scrollbar {
+::-webkit-scrollbar {
     width: 0;
     height: 0;
+    display: none;
 }
 
     /* Боковое меню */
@@ -53,6 +53,8 @@ aside#menu {
 
     background: var(--content-background-color);
     box-shadow: 4px 4px 4px var(--content-shadow-color);
+    
+    overflow-x: hidden;
 }
 #menu li {
     margin: 5px 0px 5px 0px;
@@ -96,7 +98,7 @@ aside#right-side {
 
     overflow: hidden;
 }
-button#right-side {
+#right-side {
     height: 100%;
     width: 100%;
 
@@ -112,7 +114,9 @@ aside#foot {
     bottom: 10px;
     left: calc(20% + 30px);
 
-    width: calc(75% - 60px);
+    width: calc(75% - 40px);
+    
+    overflow-y: hidden;
 }
 
 #foot div {
@@ -120,6 +124,7 @@ aside#foot {
     justify-self: center;
 
     width: fit-content;
+    max-width: calc(100% - 20px);
 
     padding: 5px;
 
@@ -128,7 +133,13 @@ aside#foot {
     border-radius: 40px;
     box-shadow: 4px 4px 4px var(--foot-shadow-color);
 
-    overflow: scroll;
+    white-space: nowrap;
+    overflow-x: scroll;
+    overflow-y: hidden;
+}
+
+#foot {
+    display: inline-block;
 }
 
 /* Стили заголовков */
@@ -163,11 +174,11 @@ button.button, button {
     box-shadow: 2px 2px 2px var(--button-shadow-color);
 }
 
-button.no_answer,
+/* button.no_answer,
 button.ok, button.partial,
 button.wrong {
     box-shadow: none;
-}
+} */
 
 /* Скрывающееся дерево */
 ul, #myUL {
@@ -258,6 +269,10 @@ button.no-answer {
     color: var(--dark-font-color);
 }
 
+button#choosed {
+    box-shadow: 0 3px aqua;
+}
+
 .correct, .partial,
 .wrong {
     color: var(--dark-font-color);
@@ -284,26 +299,51 @@ hr.header {
     display: block;
 }
 
-table.progress_line {
+#progress_line li {
     width: 100%;
-    border: 0px;
+    background-color: rgba(0, 0, 0, 0);
+    overflow: hidden;
+}
+
+#bar {
+    display: block;
+    width: 100%;
+    height: 4px;
     margin-bottom: 3px;
+    background-color: rgba(0, 0, 0, 0);
+    overflow: hidden;
+    border-radius: 40px;
+    z-index: 4;
 }
 
-td.no-answer {
-    background-color: var(--no-answer-background-color);
+div#correct, div#partial,
+div#wrong, div#no-answer {
+    position: absolute;
+    left: inherit;
+    height: 4px;
+    border-radius: 40px;
+    width: inherit;
 }
 
-td.correct {
+div#correct {
+    z-index: 3;
     background-color: var(--correct-color);
 }
 
-td.partial {
+div#partial {
+    z-index: 2;
     background-color: var(--unchecked-color);
 }
 
-td.wrong {
+div#wrong {
+    z-index: 1;
     background-color: var(--wrong-color);
+}
+
+div#no-answer {
+    z-index: 0;
+    width: inherit;
+    background-color: var(--no-answer-background-color);
 }
 
 /* Вертикальная линия (юзлесс) */
