@@ -57,10 +57,12 @@
                 </form>
             </aside>
             {% if task_list %}
-            <aside id="foot">
-                {% block foot %}
-                {% endblock %}
-            </aside>
+                <aside id="foot">
+                    <div>
+                        {% block foot %}
+                        {% endblock %}
+                    </div>
+                </aside>
             {% endif %}
             <aside id="right-side">
                 {% block right-side %}

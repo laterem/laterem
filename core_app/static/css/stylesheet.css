@@ -76,6 +76,8 @@ aside#right-side {
     
     border-radius: 20px;
     background: rgba(0, 0, 0, 0);
+
+    overflow: hidden;
 }
 button#right-side {
     height: 100%;
@@ -87,12 +89,21 @@ button#right-side {
 
     /* Нижняя часть сайта */
 aside#foot {
+    display: grid;
     position: absolute;
     top: calc(100% - 62px);
     bottom: 10px;
     left: calc(20% + 30px);
 
-    max-width: calc(75% - 60px);
+    width: calc(75% - 60px);
+}
+
+#foot div {
+    display: flex;
+    justify-self: center;
+
+    width: fit-content;
+
     padding: 5px;
 
     background-color: var(--foot-background-color);
