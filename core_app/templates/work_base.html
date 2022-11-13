@@ -12,7 +12,7 @@
     {% endwith %}
 {% endblock %}
 {% block right-side %}
-    <form method="post">
+    <form method="post" style="height: 100%;">
         {% csrf_token %}
         <button type="submit" name="{{next_task}}" id="right-side" class="button"><span></span></button>         
     </form>
