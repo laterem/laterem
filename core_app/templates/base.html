@@ -46,9 +46,10 @@
             {% endif %}
                 <form method="post">
                     {% csrf_token %}
-                    <h2>{{ work_name }}</h2>
+                    {{ work_name }}
+                    <br/>
                     {% if task_name %}
-                        <h2>Задача: {{task_name}}</h2>
+                        Задача: {{task_name}}
                         <br/>
                     {% endif %}
                     {% block content %}
