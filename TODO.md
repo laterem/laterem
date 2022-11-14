@@ -91,8 +91,8 @@
 
 - [ ] structure.md - Неактуален `Ответственный: Жура`
 - [x] secret_data.py - Up to date `Ответственный: Жура`
-- [x] DTCCompiler.compile - Up to date `Ответственный: Спайд`
-- [x] DTCCompiler.compile_alt - Up to date `Ответственный: Спайд`
+- [x] LTCCompiler.compile - Up to date `Ответственный: Спайд`
+- [ ] LTCCompiler.compile_alt - Неактуален `Ответственный: Спайд`
 
 ---
 

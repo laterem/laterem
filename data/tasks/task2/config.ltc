@@ -1,3 +1,3 @@
-id1 = Rand10(1, 10) as r1
-id2 = Rand10(1, 10) as r2
-answer?Sum(r1, r2)
+id1 = Rand10(1, 10)
+id2 = Rand10(1, 10)
+answer?Sum(id1, id2)

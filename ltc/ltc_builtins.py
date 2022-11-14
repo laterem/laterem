@@ -60,23 +60,37 @@ class IsMetricEqual(LTCCheckerFunction):
     def call(self, field):
         return field.endswith(self.args[1]) and float(field.strip(self.args[1])) == self.args[0]
 
+class Sum(LTCFunction):
+    expected_argsc = 2
+    def call(self):
+        return float(self.args[0]) + float(self.args[1])
+
 class Round(LTCFunction):
     expected_argsc = 2
     def call(self):
-        r = round(float(self.args[0]), int(self.args[1]))
-        return r
+        try:
+            r = round(float(self.args[0]), int(self.args[1]))
+            return r
+        except ValueError:
+            return self.args[0]
 
 class IsEqual(LTCCheckerFunction):
     expected_argsc = 1
     def call(self, field):
-        if isinstance(self.args[0], list):
-            return sorted(field) == sorted(self.args[0])
-        return field == str(self.args[0])
+        try:
+            if isinstance(self.args[0], list):
+                return sorted(field) == sorted(self.args[0])
+            elif isinstance(self.args[0], float):
+                return float(field) == self.args[0]
+            else:
+                return field == str(self.args[0])
+        except ValueError:
+            return False
 
-class IsEqualSum(LTCCheckerFunction):
-    expected_argsc = 2
+class IsEqualText(LTCCheckerFunction):
+    expected_argsc = 1
     def call(self, field):
-        return float(field) == float(self.args[0]) + float(self.args[1])
+        return field.strip().lower().replace('ё', 'е') == str(self.args[0]).strip().lower().replace('ё', 'е')
 
 class IsNotEqual(LTCCheckerFunction):
     expected_argsc = 1
@@ -94,9 +108,14 @@ class Roots(LTCCheckerFunction):
     expected_argsc = 4
     def call(self, field):
         a, b, c, accuracy = self.args
+        try:
+            inp = float(field)
+        except ValueError:
+            return False
+
         accuracy = int(accuracy)
         if not a:
-            return float(field) == round(-b/c, accuracy)
+            return inp == round(-b/c, accuracy)
         D = b*b - 4 * a * c
         print(a, b, c, D)
         if D >= 0:
@@ -105,7 +124,7 @@ class Roots(LTCCheckerFunction):
             x1 = (sqrtd-b)/a2
             x2 = (-sqrtd-b)/a2
             _roots = (round(x1, accuracy), round(x2, accuracy))
-            return float(field) in _roots
+            return inp in _roots
         else:
             return field.strip().lower() == 'нет корней'
 
@@ -113,9 +132,10 @@ class Roots(LTCCheckerFunction):
 KEYWORD_TABLE = {
     'GenerateLine': GenerateLine,
     'Equal': IsEqual,
+    'EqualText': IsEqualText,
     'NotEqual': IsNotEqual,
     'Rand10': RandomNum10,
-    'Sum': IsEqualSum,
+    'Sum': Sum,
     'Reversed': IsReversed,
     'Reverse': ReverseList,
     'Roots': Roots,
