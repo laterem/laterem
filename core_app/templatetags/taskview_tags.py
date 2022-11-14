@@ -25,11 +25,13 @@ def mask_tree(source, mask):
     return output
 
 def draw_progress_line(args):
-    ret = '<table class="progress_line" cellpadding="0px"><tr>'
+    ret = '<bar id="bar">'
+    gl_l = 0
     for verdict, l in args:
+        gl_l += l
         if l > 0:
-            ret += '<td class="' + verdict + '" height="4px" width=' + str(l * 100).replace('.', ',')  + '%></td>'
-    ret += '</tr></table>'
+            ret += '<div id="' + verdict + '" style="width: ' + str(gl_l * 100)  + '%"></div>'
+    ret += '</bar>'
     return ret
 
 # Кол-во вызовов = кол-во словарей в mask_tree(WORK_DIR, user.raw_available_branches)
@@ -63,15 +65,15 @@ def _submenu(inp, user: User, path=[], outer=False):
                 line_args = [("correct", green_len), ("unchecked", orange_len), ("wrong", red_len), ("no-answer", gray_len)]
 
                 if verdict == Verdicts.NO_ANSWER:
-                    output += '<li><a href="' + 'http://localhost:8000/works/' + addr + '">' + name + '</a>' + draw_progress_line(line_args) + '</li>'
+                    output += '<li id="progress_line"><a href="' + 'http://localhost:8000/works/' + addr + '">' + name + '</a>' + draw_progress_line(line_args) + '</li>'
                 else:
                     # Оперделение состояния задания
                     if verdict == Verdicts.OK:
-                        output += '<li><a href="' + 'http://localhost:8000/works/' + addr + '">' + name + '</a>' + draw_progress_line(line_args) + '</li>'
+                        output += '<li id="progress_line"><a href="' + 'http://localhost:8000/works/' + addr + '">' + name + '</a>' + draw_progress_line(line_args) + '</li>'
                     elif verdict == Verdicts.WRONG_ANSWER:
-                        output += '<li><a href="' + 'http://localhost:8000/works/' + addr + '">' + name + '</a>' + draw_progress_line(line_args) + '</li>'
+                        output += '<li id="progress_line"><a href="' + 'http://localhost:8000/works/' + addr + '">' + name + '</a>' + draw_progress_line(line_args) + '</li>'
                     else:
-                        output += '<li><a href="' + 'http://localhost:8000/works/' + addr + '">' + name + '</a>'+ draw_progress_line(line_args) + '</li>'
+                        output += '<li id="progress_line"><a href="' + 'http://localhost:8000/works/' + addr + '">' + name + '</a>'+ draw_progress_line(line_args) + '</li>'
             output += '</ul></li>'
 
     output += '</ul>'

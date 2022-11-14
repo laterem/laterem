@@ -1,6 +1,10 @@
 <form method="post">
     {% csrf_token %}
     {% for name, verdict_style in button_list_items %}
-        <button type="submit" name="{{name}}" class="button, {{verdict_style}}">{{name}}</button>
+        {% if name == task_name %}
+            <button type="submit" name="{{name}}" class="{{verdict_style}}" id="choosed">{{name}}</button>
+        {% else %}
+            <button type="submit" name="{{name}}" class="{{verdict_style}}">{{name}}</button>
+        {% endif %}
     {% endfor %}
 </form>
