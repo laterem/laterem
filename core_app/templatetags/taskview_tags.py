@@ -26,11 +26,12 @@ def mask_tree(source, mask):
 
 def draw_progress_line(args):
     ret = '<bar id="bar">'
-    gl_l = 0
+    args.reverse()
+    gl_l = 100
     for verdict, l in args:
-        gl_l += l
         if l > 0:
-            ret += '<div id="' + verdict + '" style="width: ' + str(gl_l * 100)  + '%"></div>'
+            ret += '<div id="' + verdict + '" style="width: ' + str(gl_l)  + '%"></div>'
+            gl_l -= l * 100
     ret += '</bar>'
     return ret
 

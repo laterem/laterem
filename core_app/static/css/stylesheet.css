@@ -7,7 +7,7 @@
     --foot-border-color: rgba(calc(var(--base-r) * 0.6), calc(var(--base-g) * 0.6), calc(var(--base-b) * 0.6), 0.6);
 
     --content-background-color: rgb(calc(var(--base-r) * 1.1), calc(var(--base-g) * 1.1), calc(var(--base-b) * 1.1));
-    --content-shadow-color: rgba(calc(var(--base-r) * 0.88), calc(var(--base-g) * 0.88), calc(var(--base-b) * 0.88), 0.25);
+    --content-shadow-color: rgba(calc(var(--base-r) * 0.8), calc(var(--base-g) * 0.8), calc(var(--base-b) * 0.8), 0.5);
 
 
     --icon-background-color: rgb(calc(var(--base-r) * 1.06), calc(var(--base-g) * 1.06), calc(var(--base-b) * 1.06));
@@ -170,7 +170,7 @@ button.button, button {
     background-color: var(--button-background-color);
     color: var(--dark-font-color);
 
-    box-shadow: 2px 2px 2px var(--button-shadow-color);
+    box-shadow: 2px 2px 2px var(--foot-shadow-color);
 }
 
 /* button.no_answer,
@@ -320,11 +320,6 @@ hr.header {
     background-color: rgba(0, 0, 0, 0);
     overflow: hidden;
     border-radius: 40px;
-    z-index: 4;
-}
-
-a#progress_line {
-    z-index: 4;
 }
 
 div#correct, div#partial,
@@ -337,22 +332,18 @@ div#wrong, div#no-answer {
 }
 
 div#correct {
-    z-index: 3;
     background-color: var(--correct-color);
 }
 
 div#partial {
-    z-index: 2;
     background-color: var(--unchecked-color);
 }
 
 div#wrong {
-    z-index: 1;
     background-color: var(--wrong-color);
 }
 
 div#no-answer {
-    z-index: 0;
     width: inherit;
     background-color: var(--no-answer-background-color);
 }
