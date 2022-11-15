@@ -1,11 +1,14 @@
 try:
     from .ltc_builtins import *
     from .ltc_core import *
+    from context_objects import LATEREM_FLAGS, LTC_CheckerShortcuts, LTC_SingleStorage
 except ImportError:
     from ltc_builtins import *
     from ltc_core import *
+    LTC_CheckerShortcuts, LTC_SingleStorage = True
+    LATEREM_FLAGS = {True}
 
-VERSION = 0.2
+VERSION = 0.3
 
 
 class LTC:
@@ -125,12 +128,16 @@ class LTCCompiler:
         kws[origin] = ff
 
     def compile(self, txt):
-        COMPILER_VERSION = 0.2
+        COMPILER_VERSION = 0.3
         if COMPILER_VERSION != VERSION:
             raise NotImplemented
 
-        namespace = {}
-        field_table = {}
+        if LTC_SingleStorage in LATEREM_FLAGS:
+            namespace = field_table = {}
+        else:
+            namespace = {}
+            field_table = {}
+
         checker_functions = []
         if txt[:9] == '[VERBAL]\n':
             return self.compile_alt(txt[9:])
@@ -169,7 +176,14 @@ class LTCCompiler:
             elif linemode == 'check':
                 try:
                     field = kws[0]
-                    checker_functions.append((field, LTCCompiler._build_func(kws[1])))
+                    function = LTCCompiler._build_func(kws[1])
+                    
+                    if not function._is_checker:
+                        if LTC_CheckerShortcuts in LATEREM_FLAGS:
+                            function = IsEqual(function)
+                        else:
+                            raise LTCCompileError(kws[1] + 'cannot be a Checker Function in: ' + line)
+                    checker_functions.append((field, function))
                 except IndexError:
                     raise LTCCompileError('Uncomplete operation: not enough keywords in ' + line)
             elif linemode == 'contain':

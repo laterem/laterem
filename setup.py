@@ -56,8 +56,8 @@ def assure_authtxt(path):
 #                                password=int(hashed_password))
 
 def init():
-    render_static_templates('core_app' + SEPARATOR + 'static_templates', 
-                            'core_app' + SEPARATOR + 'static')
+    #render_static_templates('core_app' + SEPARATOR + 'static_templates', 
+    #                        'core_app' + SEPARATOR + 'static')
     assure_authtxt('data' + SEPARATOR + 'userdata' + SEPARATOR + 'auth.txt')
 
 

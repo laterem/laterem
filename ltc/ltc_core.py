@@ -14,6 +14,7 @@ class LTCFunction:
     expected_argsc = 0
     result = NResult
     compiled = False
+    _is_checker = False
 
     def __init__(self, *args):
         argsc = len(args)
@@ -29,15 +30,17 @@ class LTCFunction:
     
     def compile(self, ns):
         for i, arg in enumerate(self.args):
-            if isinstance(arg, str):
-                continue
+            if callable(arg):
+                self.args[i] = arg(ns)
             elif isinstance(arg, list):
                 self.args[i] = [a(ns) for a in arg]
             else:
-                self.args[i] = arg(ns)
+                continue
         self.compiled = True
 
 class LTCCheckerFunction(LTCFunction):
+    _is_checker = True
+
     def __call__(self, field):
         return self.call(field)
 
@@ -51,4 +54,8 @@ class LTCAllias:
         self.name = name
     
     def __call__(self, ns):
-        return ns[self.name](ns)
+        r = ns[self.name]
+        if callable(r):
+            return r(ns)
+        else:
+            return r
