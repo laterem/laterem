@@ -306,46 +306,26 @@ hr.header {
     display: block;
 }
 
-#progress_line li {
+table.progress_line {
     width: 100%;
-    background-color: rgba(0, 0, 0, 0);
-    overflow: hidden;
-}
-
-#bar {
-    display: block;
-    width: 100%;
-    height: 4px;
+    border: 0px;
     margin-bottom: 3px;
-    background-color: rgba(0, 0, 0, 0);
-    overflow: hidden;
-    border-radius: 40px;
 }
 
-div#correct, div#partial,
-div#wrong, div#no-answer {
-    position: absolute;
-    left: inherit;
-    height: 4px;
-    border-radius: 40px;
-    width: inherit;
+td.no-answer {
+    background-color: var(--no-answer-background-color);
 }
 
-div#correct {
+td.correct {
     background-color: var(--correct-color);
 }
 
-div#partial {
+td.partial {
     background-color: var(--unchecked-color);
 }
 
-div#wrong {
+td.wrong {
     background-color: var(--wrong-color);
-}
-
-div#no-answer {
-    width: inherit;
-    background-color: var(--no-answer-background-color);
 }
 
 /* Вертикальная линия (юзлесс) */
