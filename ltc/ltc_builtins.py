@@ -65,6 +65,11 @@ class Sum(LTCFunction):
     def call(self):
         return float(self.args[0]) + float(self.args[1])
 
+class Multiply(LTCFunction):
+    expected_argsc = 2
+    def call(self):
+        return float(self.args[0]) * float(self.args[1])
+
 class Round(LTCFunction):
     expected_argsc = 2
     def call(self):
@@ -136,6 +141,7 @@ KEYWORD_TABLE = {
     'NotEqual': IsNotEqual,
     'Rand10': RandomNum10,
     'Sum': Sum,
+    'Multiply': Multiply,
     'Reversed': IsReversed,
     'Reverse': ReverseList,
     'Roots': Roots,
