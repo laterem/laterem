@@ -1,11 +1,19 @@
 {% extends 'base.html' %}
 
 {% block content %}
+    <div style="text-align: left;">
+        {% include task_template %}
+        <button type="submit" class="button">Проверить</button>
+    </div>
 {% endblock %}
 {% block foot %}
-    <button type="submit" class="button">Проверить</button>
-    <div class="vl"></div>
     {% with button_list_items=task_list %}
         {% include "button_list.html" %}
     {% endwith %}
+{% endblock %}
+{% block right-side %}
+    <form method="post" style="height: 100%;">
+        {% csrf_token %}
+        <button type="submit" name="{{next_task}}" id="right-side" class="button"><span></span></button>         
+    </form>
 {% endblock %}

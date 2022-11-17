@@ -1,68 +1,157 @@
+:root {
+    --body-background-color: rgb(var(--base-r), var(--base-g), var(--base-b));
+    --body-font-color: rgb(var(--font-r), var(--font-g), var(--font-b));
+
+    --foot-background-color: rgba(calc(var(--base-r) * 0.8), calc(var(--base-g) * 0.8), calc(var(--base-b) * 0.8), 0.9);
+    --foot-shadow-color: rgba(calc(var(--base-r) * 0.73), calc(var(--base-g) * 0.73), calc(var(--base-b) * 0.73), 0.25);
+    --foot-border-color: rgba(calc(var(--base-r) * 0.6), calc(var(--base-g) * 0.6), calc(var(--base-b) * 0.6), 0.6);
+
+    --content-background-color: rgb(calc(var(--base-r) * 1.1), calc(var(--base-g) * 1.1), calc(var(--base-b) * 1.1));
+    --content-shadow-color: rgba(calc(var(--base-r) * 0.8), calc(var(--base-g) * 0.8), calc(var(--base-b) * 0.8), 0.5);
+
+
+    --icon-background-color: rgb(calc(var(--base-r) * 1.06), calc(var(--base-g) * 1.06), calc(var(--base-b) * 1.06));
+    --header-gradient-top: rgb(calc(var(--base-r) + 5), calc(var(--base-g) + 5), calc(var(--base-b) + 5));
+    --header-gradient-bottom: rgb(calc(var(--base-r) - 5), calc(var(--base-g) - 5), calc(var(--base-b) - 5));
+}
+
 /* Общий стиль */
 body {
+    margin: 0;
+
+    background: var(--body-background-color);
+    color: var(--body-font-color);
+
     font-family: Arial, Helvetica, sans-serif;
-    margin: 0; /* Обнуляем отступы браузера */
-    background: var(--body-background-color); /* Цвет фона */ 
-    color: var(--body-font-color); /* Цвет текста */
 }
+
+/* Блоки */
+aside#menu, aside#content,
+aside#right-side {
+    position: absolute;
+    top: 65px;
+    bottom: 10px;
+
+    overflow: scroll;
+}
+
+        /* Скрытие скроллбаров в блоках */
+::-webkit-scrollbar {
+    width: 0;
+    height: 0;
+    display: none;
+}
+
+    /* Боковое меню */
+aside#menu {
+    left: 10px;
+
+    width: calc(20% - 20px);
+
+    padding: 10px;
+    border-radius: 20px;
+
+    background: var(--content-background-color);
+    box-shadow: 4px 4px 4px var(--content-shadow-color);
+    
+    overflow-x: hidden;
+}
+#menu li {
+    margin: 5px 0px 5px 0px;
+}
+#menu a { 
+    display: block;
+
+    margin: 5px 0px 0px 0px;
+
+    padding: 2px;
+    padding-bottom: 0px;
+    margin: 1px;
+
+    font-size: 0.9em;
+    text-decoration: none;
+    color: var(--body-font-color);
+}
+
+    /* Блок с заданием */
+aside#content {
+    left: calc(20% + 20px);
+
+    width: calc(75% - 40px);
+
+    padding: 10px;
+    padding-bottom: 35px;
+
+    border-radius: 20px;
+    box-shadow: 4px 4px 4px var(--content-shadow-color);
+    background: var(--content-background-color);
+}
+
+    /* Правая часть сайта */
+aside#right-side {
+    right: 10px;
+
+    width: calc(5% - 20px);
+    
+    border-radius: 20px;
+    background: rgba(0, 0, 0, 0);
+
+    overflow: hidden;
+}
+#right-side {
+    width: 100%;
+
+    background: rgba(0, 0, 0, 0);
+    color: var(--body-font-color);
+}
+
+    /* Нижняя часть сайта */
+aside#foot {
+    display: grid;
+    position: absolute;
+    top: calc(100% - 62px);
+    bottom: 10px;
+    left: calc(20% + 30px);
+
+    width: calc(75% - 40px);
+    
+    overflow-y: hidden;
+}
+
+#foot div {
+    display: flex;
+    justify-self: center;
+
+    width: fit-content;
+    max-width: calc(100% - 20px);
+
+    padding: 5px;
+
+    background-color: var(--foot-background-color);
+    border: 1px solid var(--foot-border-color);
+    border-radius: 40px;
+    box-shadow: 4px 4px 4px var(--foot-shadow-color);
+
+    white-space: nowrap;
+    overflow-x: scroll;
+    overflow-y: hidden;
+}
+
+#foot {
+    display: inline-block;
+}
+
 /* Стили заголовков */
 h1 {
-    margin: 0px 5px 5px 0px; /* Убираем отступы */
+    margin: 0px 5px 5px 0px;
     font-size: 28px;
 }
 h2 {
-    margin-top: 0; /* Убираем отступ сверху */
-    margin: 0px 5px 5px 0px; /* Убираем отступы */
+    margin-top: 0;
+    margin: 0px 5px 5px 0px;
     font-size: 20px;
 }
-/* Боковое меню */
-#menu { /* Левая колонка */
-    float: left; /* Обтекание справа */
-    width: 20%;
-    min-height: calc(100vh - 100px);
-    padding: 5px; /* Поля вокруг текста */
-    margin: 0px 10px 0 5px; /* Значения отступов */
-    border-radius: 5px;
-    background: var(--menu-background-color);
-}
-#menu div {
-    padding: 2px; /* Поля вокруг ссылок */
-}
-#menu a { 
-    display: block; /* Отображать ссылку как блок */
-    padding: 2px; /* Поля вокруг ссылок */
-    padding-bottom: 0px;
-    margin: 1px; /* Отступы вокруг */
-    font-size: 0.9em; /* Размер текста */
-    text-decoration: none; /* Убираем подчеркивание текста */
-    color: var(--body-font-color);
-}
-#menu a:hover { 
-    margin: 0; /* Убираем поля */
-}
-/* Блок с заданием */
-#content { /* Правая колонка */
-    margin: 30px 5px 20px 10px; /* Значения отступов */
-    margin-bottom: 60px;
-    margin-left: 22%;
-    width: 56%;
-    padding: 5px; /* Поля вокруг текста */
-    overflow:hidden;
-    padding: 10px;
-    border-radius: 20px;
-    background: var(--content-background-color);
-}
-.line {
-    border-bottom: 1px groove var(--body-background-color); /* Линия между ссылками */
-}
-/* Нижняя часть сайта */
-#foot { /* Нижний блок */
-    padding: 5px; /* Поля вокруг текста */
-    clear: both; /* Отменяем обтекание */
-    align-self: center;
-    position: fixed;
-    bottom: 10px
-}
+
 /* Стиль кнопок */
 button.button, button.no_answer,
 button.ok, button.partial,
@@ -80,7 +169,15 @@ button.wrong, button {
 button.button, button {
     background-color: var(--button-background-color);
     color: var(--dark-font-color);
+
+    box-shadow: 2px 2px 2px var(--foot-shadow-color);
 }
+
+/* button.no_answer,
+button.ok, button.partial,
+button.wrong {
+    box-shadow: none;
+} */
 
 /* Скрывающееся дерево */
 ul, #myUL {
@@ -101,10 +198,18 @@ ul, #myUL {
 }
 
 .caret::before {
-    content: "\25B6";
+    content: url("data:image/svg+xml,%3C%3Fxml version='1.0' encoding='UTF-8' standalone='no'%3F%3E%3C!-- Created with Inkscape (http://www.inkscape.org/) --%3E%3Csvg width='15px' height='15px' viewBox='0 0 5 5' version='1.1' id='svg5' inkscape:version='1.2.1 (9c6d41e410, 2022-07-14)' sodipodi:docname='caret-icon.svg' xmlns:inkscape='http://www.inkscape.org/namespaces/inkscape' xmlns:sodipodi='http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd' xmlns='http://www.w3.org/2000/svg' xmlns:svg='http://www.w3.org/2000/svg'%3E%3Csodipodi:namedview id='namedview7' pagecolor='%23505050' bordercolor='%23eeeeee' borderopacity='1' inkscape:showpageshadow='0' inkscape:pageopacity='0' inkscape:pagecheckerboard='true' inkscape:deskcolor='%23505050' inkscape:document-units='mm' showgrid='false' inkscape:zoom='17.678304' inkscape:cx='6.8728311' inkscape:cy='14.537593' inkscape:window-width='1920' inkscape:window-height='1057' inkscape:window-x='-8' inkscape:window-y='-8' inkscape:window-maximized='1' inkscape:current-layer='layer1' /%3E%3Cdefs id='defs2'%3E%3Cinkscape:path-effect effect='fillet_chamfer' id='path-effect223' is_visible='true' lpeversion='1' nodesatellites_param='F,0,0,1,0,0.52916667,0,1 @ F,0,0,1,0,0.52916667,0,1 @ F,0,0,1,0,0.52916667,0,1' unit='px' method='auto' mode='F' radius='2' chamfer_steps='1' flexible='false' use_knot_distance='true' apply_no_radius='true' apply_with_radius='true' only_selected='false' hide_knots='false' /%3E%3C/defs%3E%3Cg inkscape:label='Слой 1' inkscape:groupmode='layer' id='layer1'%3E%3Cpath sodipodi:type='star' style='fill:%23ffffff;stroke-width:0.266999;fill-opacity:1' id='path113' inkscape:flatsided='true' sodipodi:sides='3' sodipodi:cx='2.5' sodipodi:cy='2.5' sodipodi:r1='2.5053763' sodipodi:r2='1.2526883' sodipodi:arg1='0' sodipodi:arg2='1.0471976' inkscape:rounded='0' inkscape:randomized='0' d='M 4.5471046,2.7645833 1.7055836,4.4051362 A 0.30551452,0.30551452 30 0 1 1.2473118,4.1405529 l 0,-3.28110579 A 0.30551452,0.30551452 150 0 1 1.7055836,0.59486378 l 2.841521,1.64055292 a 0.30551452,0.30551452 90 0 1 0,0.5291666 z' inkscape:transform-center-x='-0.62634409' inkscape:path-effect='%23path-effect223' /%3E%3C/g%3E%3C/svg%3E");
     display: inline-block;
-    margin-right: 6px;
+    margin-right: 10px;
     color: var(--body-font-color);
+}
+
+button#right-side {
+    height: 100%;
+
+    background-image: url("data:image/svg+xml,%3C%3Fxml version='1.0' encoding='UTF-8' standalone='no'%3F%3E%3C!-- Created with Inkscape (http://www.inkscape.org/) --%3E%3Csvg width='30' height='90' viewBox='0 0 7.9374999 23.8125' version='1.1' id='svg5' inkscape:version='1.2.1 (9c6d41e410, 2022-07-14)' sodipodi:docname='рисунок.svg' xmlns:inkscape='http://www.inkscape.org/namespaces/inkscape' xmlns:sodipodi='http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd' xmlns='http://www.w3.org/2000/svg' xmlns:svg='http://www.w3.org/2000/svg'%3E%3Csodipodi:namedview id='namedview7' pagecolor='%23505050' bordercolor='%23eeeeee' borderopacity='1' inkscape:showpageshadow='0' inkscape:pageopacity='0' inkscape:pagecheckerboard='true' inkscape:deskcolor='%23505050' inkscape:document-units='mm' showgrid='false' inkscape:zoom='4.4195761' inkscape:cx='24.097334' inkscape:cy='68.106079' inkscape:window-width='1920' inkscape:window-height='1057' inkscape:window-x='-8' inkscape:window-y='-8' inkscape:window-maximized='1' inkscape:current-layer='layer1' /%3E%3Cdefs id='defs2'%3E%3Cinkscape:path-effect effect='fillet_chamfer' id='path-effect844' is_visible='true' lpeversion='1' nodesatellites_param='F,0,0,1,0,1.5875,0,1 @ F,0,0,1,0,1.5875,0,1 @ F,0,0,1,0,1.5875,0,1' unit='px' method='auto' mode='F' radius='6' chamfer_steps='1' flexible='false' use_knot_distance='true' apply_no_radius='true' apply_with_radius='true' only_selected='false' hide_knots='false' /%3E%3C/defs%3E%3Cg inkscape:label='Слой 1' inkscape:groupmode='layer' id='layer1'%3E%3Cpath sodipodi:type='star' style='fill:%23dadada;stroke:none;stroke-width:0.266999' id='path234' inkscape:flatsided='true' sodipodi:sides='3' sodipodi:cx='1.0177258' sodipodi:cy='11.90625' sodipodi:r1='13.26136' sodipodi:r2='6.6306801' sodipodi:arg1='0' sodipodi:arg2='1.0471976' inkscape:rounded='0' inkscape:randomized='0' d='m 12.904271,12.7 -17.1424099,9.897175 a 0.91654355,0.91654355 30 0 1 -1.3748154,-0.79375 l 0,-19.7943498 a 0.91654355,0.91654355 150 0 1 1.3748154,-0.79375 L 12.904271,11.1125 a 0.91654355,0.91654355 90 0 1 0,1.5875 z' inkscape:transform-center-x='-1.3229166' transform='matrix(0.39902895,0,0,1.0367076,2.2397312,-0.43705023)' inkscape:path-effect='%23path-effect844' /%3E%3C/g%3E%3C/svg%3E%0A");
+    background-repeat: no-repeat;
+    background-position: 50%;
 }
 
 .caret-down::before {
@@ -129,6 +234,7 @@ ul, #myUL {
     background: var(--icon-background-color);
 }
 
+/* Шапка сайта */
 .header {
     display: inline-block;
     vertical-align: middle;
@@ -136,6 +242,7 @@ ul, #myUL {
     
 header.header {
     width: 100%;
+    height: 60px;
     padding: 0;
     white-space: nowrap;
     position: fixed;
@@ -167,6 +274,10 @@ a.no-answer {
 button.no-answer {
     background: var(--no-answer-background-color);
     color: var(--dark-font-color);
+}
+
+button#choosed {
+    box-shadow: 0 3px var(--choosed-color);
 }
 
 .correct, .partial,
@@ -217,6 +328,7 @@ td.wrong {
     background-color: var(--wrong-color);
 }
 
+/* Вертикальная линия (юзлесс) */
 .vl {
     height: 30px;
     margin-bottom: -10px;
