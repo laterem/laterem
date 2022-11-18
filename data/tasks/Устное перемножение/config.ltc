@@ -1,0 +1,6 @@
+first_number = Rand10(0, 10)
+second_number = Rand10(0, 10)
+
+answer_mul?Multiply(first_number, second_number)
+
+answer_py?Equal('*')
