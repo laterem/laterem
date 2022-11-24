@@ -88,7 +88,7 @@ class IsEqual(LTCCheckerFunction):
             elif isinstance(self.args[0], float):
                 return float(field) == self.args[0]
             else:
-                return field == str(self.args[0])
+                return str(field) == str(self.args[0])
         except ValueError:
             return False
 

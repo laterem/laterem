@@ -1,6 +1,9 @@
 class LTCCompileError(Exception):
     pass
 
+class LTCError(Exception):
+    pass
+
 class LTCObject:
     def __init__(self, value):
         self.value = value
@@ -29,14 +32,18 @@ class LTCFunction:
         return self.result
     
     def compile(self, ns):
-        for i, arg in enumerate(self.args):
+        nargs = self.args[:]
+
+        for i, arg in enumerate(nargs):
             if callable(arg):
-                self.args[i] = arg(ns)
+                nargs[i] = arg(ns)
             elif isinstance(arg, list):
-                self.args[i] = [a(ns) for a in arg]
+                nargs[i] = [a(ns) for a in arg]
             else:
                 continue
-        self.compiled = True
+        new = type(self)(*nargs)
+        new.compiled = True
+        return new
 
 class LTCCheckerFunction(LTCFunction):
     _is_checker = True

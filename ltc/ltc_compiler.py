@@ -5,16 +5,18 @@ try:
 except ImportError:
     from ltc_builtins import *
     from ltc_core import *
-    LTC_CheckerShortcuts, LTC_SingleStorage = True
+    LTC_CheckerShortcuts = LTC_SingleStorage = True
     LATEREM_FLAGS = {True}
 
-VERSION = 0.3
+VERSION = 0.4
+RECOMPILATION_ATTEMPTS = 100
 
 
 class LTC:
-    def __init__(self, field_table, namespace, checker_functions):
+    def __init__(self, field_table, namespace, checker_functions, forbidden_cases):
         self.field_table = field_table
         self.checker_functions = checker_functions
+        self.forbidden_cases = forbidden_cases
         self.namespace = namespace
         self.executed = False
     
@@ -45,18 +47,39 @@ class LTC:
             mainobj['checkers'].append(checkerobj)
         return mainobj
     
-    def execute(self):
-        if self.executed:
-            raise Warning('Trying to execute an already executed LTC')
-            return
-
-        items = list(self.field_table.items())
-        for key, value in items:
-            self.field_table[key] = value(ns=self.namespace)
+    def execute(self, timeout=RECOMPILATION_ATTEMPTS):
+        if not timeout:
+            raise LTCError(f"LTC could not fit user forbidden cases conditions for {RECOMPILATION_ATTEMPTS} attempts of recompilation.")
+        new_field_table = {}
+        new_checker_functions = []
+        new_forbidden_cases = []
+        for key, value in self.field_table.items():
+            new_field_table[key] = value(ns=new_field_table)
         for _, value in self.checker_functions:
-            value.compile(self.namespace)
+            new_checker_functions.append(value.compile(new_field_table))
+        for _, value in self.forbidden_cases:
+            new_forbidden_cases.append(value.compile(new_field_table))
+
+        if not LTC.validate(new_field_table, new_checker_functions, new_forbidden_cases):
+            print('\t Recompilation triggered!')
+            self.execute(timeout-1)
+        
+        del self.field_table
+        del self.checker_functions
+        del self.forbidden_cases
+        self.field_table = new_field_table
+        self.checker_functions = new_checker_functions
+        self.forbidden_cases = new_forbidden_cases
         self.executed = True
     
+    @staticmethod
+    def validate(field_table, checker_functions, forbidden_cases):
+        invalid = True
+        for field, checker in forbidden_cases:
+            invalid = invalid and checker(field_table[field])
+            print(field, checker.args, field_table[field], invalid)
+        return not invalid
+
     def check(self, fields):
         valid = True
         for field, checker in self.checker_functions:
@@ -128,7 +151,7 @@ class LTCCompiler:
         kws[origin] = ff
 
     def compile(self, txt):
-        COMPILER_VERSION = 0.3
+        COMPILER_VERSION = 0.4
         if COMPILER_VERSION != VERSION:
             raise NotImplemented
 
@@ -139,6 +162,7 @@ class LTCCompiler:
             field_table = {}
 
         checker_functions = []
+        forbidden_cases = []
         if txt[:9] == '[VERBAL]\n':
             return self.compile_alt(txt[9:])
 
@@ -156,6 +180,9 @@ class LTCCompiler:
             elif '=' in line:
                 linemode = 'set'
                 line = line.replace('=', ' ')
+            elif line.startswith('\\'):
+                linemode = 'forbid'
+                line = line.lstrip('\\').strip().replace('?', ' ')
             elif '?' in line:
                 linemode = 'check'
                 line = line.replace('?', ' ')
@@ -191,9 +218,24 @@ class LTCCompiler:
                 value = kws[1]
                 value = LTCCompiler._typevalue(value)
                 namespace[allias] = value
+            elif linemode == 'forbid':
+                try:
+                    field = kws[0]
+                    function = LTCCompiler._build_func(kws[1])
+                    
+                    if not function._is_checker:
+                        if LTC_CheckerShortcuts in LATEREM_FLAGS:
+                            function = IsEqual(function)
+                        else:
+                            raise LTCCompileError(kws[1] + 'cannot be a Checker Function in: ' + line)
+                    forbidden_cases.append((field, function))
+                except IndexError:
+                    raise LTCCompileError('Uncomplete operation: not enough keywords in ' + line)
+            
         return LTC(field_table=field_table, 
                    namespace=namespace, 
-                   checker_functions=checker_functions)
+                   checker_functions=checker_functions,
+                   forbidden_cases=forbidden_cases)
 
 
     def compile_alt(self, txt):
@@ -255,18 +297,17 @@ class LTCCompiler:
 
 if __name__ == '__main__':
     test = '''
-aaa := 'bbb'
-0 = NaN
-id2 = 43 as F3
-id1 = GenerateLine(F3, GenerateLine(3, "b"))
-id3 = [["я", "список"], GenerateLine(4, "c"), "[я делаю вид, что я список]", 5]
-
-input ? Equal(GenerateLine(F3, GenerateLine(3, "b")))'''
+a = Rand10(0, 10)
+\\a?Equal(5)'''
 
     ltcc = LTCCompiler()
-    ltc = ltcc.compile(test)
-    print(ltc.field_table)
-    ltc.execute()
+    
+    for _ in range(1000):
+        ltc = ltcc.compile(test)
+        ltc.execute()
+        print(ltc.field_table)
+
+    raise   
     print(ltc.field_table)
     print(ltc.check({'input': '42'}))
     print(ltc.check({'input': 'bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb'}))
