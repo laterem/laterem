@@ -1,6 +1,6 @@
 from ltm.tasks import TaskData, Verdicts
 from ltm.works import Work as Work
-from ltm.users import User as LateremUser
+from ltm.users import User as User
 from django.http import HttpResponse, FileResponse
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
@@ -8,7 +8,7 @@ from django.core.exceptions import PermissionDenied
 from context_objects import SEPARATOR, LTM_SCANNER, WORK_DIR, SPACE_REPLACER
 from os.path import join as pathjoin
 from .views_functions import fill_additional_args, change_color_theme
-from django.contrib.auth.models import User
+from .models import *
 from django.contrib.auth.decorators import login_required
 from .forms import LoginForm
 
@@ -32,7 +32,7 @@ def login_view(request):
                 for line in file:
                     remail, rpassword = line.split('\\')
                     if remail == email:
-                        user = User.objects.create_user(email=email, password=rpassword, username=email)
+                        user = LateremUser.objects.create_user(email=email, password=rpassword, username=email, is_teacher=False)
                         if password == rpassword:
                             user = authenticate(username=email, password=password)
                             login(request, user)
@@ -90,7 +90,7 @@ def task_handle(request, taskobject, workobject, taskid, additional_render_args)
     if request.method == 'POST':  
         # Обработка кнопки смены темы
         if 'change-color-theme' in request.POST:
-            with LateremUser(request.user.email) as user:
+            with User(request.user.email) as user:
                 change_color_theme(user, request)
                 return redirect(request.path)
         else:
@@ -102,10 +102,10 @@ def task_handle(request, taskobject, workobject, taskid, additional_render_args)
 
             # Анализ ответа
             if taskobject.test(dict(request.POST)):
-                with LateremUser(request.user.email) as user:
+                with User(request.user.email) as user:
                     user.set_verdict(workobject.path, taskid, Verdicts.OK)
                 return redirect(request.path)
-            with LateremUser(request.user.email) as user:
+            with User(request.user.email) as user:
                 user.set_verdict(workobject.path, taskid, Verdicts.WRONG_ANSWER)
             return redirect(request.path)
 
@@ -125,7 +125,7 @@ def failed(request):
 # Базовая страница сайта
 @login_required
 def index_page_render(request):
-    with LateremUser(request.user.email) as user:
+    with User(request.user.email) as user:
         if request.method == 'POST':  # Расхардкодить!!!
             # Обработка кнопки смены темы
             change_color_theme(user, request)
@@ -139,7 +139,7 @@ def index_page_render(request):
                         'text2': 'Перейдите на нужную работу по ссылке слева',
                         'workdir': WORK_DIR,
                         'theme': user.get_setting('theme'),
-                        'user': LateremUser(request.user.email).open()
+                        'user': User(request.user.email).open()
                     }
                     )
 
