@@ -26,7 +26,6 @@ class LTCFunction:
         self.args = list(args)
 
     def __call__(self, ns):
-        if not self.compiled: self.compile(ns)
         if self.result is NResult:
             self.result = self.call()
         return self.result
@@ -36,9 +35,9 @@ class LTCFunction:
 
         for i, arg in enumerate(nargs):
             if callable(arg):
-                nargs[i] = arg(ns)
+                nargs[i] = arg.compile(ns)(ns)
             elif isinstance(arg, list):
-                nargs[i] = [a(ns) for a in arg]
+                nargs[i] = [a.compile(ns)(ns) for a in arg]
             else:
                 continue
         new = type(self)(*nargs)
@@ -56,12 +55,12 @@ class LTCValue(LTCFunction):
     def call(self):
         return self.args[0]
 
-class LTCAllias:
+class LTCAllias(LTCFunction):
     def __init__(self, name):
-        self.name = name
+         self.args = [name]
     
     def __call__(self, ns):
-        r = ns[self.name]
+        r = ns[self.args[0]]
         if callable(r):
             return r(ns)
         else:

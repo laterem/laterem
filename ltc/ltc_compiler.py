@@ -26,11 +26,16 @@ class LTC:
         namespace = {}
         field_table = data['field_values']
         checker_functions = []
+        forbidden_cases = []
         for checkerobj in data['checkers']:
             function = KEYWORD_TABLE[checkerobj['function']](*checkerobj['args'])
             field = checkerobj['field']
             checker_functions.append((field, function))
-        ltc = cls(field_table, namespace, checker_functions)
+        for checkerobj in data['forbidders']:
+            function = KEYWORD_TABLE[checkerobj['function']](*checkerobj['args'])
+            field = checkerobj['field']
+            forbidden_cases.append((field, function))
+        ltc = cls(field_table, namespace, checker_functions, forbidden_cases)
         ltc.executed = executed 
         return ltc
 
@@ -39,12 +44,19 @@ class LTC:
         mainobj = {}
         mainobj['field_values'] = self.field_table
         mainobj['checkers'] = []
+        mainobj['forbidders'] = []
         for field, checker in self.checker_functions:
             checkerobj = {}
             checkerobj['function'] = INVERSE_TABLE[checker.__class__]
             checkerobj['args'] = checker.args
             checkerobj['field'] = field
             mainobj['checkers'].append(checkerobj)
+        for field, checker in self.forbidden_cases:
+            checkerobj = {}
+            checkerobj['function'] = INVERSE_TABLE[checker.__class__]
+            checkerobj['args'] = checker.args
+            checkerobj['field'] = field
+            mainobj['forbidders'].append(checkerobj)
         return mainobj
     
     def execute(self, timeout=RECOMPILATION_ATTEMPTS):
@@ -53,15 +65,15 @@ class LTC:
         new_field_table = {}
         new_checker_functions = []
         new_forbidden_cases = []
+
         for key, value in self.field_table.items():
-            new_field_table[key] = value(ns=new_field_table)
-        for _, value in self.checker_functions:
-            new_checker_functions.append(value.compile(new_field_table))
-        for _, value in self.forbidden_cases:
-            new_forbidden_cases.append(value.compile(new_field_table))
+            new_field_table[key] = value.compile(new_field_table)(ns=new_field_table)
+        for field, value in self.checker_functions:
+            new_checker_functions.append((field, value.compile(new_field_table)))
+        for field, value in self.forbidden_cases:
+            new_forbidden_cases.append((field, value.compile(new_field_table)))
 
         if not LTC.validate(new_field_table, new_checker_functions, new_forbidden_cases):
-            print('\t Recompilation triggered!')
             self.execute(timeout-1)
         
         del self.field_table
@@ -74,11 +86,10 @@ class LTC:
     
     @staticmethod
     def validate(field_table, checker_functions, forbidden_cases):
-        invalid = True
+        valid = True
         for field, checker in forbidden_cases:
-            invalid = invalid and checker(field_table[field])
-            print(field, checker.args, field_table[field], invalid)
-        return not invalid
+            valid = valid and not checker(field_table[field])
+        return valid
 
     def check(self, fields):
         valid = True
