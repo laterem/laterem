@@ -12,6 +12,12 @@ class NewUser(forms.Form):
     email = forms.EmailField(label='Email')
     password = forms.CharField(label='Пароль')
 
+class EditUser(forms.Form):
+    first_name = forms.CharField(label='Имя')
+    second_name = forms.CharField(label='Фамилия')
+    email = forms.EmailField(label='Email')
+    password = forms.CharField(label='Пароль')
+
 class NewGroup(forms.Form):
     first_name = forms.CharField(label='Имя')
     second_name = forms.CharField(label='Фамилия')

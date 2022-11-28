@@ -10,7 +10,7 @@ from os.path import join as pathjoin
 from .views_functions import fill_additional_args, change_color_theme
 from .models import *
 from django.contrib.auth.decorators import login_required
-from .forms import LoginForm, NewUser
+from .forms import LoginForm, NewUser, EditUser
 
 def teacher_only(function):
     def wrap(request, *args, **kwargs):
@@ -71,11 +71,27 @@ def users_panel(request):
                                                     last_name=form.cleaned_data['second_name'],
                                                     is_teacher=False)
         else:
-            # Плохо! Переписать
+    # <Плохо! Переписать>
+            flag = False
             for user in LateremUser.objects.all():
                 if 'delete:' + user.email in request.POST:
                     user.delete()
+                    flag = True
+                    break
             form = NewUser()
+        # <Не тестилось, технически должно работать>
+        if not flag:
+            editform = EditUser(request.POST)
+            if editform.is_valid():
+                for user in LateremUser.objects.all():
+                    if 'edit:' + user.email in request.POST:
+                        user.email = editform.email
+                        user.password = editform.password
+                        user.first_name = editform.first_name
+                        user.last_name = editform.last_name
+                        user.save()
+        # </Не тестилось, технически должно работать>
+    # </Плохо! Переписать>
 
     else:
         form = NewUser()
