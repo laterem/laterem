@@ -10,7 +10,15 @@ from os.path import join as pathjoin
 from .views_functions import fill_additional_args, change_color_theme
 from .models import *
 from django.contrib.auth.decorators import login_required
-from .forms import LoginForm
+from .forms import LoginForm, NewUser
+
+def teacher_only(function):
+    def wrap(request, *args, **kwargs):
+        if not request.user.is_teacher:
+            raise PermissionDenied()
+        return function(request, *args, **kwargs)
+    return login_required(wrap)
+
 
 def logout_view(request):
     logout(request)
@@ -47,6 +55,32 @@ def login_view(request):
         return render(request, 'login.html', {'form': form})
 
 
+@teacher_only
+def users_panel(request):
+    if request.method == 'POST':
+        if "newuser" in request.POST:
+            form = NewUser(request.POST)
+            if form.is_valid():
+                test = LateremUser.objects.filter(email=form.cleaned_data['email'])
+                if test:
+                    # Пользователь с такой почтой уже есть, надо как-то оповестить 
+                    pass
+                else:
+                    LateremUser.objects.create_user(email=form.cleaned_data['email'], password=form.cleaned_data['password'],
+                                                    username=form.cleaned_data['email'], first_name=form.cleaned_data['first_name'],
+                                                    last_name=form.cleaned_data['second_name'],
+                                                    is_teacher=False)
+        else:
+            # Плохо! Переписать
+            for user in LateremUser.objects.all():
+                if 'delete:' + user.email in request.POST:
+                    user.delete()
+            form = NewUser()
+
+    else:
+        form = NewUser()
+    return render(request, 'users_panel.html', {'newuserform': form,
+                                                'allusers': LateremUser.objects.all()})
 
 # Рендер страницы работы
 @login_required

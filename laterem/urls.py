@@ -17,6 +17,7 @@ from django.contrib import admin
 from django.urls import path
 from core_app.views import failed, completed, index_page_render, login_view
 from core_app.views import task_view, render_work, getasset, logout_view
+from core_app.views import users_panel
 
 
 urlpatterns = [
@@ -28,5 +29,6 @@ urlpatterns = [
     path('completed/', completed),
     path('login/', login_view),
     path('logout/', logout_view),
-    path('', index_page_render)
+    path('', index_page_render),
+    path('teacher/manage_users/', users_panel),
 ]
