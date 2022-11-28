@@ -40,7 +40,11 @@ def login_view(request):
                 for line in file:
                     remail, rpassword = line.split('\\')
                     if remail == email:
-                        user = LateremUser.objects.create_user(email=email, password=rpassword, username=email, is_teacher=False)
+                        if email.upper() == 'ADMIN@ADMIN.ADMIN':
+                            tc = True
+                        else:
+                            tc = False
+                        user = LateremUser.objects.create_user(email=email, password=rpassword, username=email, is_teacher=tc)
                         if password == rpassword:
                             user = authenticate(username=email, password=password)
                             login(request, user)
@@ -80,16 +84,16 @@ def users_panel(request):
                     break
             form = NewUser()
         # <Не тестилось, технически должно работать>
-        if not flag:
-            editform = EditUser(request.POST)
-            if editform.is_valid():
-                for user in LateremUser.objects.all():
-                    if 'edit:' + user.email in request.POST:
-                        user.email = editform.email
-                        user.password = editform.password
-                        user.first_name = editform.first_name
-                        user.last_name = editform.last_name
-                        user.save()
+            if not flag:
+                editform = EditUser(request.POST)
+                if editform.is_valid():
+                    for user in LateremUser.objects.all():
+                        if 'edit:' + user.email in request.POST:
+                            user.email = editform.email
+                            user.password = editform.password
+                            user.first_name = editform.first_name
+                            user.last_name = editform.last_name
+                            user.save()
         # </Не тестилось, технически должно работать>
     # </Плохо! Переписать>
 
