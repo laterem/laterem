@@ -1,36 +1,12 @@
 {% extends 'base.html' %}
 {% load static %}
 {% load laterem %}
+
+{% block left-side %}
+<a href="/teacher/manage_users/users/">Все пользователи</a>
+<a href="/teacher/manage_users/groups/">Группы</a>
+<a href="/teacher/manage_users/rights/">Права</a>
+{% endblock %}
+
 {% block content %}
-<table>
-    <tbody>
-        {% for user in allusers %}
-            <tr>
-                <td>
-                    {{user.first_name}}
-                </td> 
-                <td>
-                    {{user.last_name}}
-                </td>
-                <td>
-                    {{user.email}}
-                </td> 
-                <td>
-                    <form method="post">
-                        {% csrf_token %}
-                        <button type="submit" name="delete:{{user.email}}" class="button">Удалить</button>
-                    </form>
-                </td>
-            </tr>
-        {% endfor %}
-    </tbody>
-</table>
-<form method="post">
-    {% csrf_token %}
-    {{ newuserform.first_name.label_tag }} {{ newuserform.first_name }} <br>
-    {{ newuserform.second_name.label_tag }} {{ newuserform.second_name }} <br>
-    {{ newuserform.email.label_tag }} {{ newuserform.email }} <br>
-    {{ newuserform.password.label_tag }} {{ newuserform.password }} <br>
-    <button type="submit" name="newuser" class="button">Добавить нового пользователя</button>
-</form>
 {% endblock %}

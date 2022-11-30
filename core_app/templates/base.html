@@ -18,6 +18,8 @@
         <div>
             <aside id="menu">
                 {% tree "workdir" %}
+                {% block left-side %}
+                {% endblock %}
             </aside>
             {% if task_list %}
                 <aside id="content" style="bottom: 30px;">
@@ -58,10 +60,10 @@
             </div>
             <div class="header dropdown-items">
                 <div id="header-dropdown-item">
-                    <a href="/">Система решения задач</a>
+                    <a href="/">Задачи</a>
                 </div>
                 <div id="header-dropdown-item">
-                    <a href="/teacher/manage_users/">Панель управления учителя</a>
+                    <a href="/teacher/manage_users/">Панель управления</a>
                 </div>
             </div>
 

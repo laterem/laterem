@@ -15,9 +15,9 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from core_app.views import failed, completed, index_page_render, login_view
+from core_app.views import index_page_render, login_view
 from core_app.views import task_view, render_work, getasset, logout_view
-from core_app.views import users_panel
+from core_app.views import users_panel, user_managing, right_managing, group_managing
 
 
 urlpatterns = [
@@ -25,10 +25,11 @@ urlpatterns = [
     path('task/<str:taskname>', task_view),
     path('taskasset/<str:taskname>/<str:filename>', getasset),
     path('works/<str:work_name>', render_work),
-    path('failed/', failed),
-    path('completed/', completed),
     path('login/', login_view),
     path('logout/', logout_view),
     path('', index_page_render),
     path('teacher/manage_users/', users_panel),
+    path('teacher/manage_users/users/', user_managing),
+    path('teacher/manage_users/rights/', right_managing),
+    path('teacher/manage_users/groups/', group_managing),
 ]

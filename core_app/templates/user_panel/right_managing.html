@@ -1,0 +1,29 @@
+{% extends 'users_panel.html' %}
+{% load static %}
+{% load laterem %}
+
+{% block content %}
+<table>
+    <tbody>
+        {% for user in allusers %}
+            <tr>
+                <td>
+                    {{user.first_name}}
+                </td> 
+                <td>
+                    {{user.last_name}}
+                </td>
+                <td>
+                    {{user.email}}
+                </td> 
+                <td>
+                    <form method="post">
+                        {% csrf_token %}
+                        <button type="submit" name="delete:{{user.email}}" class="button">Удалить</button>
+                    </form>
+                </td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

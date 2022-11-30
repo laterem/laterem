@@ -60,7 +60,7 @@ def login_view(request):
 
 
 @teacher_only
-def users_panel(request):
+def users_panel(request, page_for_render='users_panel.html'):
     if request.method == 'POST':
         if "newuser" in request.POST:
             form = NewUser(request.POST)
@@ -99,8 +99,20 @@ def users_panel(request):
 
     else:
         form = NewUser()
-    return render(request, 'users_panel.html', {'newuserform': form,
+    return render(request, page_for_render, {'newuserform': form,
                                                 'allusers': LateremUser.objects.all()})
+
+@teacher_only
+def user_managing(request):
+    return users_panel(request, page_for_render='user_panel/user_managing.html')
+
+@teacher_only
+def right_managing(request):
+    return users_panel(request, page_for_render='user_panel/right_managing.html')
+
+@teacher_only
+def group_managing(request):
+    return users_panel(request, page_for_render='user_panel/group_managing.html')
 
 # Рендер страницы работы
 @login_required
