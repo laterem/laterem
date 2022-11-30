@@ -13,6 +13,9 @@
     --icon-background-color: rgb(calc(var(--base-r) * 1.06), calc(var(--base-g) * 1.06), calc(var(--base-b) * 1.06));
     --header-gradient-top: rgb(calc(var(--base-r) + 5), calc(var(--base-g) + 5), calc(var(--base-b) + 5));
     --header-gradient-bottom: rgb(calc(var(--base-r) - 5), calc(var(--base-g) - 5), calc(var(--base-b) - 5));
+
+    --header-dropdown-color: rgba(calc(var(--base-r) - 5), calc(var(--base-g) - 5), calc(var(--base-b) - 5), 0.9);
+    --header-dropdown-lighted-color: rgb(calc(var(--base-r) * 1.1), calc(var(--base-g) * 1.1), calc(var(--base-b) * 1.1));
 }
 
 /* Общий стиль */
@@ -335,4 +338,32 @@ td.wrong {
     width: 2px;
     background-color: var(--button-background-color);
     display: inline-block;
+}
+
+.dropdown-items {
+    display: none;
+}
+
+.dropdown {
+    position: relative;
+}
+
+.dropdown:hover .dropdown-items {
+    display: block;
+    position: absolute;
+}
+
+#header-dropdown-item {
+    display: block;
+    padding: 5px;
+    background-color: var(--header-dropdown-color);
+}
+
+#header-dropdown-item a {
+    color: var(--body-font-color);
+    text-decoration: none;
+}
+
+#header-dropdown-item:hover {
+    background-color: var(--header-dropdown-lighted-color);
 }
