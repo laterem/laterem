@@ -29,10 +29,20 @@
 
 <form method="post">
     {% csrf_token %}
-    {{ newuserform.first_name.label_tag }} {{ newuserform.first_name }} <br>
-    {{ newuserform.second_name.label_tag }} {{ newuserform.second_name }} <br>
-    {{ newuserform.email.label_tag }} {{ newuserform.email }} <br>
-    {{ newuserform.password.label_tag }} {{ newuserform.password }} <br>
+    <table>
+        <tr>
+            <td>{{ newuserform.first_name.label_tag }}</td> <td>{{ newuserform.first_name }}</td>
+        </tr>
+        <tr>
+            <td>{{ newuserform.second_name.label_tag }}</td> <td>{{ newuserform.second_name }}</td>
+        </tr>
+        <tr>
+            <td>{{ newuserform.email.label_tag }}</td> <td>{{ newuserform.email }}</td>
+        </tr>
+        <tr>
+            <td>{{ newuserform.password.label_tag }}</td> <td>{{ newuserform.password }}</td>
+        </tr>
+    </table>
     <button type="submit" name="newuser" class="button">Добавить нового пользователя</button>
 </form>
 {% endblock %}
