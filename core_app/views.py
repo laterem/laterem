@@ -22,7 +22,7 @@ def teacher_only(function):
 
 def logout_view(request):
     logout(request)
-    return HttpResponse('<h1>Успешный выход из аккаунта</h1>')
+    return redirect('/')
 
 # Сделано в спешке, всё очень криво
 # Ничего, Жура переделает!
