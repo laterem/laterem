@@ -69,7 +69,8 @@ def settings_view(request):
         return render(request, 'settings_page.html', {
                             'title': 'Laterem Настройки',
                             'theme': user.get_setting('theme'),
-                            'user': User(request.user.email).open()
+                            'user': User(request.user.email).open(),
+                            'is_teacher': True,
                         })
 
 @teacher_only
@@ -202,7 +203,8 @@ def index_page_render(request):
                         'text2': 'Перейдите на нужную работу по ссылке слева',
                         'workdir': WORK_DIR,
                         'theme': user.get_setting('theme'),
-                        'user': User(request.user.email).open()
+                        'user': User(request.user.email).open(),
+                        'is_teacher': True,
                     }
                     )
 
