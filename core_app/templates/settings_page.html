@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<form method="post">
+    {% csrf_token %}
+
+    <h2>Внешний вид сайта</h2>
+    <p>{% include "icons/change-color-icon.html" %} Тема: {{theme}}</p>
+    <button type="submit" class="button, header" name="change-color-theme">Сменить тему</button>
+</form>
+{% endblock %}

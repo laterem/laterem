@@ -58,6 +58,19 @@ def login_view(request):
         form = LoginForm()
         return render(request, 'login.html', {'form': form})
 
+def settings_view(request):
+    if request.method == 'POST':  
+        # Обработка кнопки смены темы
+        if 'change-color-theme' in request.POST:
+            with User(request.user.email) as user:
+                change_color_theme(user, request)
+                return redirect(request.path)
+    with User(request.user.email) as user:
+        return render(request, 'settings_page.html', {
+                            'title': 'Laterem Настройки',
+                            'theme': user.get_setting('theme'),
+                            'user': User(request.user.email).open()
+                        })
 
 @teacher_only
 def users_panel(request, page_for_render='users_panel.html'):
@@ -153,27 +166,21 @@ def task_view(request, taskname):
     return task_handle(request, taskobject, workobject, taskid, additional_render_args)
     
 def task_handle(request, taskobject, workobject, taskid, additional_render_args):
-    if request.method == 'POST':  
-        # Обработка кнопки смены темы
-        if 'change-color-theme' in request.POST:
-            with User(request.user.email) as user:
-                change_color_theme(user, request)
-                return redirect(request.path)
-        else:
-            # Проверка - есть ли нажатая нами кнопка в списке задач (нужно для переадрессации на другие задачи)
-            for el in request.POST:
-                if el in workobject.tasks:
-                    # Переадрессация на задачу
-                    return redirect('/task/' + workobject.get_full_name(separator='.', space_replacement=SPACE_REPLACER) + '_id' + el.replace(' ', SPACE_REPLACER))
+    if request.method == 'POST':
+        # Проверка - есть ли нажатая нами кнопка в списке задач (нужно для переадрессации на другие задачи)
+        for el in request.POST:
+            if el in workobject.tasks:
+                # Переадрессация на задачу
+                return redirect('/task/' + workobject.get_full_name(separator='.', space_replacement=SPACE_REPLACER) + '_id' + el.replace(' ', SPACE_REPLACER))
 
-            # Анализ ответа
-            if taskobject.test(dict(request.POST)):
-                with User(request.user.email) as user:
-                    user.set_verdict(workobject.path, taskid, Verdicts.OK)
-                return redirect(request.path)
+        # Анализ ответа
+        if taskobject.test(dict(request.POST)):
             with User(request.user.email) as user:
-                user.set_verdict(workobject.path, taskid, Verdicts.WRONG_ANSWER)
+                user.set_verdict(workobject.path, taskid, Verdicts.OK)
             return redirect(request.path)
+        with User(request.user.email) as user:
+            user.set_verdict(workobject.path, taskid, Verdicts.WRONG_ANSWER)
+        return redirect(request.path)
 
     rargs = additional_render_args
     # Что-то на спайдовом
@@ -181,26 +188,16 @@ def task_handle(request, taskobject, workobject, taskid, additional_render_args)
         rargs[k] = v
     return render(request, "work_base.html", rargs)
 
-# отображение результата решения (страницы, на которые мы переадресовываем после проверки)
-def completed(request):
-    return HttpResponse("<h1>Решение Верно!</h1>")
-
-def failed(request):
-    return HttpResponse("<h1>Решение Неверно, переделывай!</h1>")
-
 # Базовая страница сайта
 @login_required
 def index_page_render(request):
     with User(request.user.email) as user:
-        if request.method == 'POST':  # Расхардкодить!!!
-            # Обработка кнопки смены темы
-            change_color_theme(user, request)
         if not request.session.get('color-theme'):
             request.session['color-theme'] = user.get_setting('theme')
         return render(request,
                     'index.html',
                     {
-                        'title': 'Сайт по ЦЭ',
+                        'title': 'Laterem',
                         'text': 'Это базовая страница',
                         'text2': 'Перейдите на нужную работу по ссылке слева',
                         'workdir': WORK_DIR,
