@@ -236,17 +236,18 @@ button#right-side {
 /* Иконка сайта */
 #main-icon {
     margin: 10px;
-    width: 28px;
+    width: auto;
     padding: 5px;
     padding-bottom: 2px;
     border-radius: 30%;
     background: var(--icon-background-color);
+    position: relative;
 }
 
 /* Шапка сайта */
 .header {
-    display: inline-block;
-    vertical-align: middle;
+    display: flex;
+    align-self: center;
 }
     
 header.header {
@@ -256,7 +257,9 @@ header.header {
     white-space: nowrap;
     position: fixed;
     background: inherit;
-    display: block;
+    display: grid;
+    grid-template-columns: min-content auto;
+    grid-template-rows: 100% max-content;  
     background-image: linear-gradient(var(--header-gradient-top), var(--header-gradient-bottom));
 }
     
@@ -346,17 +349,9 @@ td.wrong {
     display: inline-block;
 }
 
-.dropdown-items {
-    display: none;
-}
-
-.dropdown {
-    position: relative;
-}
-
-.dropdown:hover .dropdown-items {
-    display: block;
-    position: absolute;
+#user-options {
+    justify-self: end;
+    align-self: flex-start;
 }
 
 #header-dropdown-item {
