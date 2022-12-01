@@ -74,7 +74,7 @@ class LTC:
             new_forbidden_cases.append((field, value.compile(new_field_table)))
 
         if not LTC.validate(new_field_table, new_checker_functions, new_forbidden_cases):
-            self.execute(timeout-1)
+            return self.execute(timeout-1)
         
         del self.field_table
         del self.checker_functions
@@ -99,7 +99,7 @@ class LTC:
     
 
 class LTCCompiler:
-    def _typevalue(txt):
+    def _typevalue(txt: str):
         txt = txt.strip()
         if txt[-1] == txt[0] == '"':
             txt = txt.strip('"')
@@ -107,7 +107,7 @@ class LTCCompiler:
         elif txt[-1] == txt[0] == "'":
             txt = txt.strip("'")
             return LTCValue(txt)
-        elif txt.lstrip('-').isdigit():
+        elif txt.lstrip('-').replace(".", "", 1).isdigit():
             return LTCValue(txt)
         elif txt[0] == '[' and txt[-1] == ']':
             args = txt[1:-1].split(',')

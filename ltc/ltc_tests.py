@@ -8,15 +8,15 @@ class TestFailed(Exception):
 def test(name):
     def wrapper(function):
         def new():
-            print(f'<Test {name}>' + '\t' + 'Starting...')
+            print(f'[ ] <Test {name}>' + '\t' + 'Starting...')
             try:
                 function()
             except TestFailed as e:
-                print(f'<Test {name}>' + '\t' + 'Test failed! ' + str(e))
+                print(f'[!] <Test {name}>' + '\t' + 'Test failed! ' + str(e))
             except Exception as e:
-                print(f'<Test {name}>' + '\t' + 'Runtime error occured: ' + Exception.__name__ + ': ' + str(e))
+                print(f'[!] <Test {name}>' + '\t' + 'Runtime error occured: ' + type(e).__name__ + ': ' + str(e))
             else:
-                print(f'<Test {name}>' + '\t' + 'Test passed successfully!')
+                print(f'[ ] <Test {name}>' + '\t' + 'Test passed successfully!')
         return new
     return wrapper
 
@@ -96,7 +96,7 @@ input?Reverse(a)'''
     if not ltc.check({'input': input}):
         raise TestFailed()
 
-@test('5 Forbidders')
+@test('5 Forbidders 1')
 def test5():
     string = '''
 a = Rand10(0, 10)
@@ -109,6 +109,11 @@ a = Rand10(0, 10)
         ltc.execute()
         if ltc.field_table['a'] == 5:
             raise TestFailed('a == 5')
+    
+
+@test('6 Forbidders 2')
+def test6():
+    ltcc = LTCCompiler()
     
     string = '''
 a = 21
@@ -125,6 +130,34 @@ b = Sum(a, a)
         if ltc.field_table['b'] != '42':
             raise TestFailed('b != 42')
 
+@test('7 Tricky typing')
+def test7():
+    ltcc = LTCCompiler()
+    string = '''
+a = 7
+b = 3.5
+c = Multiply(b, 2)
+d = Sum(b, b)
+e = Sum(Sum(b, b), Sum(a, a))
+
+f = Multiply(c, 11)
+g = GenerateLine(2, a)
+
+inputa?Equal(c)
+inputc?Equal(d)
+inpute?Equal(21)
+inputg?Equal(f)
+'''
+    ltc = ltcc.compile(string)
+    ltc.execute()
+    ft = ltc.field_table
+    if not ltc.check({'inputa': ft['a'],
+                      'inputc': ft['c'],
+                      'inpute': ft['e'],
+                      'inputg': ft['g'],
+                      }):
+        raise TestFailed(str(ft) + ' (must be )')
+
 
 if __name__ == '__main__':
     test1()
@@ -132,4 +165,6 @@ if __name__ == '__main__':
     test3()
     test4()
     test5()
+    test6()
+    test7()
 
