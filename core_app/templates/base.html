@@ -15,29 +15,11 @@
         {% endif %}
     </head>
     <body>
-        <header role="banner" class="header">
-            <div id="main-icon" class="header">
-                {% include "icons/main-icon.html" %}
-            </div>
-            <h1 class="header">Laterem</h1>
-            <div style="float: right; clear:left; vertical-align: middle;" class="header">
-                <div id="main-icon" class="header" style="padding-right:2px; margin-right: -2px; margin-top: 17px; width: 20px; height: 22px; padding-left: 2px; padding-top: 2px;">
-                    {% include "icons/user-icon.html" %}
-                </div>
-                <div style="vertical-align: -6px; margin-left: 0px;" class="header">{{user.username}} | 
-                    <form method="post" class="header">
-                        {% csrf_token %}
-                        <button type="submit" class="button, header" name="change-color-theme">{% include "icons/change-color-icon.html" %}</button>
-                    </form>
-                </div>
-                <div style="width: 5px;" class="header"></div>
-            </div>
-            <div width="100vh" style="background-color: var(--header-gradient-bottom); height: 1px; position: fixxed; bottom: 0px;">
-            </div>
-        </header>
         <div>
             <aside id="menu">
                 {% tree "workdir" %}
+                {% block left-side %}
+                {% endblock %}
             </aside>
             {% if task_list %}
                 <aside id="content" style="bottom: 30px;">
@@ -71,4 +53,71 @@
         </div>
         <script src="{% static 'js/caret-manager.js' %}"></script>
     </body>
+    <header role="banner" class="header">
+        <div class="header">
+            <button id="main-icon" class="header" onclick="
+                    disp = document.getElementById('header-dropdown-items').style.display;
+                    document.getElementById('empty-header-dropdown-items').style.display = disp;
+                    switch (disp) {
+                        case 'none': disp = 'flex';
+                        break;
+
+                        case 'flex': disp = 'none';
+                        break;
+
+                        default: disp = 'flex';
+                    };
+                    document.getElementById('header-dropdown-items').style.display = disp;
+                ">
+                {% include "icons/main-icon.html" %}
+            </button>
+            <h1 class="header">Laterem</h1>
+        </div>
+        <div style="justify-self: end; padding-right: 5px;" class="header">
+            <button id="main-icon" class="header" style="margin-right:5px; width: auto; height: auto;" onclick="
+                disp = document.getElementById('user-options').style.display;
+                document.getElementById('empty-user-options').style.display = disp;
+                switch (disp) {
+                    case 'none': disp = 'flex';
+                    break;
+    
+                    case 'flex': disp = 'none';
+                    break;
+    
+                    default: disp = 'flex';
+                };
+                document.getElementById('user-options').style.display = disp;
+            ">
+                {% include "icons/user-icon.html" %}
+            </button>
+            <p>{{user.username}}</p>
+        </div>
+
+        <div id="empty-header-dropdown-items" class="header"></div>
+
+        <div id="header-dropdown-items" class="header dropdown" style="display: none;">
+            <div id="header-dropdown-item" class="header">
+                <a href="/">Задачи</a>
+            </div>
+            {% if is_teacher %}
+            <div id="header-dropdown-item" class="header">
+                <a href="/teacher/manage_users/">Панель управления</a>
+            </div>
+            {% endif %}
+        </div>
+
+        <div id="empty-user-options" class="header"></div>
+
+        <div id="user-options" class="header dropdown" style="display: none;">
+            <div id="header-dropdown-item" class="header">
+                <a href="/logout/">Выйти</a>
+            </div>
+            <div id="header-dropdown-item" class="header">
+                <a href="/settings/">Настройки</a>
+            </div>
+        </div>
+
+        <div width="100vh" style="background-color: var(--header-gradient-bottom); height: 1px; position: fixxed; bottom: 0px;">
+        </div>
+    </header>
 </html>

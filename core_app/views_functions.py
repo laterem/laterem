@@ -29,6 +29,7 @@ def fill_additional_args(request, taskname, template):
     ret['work_name'] = work_path[-1]
     ret['user'] = userobject
     ret['theme'] = userobject.get_setting('theme')
+    ret['is_teacher'] = True
     ret['task_template'] = template
     return ret
 

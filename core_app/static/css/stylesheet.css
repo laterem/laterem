@@ -13,6 +13,11 @@
     --icon-background-color: rgb(calc(var(--base-r) * 1.06), calc(var(--base-g) * 1.06), calc(var(--base-b) * 1.06));
     --header-gradient-top: rgb(calc(var(--base-r) + 5), calc(var(--base-g) + 5), calc(var(--base-b) + 5));
     --header-gradient-bottom: rgb(calc(var(--base-r) - 5), calc(var(--base-g) - 5), calc(var(--base-b) - 5));
+
+    --header-dropdown-color: rgba(0, 0, 0, 0);
+    --header-dropdown-lighted-color: rgba(calc(var(--base-r) * 1.1), calc(var(--base-g) * 1.1), calc(var(--base-b) * 1.1), 0.9);
+ 
+    --content-hover-color: rgb(calc(var(--base-r) * 1.3), calc(var(--base-g) * 1.3), calc(var(--base-b) * 1.3));
 }
 
 /* Общий стиль */
@@ -71,6 +76,10 @@ aside#menu {
     font-size: 0.9em;
     text-decoration: none;
     color: var(--body-font-color);
+}
+
+#menu a:hover {
+    background-color: var(--content-hover-color);
 }
 
     /* Блок с заданием */
@@ -227,17 +236,18 @@ button#right-side {
 /* Иконка сайта */
 #main-icon {
     margin: 10px;
-    width: 28px;
+    width: auto;
     padding: 5px;
     padding-bottom: 2px;
     border-radius: 30%;
     background: var(--icon-background-color);
+    position: relative;
 }
 
 /* Шапка сайта */
 .header {
-    display: inline-block;
-    vertical-align: middle;
+    display: flex;
+    align-self: center;
 }
     
 header.header {
@@ -247,7 +257,9 @@ header.header {
     white-space: nowrap;
     position: fixed;
     background: inherit;
-    display: block;
+    display: grid;
+    grid-template-columns: min-content auto;
+    grid-template-rows: 100% max-content;  
     background-image: linear-gradient(var(--header-gradient-top), var(--header-gradient-bottom));
 }
     
@@ -335,4 +347,35 @@ td.wrong {
     width: 2px;
     background-color: var(--button-background-color);
     display: inline-block;
+}
+
+.dropdown {
+    overflow: hidden;
+    padding: 5px;
+
+    background-color: var(--foot-background-color);
+    border: 1px solid var(--foot-border-color);
+    border-radius: 0px 0px 10px 10px;
+    box-shadow: 4px 4px 4px var(--foot-shadow-color);
+}
+
+#user-options {
+    justify-self: end;
+    align-self: flex-start;
+}
+
+#header-dropdown-item {
+    display: block;
+    padding: 5px;
+    background-color: var(--header-dropdown-color);
+}
+
+#header-dropdown-item a {
+    color: var(--body-font-color);
+    text-decoration: none;
+    border-radius: 5px;
+}
+
+#header-dropdown-item:hover {
+    background-color: var(--header-dropdown-lighted-color);
 }

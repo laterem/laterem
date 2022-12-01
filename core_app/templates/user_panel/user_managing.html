@@ -1,0 +1,49 @@
+{% extends 'users_panel.html' %}
+{% load static %}
+{% load laterem %}
+
+{% block content %}
+<table>
+    <tbody>
+        {% for user in allusers %}
+            <tr>
+                <td>
+                    {{user.first_name}}
+                </td> 
+                <td>
+                    {{user.last_name}}
+                </td>
+                <td>
+                    {{user.email}}
+                </td> 
+                <td>
+                    <form method="post">
+                        {% csrf_token %}
+                        <button type="submit" name="delete:{{user.email}}" class="button">Удалить</button>
+                    </form>
+                </td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<form method="post">
+    {% csrf_token %}
+    <table>
+        <tr>
+            <td>{{ newuserform.first_name.label_tag }}</td> <td>{{ newuserform.first_name }}</td>
+        </tr>
+        <tr>
+            <td>{{ newuserform.second_name.label_tag }}</td> <td>{{ newuserform.second_name }}</td>
+        </tr>
+        <tr>
+            <td>{{ newuserform.email.label_tag }}</td> <td>{{ newuserform.email }}</td>
+        </tr>
+        <tr>
+            <td>{{ newuserform.password.label_tag }}</td> <td>{{ newuserform.password }}</td>
+        </tr>
+    </table>
+    <button type="submit" name="newuser" class="button">Добавить нового пользователя</button>
+</form>
+{% endblock %}
+ 
