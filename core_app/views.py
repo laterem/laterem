@@ -74,7 +74,7 @@ def settings_view(request):
                         })
 
 @teacher_only
-def users_panel(request, page_for_render='users_panel.html'):
+def users_panel(request, page_for_render='users_panel.html', rargs=dict()):
     if request.method == 'POST':
         if "newuser" in request.POST:
             form = NewUser(request.POST)
@@ -114,8 +114,9 @@ def users_panel(request, page_for_render='users_panel.html'):
 
     else:
         form = NewUser()
-    return render(request, page_for_render, {'newuserform': form,
-                                                'allusers': LateremUser.objects.all()})
+    rargs['newuserform'] = form
+    rargs['allusers'] = LateremUser.objects.all()
+    return render(request, page_for_render, rargs)
 
 @teacher_only
 def user_managing(request):
@@ -127,7 +128,7 @@ def right_managing(request):
 
 @teacher_only
 def group_managing(request):
-    return users_panel(request, page_for_render='user_panel/group_managing.html')
+    return users_panel(request, page_for_render='user_panel/group_managing.html', rargs={'allgroup': {'Тестовая группа 1': ['Вася', 'Петя'], 'Тестовая группа 2': ['Петя', 'Федя', 'Спайд']}})
 
 # Рендер страницы работы
 @login_required

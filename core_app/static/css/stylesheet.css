@@ -457,3 +457,45 @@ div#user-table-header {
     align-items: center;
     padding: 4px;
 }
+
+.group-table-element {
+    display: flex;
+    padding: 5px;
+    border-collapse: collapse;
+    border: 1px solid var(--dark-font-color);
+    border-right: none;
+    border-bottom: none;
+}
+
+div#group-table {
+    display: grid; 
+    grid-template-columns: auto;
+    
+    border-radius: 0 0 10px 10px;
+    overflow: hidden;
+    border-width: 1px;
+    border-color: var(--dark-font-color);
+    border-style: solid;
+    width: 100%;
+
+    margin-bottom: 10px;
+}
+
+div#group-table-header {
+    display: flex;
+    background-color: var(--content-hover-color);
+    border-radius: 10px 10px 0 0;
+    overflow: hidden;
+    border-width: 1px;
+    border-color: var(--dark-font-color);
+    border-style: solid;
+    width: calc(100% - 10px);
+    padding: 5px;
+    border-bottom: 0;
+}
+
+#group-table-header * {
+    display: inline-flex;
+    align-items: center;
+    padding: 4px;
+}

@@ -4,9 +4,14 @@
 
 {% block content %}
 {% if allgroup %}
-    {% for group in allgroup %}
+    {% for group, members in allgroup.items %}
     <div class="group">
-        {% include "group_layout.html" %}
+        <div id="group-table-header">{{group}}</div>
+        <div id="group-table">
+        {% for member in members %}
+            <div class="group-table-element">{{member}}</div>
+        {% endfor %}
+        </div>
     </div>
     {% endfor %}
 {% else %}
