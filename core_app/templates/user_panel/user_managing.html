@@ -3,8 +3,43 @@
 {% load laterem %}
 
 {% block content %}
-<table>
-    <tbody>
+ <div id="user-table">
+    <table>
+        <tr style="background-color: var(--content-hover-color);">
+            <td colspan="3"></td>
+            <td style="width: 40px">
+                <button class="button-icon" onclick="
+                    disp = document.getElementById('add-user').style.display;
+                    switch (disp) {
+                        case 'none': disp = 'block';
+                        break;
+            
+                        case 'block': disp = 'none';
+                        break;
+            
+                        default: disp = 'block';
+                    };
+                    document.getElementById('add-user').style.display = disp;
+                    document.getElementById('blackout').style.display = disp;
+                ">{% include "icons/add-user-icon.html" %}</button>
+            </td>
+            <td style="width: 40px">
+                <button class="button-icon" onclick="
+                    disp = document.getElementById('add-user').style.display;
+                    switch (disp) {
+                        case 'none': disp = 'block';
+                        break;
+            
+                        case 'block': disp = 'none';
+                        break;
+            
+                        default: disp = 'block';
+                    };
+                    document.getElementById('add-user').style.display = disp;
+                    document.getElementById('blackout').style.display = disp;
+                ">{% include "icons/import-from-file-icon.html" %}</button>
+            </td>
+        </tr>
         {% for user in allusers %}
             <tr>
                 <td>
@@ -19,31 +54,32 @@
                 <td>
                     <form method="post">
                         {% csrf_token %}
-                        <button type="submit" name="delete:{{user.email}}" class="button">Удалить</button>
+                        <button type="submit" name="delete:{{user.email}}" class="button-icon"><div style="width: 1.5em">{% include "icons/delete-icon.html" %}</div></button>
+                    </form>
+                </td>
+                <td>
+                    <form method="post">
+                        {% csrf_token %}
+                        <button type="submit" name="edit:{{user.email}}" class="button-icon"><div style="width: 1.5em">{% include "icons/pencil-icon.html" %}</div></button>
                     </form>
                 </td>
             </tr>
         {% endfor %}
-    </tbody>
-</table>
-
-<form method="post">
-    {% csrf_token %}
-    <table>
-        <tr>
-            <td>{{ newuserform.first_name.label_tag }}</td> <td>{{ newuserform.first_name }}</td>
-        </tr>
-        <tr>
-            <td>{{ newuserform.second_name.label_tag }}</td> <td>{{ newuserform.second_name }}</td>
-        </tr>
-        <tr>
-            <td>{{ newuserform.email.label_tag }}</td> <td>{{ newuserform.email }}</td>
-        </tr>
-        <tr>
-            <td>{{ newuserform.password.label_tag }}</td> <td>{{ newuserform.password }}</td>
-        </tr>
     </table>
-    <button type="submit" name="newuser" class="button">Добавить нового пользователя</button>
-</form>
-{% endblock %}
+ </div>
+<button id="blackout" style="display: none;" onclick="
+        disp = document.getElementById('add-user').style.display;
+        switch (disp) {
+            case 'none': disp = 'block';
+            break;
+
+            case 'block': disp = 'none';
+            break;
+
+            default: disp = 'block';
+        };
+        document.getElementById('add-user').style.display = disp;
+        document.getElementById('blackout').style.display = disp;
+    "></button>
+{% include "./add_user.html" %}{% endblock %}
  
