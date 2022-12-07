@@ -1,11 +1,11 @@
 import json
 from os.path import isfile
-from context_objects import SEPARATOR
+from context_objects import SEPARATOR, USER_SETTINGS_MASK
 from .tasks import Verdicts
+from .user_settings import Settings
 from .works import Work, GroupVerdict
+from core_app.models import LateremUser
 
-DEFAULT_SETTINGS = {'theme': 'dark',
-                    }
 
 
 class User:
