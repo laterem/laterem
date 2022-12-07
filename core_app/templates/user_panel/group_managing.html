@@ -3,5 +3,13 @@
 {% load laterem %}
 
 {% block content %}
+{% if allgroup %}
+    {% for group in allgroup %}
+    <div class="group">
+        {% include "group_layout.html" %}
+    </div>
+    {% endfor %}
+{% else %}
 У вас нет доступных групп
+{% endif %}
 {% endblock %}

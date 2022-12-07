@@ -9,7 +9,11 @@
     --font-g: 10;
     --font-b: 25;
 
-    --button-background-color: rgb(218, 219, 221);
+    --button-r: 218;
+    --button-b: 219;
+    --button-g: 221;
+
+    --blackout-alpha: 0.6;
 
     --correct-color: rgb(44, 235, 146);
     --unchecked-color: rgb(255, 193, 7);

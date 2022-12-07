@@ -26,17 +26,8 @@
             {% else %}
                 <aside id="content">
             {% endif %}
-                <form method="post">
-                    {% csrf_token %}
-                    {{ work_name }}
-                    <br/>
-                    {% if task_name %}
-                        Задача: {{task_name}}
-                        <br/>
-                    {% endif %}
-                    {% block content %}
-                    {% endblock %}
-                </form>
+                {% block content %}
+                {% endblock %}
             </aside>
             {% if task_list %}
                 <aside id="foot">
