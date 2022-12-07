@@ -417,27 +417,43 @@ table#add-user {
     background-color: var(--blackout-color);
     backdrop-filter: blur(1px);
 }
-
-#user-table td {
-    border-width: 1px;
-    border-color: var(--dark-font-color);
-    border-style: outset;
-    padding: 3px;
-}
-
-#user-table table {
-    border-collapse: collapse;
-    width: 100%;
-    table-layout: fixed;
-}
-
+ 
 div#user-table {
-    border-radius: 10px;
+    display: grid; 
+    grid-template-columns: auto auto 40px 40px;
+    
+    border-radius: 0 0 10px 10px;
     overflow: hidden;
-    width: fit-content;
-    padding: 0px;
     border-width: 1px;
     border-color: var(--dark-font-color);
     border-style: solid;
     width: 100%;
+}
+
+.user-table-element {
+    display: flex;
+    padding: 5px;
+    border-collapse: collapse;
+    border: 1px solid var(--dark-font-color);
+    border-right: none;
+    border-bottom: none;
+}
+
+div#user-table-header {
+    display: flex;
+    background-color: var(--content-hover-color);
+    border-radius: 10px 10px 0 0;
+    overflow: hidden;
+    border-width: 1px;
+    border-color: var(--dark-font-color);
+    border-style: solid;
+    width: 100%;
+    justify-content: end;
+    border-bottom: 0;
+}
+
+#user-table-header * {
+    display: inline-flex;
+    align-items: center;
+    padding: 4px;
 }
