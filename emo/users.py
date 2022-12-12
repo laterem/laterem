@@ -5,26 +5,21 @@ from .tasks import Verdicts
 from .user_settings import Settings
 from .works import Work, GroupVerdict
 from core_app.models import LateremUser
+from extratypes import Hybrid
 
 
-
-class User:
-    def __init__(self, login):
-        self.login = login
-        self.username = login
-        self.loaded = False
+class User(Hybrid):
+    def __init__(self, dbuser):
+        super().__init__()
+        self.dbmodel = dbuser
+        self.source_from(dbuser)
         self.modified = False
     
     def __enter__(self):
-        self.load_json()
         return self
     
     def __exit__(self, exc_type, exc_val, exc_tb):
         self.close()
-    
-    def open(self):
-        self.load_json()
-        return self
     
     def close(self):
         self.dump_json()

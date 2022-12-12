@@ -24,3 +24,18 @@ class Flag:
     
     def __contains__(self, __t):
         return __t.chain <= self.chain
+
+
+class Hybrid:
+    def __init__(self):
+        self.__sources = set()
+
+    def source_from(self, obj):
+        self.__sources.add(obj)
+    
+    def __getattr__(self, val):
+        for src in self.__sources:
+            if hasattr(src, val):
+                return src.__getattribute__(val)
+        else:
+            raise AttributeError(f"{val} not found neither in {self.__class__.__name__} hybrid-like class itself, nor in any of it's sources.")

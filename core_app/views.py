@@ -87,7 +87,7 @@ def users_panel(request, page_for_render='users_panel.html'):
                     LateremUser.objects.create_user(email=form.cleaned_data['email'], password=form.cleaned_data['password'],
                                                     username=form.cleaned_data['email'], first_name=form.cleaned_data['first_name'],
                                                     last_name=form.cleaned_data['second_name'],
-                                                    is_teacher=False)
+                                                    is_teacher=False, settings=0)
         else:
     # <Плохо! Переписать>
             flag = False
