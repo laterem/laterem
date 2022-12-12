@@ -33,9 +33,33 @@ class Hybrid:
     def source_from(self, obj):
         self.__sources.add(obj)
     
-    def __getattr__(self, val):
+    def __setattr__(self, name, val):
         for src in self.__sources:
-            if hasattr(src, val):
-                return src.__getattribute__(val)
+            if hasattr(src, name):
+                return src.__setattr__(name, val)
         else:
-            raise AttributeError(f"{val} not found neither in {self.__class__.__name__} hybrid-like class itself, nor in any of it's sources.")
+            object.__setattr__(self, name, val)
+
+    def __getattr__(self, name):
+        for src in self.__sources:
+            if hasattr(src, name):
+                return src.__getattribute__(name)
+        else:
+            raise AttributeError(f"{name} not found neither in {self.__class__.__name__} hybrid-like class itself, nor in any of it's sources.")
+
+class DBHybrid(Hybrid):
+    def __init__(self, dbobj):
+        super().__init__()
+        self.dbmodel = dbobj
+        self.source_from(dbobj)
+        self.modified = False
+    
+    def __enter__(self):
+        return self
+    
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        self.close()
+    
+    def close(self):
+        if self.modified:
+            self.dbmodel.save()

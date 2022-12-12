@@ -1,69 +1,23 @@
-import json
-from os.path import isfile
-from context_objects import SEPARATOR, USER_SETTINGS_MASK
+from context_objects import SEPARATOR
 from .tasks import Verdicts
-from .user_settings import Settings
-from .works import Work, GroupVerdict
-from core_app.models import LateremUser
-from extratypes import Hybrid
+from .works import Work
+from .groups import Group
+from core_app.models import LateremGroupMembership, LateremGroup, LateremWork
+from extratypes import DBHybrid
 
+class User(DBHybrid):
+    def __init__(self, dbobj):
+        super().__init__(dbobj)
 
-class User(Hybrid):
-    def __init__(self, dbuser):
-        super().__init__()
-        self.dbmodel = dbuser
-        self.source_from(dbuser)
-        self.modified = False
-    
-    def __enter__(self):
-        return self
-    
-    def __exit__(self, exc_type, exc_val, exc_tb):
-        self.close()
-    
-    def close(self):
-        self.dump_json()
+    def groups(self):
+        return [Group(x) for x in LateremGroup.objects.filter(lateremgroupmembership__user=self.dbmodel)]
 
-    @property
-    def _jsonpath(self):
-        return 'data' + SEPARATOR + 'userdata' + SEPARATOR + 'personal' + SEPARATOR + self.login + '.json'
-
-    def _load_dummy(self):
-        self.raw_available_branches = {}
-        self.raw_verdicts = {}
-        self.raw_settings = {}
-    
-    def get_setting(self, setting):
-        return self.raw_settings[setting] if setting in self.raw_settings else DEFAULT_SETTINGS[setting]
-    
-    def set_setting(self, setting, value):
-        self.raw_settings[setting] = value
-        self.modified = True
-    
-    def load_json(self):
-        if not isfile(self._jsonpath):
-            self._load_dummy()
-        else:
-            with open(self._jsonpath, 'r', encoding='utf-8') as f:
-                d = json.load(f)
-                self.raw_available_branches = d['available_branches']
-                self.raw_verdicts = d['verdicts']
-                self.raw_settings = d['settings']
-            
-            self.loaded = True
-            return d
-        self.modified = False
-    
-    def dump_json(self):
-        with open(self._jsonpath, 'w', encoding='utf-8') as f:
-            data = {'available_branches': self.raw_available_branches,
-                    'verdicts': self.raw_verdicts,
-                    'settings': self.raw_settings}
-            json.dump(data, f, sort_keys=True, indent=4,
-                      ensure_ascii=False)
-        self.modified = False
+    def available_works(self):
+        return [Work(x) for x in LateremWork.objects.filter(lateremassignment__user=self.dbmodel)]
 
     def get_task_verdict(self, worklayers, taskname):
+        return NotImplemented
+
         cd = self.raw_verdicts
         for layer in worklayers:
             if layer not in cd:
@@ -72,6 +26,8 @@ class User(Hybrid):
         return cd[taskname] if taskname in cd else Verdicts.NO_ANSWER
     
     def get_task_verdicts(self, worklayers, tasknames):
+        return NotImplemented
+
         cd = self.raw_verdicts
         for layer in worklayers:
             if layer not in cd:
@@ -81,6 +37,8 @@ class User(Hybrid):
                 for taskname in tasknames]
     
     def get_work_stats(self, worklayers, normalize=False):
+        return NotImplemented
+
         cd = self.raw_verdicts
         work = Work(worklayers)
         tasks = work.tasks.keys()
@@ -130,10 +88,14 @@ class User(Hybrid):
                 Verdicts.NO_ANSWER: na}
 
     def get_work_verdict(self, worklayers=None):
+        return NotImplemented
+
         stats = self.get_work_stats(worklayers)
         return Work.stat_to_average_verdict(stats)
 
     def set_verdict(self, worklayers, taskname, verdict):
+        return NotImplemented
+
         cd = self.raw_verdicts
         for layer in worklayers:
             if layer not in cd:
@@ -143,6 +105,8 @@ class User(Hybrid):
         self.modified = True
 
     def open_branch(self, categorypath):
+        return NotImplemented
+
         worklayers = categorypath.split(SEPARATOR)
         cd = self.raw_available_branches
         for layer in worklayers:
