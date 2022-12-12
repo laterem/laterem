@@ -26,11 +26,19 @@ class LateremGroupMembership(models.Model):
     can_examine_solutions = models.BooleanField(default=False)
     can_solve_works = models.BooleanField(default=True)
 
+class LateremCategoryCategory(models.Model):
+    name = models.CharField(max_length=128)
+    root_category = models.IntegerField(null=True)
 
+class LateremWorkCategory(models.Model):
+    name = models.CharField(max_length=128)
+    root_category = models.ForeignKey(LateremCategoryCategory, null=True, on_delete=models.SET_NULL)
 
 class LateremWork(models.Model):
-    name = models.CharField(primary_key=True, unique=True, max_length=128)
+    id = models.AutoField(primary_key=True,unique=True)
+    name = models.CharField(max_length=128)
     author = models.ForeignKey(LateremUser, on_delete=models.DO_NOTHING)
+    category = models.ForeignKey(LateremWorkCategory, null=True, on_delete=models.SET_NULL)
 
 class LateremTask(models.Model):
     name = models.CharField(max_length=128)
@@ -48,6 +56,5 @@ class LateremSolution(models.Model):
     task = models.ForeignKey(LateremTask, on_delete=models.CASCADE)
     verdict = models.CharField(max_length=2)
     timestamp = models.DateTimeField()
+    answers = models.TextField()
     teacher_comment = models.TextField()
-
-

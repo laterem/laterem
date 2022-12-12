@@ -1,23 +1,28 @@
-from ltm.tasks import TaskData, Verdicts
-from ltm.works import Work as Work
-from ltm.users import User as User
 from django.http import HttpResponse, FileResponse
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
 from django.core.exceptions import PermissionDenied
-from context_objects import SEPARATOR, LTM_SCANNER, WORK_DIR, SPACE_REPLACER
+from context_objects import SEPARATOR, LTM_SCANNER
 from os.path import join as pathjoin
-from .views_functions import fill_additional_args, change_color_theme
+from .views_functions import taskview_rargs, change_color_theme
 from .models import *
 from django.contrib.auth.decorators import login_required
 from .forms import LoginForm, NewUser, EditUser
 
-def teacher_only(function):
-    def wrap(request, *args, **kwargs):
-        if not request.user.is_teacher:
-            raise PermissionDenied()
-        return function(request, *args, **kwargs)
-    return login_required(wrap)
+from dbapi.users import User
+from dbapi.tasks import Task, CompiledTask, Work, Category
+from dbapi.solutions import Verdicts
+
+#import db_test_create
+
+def permission_required(permission):
+    def wrapper(function):
+        def wrap(request, *args, **kwargs):
+            if not User(request.user).has_global_permission(permission):
+                raise PermissionDenied()
+            return function(request, *args, **kwargs)
+        return login_required(wrap)
+    return wrapper
 
 
 def logout_view(request):
@@ -44,7 +49,7 @@ def login_view(request):
                             tc = True
                         else:
                             tc = False
-                        user = LateremUser.objects.create_user(email=email, password=rpassword, username=email, is_teacher=tc)
+                        user = LateremUser.objects.create_user(email=email, password=rpassword, username=email, settings='{}')
                         if password == rpassword:
                             user = authenticate(username=email, password=password)
                             login(request, user)
@@ -62,19 +67,22 @@ def settings_view(request):
     if request.method == 'POST':  
         # Обработка кнопки смены темы
         if 'change-color-theme' in request.POST:
-            with User(request.user.email) as user:
+            with User(request.user) as user:
                 change_color_theme(user, request)
                 return redirect(request.path)
-    with User(request.user.email) as user:
+    with User(request.user) as user:
         return render(request, 'settings_page.html', {
                             'title': 'Laterem Настройки',
                             'theme': user.get_setting('theme'),
-                            'user': User(request.user.email).open(),
+                            'user': user,
                             'is_teacher': True,
                         })
 
-@teacher_only
-def users_panel(request, page_for_render='users_panel.html'):
+def teacher_hub(request):
+    return render(request, "teacher_panel/teacher_panel_base.html")
+
+@permission_required("can_manage_users")
+def users_panel(request):
     if request.method == 'POST':
         if "newuser" in request.POST:
             form = NewUser(request.POST)
@@ -87,12 +95,14 @@ def users_panel(request, page_for_render='users_panel.html'):
                     LateremUser.objects.create_user(email=form.cleaned_data['email'], password=form.cleaned_data['password'],
                                                     username=form.cleaned_data['email'], first_name=form.cleaned_data['first_name'],
                                                     last_name=form.cleaned_data['second_name'],
-                                                    is_teacher=False, settings=0)
+                                                    settings="{}")
         else:
     # <Плохо! Переписать>
             flag = False
-            for user in LateremUser.objects.all():
-                if 'delete:' + user.email in request.POST:
+            for signal in request.POST:
+                if signal.startswith('delete:'):
+                    email = signal.lstrip('delete:')
+                    user = LateremUser.objects.get(email=email)
                     user.delete()
                     flag = True
                     break
@@ -101,8 +111,10 @@ def users_panel(request, page_for_render='users_panel.html'):
             if not flag:
                 editform = EditUser(request.POST)
                 if editform.is_valid():
-                    for user in LateremUser.objects.all():
-                        if 'edit:' + user.email in request.POST:
+                    for signal in request.POST:
+                        if signal.startswith('edit:'):
+                            email = signal.lstrip('edit:')
+                            user = LateremUser.objects.get(email=email)
                             user.email = editform.email
                             user.password = editform.password
                             user.first_name = editform.first_name
@@ -113,30 +125,23 @@ def users_panel(request, page_for_render='users_panel.html'):
 
     else:
         form = NewUser()
-    return render(request, page_for_render, {'newuserform': form,
-                                                'allusers': LateremUser.objects.all()})
+    return render(request, "teacher_panel/user_panel.html", {'newuserform': form,
+                            'allusers': LateremUser.objects.all()})
 
-@teacher_only
-def user_managing(request):
-    return users_panel(request, page_for_render='user_panel/user_managing.html')
-
-@teacher_only
-def right_managing(request):
-    return users_panel(request, page_for_render='user_panel/right_managing.html')
-
-@teacher_only
-def group_managing(request):
-    return users_panel(request, page_for_render='user_panel/group_managing.html')
+@permission_required("can_manage_groups")
+def group_panel(request):
+     return render(request, "teacher_panel/group_panel.html")
 
 # Рендер страницы работы
 @login_required
-def render_work(request, work_name):
-    work_path = Work.split_full_name(work_name, separator='.', space_replacement=SPACE_REPLACER)
-    work = Work(work_path)
+def render_work(request, work_id):
+    work_id = int(work_id)
+
+    work = Work.by_id(work_id)
     if 'compiled_tasks' in request.session: 
         request.session.modified = True
         request.session['compiled_tasks'] = {}
-    return redirect('/task/' + work_name + '_id' + work.get_tasks_ids()[0][0])
+    return redirect('/task/' + str(work.tasks()[0].id))
 
 
 def getasset(request, taskname, filename):
@@ -147,52 +152,48 @@ def getasset(request, taskname, filename):
     return FileResponse(open(path, 'rb'))
 
 # Функция рендера (обработки и конечного представления на сайте) задачи по имени (имя берётся из адресной строки)
-# ОЧЕНЬ КРИВО
 @login_required
-def task_view(request, taskname):
-    if 'compiled_tasks' not in request.session: request.session['compiled_tasks'] = {}
+def task_view(request, task_id):
+    if 'compiled_tasks' not in request.session: 
+        request.session['compiled_tasks'] = {}
 
-    work_name, taskid = taskname.split('_id')
-    taskid = taskid.replace(SPACE_REPLACER, ' ')
-    work_path = Work.split_full_name(work_name, separator='.', space_replacement=SPACE_REPLACER)
-    workobject = Work(work_path)
-
-    if taskname not in request.session['compiled_tasks']:
-        taskobject = TaskData.open(workobject.tasks[taskid])
-        request.session['compiled_tasks'][taskname] = taskobject.as_JSON()
+    task_id = int(task_id)
+    task = Task.by_id(task_id)
+    if task_id not in request.session['compiled_tasks']:
+        compiled_task = task.compile()
+        request.session['compiled_tasks'][task_id] = compiled_task.as_JSON()
         request.session.modified = True
     else:
-        taskobject = TaskData.from_JSON(request.session['compiled_tasks'][taskname])
-    additional_render_args = fill_additional_args(request, taskname, taskobject.template)
-    return task_handle(request, taskobject, workobject, taskid, additional_render_args)
-    
-def task_handle(request, taskobject, workobject, taskid, additional_render_args):
+        compiled_task = CompiledTask.from_JSON(request.session['compiled_tasks'][task_id])
+
     if request.method == 'POST':
         # Проверка - есть ли нажатая нами кнопка в списке задач (нужно для переадрессации на другие задачи)
         for el in request.POST:
-            if el in workobject.tasks:
+            if el.startswith('redirect:task'):
                 # Переадрессация на задачу
-                return redirect('/task/' + workobject.get_full_name(separator='.', space_replacement=SPACE_REPLACER) + '_id' + el.replace(' ', SPACE_REPLACER))
+                l_task_id = el.lstrip('redirect:task')
+                return redirect('/task/' + l_task_id)
 
         # Анализ ответа
-        if taskobject.test(dict(request.POST)):
-            with User(request.user.email) as user:
-                user.set_verdict(workobject.path, taskid, Verdicts.OK)
+        if compiled_task.test(dict(request.POST)):
+            with User(request.user) as user:
+                user.solve(task, compiled_task.ltc.mask_answer_dict(dict(request.POST)), Verdicts.OK)
             return redirect(request.path)
         with User(request.user.email) as user:
-            user.set_verdict(workobject.path, taskid, Verdicts.WRONG_ANSWER)
+            user.solve(task, dict(request.POST), Verdicts.WRONG_ANSWER)
         return redirect(request.path)
 
-    rargs = additional_render_args
-    # Что-то на спайдовом
-    for k, v in taskobject.ltc.field_table.items():
-        rargs[k] = v
-    return render(request, "work_base.html", rargs)
+    additional_render_args = taskview_rargs(user=User(request.user),
+                                            task=task,
+                                            compiled_task=compiled_task)
+    for k, v in compiled_task.ltc.field_table.items():
+        additional_render_args[k] = v
+    return render(request, "work_base.html", additional_render_args)
 
 # Базовая страница сайта
 @login_required
 def index_page_render(request):
-    with User(request.user.email) as user:
+    with User(request.user) as user:
         if not request.session.get('color-theme'):
             request.session['color-theme'] = user.get_setting('theme')
         return render(request,
@@ -201,9 +202,9 @@ def index_page_render(request):
                         'title': 'Laterem',
                         'text': 'Это базовая страница',
                         'text2': 'Перейдите на нужную работу по ссылке слева',
-                        'workdir': WORK_DIR,
+                        'workdir': Category.global_tree(user),
                         'theme': user.get_setting('theme'),
-                        'user': User(request.user.email).open(),
+                        'user': User(request.user),
                         'is_teacher': True,
                     }
                     )

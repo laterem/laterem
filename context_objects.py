@@ -17,16 +17,12 @@ else:
     SEPARATOR = '\\'
 
 LTM_SCANNER = Scanner('data' + SEPARATOR + 'tasks' + SEPARATOR)
-WORK_DIR = rdir_to_tree('data' + SEPARATOR + 'works' + SEPARATOR)
 SPACE_REPLACER = '§'
 
-USER_SETTINGS_MASK = {
-    'theme': 0b1,
-    }
 USER_DEFAULT_SETTINGS = {
     'theme': 'dark',
     }
-USER_SETTINGS_FIELDS = USER_SETTINGS_MASK.keys()
+USER_SETTINGS_FIELDS = USER_DEFAULT_SETTINGS.keys()
 
 def update_global_dict(container: dict, value):
     container.clear()
