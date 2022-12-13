@@ -9,7 +9,7 @@ class Member(DBHybrid):
         super().__init__(dbobj)
         self.group = group
         self.dbmembership = LateremGroupMembership.objects.get(user=dbobj,
-                                                               group=group.dbmodel)
+                                                               group=group.dbmodel)               
     
     def get_permission(self, permission):
         if self.dbmembership.is_group_admin:

@@ -138,9 +138,9 @@ def render_work(request, work_id):
     work_id = int(work_id)
 
     work = Work.by_id(work_id)
-    if 'compiled_tasks' in request.session: 
-        request.session.modified = True
-        request.session['compiled_tasks'] = {}
+    #if 'compiled_tasks' in request.session: 
+     #   request.session.modified = True
+      #  request.session['compiled_tasks'] = {}
     return redirect('/task/' + str(work.tasks()[0].id))
 
 
@@ -153,18 +153,18 @@ def getasset(request, taskname, filename):
 
 # Функция рендера (обработки и конечного представления на сайте) задачи по имени (имя берётся из адресной строки)
 @login_required
-def task_view(request, task_id):
+def task_view(request, stask_id):
     if 'compiled_tasks' not in request.session: 
         request.session['compiled_tasks'] = {}
 
-    task_id = int(task_id)
+    task_id = int(stask_id)
     task = Task.by_id(task_id)
-    if task_id not in request.session['compiled_tasks']:
+    if stask_id not in request.session['compiled_tasks']:
         compiled_task = task.compile()
-        request.session['compiled_tasks'][task_id] = compiled_task.as_JSON()
+        request.session['compiled_tasks'][stask_id] = compiled_task.as_JSON()
         request.session.modified = True
     else:
-        compiled_task = CompiledTask.from_JSON(request.session['compiled_tasks'][task_id])
+        compiled_task = CompiledTask.from_JSON(request.session['compiled_tasks'][stask_id])
 
     if request.method == 'POST':
         # Проверка - есть ли нажатая нами кнопка в списке задач (нужно для переадрессации на другие задачи)

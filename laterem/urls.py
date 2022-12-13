@@ -22,7 +22,7 @@ from core_app.views import users_panel, teacher_hub, group_panel
 
 urlpatterns = [
    # path('admin/', admin.site.urls),
-    path('task/<str:task_id>', task_view),
+    path('task/<str:stask_id>', task_view),
     path('taskasset/<str:taskname>/<str:filename>', getasset),
     path('works/<str:work_id>', render_work),
     path('login/', login_view),
