@@ -55,10 +55,11 @@ class User(DBHybrid):
             return fake
     
     def set_settings(self, **settings):
-        settings = json.loads(self.dbmodel.settings)
-        for key, value in settings:
-            settings[key] = value
-        self.dbmodel.settings = json.dumps(settings)
+        self.modified = True
+        usettings = json.loads(self.dbmodel.settings)
+        for key, value in settings.items():
+            usettings[key] = value
+        self.dbmodel.settings = json.dumps(usettings)
     
     def get_setting(self, setting):
         settings = json.loads(self.dbmodel.settings)

@@ -179,7 +179,7 @@ def task_view(request, stask_id):
             with User(request.user) as user:
                 user.solve(task, compiled_task.ltc.mask_answer_dict(dict(request.POST)), Verdicts.OK)
             return redirect(request.path)
-        with User(request.user.email) as user:
+        with User(request.user) as user:
             user.solve(task, dict(request.POST), Verdicts.WRONG_ANSWER)
         return redirect(request.path)
 
