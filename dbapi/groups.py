@@ -28,5 +28,18 @@ class Group(DBHybrid):
     def get_works(self):
         return [Work(x) for x in LateremWork.objects.filter(lateremassignment__group=self.dbmodel)]
     
+    def add_member(self, user, **permissions):
+        membership = LateremGroupMembership.objects.create(user=user.dbmodel,
+                                                           group=self.dbmodel,
+                                                           **permissions)
+        membership.save()
+        member = Member(user.dbmodel, self)
+        return member
+    
+    def set_global_permission(self, **permissions):
+        for key, value in permissions.items():
+            self.dbmodel.__setattr__(key, value)
+
+    
 
     
