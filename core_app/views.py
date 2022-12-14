@@ -13,7 +13,7 @@ from dbapi.users import User
 from dbapi.tasks import Task, CompiledTask, Work, Category
 from dbapi.solutions import Verdicts
 
-#import db_test_create
+# import db_test_create
 
 def permission_required(permission):
     def wrapper(function):
@@ -197,12 +197,12 @@ def task_view(request, stask_id):
 
 # Базовая страница сайта
 @login_required
-def index_page_render(request):
+def student_page_render(request):
     with User(request.user) as user:
         if not request.session.get('color-theme'):
             request.session['color-theme'] = user.get_setting('theme')
         return render(request,
-                    'index.html',
+                    'student.html',
                     {
                         'title': 'Laterem',
                         'text': 'Это базовая страница',
@@ -214,3 +214,11 @@ def index_page_render(request):
                     }
                     )
 
+def main_page_render(request):
+    with User(request.user) as user:
+        return render(request,
+                    'main.html',
+                    {
+                        'title': 'Laterem'
+                    }
+                    )

@@ -15,7 +15,7 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from core_app.views import index_page_render, login_view, settings_view
+from core_app.views import main_page_render, student_page_render, login_view, settings_view
 from core_app.views import task_view, render_work, getasset, logout_view
 from core_app.views import users_panel, teacher_hub, group_panel
 
@@ -28,7 +28,8 @@ urlpatterns = [
     path('login/', login_view),
     path('logout/', logout_view),
     path('settings/', settings_view),
-    path('', index_page_render),
+    path('', main_page_render),
+    path('student/', student_page_render),
     path('teacher/', teacher_hub),
     path('teacher/users/', users_panel),
     path('teacher/groups/', group_panel),
