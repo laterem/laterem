@@ -62,7 +62,7 @@ def login_view(request):
         form = LoginForm()
         return render(request, 'login.html', render_args(additional={'form': form}))
 
-def settings_view(request):
+def profile_view(request):
     if request.method == 'POST':  
         # Обработка кнопки смены темы
         if 'change-color-theme' in request.POST:
@@ -70,8 +70,8 @@ def settings_view(request):
                 change_color_theme(user, request)
                 return redirect(request.path)
     with User(request.user) as user:
-        return render(request, 'settings_page.html', render_args(me=user, 
-                                                                 additional={'title': 'Laterem Настройки'}))
+        return render(request, 'profile_page.html', render_args(me=user, 
+                                                                 additional={'title': 'Laterem Настройки', 'workdir': dict()}))
 
 
 def teacher_hub(request):
@@ -217,7 +217,7 @@ def student_page_render(request):
     with User(request.user) as user:
         if not request.session.get('color-theme'):
             request.session['color-theme'] = user.get_setting('theme')
-        return render(request, 'index.html', render_args(me=User(request.user),
+        return render(request, 'student.html', render_args(me=User(request.user),
                                                          additional={'title': 'Laterem',
                                                                      'text': 'Это базовая страница',
                                                                      'text2': 'Перейдите на нужную работу по ссылке слева'}))

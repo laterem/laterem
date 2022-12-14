@@ -184,6 +184,7 @@ button.wrong, button {
     margin: 4px 2px;
     cursor: pointer;
     border-radius: 16px;
+    height: fit-content;
 }
 
 .button, button {
@@ -440,6 +441,11 @@ div#user-table {
     align-items: center;
 }
 
+.user-table-element a {
+    text-decoration: none;
+    color: var(--body-font-color);
+}
+
 div#user-table-header {
     display: flex;
     background-color: var(--content-hover-color);
@@ -470,7 +476,7 @@ div#user-table-header {
 
 div#group-table {
     display: grid; 
-    grid-template-columns: auto;
+    grid-template-columns: auto auto 40px 40px;
     
     border-radius: 0 0 10px 10px;
     overflow: hidden;
@@ -483,7 +489,8 @@ div#group-table {
 }
 
 div#group-table-header {
-    display: flex;
+    display: grid;
+    grid-template-columns: auto min-content min-content;
     background-color: var(--content-hover-color);
     border-radius: 10px 10px 0 0;
     overflow: hidden;
@@ -496,7 +503,8 @@ div#group-table-header {
 }
 
 #group-table-header * {
-    display: inline-flex;
+    display: flex;
     align-items: center;
     padding: 4px;
+    margin: 1px;
 }

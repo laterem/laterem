@@ -4,7 +4,12 @@
 
 {% block content %}
     <form method="post"> {% csrf_token %} {{add_member_form.as_p}} </form>
-    <div id="group-table-header">{{group.name}}</div>
+    <div id="group-table-header">
+        <p style="grid-column: 1;">{{group.name}}</p>
+        <button style="grid-column: 2;" class="button-icon"><div style="width: 2em; padding: 0;">{% include "icons/pencil-icon.html" %}</div></button>
+        <button style="grid-column: 3;" class="button-icon">{% include "icons/add-user-icon.html" %}</button>
+        <p style="grid-column: 1;">group.description</p>
+    </div>
     <div id="group-table">
     {% for member in group.get_members %}
         <div style="grid-column: 1; border-left: none;" class="group-table-element">
