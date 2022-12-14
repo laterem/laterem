@@ -22,20 +22,28 @@ def open_ltc(path):
 
 class Task(DBHybrid):
     __dbmodel__ = LateremTask
+
     @property 
     def work(self):
         return Work(self.dbmodel.work)
 
+    @property
+    def template_path(self):
+        task_type = self.dbmodel.task_type
+        tmpviewpath = task_type + '_view' + '.html'
+        return 'static_copies/' + tmpviewpath
+
     def compile(self):
-        path = LTM_SCANNER.id_to_path(self.dbmodel.task_type)
+        task_type = self.dbmodel.task_type
+        path = LTM_SCANNER.id_to_path(task_type)
         ltcpath = os.path.join(path, 'config.ltc')
         viewpath = os.path.join(path, 'view.html')
-        tmpviewpath = self.dbmodel.task_type + '_view' + '.html'
+        tmpviewpath = task_type + '_view' + '.html'
 
         shutil.copyfile(viewpath, TEMPLATE_CLONING_PATH + tmpviewpath)
         
         ltc = open_ltc(ltcpath)
-        template = 'static_copies/' + tmpviewpath
+        template = self.template_path
         return CompiledTask(ltc, template)
 
 

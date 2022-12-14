@@ -1,3 +1,7 @@
+class NotSpecified:
+    def __bool__(self):
+        return False
+
 class Literal:
     value = None
 

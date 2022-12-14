@@ -4,7 +4,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.core.exceptions import PermissionDenied
 from context_objects import SEPARATOR, LTM_SCANNER
 from os.path import join as pathjoin
-from .views_functions import taskview_rargs, change_color_theme
+from .views_functions import render_args, change_color_theme
 from .models import *
 from django.contrib.auth.decorators import login_required
 from .forms import LoginForm, NewUser, EditUser
@@ -62,7 +62,7 @@ def login_view(request):
                     return HttpResponse('<h1>Такого аккаунта не существует! или данные некорректные</h1>')
     else:
         form = LoginForm()
-        return render(request, 'login.html', {'form': form})
+        return render(request, 'login.html', render_args(additional={'form': form}))
 
 def settings_view(request):
     if request.method == 'POST':  
@@ -72,16 +72,12 @@ def settings_view(request):
                 change_color_theme(user, request)
                 return redirect(request.path)
     with User(request.user) as user:
-        return render(request, 'settings_page.html', {
-                            'title': 'Laterem Настройки',
-                            'theme': user.get_setting('theme'),
-                            'user': user,
-                            'is_teacher': True,
-                        })
+        return render(request, 'settings_page.html', render_args(me=user, 
+                                                                 additional={'title': 'Laterem Настройки'}))
 
 
 def teacher_hub(request):
-    return render(request, "teacher_panel/teacher_panel_base.html")
+    return render(request, "teacher_panel/teacher_panel_base.html", render_args())
 
 @permission_required("can_manage_users")
 def users_panel(request):
@@ -128,14 +124,13 @@ def users_panel(request):
 
     else:
         form = NewUser()
-    return render(request, "teacher_panel/user_panel.html", {'newuserform': form,
-                            'allusers': LateremUser.objects.all()})
+    return render(request, "teacher_panel/user_panel.html", render_args(meta_all_users_available=True,
+                                                                        additional={'newuserform': form}))
 
 @permission_required("can_manage_groups")
 def group_panel(request):
-     return render(request, "teacher_panel/group_panel.html",
-                   {'allgroup': {'Тестовая группа 1': ['Вася', 'Петя'], 
-                    'Тестовая группа 2': ['Петя', 'Федя', 'Спайд']}})
+     return render(request, "teacher_panel/group_panel.html",render_args(meta_all_groups_available=True,
+                                                                        ))
 
 # Рендер страницы работы
 @login_required
@@ -187,13 +182,9 @@ def task_view(request, stask_id):
         with User(request.user) as user:
             user.solve(task, dict(request.POST), Verdicts.WRONG_ANSWER)
         return redirect(request.path)
-
-    additional_render_args = taskview_rargs(user=User(request.user),
-                                            task=task,
-                                            compiled_task=compiled_task)
-    for k, v in compiled_task.ltc.field_table.items():
-        additional_render_args[k] = v
-    return render(request, "work_base.html", additional_render_args)
+    return render(request, "work_base.html", render_args(me=User(request.user),
+                                                         current_task=task,
+                                                         additional=compiled_task.ltc.field_table))
 
 # Базовая страница сайта
 @login_required
@@ -201,16 +192,8 @@ def index_page_render(request):
     with User(request.user) as user:
         if not request.session.get('color-theme'):
             request.session['color-theme'] = user.get_setting('theme')
-        return render(request,
-                    'index.html',
-                    {
-                        'title': 'Laterem',
-                        'text': 'Это базовая страница',
-                        'text2': 'Перейдите на нужную работу по ссылке слева',
-                        'workdir': Category.global_tree(user),
-                        'theme': user.get_setting('theme'),
-                        'user': User(request.user),
-                        'is_teacher': True,
-                    }
-                    )
+        return render(request, 'index.html', render_args(me=User(request.user),
+                                                         additional={'title': 'Laterem',
+                                                                     'text': 'Это базовая страница',
+                                                                     'text2': 'Перейдите на нужную работу по ссылке слева'}))
 
