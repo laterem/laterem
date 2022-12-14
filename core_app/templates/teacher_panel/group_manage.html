@@ -1,0 +1,12 @@
+{% extends 'teacher_panel/teacher_panel_base.html' %}
+{% load static %}
+{% load laterem %}
+
+{% block content %}
+    <div id="group-table-header">{{group}}</div>
+    <div id="group-table">
+    {% for member in members %}
+        <div class="group-table-element">{{member}}</div>
+    {% endfor %}
+    </div>
+{% endblock %}

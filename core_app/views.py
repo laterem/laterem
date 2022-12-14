@@ -29,9 +29,6 @@ def logout_view(request):
     logout(request)
     return redirect('/')
 
-# Сделано в спешке, всё очень криво
-# Ничего, Жура переделает!
-# Ага, знаю я как Жура переделывает
 def login_view(request):
     if request.method == 'POST':
         email = request.POST['email']
@@ -134,8 +131,13 @@ def users_panel(request):
 @permission_required("can_manage_groups")
 def group_panel(request):
      return render(request, "teacher_panel/group_panel.html",
-                   {'allgroup': {'Тестовая группа 1': ['Вася', 'Петя'], 
-                    'Тестовая группа 2': ['Петя', 'Федя', 'Спайд']}})
+                   {'allgroup': {'Тестовая группа 1': 'group1', 
+                    'Тестовая группа 2': 'group2'}})
+
+@permission_required("can_manage_groups")
+def manage_group(request, group_name):
+    return render(request, 'teacher_panel/group_manage.html',
+                   {'members': ['Петя', 'Федя', 'Спайд']})
 
 # Рендер страницы работы
 @login_required

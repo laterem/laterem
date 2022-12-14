@@ -4,15 +4,8 @@
 
 {% block content %}
 {% if allgroup %}
-    {% for group, members in allgroup.items %}
-    <div class="group">
-        <div id="group-table-header">{{group}}</div>
-        <div id="group-table">
-        {% for member in members %}
-            <div class="group-table-element">{{member}}</div>
-        {% endfor %}
-        </div>
-    </div>
+    {% for group_title, group_id in allgroup.items %}
+    <a href="{{group_id}}" class="button">{{group_title}}</a><nobr/>
     {% endfor %}
 {% else %}
 У вас нет доступных групп
