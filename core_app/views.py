@@ -127,7 +127,12 @@ def users_panel(request):
 
 @permission_required("can_manage_groups")
 def group_panel(request):
-     return render(request, "teacher_panel/group_panel.html", render_args(meta_all_groups_available=True,
+    if request.method == 'POST':
+        if 'new-group' in request.POST:
+            with Group(LateremGroup.objects.create(name="Новая группа")) as new:
+                new.add_member(User(request.user), is_group_admin=True)
+                return redirect('/teacher/groups/' + str(new.id))
+    return render(request, "teacher_panel/group_panel.html", render_args(meta_all_groups_available=True,
                                                                           ))
 
 @permission_required("can_manage_groups")
