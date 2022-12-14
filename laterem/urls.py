@@ -17,20 +17,19 @@ from django.contrib import admin
 from django.urls import path
 from core_app.views import index_page_render, login_view, settings_view
 from core_app.views import task_view, render_work, getasset, logout_view
-from core_app.views import users_panel, user_managing, right_managing, group_managing
+from core_app.views import users_panel, teacher_hub, group_panel
 
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
-    path('task/<str:taskname>', task_view),
+   # path('admin/', admin.site.urls),
+    path('task/<str:stask_id>', task_view),
     path('taskasset/<str:taskname>/<str:filename>', getasset),
-    path('works/<str:work_name>', render_work),
+    path('works/<str:work_id>', render_work),
     path('login/', login_view),
     path('logout/', logout_view),
     path('settings/', settings_view),
     path('', index_page_render),
-    path('teacher/manage_users/', users_panel),
-    path('teacher/manage_users/users/', user_managing),
-    path('teacher/manage_users/rights/', right_managing),
-    path('teacher/manage_users/groups/', group_managing),
+    path('teacher/', teacher_hub),
+    path('teacher/users/', users_panel),
+    path('teacher/groups/', group_panel),
 ]

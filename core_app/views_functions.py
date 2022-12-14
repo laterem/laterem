@@ -1,37 +1,32 @@
-from context_objects import SPACE_REPLACER, WORK_DIR, SEPARATOR
 from .forms import *
-from ltm.users import User as LateremUser
-from ltm.tasks import Verdicts
-from ltm.works import Work
+from dbapi.solutions import Verdicts
+from dbapi.tasks import Category
 
-def fill_additional_args(request, taskname, template):
-    work_name, taskid = taskname.split('_id')
-    taskid = taskid.replace(SPACE_REPLACER, ' ')
-    work_path = Work.split_full_name(work_name, separator='.', space_replacement=SPACE_REPLACER)
-    workobject = Work(work_path)
-    userobject = LateremUser(request.user.email).open()
-
-    ret = {}
-    ret['workdir'] = WORK_DIR
-    ret['meta_tasktype'] = workobject.tasks[taskid]
+def taskview_rargs(user, task, compiled_task):
     _colors = {Verdicts.NO_ANSWER: 'no-answer',
                 Verdicts.OK: 'correct',
                 Verdicts.PARTIALLY_SOLVED: 'partial',
                 Verdicts.SENT: 'partial',
                 Verdicts.WRONG_ANSWER: 'wrong'}
-    verdicts = (_colors[ver] for ver in userobject.get_task_verdicts(work_path, workobject.tasks.keys()))
-    ret['task_list'] = zip(workobject.tasks.keys(), verdicts)
-    ret['task_name'] = taskid
-    if (list(workobject.tasks.keys()).index(taskid) >= 0) and list(workobject.tasks.keys()).index(taskid) + 1 < len(list(workobject.tasks.keys())):
-        ret['next_task'] = list(workobject.tasks.keys())[list(workobject.tasks.keys()).index(taskid) + 1]
+    all_tasks_in_work = task.work.tasks()
+    task_index_in_work = all_tasks_in_work.index(task)
+    ret = {}
+    ret['workdir'] = Category.global_tree(user)
+    ret['meta_tasktype'] = task.task_type
+    ret['task_list'] = [(_task.id, _colors[user.get_task_solution(_task).verdict]) 
+                        for _task in all_tasks_in_work]
+    ret['task_name'] = task.id
+    if (task_index_in_work >= 0) and task_index_in_work + 1 < len(all_tasks_in_work):
+        ret['next_task'] = all_tasks_in_work[task_index_in_work + 1].id
     else:
-        ret['next_task'] = list(workobject.tasks.keys())[0]
-    ret['work_name'] = work_path[-1]
-    ret['user'] = userobject
-    ret['theme'] = userobject.get_setting('theme')
+        ret['next_task'] = all_tasks_in_work[0].id
+    ret['work_name'] = task.work.name
+    ret['user'] = user
+    ret['theme'] = user.get_setting('theme')
     ret['is_teacher'] = True
-    ret['task_template'] = template
+    ret['task_template'] = compiled_task.template
     return ret
+
 
 def change_color_theme(user, request):
     usertheme = user.get_setting('theme')
@@ -41,5 +36,5 @@ def change_color_theme(user, request):
     elif usertheme == 'light':
         usertheme = 'dark'
     
-    user.set_setting('theme', usertheme)
+    user.set_settings(theme=usertheme)
     request.session['color-theme'] = usertheme

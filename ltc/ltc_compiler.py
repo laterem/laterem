@@ -20,6 +20,12 @@ class LTC:
         self.namespace = namespace
         self.executed = False
     
+    def get_answer_fields(self):
+        return [x[0] for x in self.checker_functions]
+    
+    def mask_answer_dict(self, __dict):
+        return {key: __dict[key] for key in self.get_answer_fields()}
+
     @classmethod
     def from_dict(cls, data):
         executed = True
