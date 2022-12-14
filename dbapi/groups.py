@@ -36,6 +36,12 @@ class Group(DBHybrid):
         member = Member(user.dbmodel, self)
         return member
     
+    def remove_member(self, user):
+        membership = LateremGroupMembership.objects.get(user=user.dbmodel,
+                                                        group=self.dbmodel
+                                                        )
+        membership.delete()
+
     def set_global_permission(self, **permissions):
         for key, value in permissions.items():
             self.dbmodel.__setattr__(key, value)

@@ -46,66 +46,16 @@
     </body>
     <header role="banner" class="header">
         <div class="header">
-            <button id="main-icon" class="header" onclick="
-                    disp = document.getElementById('header-dropdown-items').style.display;
-                    document.getElementById('empty-header-dropdown-items').style.display = disp;
-                    switch (disp) {
-                        case 'none': disp = 'flex';
-                        break;
-
-                        case 'flex': disp = 'none';
-                        break;
-
-                        default: disp = 'flex';
-                    };
-                    document.getElementById('header-dropdown-items').style.display = disp;
-                ">
+            <a id="main-icon" class="header button" href="/">
                 {% include "icons/main-icon.html" %}
-            </button>
+            </a>
             <h1 class="header">Laterem</h1>
         </div>
         <div style="justify-self: end; padding-right: 5px;" class="header">
-            <button id="main-icon" class="header" style="margin-right:5px; width: auto; height: auto;" onclick="
-                disp = document.getElementById('user-options').style.display;
-                document.getElementById('empty-user-options').style.display = disp;
-                switch (disp) {
-                    case 'none': disp = 'flex';
-                    break;
-    
-                    case 'flex': disp = 'none';
-                    break;
-    
-                    default: disp = 'flex';
-                };
-                document.getElementById('user-options').style.display = disp;
-            ">
+            <a id="main-icon" class="header button" style="margin-right:5px; width: auto; height: auto;" href="/settings">
                 {% include "icons/user-icon.html" %}
-            </button>
+            </a>
             <p>{{user.username}}</p>
-        </div>
-
-        <div id="empty-header-dropdown-items" class="header"></div>
-
-        <div id="header-dropdown-items" class="header dropdown" style="display: none;">
-            <div id="header-dropdown-item" class="header">
-                <a href="/">Задачи</a>
-            </div>
-            {% if is_teacher %}
-            <div id="header-dropdown-item" class="header">
-                <a href="/teacher/">Панель управления</a>
-            </div>
-            {% endif %}
-        </div>
-
-        <div id="empty-user-options" class="header"></div>
-
-        <div id="user-options" class="header dropdown" style="display: none;">
-            <div id="header-dropdown-item" class="header">
-                <a href="/logout/">Выйти</a>
-            </div>
-            <div id="header-dropdown-item" class="header">
-                <a href="/settings/">Настройки</a>
-            </div>
         </div>
 
         <div width="100vh" style="background-color: var(--header-gradient-bottom); height: 1px; position: fixxed; bottom: 0px;">

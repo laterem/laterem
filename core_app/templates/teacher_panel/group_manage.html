@@ -1,0 +1,30 @@
+{% extends 'teacher_panel/teacher_panel_base.html' %}
+{% load static %}
+{% load laterem %}
+
+{% block content %}
+    <form method="post"> {% csrf_token %} {{add_member_form.as_p}} </form>
+    <div id="group-table-header">{{group.name}}</div>
+    <div id="group-table">
+    {% for member in group.get_members %}
+        <div style="grid-column: 1; border-left: none;" class="group-table-element">
+            {{member.first_name}} {{member.last_name}}
+        </div>
+        <div style="grid-column: 2;" class="group-table-element">
+            {{member.email}}
+        </div> 
+        <div style="grid-column: 3; padding: 0;" class="group-table-element">
+            <form method="post">
+                {% csrf_token %}
+                <button type="submit" name="delete:{{member.email}}" class="button-icon"><div style="width: 1.5em">{% include "icons/delete-icon.html" %}</div></button>
+            </form>
+        </div>
+        <div style="grid-column: 4; padding: 0; border-left: none;" class="group-table-element">
+            <form method="post">
+                {% csrf_token %}
+                <button type="submit" name="edit_perms:{{member.email}}" class="button-icon"><div style="width: 1.5em">{% include "icons/pencil-icon.html" %}</div></button>
+            </form>
+        </div>
+    {% endfor %}
+    </div>
+{% endblock %}

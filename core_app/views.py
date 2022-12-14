@@ -7,11 +7,12 @@ from os.path import join as pathjoin
 from .views_functions import render_args, change_color_theme
 from .models import *
 from django.contrib.auth.decorators import login_required
-from .forms import LoginForm, NewUser, EditUser
+from .forms import LoginForm, NewUser, EditUser, AddMember
 
 from dbapi.users import User
 from dbapi.tasks import Task, CompiledTask, Work, Category
 from dbapi.solutions import Verdicts
+from dbapi.groups import Group
 
 #import db_test_create
 
@@ -29,9 +30,6 @@ def logout_view(request):
     logout(request)
     return redirect('/')
 
-# Сделано в спешке, всё очень криво
-# Ничего, Жура переделает!
-# Ага, знаю я как Жура переделывает
 def login_view(request):
     if request.method == 'POST':
         email = request.POST['email']
@@ -129,8 +127,30 @@ def users_panel(request):
 
 @permission_required("can_manage_groups")
 def group_panel(request):
-     return render(request, "teacher_panel/group_panel.html",render_args(meta_all_groups_available=True,
-                                                                        ))
+     return render(request, "teacher_panel/group_panel.html", render_args(meta_all_groups_available=True,
+                                                                          ))
+
+@permission_required("can_manage_groups")
+def manage_group(request, group_id):
+    group = Group.by_id(group_id)
+
+    if request.method == 'POST':
+        for signal in request.POST:
+            if signal.startswith('delete:'):
+                email = signal.lstrip('delete:')
+                user = User.get(email=email)
+                group.remove_member(user)
+                return redirect(request.path)
+        add_member_form = AddMember(request.POST)
+        if add_member_form.is_valid():
+            user = User.get(email=add_member_form.cleaned_data['email'])
+            group.add_member(user)
+            return redirect(request.path)
+    else:
+        add_member_form=AddMember()
+
+    return render(request, 'teacher_panel/group_manage.html', render_args(current_group=group,
+                                                                          additional={"add_member_form":add_member_form}))
 
 # Рендер страницы работы
 @login_required
@@ -188,7 +208,7 @@ def task_view(request, stask_id):
 
 # Базовая страница сайта
 @login_required
-def index_page_render(request):
+def student_page_render(request):
     with User(request.user) as user:
         if not request.session.get('color-theme'):
             request.session['color-theme'] = user.get_setting('theme')
@@ -197,3 +217,11 @@ def index_page_render(request):
                                                                      'text': 'Это базовая страница',
                                                                      'text2': 'Перейдите на нужную работу по ссылке слева'}))
 
+def main_page_render(request):
+    with User(request.user) as user:
+        return render(request,
+                    'main.html',
+                    {
+                        'title': 'Laterem'
+                    }
+                    )

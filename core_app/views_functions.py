@@ -9,6 +9,7 @@ def render_args(*,
                 me=NotSpecified, 
                 current_task=NotSpecified,
                 current_work=NotSpecified,
+                current_group=NotSpecified,
                 meta_all_users_available=True,
                 meta_all_groups_available=True,
                 additional={}
@@ -50,6 +51,9 @@ def render_args(*,
             ret['task_list'] = [(_task.id, _colors[Verdicts.NO_ANSWER]) 
                                 for _task in all_tasks_in_work]
     
+    if current_group is not NotSpecified:
+        ret['group'] = current_group
+
     if meta_all_users_available:
         ret['allusers'] = map(User, LateremUser.objects.all())
     

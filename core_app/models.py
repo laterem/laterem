@@ -5,7 +5,8 @@ class LateremUser(AbstractUser):
     settings = models.TextField()
 
 class LateremGroup(models.Model):
-    name = models.CharField(primary_key=True, unique=True, max_length=128)
+    id = models.AutoField(primary_key=True,unique=True)
+    name = models.CharField(max_length=128)
     # Global Permissions (temporary)
     can_solve_tasks = models.BooleanField(default=True)
     can_manage_groups = models.BooleanField(default=False)

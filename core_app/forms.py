@@ -23,3 +23,7 @@ class NewGroup(forms.Form):
     second_name = forms.CharField(label='Фамилия')
     email = forms.EmailField(label='Email')
     password = forms.CharField(label='Пароль')
+
+class AddMember(forms.Form):
+    email = forms.CharField(label='Почта')
+    

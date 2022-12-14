@@ -173,7 +173,7 @@ h2 {
     padding: 0.5em
 }
 
-button.button, button.no_answer,
+.button, button.no_answer,
 button.ok, button.partial,
 button.wrong, button {
     border: none;
@@ -186,7 +186,7 @@ button.wrong, button {
     border-radius: 16px;
 }
 
-button.button, button {
+.button, button {
     background-color: var(--button-background-color);
     color: var(--dark-font-color);
 
@@ -437,6 +437,7 @@ div#user-table {
     border: 1px solid var(--dark-font-color);
     border-right: none;
     border-bottom: none;
+    align-items: center;
 }
 
 div#user-table-header {
