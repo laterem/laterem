@@ -396,7 +396,7 @@ td.wrong {
     background-color: var(--header-dropdown-lighted-color);
 }
 
-table#add-user {
+table#add-user, table#add-group-member {
     border-radius: 10px;
     padding: 5px;
     background-color: var(--content-background-color);
@@ -446,8 +446,8 @@ div#user-table {
     color: var(--body-font-color);
 }
 
-div#user-table-header {
-    display: flex;
+div#user-table-header, div#group-table-header {
+    display: grid;
     background-color: var(--content-hover-color);
     border-radius: 10px 10px 0 0;
     overflow: hidden;
@@ -455,7 +455,7 @@ div#user-table-header {
     border-color: var(--dark-font-color);
     border-style: solid;
     width: 100%;
-    justify-content: end;
+    grid-template-columns: auto max-content max-content;
     border-bottom: 0;
 }
 
@@ -486,20 +486,6 @@ div#group-table {
     width: 100%;
 
     margin-bottom: 10px;
-}
-
-div#group-table-header {
-    display: grid;
-    grid-template-columns: auto min-content min-content;
-    background-color: var(--content-hover-color);
-    border-radius: 10px 10px 0 0;
-    overflow: hidden;
-    border-width: 1px;
-    border-color: var(--dark-font-color);
-    border-style: solid;
-    width: calc(100% - 10px);
-    padding: 5px;
-    border-bottom: 0;
 }
 
 #group-table-header * {

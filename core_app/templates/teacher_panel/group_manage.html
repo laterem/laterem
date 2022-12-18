@@ -3,12 +3,45 @@
 {% load laterem %}
 
 {% block content %}
-    <form method="post"> {% csrf_token %} {{add_member_form.as_p}} </form>
-    <div id="group-table-header">
-        <p style="grid-column: 1;">{{group.name}}</p>
+    <div style="display: grid; grid-template-columns: auto max-content; align-items: center;">
+        <h2 style="grid-column: 1;">{{group.name}}</h2>
         <button style="grid-column: 2;" class="button-icon"><div style="width: 2em; padding: 0;">{% include "icons/pencil-icon.html" %}</div></button>
-        <button style="grid-column: 3;" class="button-icon">{% include "icons/add-user-icon.html" %}</button>
         <p style="grid-column: 1;">group.description</p>
+    </div>
+    <div id="group-table-header">
+        <p style="grid-column: 1;">Участники</p>
+        <div style="grid-column: 2;">
+            <button class="button" onclick="
+                disp = document.getElementById('add-group-member').style.display;
+                switch (disp) {
+                    case 'none': disp = 'block';
+                    break;
+        
+                    case 'block': disp = 'none';
+                    break;
+        
+                    default: disp = 'block';
+                };
+                document.getElementById('add-group-member').style.display = disp;
+                document.getElementById('blackout').style.display = disp;
+            ">{% include "icons/add-user-icon.html" %} &nbsp; Добавить &nbsp;</button>
+        </div>
+        <div style="grid-column: 3;">
+            <button class="button" onclick="
+                disp = document.getElementById('add-group-member').style.display;
+                switch (disp) {
+                    case 'none': disp = 'block';
+                    break;
+        
+                    case 'block': disp = 'none';
+                    break;
+        
+                    default: disp = 'block';
+                };
+                document.getElementById('add-group-member').style.display = disp;
+                document.getElementById('blackout').style.display = disp;
+            ">{% include "icons/import-from-file-icon.html" %} &nbsp; Импорт &nbsp;</button>
+        </div>
     </div>
     <div id="group-table">
     {% for member in group.get_members %}
@@ -32,4 +65,19 @@
         </div>
     {% endfor %}
     </div>
+    <button id="blackout" style="display: none;" onclick="
+        disp = document.getElementById('add-group-member').style.display;
+        switch (disp) {
+            case 'none': disp = 'block';
+            break;
+
+            case 'block': disp = 'none';
+            break;
+
+            default: disp = 'block';
+        };
+        document.getElementById('add-group-member').style.display = disp;
+        document.getElementById('blackout').style.display = disp;
+    "></button>
+    {% include "./add_group_member.html" %}
 {% endblock %}
