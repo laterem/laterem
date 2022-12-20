@@ -62,6 +62,7 @@ def login_view(request):
         form = LoginForm()
         return render(request, 'login.html', render_args(additional={'form': form}))
 
+@login_required
 def profile_view(request):
     if request.method == 'POST':  
         # Обработка кнопки смены темы
@@ -73,7 +74,7 @@ def profile_view(request):
         return render(request, 'profile_page.html', render_args(me=user, 
                                                                  additional={'title': 'Laterem Настройки', 'workdir': dict()}))
 
-
+@login_required
 def teacher_hub(request):
     return render(request, "teacher_panel/teacher_panel_base.html", render_args())
 
@@ -124,6 +125,10 @@ def users_panel(request):
         form = NewUser()
     return render(request, "teacher_panel/user_panel.html", render_args(meta_all_users_available=True,
                                                                         additional={'newuserform': form}))
+
+@permission_required("can_manage_works")
+def work_panel(request):
+    return render(request, "teacher_panel/work_managing_base.html", render_args())
 
 @permission_required("can_manage_groups")
 def group_panel(request):

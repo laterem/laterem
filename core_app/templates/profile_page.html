@@ -9,7 +9,7 @@
 <div style="display: flex; margin-bottom: 10px;">
     <div style="width: 100px; height: 100px;">{% include "icons/user-icon.html" %}</div>
     <div>
-        <h1 style="justify-self: baseline;">{{user.dbmodel.first_name}}</h1><h1 style="justify-self: baseline;">{{user.dbmodel.last_name}}</h1>
+        <h1 style="justify-self: center;">{{user.dbmodel.first_name}} {{user.dbmodel.last_name}}</h1><h3 style="justify-self: center;">{{user.dbmodel.email}}</h3>
         <a class="button" href="/logout">Выйти</a>
     </div>
 </div>

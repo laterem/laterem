@@ -32,6 +32,7 @@ urlpatterns = [
     path('student/', student_page_render),
     path('teacher/', teacher_hub),
     path('teacher/users/', users_panel),
+    path('teacher/works/', group_panel),
     path('teacher/groups/', group_panel),
     path('teacher/groups/<str:group_id>', manage_group),
 ]
