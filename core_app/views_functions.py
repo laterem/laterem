@@ -3,7 +3,39 @@ from dbapi.solutions import Verdicts
 from dbapi.tasks import Category, Work
 from dbapi.groups import Group
 from dbapi.users import User
+from .models import LateremUser
 from extratypes import NotSpecified
+from context_objects import LATEREM_FLAGS, DEBUG_DBSamples
+
+if DEBUG_DBSamples in LATEREM_FLAGS:
+    from secret_data import ADMIN_PASSWORD
+    def DEBUG_assure_admin(email='admin@admin.admin',
+                        password=ADMIN_PASSWORD):
+        admin = LateremUser.objects.filter(email=email)
+        if not admin:
+            admin = LateremUser.objects.create_user(email=email, password=password, username=email, settings='{}')
+            admin.save()
+            testcat = LateremWorkCategory.objects.create(name='Misc.')
+            admins = LateremGroup.objects.create(name="ADMINS",
+                                                can_solve_tasks=True,
+                                                can_manage_groups=True,
+                                                can_manage_users=True,
+                                                can_manage_works=True)
+
+            with Group(admins) as gr:
+                gr.add_member(User(admin), is_group_admin=True)
+            admins.save()
+            testcat.save()
+            print('\n')
+            print('|\t В базе данных не было обнаружено пользователя-админа, поэтому')
+            print('|\t были созданы следующие тестовые сущности:')
+            print('|\t - Пользователь-админ ' + f'("{email}"; "{password}")')
+            print('|\t - Группа админов ("ADMINS")')
+            print('|\t - Категория для работ ("Misc.")')
+            print('\n')
+else:
+    def DEBUG_assure_admin(*args, **kwargs):
+        pass
 
 def render_args(*, 
                 me=NotSpecified, 

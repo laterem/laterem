@@ -4,7 +4,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.core.exceptions import PermissionDenied
 from context_objects import SEPARATOR, LTM_SCANNER
 from os.path import join as pathjoin
-from .views_functions import render_args, change_color_theme
+from .views_functions import render_args, change_color_theme, DEBUG_assure_admin
 from .models import *
 from django.contrib.auth.decorators import login_required
 from .forms import LoginForm, NewUser, EditUser, AddMember, AddTask
@@ -13,8 +13,6 @@ from dbapi.users import User
 from dbapi.tasks import Task, CompiledTask, Work, Category
 from dbapi.solutions import Verdicts
 from dbapi.groups import Group
-
-#import db_test_create
 
 def permission_required(permission):
     def wrapper(function):
@@ -25,12 +23,14 @@ def permission_required(permission):
         return login_required(wrap)
     return wrapper
 
-
 def logout_view(request):
     logout(request)
     return redirect('/')
 
 def login_view(request):
+    # <Костыль>
+    DEBUG_assure_admin()
+    # </Костыль>
     if request.method == 'POST':
         email = request.POST['email']
         password = request.POST['password']
@@ -39,25 +39,7 @@ def login_view(request):
             login(request, user)
             return redirect(request.GET.get('next'))
         else:
-            with open('data' + SEPARATOR + 'userdata' + SEPARATOR + 'auth.txt', mode='r') as file:
-                for line in file:
-                    remail, rpassword = line.split('\\')
-                    if remail == email:
-                        if email.upper() == 'ADMIN@ADMIN.ADMIN':
-                            tc = True
-                        else:
-                            tc = False
-
-                        user = LateremUser.objects.create_user(email=email, password=rpassword, username=email, settings='{}')
-                        if password == rpassword:
-                            user = authenticate(username=email, password=password)
-                            login(request, user)
-                            return redirect(request.GET.get('next'))
-                        else:
-                            return HttpResponse('<h1>Такого аккаунта не существует! или данные некорректные</h1>')
-                else:
-                    # Пользователь не найден ни в файле auth.txt, ни в базе данных
-                    return HttpResponse('<h1>Такого аккаунта не существует! или данные некорректные</h1>')
+            return HttpResponse('<h1>Такого аккаунта не существует! или данные некорректные</h1>')
     else:
         form = LoginForm()
         return render(request, 'login.html', render_args(additional={'form': form}))
@@ -72,7 +54,8 @@ def profile_view(request):
                 return redirect(request.path)
     with User(request.user) as user:
         return render(request, 'profile_page.html', render_args(me=user, 
-                                                                 additional={'title': 'Laterem Настройки', 'workdir': dict()}))
+                                                                additional={'title': 'Laterem Настройки', 
+                                                                'workdir': dict()})) # <- Костыыыль! 
 
 @login_required
 def teacher_hub(request):
@@ -130,8 +113,15 @@ def users_panel(request):
 def work_panel(request):
     if request.method == 'POST':
         if 'new-work' in request.POST:
+            # <На время отсутствия возможности работать с категориями с сайта>
+            DEBUG_misc_category = LateremWorkCategory.objects.filter(name='Misc.').first()
+            # </На время отсутствия возможности работать с категориями с сайта>
             with Work(LateremWork.objects.create(name="Новая работа",
-                                                 author=request.user)) as new:
+                                                 author=request.user,
+                                                 # <На время отсутствия возможности работать с категориями с сайта>
+                                                 category=DEBUG_misc_category
+                                                 # </На время отсутствия возможности работать с категориями с сайта>
+                                                 )) as new:
                 return redirect('/teacher/works/' + str(new.id))
     return render(request, "teacher_panel/work_panel.html", render_args(meta_all_works_available=True,
                                                                         ))

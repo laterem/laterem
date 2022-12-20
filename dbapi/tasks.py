@@ -104,8 +104,10 @@ class Category(DBHybrid):
 
     @staticmethod
     def roots():
-        return [Category(x) for x in LateremCategoryCategory.objects.filter(root_category__isnull=True)]
-
+        catcat = [Category(x) for x in LateremCategoryCategory.objects.filter(root_category__isnull=True)]
+        worcat = [WorkCategory(x) for x in LateremWorkCategory.objects.filter(root_category__isnull=True)]
+        return catcat + worcat
+        
     @staticmethod
     def global_tree(accesible_for=None):
         roots = Category.roots()

@@ -6,8 +6,9 @@ from extratypes import Literal, Flag
 
 LTC_SingleStorage = Flag.new()
 LTC_CheckerShortcuts = Flag.new()
+DEBUG_DBSamples = Flag.new()
 
-LATEREM_FLAGS = LTC_CheckerShortcuts | LTC_SingleStorage
+LATEREM_FLAGS = LTC_CheckerShortcuts | LTC_SingleStorage | DEBUG_DBSamples
 
 
 from sys import platform
