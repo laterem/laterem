@@ -7,7 +7,7 @@ from os.path import join as pathjoin
 from .views_functions import render_args, change_color_theme
 from .models import *
 from django.contrib.auth.decorators import login_required
-from .forms import LoginForm, NewUser, EditUser, AddMember
+from .forms import LoginForm, NewUser, EditUser, AddMember, AddTask
 
 from dbapi.users import User
 from dbapi.tasks import Task, CompiledTask, Work, Category
@@ -128,7 +128,37 @@ def users_panel(request):
 
 @permission_required("can_manage_works")
 def work_panel(request):
-    return render(request, "teacher_panel/work_managing_base.html", render_args())
+    if request.method == 'POST':
+        if 'new-work' in request.POST:
+            with Work(LateremWork.objects.create(name="Новая работа",
+                                                 author=request.user)) as new:
+                return redirect('/teacher/works/' + str(new.id))
+    return render(request, "teacher_panel/work_panel.html", render_args(meta_all_works_available=True,
+                                                                        ))
+
+@permission_required("can_manage_works")
+def manage_work(request, work_id):
+    work = Work.by_id(work_id)
+
+    if request.method == 'POST':
+        for signal in request.POST:
+            if signal.startswith('delete:'):
+                id = int(signal.lstrip('delete:'))
+                task = Task.by_id(id)
+                work.remove_task(task)
+                return redirect(request.path)
+        add_task_form = AddTask(request.POST)
+        if add_task_form.is_valid():
+            task = work.add_task(name=add_task_form.cleaned_data['name'], 
+                                 task_type=add_task_form.cleaned_data['task_type'])
+            return redirect(request.path)
+    else:
+        add_task_form = AddTask()
+
+    return render(request, 'teacher_panel/work_manage.html', render_args(current_work=work,
+                                                                         additional={"add_task_form":add_task_form}))
+
+
 
 @permission_required("can_manage_groups")
 def group_panel(request):

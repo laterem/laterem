@@ -1,0 +1,76 @@
+{% extends 'teacher_panel/teacher_panel_base.html' %}
+{% load static %}
+{% load laterem %}
+
+{% block content %}
+    <div style="display: grid; grid-template-columns: auto max-content; align-items: center;">
+        <h2 style="grid-column: 1;">{{work.name}}</h2>
+        <button style="grid-column: 2;" class="button-icon"><div style="width: 2em; padding: 0;">{% include "icons/pencil-icon.html" %}</div></button>
+    </div>
+    <div id="group-table-header">
+        <p style="grid-column: 1;">Задания</p>
+        <div style="grid-column: 2;">
+            <button class="button" onclick="
+                disp = document.getElementById('add-task').style.display;
+                switch (disp) {
+                    case 'none': disp = 'block';
+                    break;
+        
+                    case 'block': disp = 'none';
+                    break;
+        
+                    default: disp = 'block';
+                };
+                document.getElementById('add-task').style.display = disp;
+                document.getElementById('blackout').style.display = disp;
+            ">{% include "icons/add-user-icon.html" %} &nbsp; Добавить &nbsp;</button>
+        </div>
+        <div style="grid-column: 3;">
+            <button class="button" onclick="
+                disp = document.getElementById('add-task').style.display;
+                switch (disp) {
+                    case 'none': disp = 'block';
+                    break;
+        
+                    case 'block': disp = 'none';
+                    break;
+        
+                    default: disp = 'block';
+                };
+                document.getElementById('add-task').style.display = disp;
+                document.getElementById('blackout').style.display = disp;
+            ">{% include "icons/import-from-file-icon.html" %} &nbsp; Импорт &nbsp;</button>
+        </div>
+    </div>
+    <div id="group-table">
+    {% for task in work.tasks %}
+        <div style="grid-column: 1; border-left: none;" class="group-table-element">
+            {{task.name}}
+        </div>
+        <div style="grid-column: 2;" class="group-table-element">
+            {{task.task_type}}
+        </div> 
+        <div style="grid-column: 3; padding: 0;" class="group-table-element">
+            <form method="post">
+                {% csrf_token %}
+                <button type="submit" name="delete:{{task.id}}" class="button-icon"><div style="width: 1.5em">{% include "icons/delete-icon.html" %}</div></button>
+            </form>
+        </div>
+    {% endfor %}
+    </div>
+    <button id="blackout" style="display: none;" onclick="
+        disp = document.getElementById('add-task').style.display;
+        switch (disp) {
+            case 'none': disp = 'block';
+            break;
+
+            case 'block': disp = 'none';
+            break;
+
+            default: disp = 'block';
+        };
+        document.getElementById('add-task').style.display = disp;
+        document.getElementById('blackout').style.display = disp;
+    "></button>
+    {% include "./work_add_task.html" %}
+{% endblock %}

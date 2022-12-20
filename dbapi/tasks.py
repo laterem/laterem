@@ -78,6 +78,16 @@ class Work(DBHybrid):
     
     def tasks(self):
         return [Task(x) for x in LateremTask.objects.filter(work=self.dbmodel)]
+    
+    def add_task(self, name, task_type):
+        task = Task(LateremTask.objects.create(name=name,
+                                               task_type=task_type,
+                                               work=self.dbmodel))
+        task.dbmodel.save()
+        return task
+
+    def remove_task(self, task):
+        task.dbmodel.delete()
 
 class WorkCategory(DBHybrid):
     __dbmodel__ = LateremWorkCategory

@@ -1,0 +1,21 @@
+{% extends 'teacher_panel/teacher_panel_base.html' %}
+{% load static %}
+{% load laterem %}
+
+{% block content %}
+<form method="post">
+    {% csrf_token %}
+    <button type="submit" name="new-work"> Добавить работу </button>
+</form>
+{% if allworks %}
+    <div id="user-table">
+        {% for work in allworks %}
+            <div style="grid-column: 1; border-left: none;" class="user-table-element">
+                <a href="{{work.id}}">{{work.name}}</a>
+            </div>
+        {% endfor %}
+     </div>
+{% else %}
+У вас нет доступных работ
+{% endif %}
+{% endblock %}

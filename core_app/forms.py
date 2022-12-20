@@ -26,4 +26,8 @@ class NewGroup(forms.Form):
 
 class AddMember(forms.Form):
     email = forms.CharField(label='Почта')
-    
+
+
+class AddTask(forms.Form):
+    name = forms.CharField(label='Название')
+    task_type = forms.CharField(label='Имя шаблона')

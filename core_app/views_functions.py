@@ -1,6 +1,6 @@
 from .forms import *
 from dbapi.solutions import Verdicts
-from dbapi.tasks import Category
+from dbapi.tasks import Category, Work
 from dbapi.groups import Group
 from dbapi.users import User
 from extratypes import NotSpecified
@@ -10,8 +10,9 @@ def render_args(*,
                 current_task=NotSpecified,
                 current_work=NotSpecified,
                 current_group=NotSpecified,
-                meta_all_users_available=True,
-                meta_all_groups_available=True,
+                meta_all_users_available=False,
+                meta_all_groups_available=False,
+                meta_all_works_available=False,
                 additional={}
                 ):
     ret = {}
@@ -38,6 +39,7 @@ def render_args(*,
     
     if current_work is not NotSpecified:
         all_tasks_in_work = current_work.tasks()
+        ret['work'] = current_work
         ret['work_name'] = current_work.name
         _colors = {Verdicts.NO_ANSWER: 'no-answer',
                    Verdicts.OK: 'correct',
@@ -59,6 +61,9 @@ def render_args(*,
     
     if meta_all_groups_available:
         ret['allgroup'] = map(Group, LateremGroup.objects.all())
+    
+    if meta_all_works_available:
+        ret['allworks'] = map(Work, LateremWork.objects.all())
 
     for key, value in additional.items():
         ret[key] = value

@@ -1,0 +1,16 @@
+<form method="post">
+    {% csrf_token %}
+    <table id="add-task" style="display: none;">
+        <tr>
+            <td>Название задачи:</td>
+            <td>{{add_task_form.name}}</td>
+        </tr>
+        <tr>
+            <td>Имя шаблона:</td>
+            <td>{{add_task_form.task_type}}</td>
+        </tr>
+        <tr>
+            <td colspan="2"><button type="submit" name="newtask" class="button">Добавить задачу в работу</button></td>
+        </tr>
+    </table>
+</form>

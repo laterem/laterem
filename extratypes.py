@@ -67,7 +67,11 @@ class DBHybrid(Hybrid):
     
     @classmethod
     def get(cls, **criteria):
-        return cls(cls.__dbmodel__.objects.get(**criteria))
+        f = cls.__dbmodel__.objects.filter(**criteria)
+        if f:
+            return cls(f.first())
+        else:
+            return None
     
     @classmethod
     def by_id(cls, id):
