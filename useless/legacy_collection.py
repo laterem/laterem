@@ -123,3 +123,19 @@ class NestingDictWrapper(dict):
     def __setitem__(self, key, value):
         self.dict[key] = value
         self.wrapper[key] = value
+
+from os import listdir
+from os.path import join
+# Построение объекта вложенного словаря по директории (рекурсия, произвольная вложенность)
+def rdir_to_tree(sourcepath, layers=-1):
+    dirlist = listdir(sourcepath)
+    if dirlist:
+        if layers == 0 or (layers < 0 and dirlist[0].endswith('.json')): # Костыль, но учителю нужно постараться чтобы его заабузить
+            return sorted([join(sourcepath, path) for path in dirlist if path.endswith('.json')])
+        else:
+            output = {}
+            for key in dirlist:
+                output[key] = rdir_to_tree(join(sourcepath, key), layers-1)
+            return output
+    else:
+        return []

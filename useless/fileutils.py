@@ -1,20 +1,6 @@
 from os import listdir
 from os.path import isfile, join
 
-# Построение объекта вложенного словаря по директории (рекурсия, произвольная вложенность)
-def rdir_to_tree(sourcepath, layers=-1):
-    dirlist = listdir(sourcepath)
-    if dirlist:
-        if layers == 0 or (layers < 0 and dirlist[0].endswith('.json')): # Костыль, но учителю нужно постараться чтобы его заабузить
-            return sorted([join(sourcepath, path) for path in dirlist if path.endswith('.json')])
-        else:
-            output = {}
-            for key in dirlist:
-                output[key] = rdir_to_tree(join(sourcepath, key), layers-1)
-            return output
-    else:
-        return []
-
 # Поиск пути к файлу по его названию
 class Scanner:
     '''Class for identifying file within directories by their filenames only,

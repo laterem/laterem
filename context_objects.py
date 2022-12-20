@@ -1,6 +1,4 @@
-from fileutils import Scanner
-from fileutils import rdir_to_tree
-from extratypes import Literal, Flag
+from extratypes import Literal, Flag, Scanner
 
 # Модуль инициализации и расположения объектов, общих для всех модулей системы
 
