@@ -1,10 +1,10 @@
 <form method="post">
     {% csrf_token %}
-    {% for name, verdict_style in button_list_items %}
-        {% if name == task_name %}
-            <button type="submit" name="redirect:task{{name}}" class="{{verdict_style}}" id="choosed">{{name}}</button>
+    {% for ctask, verdict_style in button_list_items %}
+        {% if ctask == task %}
+            <button type="submit" name="redirect:task{{ctask.id}}" class="{{verdict_style}}" id="choosed">{{ctask.name}}</button>
         {% else %}
-            <button type="submit" name="redirect:task{{name}}" class="{{verdict_style}}">{{name}}</button>
+            <button type="submit" name="redirect:task{{ctask.id}}" class="{{verdict_style}}">{{ctask.name}}</button>
         {% endif %}
     {% endfor %}
 </form>

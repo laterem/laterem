@@ -29,13 +29,11 @@ def render_args(*,
             current_work = task_work
         all_tasks_in_task_work = task_work.tasks()
         task_index = all_tasks_in_task_work.index(current_task)
-        ret['meta_tasktype'] = current_task.task_type
-        ret['task_name'] = current_task.id
+        ret['task'] = current_task
         if (task_index >= 0) and task_index + 1 < len(all_tasks_in_task_work):
             ret['next_task'] = all_tasks_in_task_work[task_index + 1].id
         else:
             ret['next_task'] = all_tasks_in_task_work[0].id
-        ret['task_template'] = current_task.template_path
     
     if current_work is not NotSpecified:
         all_tasks_in_work = current_work.tasks()
@@ -47,10 +45,10 @@ def render_args(*,
                    Verdicts.SENT: 'partial',
                    Verdicts.WRONG_ANSWER: 'wrong'}
         if me is not NotSpecified:
-            ret['task_list'] = [(_task.id, _colors[me.get_task_solution(_task).verdict]) 
+            ret['task_list'] = [(_task, _colors[me.get_task_solution(_task).verdict]) 
                                 for _task in all_tasks_in_work]
         else:
-            ret['task_list'] = [(_task.id, _colors[Verdicts.NO_ANSWER]) 
+            ret['task_list'] = [(_task, _colors[Verdicts.NO_ANSWER]) 
                                 for _task in all_tasks_in_work]
     
     if current_group is not NotSpecified:

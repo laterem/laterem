@@ -5,12 +5,12 @@
     {% csrf_token %}
     {{ work_name }}
     <br/>
-    {% if task_name %}
-        Задача: {{task_name}}
+    {% if task.name %}
+        Задача: {{task.name}}
         <br/>
     {% endif %}
     <div style="text-align: left;">
-        {% include task_template %}
+        {% include task.template_path %}
         <button type="submit" class="button">Проверить</button>
     </div>
 </form>

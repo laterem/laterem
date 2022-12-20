@@ -9,7 +9,7 @@ register = template.Library()
 
 @register.simple_tag(takes_context=True)
 def asset(context, format_string):
-    taskname = context['meta_tasktype']
+    taskname = context['task'].task_type
     path = '/taskasset' + '/' + taskname + '/' + format_string
     return path
 
@@ -40,7 +40,6 @@ def _submenu(inp, user: User, path=[], outer=False):
         output = '<ul class="nested">'
     
     for key, value in inp.items():
-        print(key, value)
         if isinstance(value, dict):
             output += '<li><span class="caret">' + key + '</span>' + _submenu(value, user, path=path + [key]) + '</li>'
         else:
