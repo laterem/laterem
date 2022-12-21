@@ -3,18 +3,18 @@
 {% load laterem %}
 
 {% block content %}
-<form method="post">
-    {% csrf_token %}
-    <button type="submit" name="new-work"> Добавить работу </button>
-</form>
 {% if allworks %}
-    <div id="user-table">
+    <!-- <div id="all-groups-table">
         {% for work in allworks %}
-            <div style="grid-column: 1; border-left: none;" class="user-table-element">
-                <a href="{{work.id}}">{{work.name}}</a>
-            </div>
+        <div class="all-groups-table-element">
+            <a href="{{work.id}}">{{work.name}}</a>
+        </div>
         {% endfor %}
-     </div>
+    </div> -->
+    <form method="post">
+        {% csrf_token %}
+        {% fillable_tree "workdir" %}
+    </form>
 {% else %}
 У вас нет доступных работ
 {% endif %}

@@ -3,18 +3,23 @@
 {% load laterem %}
 
 {% block content %}
-<form method="post">
-    {% csrf_token %}
-    <button type="submit" name="new-group"> Добавить группу </button>
-</form>
 {% if allgroup %}
-    <div id="user-table">
+    <div id="all-groups-table-header">
+        <div style="grid-column: 1;"><span style="font-size: larger;">Все группы</span></div>
+        <div style="grid-column: 3;">
+            <form method="post">
+                {% csrf_token %}
+                <button type="submit" name="new-group">{% include "icons/add-user-icon.html" %} &nbsp; Добавить &nbsp;</button>
+            </form>
+        </div>
+    </div>
+    <div id="all-groups-table">
         {% for group in allgroup %}
-            <div style="grid-column: 1; border-left: none;" class="user-table-element">
-                <a href="{{group.id}}">{{group.name}}</a>
-            </div>
+        <div class="all-groups-table-element">
+            <a href="{{group.id}}">{{group.name}}</a>
+        </div>
         {% endfor %}
-     </div>
+    </div>
 {% else %}
 У вас нет доступных групп
 {% endif %}

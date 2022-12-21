@@ -3,25 +3,69 @@
 {% load laterem %}
 
 {% block content %}
-    <div style="display: grid; grid-template-columns: auto max-content; align-items: center;">
-        <h2 style="grid-column: 1;">{{group.name}}</h2>
-        <button style="grid-column: 2;" class="button-icon"><div style="width: 2em; padding: 0;">{% include "icons/pencil-icon.html" %}</div></button>
-        <p style="grid-column: 1;">group.description</p>
+<script>is_blackout = false;</script>
+<form method="dialog" id="main-form">
+    {% csrf_token %}  
+    <div id="group-manage-header">
+        <div style="grid-column: 1;">
+            <input value="{{group.name}}" disabled="true" style="font-size: larger;" class="group-info"/>
+        </div>
+        <div style="grid-column: 2;">
+            <button class="button-icon" onclick="
+                edits = document.getElementsByClassName('group-info');
+                for (i=0; i<edits.length; i++) {
+                    edits[i].disabled = !edits[i].disabled;
+                }
+                text = document.getElementById('edit-span').textContent;
+                switch (text) {
+                    case 'Подтвердить':
+                        text = 'Редактировать';
+                        document.getElementById('main-form').method = 'post';
+                    break;
+                    case 'Редактировать':
+                        text = 'Подтвердить';
+                        document.getElementById('main-form').method = 'dialog';
+                    break;
+                    default: text = 'Подтвердить';
+                };
+                document.getElementById('edit-span').textContent = text;
+            "><div style="width: 2em; padding: 0;">{% include "icons/pencil-icon.html" %}</div><span id="edit-span">Редактировать</span></button>
+            <button class="button-icon"><div style="width: 2em; padding: 0;">{% include "icons/delete-icon.html" %}</div><span>Удалить</span></button>
+        </div>
+        <div style="grid-column: 1;">
+            <input value="group.description" disabled="true" class="group-info"/>
+        </div>
+        <div style="grid-column: 2;">
+            <button class="button-icon" onclick="
+                if (!is_blackout) {
+                    document.getElementById('appoint-work').style.display = 'block';
+                    document.getElementById('blackout').style.display = 'block';
+                }
+                else {
+                    document.getElementById('appoint-work').style.display = 'none';
+                    document.getElementById('blackout').style.display = 'none';
+                }
+                is_blackout = !is_blackout;
+            "><div style="width: 2em; padding: 0;">{% include "icons/book-plus.html" %}</div><span>Назначить работу</span></button>
+        </div>
     </div>
+</form>
+    <hr style="margin-top: 15px; margin-bottom: 15px;"/>
     <div id="group-table-header">
-        <p style="grid-column: 1;">Участники</p>
+        <span style="grid-column: 1; font-size: larger; margin-left: 5px;">Участники</span>
         <div style="grid-column: 2;">
             <button class="button" onclick="
                 disp = document.getElementById('add-group-member').style.display;
-                switch (disp) {
-                    case 'none': disp = 'block';
+                switch (is_blackout) {
+                    case false: disp = 'block';
                     break;
         
-                    case 'block': disp = 'none';
+                    case true: disp = 'none';
                     break;
         
                     default: disp = 'block';
                 };
+                is_blackout = !is_blackout;
                 document.getElementById('add-group-member').style.display = disp;
                 document.getElementById('blackout').style.display = disp;
             ">{% include "icons/add-user-icon.html" %} &nbsp; Добавить &nbsp;</button>
@@ -29,15 +73,16 @@
         <div style="grid-column: 3;">
             <button class="button" onclick="
                 disp = document.getElementById('add-group-member').style.display;
-                switch (disp) {
-                    case 'none': disp = 'block';
+                switch (is_blackout) {
+                    case false: disp = 'block';
                     break;
         
-                    case 'block': disp = 'none';
+                    case true: disp = 'none';
                     break;
         
                     default: disp = 'block';
                 };
+                is_blackout = !is_blackout;
                 document.getElementById('add-group-member').style.display = disp;
                 document.getElementById('blackout').style.display = disp;
             ">{% include "icons/import-from-file-icon.html" %} &nbsp; Импорт &nbsp;</button>
@@ -67,17 +112,19 @@
     </div>
     <button id="blackout" style="display: none;" onclick="
         disp = document.getElementById('add-group-member').style.display;
-        switch (disp) {
-            case 'none': disp = 'block';
+        switch (is_blackout) {
+            case false: disp = 'block';
             break;
 
-            case 'block': disp = 'none';
+            case true: disp = 'none';
             break;
 
             default: disp = 'block';
         };
+        is_blackout = !is_blackout;
         document.getElementById('add-group-member').style.display = disp;
         document.getElementById('blackout').style.display = disp;
     "></button>
     {% include "./add_group_member.html" %}
+    {% include "./assign_work.html" %}
 {% endblock %}

@@ -1,5 +1,9 @@
 {% extends 'base.html' %}
 
+{% block left_side %}
+    {% tree "workdir" %}
+{% endblock %}
+
 {% block content %}
 <form method="post">
     {% csrf_token %}

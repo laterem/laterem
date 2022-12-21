@@ -170,7 +170,19 @@ h2 {
 /* Стиль кнопок */
 .button-icon {
     background-color: var(--button-icon-background-color);
-    padding: 0.5em
+    padding: 0.5em;
+    text-align: center;
+    align-items: center;
+    text-decoration: none;
+    display: inline-flex;
+    margin: 4px 2px;
+    cursor: pointer;
+    border-radius: 16px;
+    height: fit-content;
+}
+
+.button-icon div {
+    display: inline-block;
 }
 
 .button, button.no_answer,
@@ -212,6 +224,11 @@ ul, #myUL {
 #myUL {
     margin: 0;
     padding: 0;
+}
+
+#myUL a {
+    text-decoration: none;
+    color: var(--body-font-color);
 }
 
 .caret {
@@ -396,7 +413,7 @@ td.wrong {
     background-color: var(--header-dropdown-lighted-color);
 }
 
-table#add-user, table#add-group-member, table#add-task {
+table#add-user, table#add-group-member, table#add-task, table#appoint-work {
     border-radius: 10px;
     padding: 5px;
     background-color: var(--content-background-color);
@@ -419,7 +436,7 @@ table#add-user, table#add-group-member, table#add-task {
     backdrop-filter: blur(1px);
 }
  
-div#user-table {
+div#user-table, div#all-groups-table {
     display: grid; 
     grid-template-columns: auto auto 40px 40px;
     
@@ -431,24 +448,33 @@ div#user-table {
     width: 100%;
 }
 
-.user-table-element {
+div#all-groups-table {
+    grid-template-columns: 100%;
+}
+
+.group-table-element, .user-table-element,
+.all-groups-table-element {
     display: flex;
     padding: 5px;
     border-collapse: collapse;
-    border: 1px solid var(--dark-font-color);
-    border-right: none;
-    border-bottom: none;
-    align-items: center;
 }
 
-.user-table-element a {
+.group-table-element:nth-of-type(8n+4), .group-table-element:nth-of-type(8n+1),
+.group-table-element:nth-of-type(8n+2), .group-table-element:nth-of-type(8n+3),
+.user-table-element:nth-of-type(8n+4), .user-table-element:nth-of-type(8n+1),
+.user-table-element:nth-of-type(8n+2), .user-table-element:nth-of-type(8n+3),
+.all-groups-table-element:nth-of-type(2n+1) {
+    background-color: var(--content-hover-color);
+}
+
+.user-table-element a, .all-groups-table-element a {
     text-decoration: none;
     color: var(--body-font-color);
 }
 
-div#user-table-header, div#group-table-header {
+div#user-table-header, div#group-table-header,
+div#all-groups-table-header {
     display: grid;
-    background-color: var(--content-hover-color);
     border-radius: 10px 10px 0 0;
     overflow: hidden;
     border-width: 1px;
@@ -459,19 +485,18 @@ div#user-table-header, div#group-table-header {
     border-bottom: 0;
 }
 
-#user-table-header * {
+div#user-table-header, div#user-table,
+div#all-groups-table, div#all-groups-table-header {
+    margin-left: -10px;
+    margin-right: -10px;
+    border: none;
+    width: calc(100% + 20px)
+}
+
+#user-table-header *, #all-groups-table-header * {
     display: inline-flex;
     align-items: center;
     padding: 4px;
-}
-
-.group-table-element {
-    display: flex;
-    padding: 5px;
-    border-collapse: collapse;
-    border: 1px solid var(--dark-font-color);
-    border-right: none;
-    border-bottom: none;
 }
 
 div#group-table {
@@ -493,4 +518,21 @@ div#group-table {
     align-items: center;
     padding: 4px;
     margin: 1px;
+}
+
+#group-manage-header {
+    display: grid;
+    grid-template-columns: auto max-content;
+    align-items: center;
+}
+
+.group-info:disabled {
+    border: none;
+    color: var(--body-font-color);
+    background-color: var(--content-background-color);
+}
+
+#group-manage-header div:nth-of-type(2n) {
+    justify-items: end;
+    justify-self: end;
 }
