@@ -111,3 +111,11 @@ def change_color_theme(user, request):
     
     user.set_settings(theme=usertheme)
     request.session['color-theme'] = usertheme
+
+def get_category_for_work(post, label='new-work_'):
+    res = dict()
+    for key, value in dict(post).items():
+        print(key[:len(label)], label)
+        if key[:len(label)] == label:
+            res[key[len(label):]] = value
+    return res

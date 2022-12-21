@@ -4,7 +4,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.core.exceptions import PermissionDenied
 from context_objects import SEPARATOR, LTM_SCANNER
 from os.path import join as pathjoin
-from .views_functions import render_args, change_color_theme, DEBUG_assure_admin
+from .views_functions import render_args, change_color_theme, DEBUG_assure_admin, get_category_for_work
 from .models import *
 from django.contrib.auth.decorators import login_required
 from .forms import LoginForm, NewUser, EditUser, AddMember, AddTask
@@ -112,18 +112,26 @@ def users_panel(request):
 @permission_required("can_manage_works")
 def work_panel(request):
     if request.method == 'POST':
-        if 'new-work' in request.POST:
-            # <На время отсутствия возможности работать с категориями с сайта>
-            DEBUG_misc_category = LateremWorkCategory.objects.filter(name='Misc.').first()
-            # </На время отсутствия возможности работать с категориями с сайта>
-            with Work(LateremWork.objects.create(name="Новая работа",
-                                                 author=request.user,
-                                                 # <На время отсутствия возможности работать с категориями с сайта>
-                                                 category=DEBUG_misc_category
-                                                 # </На время отсутствия возможности работать с категориями с сайта>
-                                                 )) as new:
-                return redirect('/teacher/works/' + str(new.id))
+        category_for_work = get_category_for_work(request.POST)
+        if category_for_work:
+            for key, _ in category_for_work.items():
+                # <На время отсутствия возможности работать с категориями с сайта>
+                DEBUG_misc_category = LateremWorkCategory.objects.filter(name=key).first()
+                # </На время отсутствия возможности работать с категориями с сайта>
+                with Work(LateremWork.objects.create(name="Новая работа",
+                                                    author=request.user,
+                                                    # <На время отсутствия возможности работать с категориями с сайта>
+                                                    category=DEBUG_misc_category
+                                                    # </На время отсутствия возможности работать с категориями с сайта>
+                                                    )) as new:
+                    return redirect('/teacher/works/' + str(new.id))
+        category_for_work = get_category_for_work(request.POST, label='new-folder_')
+        if category_for_work:
+            for key, _ in category_for_work.items():
+                # СОЗДАНИЕ КАТЕГОРИИ
+                ...
     return render(request, "teacher_panel/work_panel.html", render_args(meta_all_works_available=True,
+                                                                        me=User(request.user),
                                                                         ))
 
 @permission_required("can_manage_works")
