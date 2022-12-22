@@ -154,10 +154,8 @@ def manage_work(request, work_id):
                 task = Task.by_id(id)
                 work.remove_task(task)
                 return redirect(request.path)
-        rename_form = RenameForm(request.POST)
-        if rename_form.is_valid():
-            name = rename_form.cleaned_data['name']
-            print(name)
+        if 'edit_data' in request.POST:
+            name = request.POST.get('work_name')
             work.dbmodel.name = name
             work.dbmodel.save()
             return redirect(request.path)
@@ -168,10 +166,8 @@ def manage_work(request, work_id):
             return redirect(request.path)
     else:
         add_task_form = AddTask()
-        rename_form=RenameForm(initial={'name': work.name})
 
     return render(request, 'teacher_panel/work_manage.html', render_args(additional={"add_task_form":add_task_form, 
-                                                                                     "rename_form":rename_form,
                                                                                      'work': work}))
 
 
