@@ -103,24 +103,35 @@ def users_panel(request):
 @permission_required("can_manage_works")
 def work_panel(request):
     if request.method == 'POST':
-        category_for_work = get_category_for_work(request.POST)
-        if category_for_work:
-            for key, _ in category_for_work.items():
-                # <На время отсутствия возможности работать с категориями с сайта>
-                DEBUG_misc_category = LateremWorkCategory.objects.filter(name=key).first()
-                # </На время отсутствия возможности работать с категориями с сайта>
-                with Work(LateremWork.objects.create(name="Новая работа",
-                                                    author=request.user,
-                                                    # <На время отсутствия возможности работать с категориями с сайта>
-                                                    category=DEBUG_misc_category
-                                                    # </На время отсутствия возможности работать с категориями с сайта>
-                                                    )) as new:
-                    return redirect('/teacher/works/' + str(new.id))
-        category_for_work = get_category_for_work(request.POST, label='new-folder_')
-        if category_for_work:
-            for key, _ in category_for_work.items():
-                # СОЗДАНИЕ КАТЕГОРИИ
-                ...
+        for signal in request.POST:
+            if signal.startswith('add-work-'):
+                cat_id = signal[len('add-work-'):]
+                if cat_id == 'mother':
+                    with Work(LateremWork.objects.create(name="Новая работа",
+                                                         author=request.user,
+                                                        )) as new:
+                        return redirect('/teacher/works/' + str(new.id))
+                else:
+                    # /!\ Typecast warning
+                    cat = Category.by_id(int(cat_id))
+                    with Work(LateremWork.objects.create(name="Новая работа",
+                                                         author=request.user,
+                                                         category=cat.dbmodel
+                                                        )) as new:
+                        return redirect('/teacher/works/' + str(new.id))
+            elif signal.startswith('add-category-'):
+                cat_id = signal[len('add-category-'):]
+                if cat_id == 'mother':
+                    with Category(LateremCategoryCategory.objects.create(name="Новая категория",
+                                                                         )) as new:
+                        return redirect(request.path)
+                else:
+                    # /!\ Typecast warning
+                    cat = int(cat_id)
+                    with Category(LateremCategoryCategory.objects.create(name="Новая категория",
+                                                                         root_category=cat
+                                                                         )) as new:
+                        return redirect(request.path)
     return render(request, "teacher_panel/work_panel.html", render_args(meta_all_works_available=True,
                                                                         me=User(request.user),
                                                                         ))

@@ -122,14 +122,14 @@ class Scanner:
         leaves = []
         roots = [self.root]
         while roots:
-            for root in roots:
-                children = listdir(root)
-                for child in children:
-                    path = join(root, child)
-                    if isfile(path):
-                        leaves.append(child)
-                    else:
-                        roots.append(path)
+            root = roots.pop(0)
+            children = listdir(root)
+            for child in children:
+                path = join(root, child)
+                if isfile(path):
+                    leaves.append(child)
+                else:
+                    roots.append(path)
         if use_cache:
             self.leaves = leaves
         return leaves

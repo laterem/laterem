@@ -32,7 +32,7 @@ def _submenu(inp, user: User, outer=False, editable=False, unravel=False):
             output = '<ul id="myUL"><li><span class="caret caret-down" style="font-size: larger;">'
             output += "Работы"
             output += "</span>"
-            output += '<button type="submit" name="add-category-mother class="button-icon" style="margin-left: 10px; height: min-content"'
+            output += '<button type="submit" name="add-category-mother" class="button-icon" style="margin-left: 10px; height: min-content"'
             output += folder_plus
             output += '&nbsp; Добавить &nbsp;'
             output += '</button>'
