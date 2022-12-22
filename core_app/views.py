@@ -90,6 +90,12 @@ def users_panel(request):
                 elif signal.startswith('edit:'):
                     email = signal.lstrip('edit:')
                     user = LateremUser.objects.get(email=email)
+                    print('±\tИзменение пользователя', email)
+                    print('±\tНовые данные:')
+                    print('±\t\tИмя:', request.POST.get('user_name'))
+                    print('±\t\tФамилия:', request.POST.get('user_lastname'))
+                    print('±\t\tПочта:', request.POST.get('user_email'))
+                    print('±\t\tПароль:', request.POST.get('user_password'))
             form = NewUser()
         # <Не тестилось, технически должно работать>
             if not flag:
