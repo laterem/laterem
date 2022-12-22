@@ -3,7 +3,7 @@
     <table id="add-group-member" style="display: none;">
         <tr>
             <td>Почта:</td>
-            <td><select>
+            <td><select name="user_email">
                 {% if users %}
                 {% for user in users %}
                     <option value="{{user.dbmodel.email}}">{{user.email}}</option>
