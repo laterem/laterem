@@ -87,6 +87,9 @@ def users_panel(request):
                     user.delete()
                     flag = True
                     break
+                elif signal.startswith('edit:'):
+                    email = signal.lstrip('edit:')
+                    user = LateremUser.objects.get(email=email)
             form = NewUser()
         # <Не тестилось, технически должно работать>
             if not flag:
@@ -189,7 +192,6 @@ def manage_group(request, group_id):
 
         if 'edit_data' in request.POST:
             name = request.POST.get('group_name', 'Empty')
-            print('§§§', request.POST, name)
             group.dbmodel.name = name
             group.dbmodel.save()
             return redirect(request.path)
