@@ -88,7 +88,7 @@ class User(DBHybrid):
             else:
                 na += 1
                 
-        if normalize:
+        if tasks and normalize:
             s = na + wa + ps + ok + st
             na = na / s
             wa = wa / s

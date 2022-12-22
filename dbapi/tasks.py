@@ -79,6 +79,9 @@ class Work(DBHybrid):
     def tasks(self):
         return [Task(x) for x in LateremTask.objects.filter(work=self.dbmodel)]
     
+    def is_valid(self):
+        return not not self.tasks()
+    
     def add_task(self, name, task_type):
         task = Task(LateremTask.objects.create(name=name,
                                                task_type=task_type,
@@ -95,9 +98,10 @@ class WorkCategory(DBHybrid):
     def works(self, accesible_for=None):
         if accesible_for:
             return [Work(x) for x in LateremWork.objects.filter(category=self.dbmodel)
-                    if accesible_for.has_access(Work(x))]
+                    if accesible_for.has_access(Work(x)) and Work(x).is_valid()]
         else:
-            return [Work(x) for x in LateremWork.objects.filter(category=self.dbmodel)]
+            return [Work(x) for x in LateremWork.objects.filter(category=self.dbmodel)
+                    if Work(x).is_valid()]
 
 class Category(DBHybrid):
     __dbmodel__ = LateremCategoryCategory
