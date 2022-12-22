@@ -187,10 +187,9 @@ def manage_group(request, group_id):
             group.dbmodel.delete()
             return redirect('/teacher/groups/')
 
-        rename_form = RenameForm(request.POST)
-        if rename_form.is_valid():
-            name = rename_form.cleaned_data['name']
-            print(name)
+        if 'edit_data' in request.POST:
+            name = request.POST.get('group_name', 'Empty')
+            print('§§§', request.POST, name)
             group.dbmodel.name = name
             group.dbmodel.save()
             return redirect(request.path)
