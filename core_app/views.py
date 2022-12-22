@@ -196,14 +196,14 @@ def manage_group(request, group_id):
                 user = User.get(email=email)
                 group.remove_member(user)
                 return redirect(request.path)
-        if 'newuser' in request.POST:
-            user = User.get(email=request.POST.get('user_email'))
-            group.add_member(user)
-            return redirect(request.path)
         assign_work_form = AssignWork(request.POST)
         if assign_work_form.is_valid():
             work = Work.by_id(assign_work_form.cleaned_data['id'])
             group.assign(work, me)
+            return redirect(request.path)
+        if 'newuser' in request.POST:
+            user = User.get(email=request.POST.get('user_email'))
+            group.add_member(user)
             return redirect(request.path)
     else:
         assign_work_form=AssignWork()

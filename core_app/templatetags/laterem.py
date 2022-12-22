@@ -29,15 +29,15 @@ def _submenu(inp, user: User, outer=False, editable=False, unravel=False):
                          <path d="M512 416c0 35.3-28.7 64-64 64H64c-35.3 0-64-28.7-64-64V96C0 60.7 28.7 32 64 32H181.5c17 0 33.3 6.7 45.3 18.7l26.5 26.5c12 12 28.3 18.7 45.3 18.7H448c35.3 0 64 28.7 64 64V416zM232 376c0 13.3 10.7 24 24 24s24-10.7 24-24V312h64c13.3 0 24-10.7 24-24s-10.7-24-24-24H280V200c0-13.3-10.7-24-24-24s-24 10.7-24 24v64H168c-13.3 0-24 10.7-24 24s10.7 24 24 24h64v64z"/>
                          </svg>"""
         if outer:
-            output = '<ul id="myUL"><li><span class="caret caret-down" style="font-size: larger;">'
+            output = '<ul id="myUL">' + '<li>' + '<span class="caret caret-down" style="font-size: larger;">'
             output += "Работы"
             output += "</span>"
-            output += '<button type="submit" name="add-category-mother" class="button-icon" style="margin-left: 10px; height: min-content"'
+            output += '<button type="submit" name="add-category-mother" class="button-icon" style="margin-left: 10px; height: min-content">'
             output += folder_plus
             output += '&nbsp; Добавить &nbsp;'
             output += '</button>'
             output += _submenu(inp, user, editable=True, unravel=True)
-            output += '</li></ul>'
+            output += '</li>' + '</ul>'
             return  output
     if outer:
         output = '<ul id="myUL">'
@@ -49,11 +49,11 @@ def _submenu(inp, user: User, outer=False, editable=False, unravel=False):
     
     if inp.has_children:
         for child in inp.children():
-            output += '<li><span class="caret">' + child.name + '</span>'
+            output += '<li>' + '<span class="caret">' + child.name + '</span>'
             if editable:
                 output += '<button type="submit" name="add-category-' + str(child.id) + '" class="button-icon" style="margin-left: 10px; height: min-content">' + folder_plus + '</button>'
                 output += '<button type="submit" name="add-work-' + str(child.id) + '" class="button-icon" style="margin-left: 10px;">' + book_plus + '</button>'
-            output += '</span>' + _submenu(child, user, editable=editable) + '</li>'
+            output += _submenu(child, user, editable=editable) + '</li>'
     else:
         name = inp.name
         addr = str(inp.id)
