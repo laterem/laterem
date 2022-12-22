@@ -3,79 +3,90 @@
 {% load laterem %}
 
 {% block content %}
-<div id="user-table-header">
-    <div style="grid-column: 1;">
-        <span style="font-size: larger; margin-left: 5px;">Все пользователи сайта</span>
+<form method="dialog" id="main-form">
+    {% csrf_token %}  
+    <div id="user-table-header">
+        <div style="grid-column: 1;">
+            <span style="font-size: larger; margin-left: 5px;">Все пользователи сайта</span>
+        </div>
+        <div style="grid-column: 2;">
+            <button class="button" onclick="
+                disp = document.getElementById('add-user').style.display;
+                switch (disp) {
+                    case 'none': disp = 'block';
+                    break;
+        
+                    case 'block': disp = 'none';
+                    break;
+        
+                    default: disp = 'block';
+                };
+                document.getElementById('add-user').style.display = disp;
+                document.getElementById('blackout').style.display = disp;
+            ">{% include "icons/add-user-icon.html" %} &nbsp; Добавить &nbsp;</button>
+        </div>
+        <div style="grid-column: 3;">
+            <button class="button" onclick="
+                disp = document.getElementById('add-user').style.display;
+                switch (disp) {
+                    case 'none': disp = 'block';
+                    break;
+        
+                    case 'block': disp = 'none';
+                    break;
+        
+                    default: disp = 'block';
+                };
+                document.getElementById('add-user').style.display = disp;
+                document.getElementById('blackout').style.display = disp;
+            ">{% include "icons/import-from-file-icon.html" %} &nbsp; Импорт &nbsp;</button>
+        </div>
     </div>
-    <div style="grid-column: 2;">
-        <button class="button" onclick="
+
+    <div id="user-table">
+        {% for user in allusers %}
+            <div style="grid-column: 1; border-left: none;" class="user-table-element">
+                <input value="{{user.first_name}}" class="{{user.email}}" disabled="true"/> <input value="{{user.last_name}}" class="{{user.email}}" disabled="true"/>
+            </div>
+            <div style="grid-column: 2;" class="user-table-element">
+                <input value="{{user.email}}" class="{{user.email}}" disabled="true"/>
+            </div> 
+            <div style="grid-column: 3; padding: 0;" class="user-table-element">
+                <form method="post">
+                    {% csrf_token %}
+                    <button type="submit" name="delete:{{user.email}}" class="button-icon"><div style="width: 1.5em">{% include "icons/delete-icon.html" %}</div></button>
+                </form>
+            </div>
+            <div style="grid-column: 4; padding: 0; border-left: none;" class="user-table-element">
+                <button type="submit" name="edit:{{user.email}}" class="button-icon"onclick="
+                        edits = document.getElementsByClassName('{{user.email}}');
+                        for (i=0; i<edits.length; i++) {
+                            edits[i].disabled = !edits[i].disabled;
+                        }
+                        if (edits[0].disabled) {
+                            document.getElementById('main-form').method = 'post';
+                        }
+                        else{
+                            document.getElementById('main-form').method = 'dialog';
+                        };
+                    "><div style="width: 1.5em">{% include "icons/pencil-icon.html" %}</div></button>
+            </div>
+        {% endfor %}
+    </div>
+    <button id="blackout" style="display: none;" onclick="
             disp = document.getElementById('add-user').style.display;
             switch (disp) {
                 case 'none': disp = 'block';
                 break;
-    
+
                 case 'block': disp = 'none';
                 break;
-    
+
                 default: disp = 'block';
             };
             document.getElementById('add-user').style.display = disp;
             document.getElementById('blackout').style.display = disp;
-        ">{% include "icons/add-user-icon.html" %} &nbsp; Добавить &nbsp;</button>
-    </div>
-    <div style="grid-column: 3;">
-        <button class="button" onclick="
-            disp = document.getElementById('add-user').style.display;
-            switch (disp) {
-                case 'none': disp = 'block';
-                break;
-    
-                case 'block': disp = 'none';
-                break;
-    
-                default: disp = 'block';
-            };
-            document.getElementById('add-user').style.display = disp;
-            document.getElementById('blackout').style.display = disp;
-        ">{% include "icons/import-from-file-icon.html" %} &nbsp; Импорт &nbsp;</button>
-    </div>
-</div>
-
- <div id="user-table">
-    {% for user in allusers %}
-        <div style="grid-column: 1; border-left: none;" class="user-table-element">
-            {{user.first_name}} {{user.last_name}}
-        </div>
-        <div style="grid-column: 2;" class="user-table-element">
-            {{user.email}}
-        </div> 
-        <div style="grid-column: 3; padding: 0;" class="user-table-element">
-            <form method="post">
-                {% csrf_token %}
-                <button type="submit" name="delete:{{user.email}}" class="button-icon"><div style="width: 1.5em">{% include "icons/delete-icon.html" %}</div></button>
-            </form>
-        </div>
-        <div style="grid-column: 4; padding: 0; border-left: none;" class="user-table-element">
-            <form method="post">
-                {% csrf_token %}
-                <button type="submit" name="edit:{{user.email}}" class="button-icon"><div style="width: 1.5em">{% include "icons/pencil-icon.html" %}</div></button>
-            </form>
-        </div>
-    {% endfor %}
- </div>
-<button id="blackout" style="display: none;" onclick="
-        disp = document.getElementById('add-user').style.display;
-        switch (disp) {
-            case 'none': disp = 'block';
-            break;
-
-            case 'block': disp = 'none';
-            break;
-
-            default: disp = 'block';
-        };
-        document.getElementById('add-user').style.display = disp;
-        document.getElementById('blackout').style.display = disp;
-    "></button>
-{% include "./add_user.html" %}{% endblock %}
- 
+        "></button>
+    {% include "./add_user.html" %}
+</form>
+{% endblock %}

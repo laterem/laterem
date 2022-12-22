@@ -453,7 +453,7 @@ div#all-groups-table {
 }
 
 .group-table-element, .user-table-element,
-.all-groups-table-element {
+.all-groups-table-element, .work-table-element {
     display: flex;
     padding: 5px;
     border-collapse: collapse;
@@ -463,7 +463,9 @@ div#all-groups-table {
 .group-table-element:nth-of-type(8n+2), .group-table-element:nth-of-type(8n+3),
 .user-table-element:nth-of-type(8n+4), .user-table-element:nth-of-type(8n+1),
 .user-table-element:nth-of-type(8n+2), .user-table-element:nth-of-type(8n+3),
-.all-groups-table-element:nth-of-type(2n+1) {
+.all-groups-table-element:nth-of-type(2n+1),
+.work-table-element:nth-of-type(6n+1), .work-table-element:nth-of-type(6n+2),
+.work-table-element:nth-of-type(6n+3) {
     background-color: var(--content-hover-color);
 }
 
@@ -473,7 +475,7 @@ div#all-groups-table {
 }
 
 div#user-table-header, div#group-table-header,
-div#all-groups-table-header {
+div#all-groups-table-header, div#work-table-header {
     display: grid;
     border-radius: 10px 10px 0 0;
     overflow: hidden;
@@ -499,7 +501,7 @@ div#all-groups-table, div#all-groups-table-header {
     padding: 4px;
 }
 
-div#group-table {
+div#group-table, div#work-table {
     display: grid; 
     grid-template-columns: auto auto 40px 40px;
     
@@ -513,7 +515,11 @@ div#group-table {
     margin-bottom: 10px;
 }
 
-#group-table-header * {
+div#work-table  {
+    grid-template-columns: auto auto 40px;
+}
+
+#group-table-header *, #work-table-header * {
     display: flex;
     align-items: center;
     padding: 4px;
@@ -526,10 +532,10 @@ div#group-table {
     align-items: center;
 }
 
-.group-info:disabled {
+.group-info:disabled, .user-table-element input:disabled, input:disabled {
     border: none;
-    color: var(--body-font-color);
-    background-color: var(--content-background-color);
+    color: currentColor;
+    background-color: var(--header-dropdown-color);
 }
 
 #group-manage-header div:nth-of-type(2n) {

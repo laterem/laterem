@@ -3,12 +3,26 @@
 {% load laterem %}
 
 {% block content %}
-    <div style="display: grid; grid-template-columns: auto max-content; align-items: center;">
-        <h2 style="grid-column: 1;">{{work.name}}</h2>
-        <button style="grid-column: 2;" class="button-icon"><div style="width: 2em; padding: 0;">{% include "icons/pencil-icon.html" %}</div></button>
-    </div>
-    <div id="group-table-header">
-        <p style="grid-column: 1;">Задания</p>
+    <form method="dialog" id="main-form">
+        {% csrf_token %}
+        <div style="display: grid; grid-template-columns: auto max-content; align-items: center;">
+            <div style="grid-column: 1;"><input value="{{work.name}}" disabled="true" style="font-size: larger;" id="work_name"/></div>
+            <button style="grid-column: 2;" class="button-icon" onclick="
+                    edit = document.getElementById('work_name');
+                    edit.disabled = !edit.disabled;
+                    if (!edit.disabled) {
+                        document.getElementById('main-form').method = 'dialog';
+                    }
+                    else {
+                        document.getElementById('main-form').method = 'post';
+                    }
+                    document.getElementsById('work_name') = edit;
+                "><div style="width: 2em; padding: 0;">{% include "icons/pencil-icon.html" %}</div></button>
+        </div>
+    </form>
+    
+    <div id="work-table-header">
+        <div style="grid-column: 1;"><span style="font-size: larger;">Задания</span></div>
         <div style="grid-column: 2;">
             <button class="button" onclick="
                 disp = document.getElementById('add-task').style.display;
@@ -42,15 +56,15 @@
             ">{% include "icons/import-from-file-icon.html" %} &nbsp; Импорт &nbsp;</button>
         </div>
     </div>
-    <div id="group-table">
+    <div id="work-table">
     {% for task in work.tasks %}
-        <div style="grid-column: 1; border-left: none;" class="group-table-element">
+        <div style="grid-column: 1; border-left: none;" class="work-table-element">
             {{task.name}}
         </div>
-        <div style="grid-column: 2;" class="group-table-element">
+        <div style="grid-column: 2;" class="work-table-element">
             {{task.task_type}}
         </div> 
-        <div style="grid-column: 3; padding: 0;" class="group-table-element">
+        <div style="grid-column: 3; padding: 0;" class="work-table-element">
             <form method="post">
                 {% csrf_token %}
                 <button type="submit" name="delete:{{task.id}}" class="button-icon"><div style="width: 1.5em">{% include "icons/delete-icon.html" %}</div></button>
