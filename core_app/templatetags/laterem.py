@@ -41,11 +41,10 @@ def _submenu(inp, user: User, outer=False, editable=False, unravel=False):
             return  output
     if outer:
         output = '<ul id="myUL">'
+    elif unravel:
+        output = '<ul class="nested active">'
     else:
-        if unravel:
-            output = '<ul class="nested active">'
-        else:
-            output = '<ul class="nested">'
+        output = '<ul class="nested">'
     
     if inp.has_children:
         for child in inp.children():
@@ -69,7 +68,7 @@ def _submenu(inp, user: User, outer=False, editable=False, unravel=False):
             output += '<li><a href="' + '/works/' + addr + '">' + name + '</a>' + draw_progress_line(line_args) + '</li>'
         else:
             output += '<li><a href="' + '/teacher/works/' + addr + '">' + name + '</a>' + '</li>'
-    return output
+    return output + '</ul>'
 
     
 
