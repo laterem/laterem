@@ -25,11 +25,11 @@ from secret_data import DJANGO_SECRET_KEY
 SECRET_KEY = DJANGO_SECRET_KEY
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 # SESSION_COOKIE_SECURE = True
 # CSRF_COOKIE_SECURE = True
 
-ALLOWED_HOSTS = ['localhost']
+ALLOWED_HOSTS = ['localhost', 'laterem2.pythonanywhere.com']
 
 
 # Application definition
