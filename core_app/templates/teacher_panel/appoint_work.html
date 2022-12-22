@@ -1,0 +1,12 @@
+<form method="post">
+    {% csrf_token %}
+    <table id="appoint-work" style="display: none;">
+        <tr>
+            <td>{{ assign_work_form.as_p }}</td>
+        </tr>
+        <tr></tr>
+        <tr>
+            <td colspan="2"><button type="submit" name="newuser" class="button">Назначить работу</button></td>
+        </tr>
+    </table>
+</form>
