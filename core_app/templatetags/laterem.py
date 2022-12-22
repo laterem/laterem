@@ -79,7 +79,6 @@ def _submenu(inp, user: User, path=[], outer=False, fillable=False, first_active
 
 @register.simple_tag(takes_context=True)
 def tree(context, treename):
-    return 'I AM A TREE'
     try:
         user = context['user']
         return SafeString(_submenu(context[treename], user, outer=True))
