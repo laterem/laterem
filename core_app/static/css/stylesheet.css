@@ -436,7 +436,7 @@ table#add-user, table#add-group-member, table#add-task, table#appoint-work {
     backdrop-filter: blur(1px);
 }
  
-div#user-table, div#all-groups-table {
+div#user-table, div#all-groups-table, div#task-table {
     display: grid; 
     grid-template-columns: auto auto 40px 40px;
     
@@ -448,12 +448,13 @@ div#user-table, div#all-groups-table {
     width: 100%;
 }
 
-div#all-groups-table {
+div#all-groups-table div#task-table {
     grid-template-columns: 100%;
 }
 
 .group-table-element, .user-table-element,
-.all-groups-table-element, .work-table-element {
+.all-groups-table-element, .work-table-element,
+.task-table-element {
     display: flex;
     padding: 5px;
     border-collapse: collapse;
@@ -465,17 +466,20 @@ div#all-groups-table {
 .user-table-element:nth-of-type(8n+2), .user-table-element:nth-of-type(8n+3),
 .all-groups-table-element:nth-of-type(2n+1),
 .work-table-element:nth-of-type(6n+1), .work-table-element:nth-of-type(6n+2),
-.work-table-element:nth-of-type(6n+3) {
+.work-table-element:nth-of-type(6n+3),
+.task-table-element:nth-of-type(2n+1) {
     background-color: var(--content-hover-color);
 }
 
-.user-table-element a, .all-groups-table-element a {
+.user-table-element a, .all-groups-table-element a,
+.task-table-element a {
     text-decoration: none;
     color: var(--body-font-color);
 }
 
 div#user-table-header, div#group-table-header,
-div#all-groups-table-header, div#work-table-header {
+div#all-groups-table-header, div#work-table-header,
+div#task-table-header {
     display: grid;
     border-radius: 10px 10px 0 0;
     overflow: hidden;
@@ -488,14 +492,16 @@ div#all-groups-table-header, div#work-table-header {
 }
 
 div#user-table-header, div#user-table,
-div#all-groups-table, div#all-groups-table-header {
+div#all-groups-table, div#all-groups-table-header,
+div#task-table, div#task-table-header {
     margin-left: -10px;
     margin-right: -10px;
     border: none;
     width: calc(100% + 20px)
 }
 
-#user-table-header *, #all-groups-table-header * {
+#user-table-header *, #all-groups-table-header *,
+#task-table-header * {
     display: inline-flex;
     align-items: center;
     padding: 4px;

@@ -224,9 +224,9 @@ def manage_group(request, group_id):
                                                                                       "users": users,
                                                                                       }))
 
-@permission_required("can_manage_tasks")
+# @permission_required("can_manage_tasks")
 def task_panel(request):
-    ...
+    return render(request, 'teacher_panel/task_panel.html', render_args(additional={"all_templates": LTM_SCANNER.all_shoots()}))
 
 # Рендер страницы работы
 @login_required
