@@ -21,6 +21,7 @@ class User(DBHybrid):
 
     def has_global_permission(self, name):
         # TODO: Оптимизировать сырым SQL запросом / вырезать
+        
         return bool([x for x in LateremGroup.objects.filter(lateremgroupmembership__user=self.dbmodel) if x.__getattribute__(name) == True])
 
     def solve(self, task, answers, verdict):
@@ -35,6 +36,9 @@ class User(DBHybrid):
         return new
     
     def has_access(self, work):
+        if self.has_global_permission("can_manage_works"):
+            return True
+
         for group in self.groups():
             assignments = LateremAssignment.objects.filter(group=group.dbmodel, work=work.dbmodel)
             if assignments: return True
