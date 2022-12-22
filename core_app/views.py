@@ -82,7 +82,7 @@ def users_panel(request):
             flag = False
             for signal in request.POST:
                 if signal.startswith('delete:'):
-                    email = signal.lstrip('delete:')
+                    email = signal[len('delete:'):]
                     user = LateremUser.objects.get(email=email)
                     user.delete()
                     flag = True
