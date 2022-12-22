@@ -160,9 +160,9 @@ def manage_work(request, work_id):
             work.dbmodel.save()
             return redirect(request.path)
         add_task_form = AddTask(request.POST)
-        if add_task_form.is_valid():
-            task = work.add_task(name=add_task_form.cleaned_data['name'], 
-                                 task_type=add_task_form.cleaned_data['task_type'])
+        if 'newtask' in request.POST:
+            task = work.add_task(name=request.POST.get('task_name'), 
+                                 task_type=request.POST.get('task_type'))
             return redirect(request.path)
     else:
         add_task_form = AddTask()
