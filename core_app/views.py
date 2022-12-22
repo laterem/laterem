@@ -194,7 +194,9 @@ def manage_group(request, group_id):
 
         if 'edit_data' in request.POST:
             name = request.POST.get('group_name', 'Empty')
+            description = request.POST.get('group_description')
             group.dbmodel.name = name
+            # group.dbmodel.description = description
             group.dbmodel.save()
             return redirect(request.path)
 
