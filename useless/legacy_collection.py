@@ -1,4 +1,4 @@
-from ltm.tasks import Verdicts
+from dbapi.tasks import Verdicts
 from context_objects import SEPARATOR, WORKS
 
 def init_personal_tree(tree):
@@ -139,3 +139,30 @@ def rdir_to_tree(sourcepath, layers=-1):
             return output
     else:
         return []
+
+LateremCategoryCategory = None
+Category = None
+def tree(self, accesible_for=None):
+    children = self.categories()
+    ret = {}
+    for child in children:
+        if child.__dbmodel__ == LateremCategoryCategory:
+            result = child.tree(accesible_for)
+        else:
+            result = child.works(accesible_for)
+        if result:
+            ret[child.name] = result
+    return ret
+
+@staticmethod
+def global_tree(accesible_for=None):
+    roots = Category.roots()
+    ret = {}
+    for child in roots:
+        if child.__dbmodel__ == LateremCategoryCategory:
+            result = child.tree(accesible_for)
+        else:
+            result = child.works(accesible_for)
+        if result:
+            ret[child.name] = result
+    return ret

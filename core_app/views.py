@@ -4,7 +4,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.core.exceptions import PermissionDenied
 from context_objects import LTM_SCANNER
 from os.path import join as pathjoin
-from .views_functions import render_args, change_color_theme, DEBUG_assure_admin, get_category_for_work
+from .views_functions import render_args, change_color_theme, DEBUG_assure_admin
 from .models import *
 from django.contrib.auth.decorators import login_required
 from .forms import LoginForm, NewUser, AddMember, AssignWork
@@ -122,13 +122,13 @@ def work_panel(request):
             elif signal.startswith('add-category-'):
                 cat_id = signal[len('add-category-'):]
                 if cat_id == 'mother':
-                    with Category(LateremCategoryCategory.objects.create(name="Новая категория",
+                    with Category(LateremCategory.objects.create(name="Новая категория",
                                                                          )) as new:
                         return redirect(request.path)
                 else:
                     # /!\ Typecast warning
                     cat = int(cat_id)
-                    with Category(LateremCategoryCategory.objects.create(name="Новая категория",
+                    with Category(LateremCategory.objects.create(name="Новая категория",
                                                                          root_category=cat
                                                                          )) as new:
                         return redirect(request.path)

@@ -12,6 +12,7 @@ class LateremGroup(models.Model):
     can_manage_groups = models.BooleanField(default=False)
     can_manage_users = models.BooleanField(default=False)
     can_manage_works = models.BooleanField(default=False)
+    can_manage_tasks = models.BooleanField(default=False)
 
 class LateremGroupMembership(models.Model):
     user = models.ForeignKey(LateremUser, on_delete=models.CASCADE)
@@ -27,19 +28,15 @@ class LateremGroupMembership(models.Model):
     can_examine_solutions = models.BooleanField(default=False)
     can_solve_works = models.BooleanField(default=True)
 
-class LateremCategoryCategory(models.Model):
+class LateremCategory(models.Model):
     name = models.CharField(max_length=128)
     root_category = models.IntegerField(null=True)
-
-class LateremWorkCategory(models.Model):
-    name = models.CharField(max_length=128)
-    root_category = models.ForeignKey(LateremCategoryCategory, null=True, on_delete=models.SET_NULL)
-
+    
 class LateremWork(models.Model):
     id = models.AutoField(primary_key=True,unique=True)
     name = models.CharField(max_length=128)
     author = models.ForeignKey(LateremUser, on_delete=models.DO_NOTHING)
-    category = models.ForeignKey(LateremWorkCategory, null=True, on_delete=models.SET_NULL)
+    category = models.ForeignKey(LateremCategory, null=True, on_delete=models.SET_NULL)
 
 class LateremTask(models.Model):
     name = models.CharField(max_length=128)

@@ -4,7 +4,7 @@ import json
 from ltc.ltc_compiler import LTCCompiler, LTC
 from context_objects import LTM_SCANNER
 from extratypes import DBHybrid, NotSpecified
-from core_app.models import LateremTask, LateremWorkCategory, LateremWork, LateremCategoryCategory
+from core_app.models import LateremTask, LateremCategory, LateremWork
 
 
 TEMPLATE_CLONING_PATH = 'core_app/templates/static_copies/'
@@ -116,65 +116,16 @@ class Work(DBHybrid):
     def remove_task(self, task):
         task.dbmodel.delete()
 
-class WorkCategory(DBHybrid):
-    __dbmodel__ = LateremWorkCategory
-
-    has_children = True
-
-    def is_visible(self, user, access_buffer=NotSpecified):
-        if user is None or user is NotSpecified:
-            if access_buffer is not NotSpecified:
-                access_buffer[self] = True
-            return True
-        if user.has_global_permission('can_manage_works'):
-            if access_buffer is not NotSpecified:
-                access_buffer[self] = True
-            return True
-        if access_buffer is not NotSpecified:
-            if self in access_buffer:
-                return access_buffer[self]
-            else:
-                result = any(map(lambda x: x.is_visible(user, access_buffer), self.children()))
-                access_buffer[self] = result
-                return result
-        return any(map(lambda x: x.is_visible(user, access_buffer), self.children()))
-
-    def __hash__(self):
-        return hash('WC' + str(self.id))
-
-    def works(self, accesible_for=None):
-        if accesible_for:
-            return [Work(x) for x in LateremWork.objects.filter(category=self.dbmodel)
-                    if accesible_for.has_access(Work(x))]
-        else:
-            return [Work(x) for x in LateremWork.objects.filter(category=self.dbmodel)]
-    
-    def children(self, *args, **kwargs):
-        return self.works(*args, **kwargs)
-
 class Category(DBHybrid):
-    __dbmodel__ = LateremCategoryCategory
+    __dbmodel__ = LateremCategory
 
     has_children = True
         
     @staticmethod
     def roots():
-        catcat = [Category(x) for x in LateremCategoryCategory.objects.filter(root_category__isnull=True)]
-        worcat = [WorkCategory(x) for x in LateremWorkCategory.objects.filter(root_category__isnull=True)]
-        return catcat + worcat
-        
-    @staticmethod
-    def global_tree(accesible_for=None):
-        roots = Category.roots()
-        ret = {}
-        for child in roots:
-            if child.__dbmodel__ == LateremCategoryCategory:
-                result = child.tree(accesible_for)
-            else:
-                result = child.works(accesible_for)
-            if result:
-                ret[child.name] = result
-        return ret
+        cat = [Category(x) for x in LateremCategory.objects.filter(root_category__isnull=True)]
+        wor = [Work(x) for x in LateremWork.objects.filter(category__isnull=True)]
+        return cat + wor
     
     def __hash__(self):
         return hash('CC' + str(self.id))
@@ -197,40 +148,38 @@ class Category(DBHybrid):
                 return result
         return any(map(lambda x: x.is_visible(user, access_buffer), self.children()))
 
-    def categories(self, accessible_for=None, access_buffer=NotSpecified):
+    def categories(self, accessible_for=NotSpecified, access_buffer=NotSpecified):
         result = []
-
-        for x in LateremWorkCategory.objects.filter(root_category=self.dbmodel):
-            cat = WorkCategory(x)
-            if accessible_for is not NotSpecified:
-                if cat.is_visible(accessible_for, access_buffer):
-                    result.append(cat)
-            else:
-                 result.append(cat)
-        for x in LateremCategoryCategory.objects.filter(root_category=self.dbmodel.id):
+        for x in LateremCategory.objects.filter(root_category=self.dbmodel.id):
             cat = Category(x)
             if accessible_for is not NotSpecified:
                 if cat.is_visible(accessible_for, access_buffer):
                     result.append(cat)
             else:
                  result.append(cat)
+        return result
 
+    def works(self, accesible_for=NotSpecified, access_buffer=NotSpecified):
+        result = []
+        for x in LateremWork.objects.filter(category=self.dbmodel):
+            work = Work(x)
+            if accesible_for is not NotSpecified:
+                if work in access_buffer:
+                    if access_buffer[work]:
+                        result.append(work)
+                    continue
+                if accesible_for.has_access(work):
+                    if access_buffer is not NotSpecified:
+                        access_buffer[work] = True
+                    result.append(work)
+            else:
+                if access_buffer is not NotSpecified:
+                    access_buffer[work] = True
+                result.append(work)
         return result
 
     def children(self, *args, **kwargs):
-        return self.categories(*args, **kwargs)
-
-    def tree(self, accesible_for=None):
-        children = self.categories()
-        ret = {}
-        for child in children:
-            if child.__dbmodel__ == LateremCategoryCategory:
-                result = child.tree(accesible_for)
-            else:
-                result = child.works(accesible_for)
-            if result:
-                ret[child.name] = result
-        return ret
+        return self.categories(*args, **kwargs) + self.works(*args, **kwargs)
 
 class RootsMimic:
     has_children = True

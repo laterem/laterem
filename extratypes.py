@@ -100,6 +100,7 @@ class Scanner:
         self.root = root
         self.table = {}
         self.leaves = []
+        self.shoots = []
     
     @staticmethod
     def _scan(roots, id):
@@ -116,6 +117,32 @@ class Scanner:
                 ext.append(p)
         return Scanner._scan(roots + ext, id)
     
+    def all_shoots(self, use_cache=True):
+        if use_cache and self.shoots:
+            return self.shoots
+        shoots = []
+        roots = [self.root]
+        while roots:
+            root = roots.pop(0)
+            children = listdir(root)
+            for child in children:
+                path = join(root, child)
+
+                grandchildren = listdir(path)
+                flag = False
+                for grandchild in grandchildren:
+                    if isfile(join(path, grandchild)):
+                        flag = True
+                        break
+
+                if flag:
+                    shoots.append(child)
+                else:
+                    roots.append(path)
+        if use_cache:
+            self.shoots = shoots
+        return shoots
+
     def all_leaves(self, use_cache=True):
         if use_cache and self.leaves:
             return self.leaves

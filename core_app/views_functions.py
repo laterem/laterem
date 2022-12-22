@@ -15,7 +15,7 @@ if DEBUG_DBSamples in LATEREM_FLAGS:
         if not admin:
             admin = LateremUser.objects.create_user(email=email, password=password, username=email, settings='{}')
             admin.save()
-            testcat = LateremWorkCategory.objects.create(name='Misc.')
+            testcat = LateremCategory.objects.create(name='Misc.')
             admins = LateremGroup.objects.create(name="ADMINS",
                                                 can_solve_tasks=True,
                                                 can_manage_groups=True,
@@ -100,8 +100,8 @@ def render_args(*,
     if meta_all_works_available:
         ret['allworks'] = map(Work, LateremWork.objects.all())
 
-    if meta_all_works_available:
-        ret['alltasktypes'] = LTM_SCANNER.all_leaves()
+    if meta_all_task_types_available:
+        ret['alltasktypes'] = LTM_SCANNER.all_shoots()
 
     for key, value in additional.items():
         ret[key] = value
@@ -119,11 +119,3 @@ def change_color_theme(user, request):
     
     user.set_settings(theme=usertheme)
     request.session['color-theme'] = usertheme
-
-def get_category_for_work(post, label='new-work_'):
-    res = dict()
-    for key, value in dict(post).items():
-        print(key[:len(label)], label)
-        if key[:len(label)] == label:
-            res[key[len(label):]] = value
-    return res
