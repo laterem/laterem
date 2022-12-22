@@ -28,6 +28,16 @@ def _submenu(inp, user: User, outer=False, editable=False, unravel=False):
         folder_plus = """<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" style="width: 1.5em; height: 1.5em; vertical-align: middle;fill: currentColor;overflow: hidden;">
                          <path d="M512 416c0 35.3-28.7 64-64 64H64c-35.3 0-64-28.7-64-64V96C0 60.7 28.7 32 64 32H181.5c17 0 33.3 6.7 45.3 18.7l26.5 26.5c12 12 28.3 18.7 45.3 18.7H448c35.3 0 64 28.7 64 64V416zM232 376c0 13.3 10.7 24 24 24s24-10.7 24-24V312h64c13.3 0 24-10.7 24-24s-10.7-24-24-24H280V200c0-13.3-10.7-24-24-24s-24 10.7-24 24v64H168c-13.3 0-24 10.7-24 24s10.7 24 24 24h64v64z"/>
                          </svg>"""
+        pencil_icon = """<svg version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+                                width="1.5em" height="1.5em" viewBox="0 0 297.068 297.068" style="enable-background:new 0 0 297.068 297.068;" xml:space="preserve">
+                            <g>
+                                <path d="M288.758,46.999l-38.69-38.69c-5.347-5.354-12.455-8.303-20.02-8.303s-14.672,2.943-20.02,8.297L28.632,190.266L0,297.061
+                                    l107.547-28.805L288.745,87.045c5.36-5.354,8.323-12.462,8.323-20.026S294.105,52.347,288.758,46.999z M43.478,193.583
+                                    L180.71,55.823l60.554,60.541L103.761,253.866L43.478,193.583z M37.719,206.006l53.368,53.362l-42.404,11.35L26.35,248.384
+                                    L37.719,206.006z M279.657,77.951l-19.493,19.505l-60.579-60.541l19.544-19.525c5.823-5.848,16.016-5.842,21.851,0l38.69,38.696
+                                    c2.924,2.918,4.544,6.8,4.544,10.926C284.214,71.139,282.594,75.027,279.657,77.951z"/>
+                            </g>
+                         </svg>"""
         if outer:
             output = '<ul id="myUL">' + '<li>' + '<span class="caret caret-down" style="font-size: larger;">'
             output += "Работы"
@@ -48,10 +58,13 @@ def _submenu(inp, user: User, outer=False, editable=False, unravel=False):
     
     if inp.has_children:
         for child in inp.children():
-            output += '<li>' + '<span class="caret">' + child.name + '</span>'
+            output += '<li>' + '<span class="caret">' + '<input value="' + child.name + '" id="input-' + str(child.id) + '" disabled="true"/>' + '</span>'
             if editable:
+                change_name = "edit=getElementById('input-" + str(child.id) + "'); if (tree_is_editing) {document.getElementById('edit-" + str(child.id) + "').type = 'submit';}; tree_is_editing = !tree_is_editing; edit.disabled = false; getElementById('input-" + str(child.id) + "') = edit;"
+                output += '<button type="button" name="edit-' + str(child.id) + '" id="edit-' + str(child.id) + '" class="button-icon" style="margin-left: 10px;" onclick="' + change_name + '">' + pencil_icon + '</button>'
                 output += '<button type="submit" name="add-category-' + str(child.id) + '" class="button-icon" style="margin-left: 10px; height: min-content">' + folder_plus + '</button>'
                 output += '<button type="submit" name="add-work-' + str(child.id) + '" class="button-icon" style="margin-left: 10px;">' + book_plus + '</button>'
+                
             output += _submenu(child, user, editable=editable) + '</li>'
     else:
         name = inp.name

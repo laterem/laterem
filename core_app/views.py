@@ -132,6 +132,10 @@ def work_panel(request):
                                                                          root_category=cat
                                                                          )) as new:
                         return redirect(request.path)
+            elif signal.startswith('edit-'):
+                category = signal[len('edit-'):]
+                # Изменение имени категории с id = category на request.POST.get('input-' + category)
+
     return render(request, "teacher_panel/work_panel.html", render_args(meta_all_works_available=True,
                                                                         me=User(request.user),
                                                                         ))

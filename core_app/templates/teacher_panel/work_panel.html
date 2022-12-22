@@ -11,6 +11,7 @@
         </div>
         {% endfor %}
     </div> -->
+    <script>tree_is_editing=false;</script>
     <form method="post">
         {% csrf_token %}
         {% fillable_tree "workdir" %}
