@@ -154,7 +154,7 @@ def manage_work(request, work_id):
             return redirect(request.path)
         add_task_form = AddTask(request.POST)
         if add_task_form.is_valid():
-            task = work.add_task(name=add_task_form.cleaned_data['name'], 
+            task = work.add_task(name=add_task_form.cleaned_data['task_name'], 
                                  task_type=add_task_form.cleaned_data['task_type'])
             return redirect(request.path)
     else:
