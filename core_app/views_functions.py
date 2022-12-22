@@ -5,7 +5,7 @@ from dbapi.groups import Group
 from dbapi.users import User
 from .models import LateremUser
 from extratypes import NotSpecified
-from context_objects import LATEREM_FLAGS, DEBUG_DBSamples
+from context_objects import LATEREM_FLAGS, DEBUG_DBSamples, LTM_SCANNER
 
 if DEBUG_DBSamples in LATEREM_FLAGS:
     from secret_data import ADMIN_PASSWORD
@@ -29,7 +29,7 @@ if DEBUG_DBSamples in LATEREM_FLAGS:
             print('\n')
             print('|\t В базе данных не было обнаружено пользователя-админа, поэтому')
             print('|\t были созданы следующие тестовые сущности:')
-            print('|\t - Пользователь-админ ' + f'("{email}"; "{password}")')
+            print('|\t - Пользователь-админ ' + f'(Почта: "{email}"; Пароль: "{password}")')
             print('|\t - Группа админов ("ADMINS")')
             print('|\t - Категория для работ ("Misc.")')
             print('\n')
@@ -45,6 +45,7 @@ def render_args(*,
                 meta_all_users_available=False,
                 meta_all_groups_available=False,
                 meta_all_works_available=False,
+                meta_all_task_types_available=False,
                 additional={}
                 ):
     ret = {}
@@ -98,6 +99,9 @@ def render_args(*,
     
     if meta_all_works_available:
         ret['allworks'] = map(Work, LateremWork.objects.all())
+
+    if meta_all_works_available:
+        ret['alltasktypes'] = LTM_SCANNER.all_leaves()
 
     for key, value in additional.items():
         ret[key] = value

@@ -90,12 +90,6 @@ def users_panel(request):
                 elif signal.startswith('edit:'):
                     email = signal.lstrip('edit:')
                     user = LateremUser.objects.get(email=email)
-                    print('±\tИзменение пользователя', email)
-                    print('±\tНовые данные:')
-                    print('±\t\tИмя:', request.POST.get('user_name'))
-                    print('±\t\tФамилия:', request.POST.get('user_lastname'))
-                    print('±\t\tПочта:', request.POST.get('user_email'))
-                    print('±\t\tПароль:', request.POST.get('user_password'))
                     user.email = request.POST.get('user_email')
                     user.password = request.POST.get('user_password')
                     user.first_name = request.POST.get('user_name')
@@ -152,8 +146,8 @@ def manage_work(request, work_id):
                                  task_type=request.POST.get('task_type'))
             return redirect(request.path)
 
-    return render(request, 'teacher_panel/work_manage.html', render_args(additional={'all_task_types': ['градиенты', 'Устное перемножение', 'фрейд'],
-                                                                                     'work': work}))
+    return render(request, 'teacher_panel/work_manage.html', render_args(meta_all_task_types_available=True,
+                                                                         additional={'work': work}))
 
 
 

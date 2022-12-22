@@ -99,7 +99,9 @@ class Scanner:
     def __init__(self, root):
         self.root = root
         self.table = {}
+        self.leaves = []
     
+    @staticmethod
     def _scan(roots, id):
         if not roots:
             return -1
@@ -113,7 +115,25 @@ class Scanner:
             if not isfile(p):
                 ext.append(p)
         return Scanner._scan(roots + ext, id)
-
+    
+    def all_leaves(self, use_cache=True):
+        if use_cache and self.leaves:
+            return self.leaves
+        leaves = []
+        roots = [self.root]
+        while roots:
+            for root in roots:
+                children = listdir(root)
+                for child in children:
+                    path = join(root, child)
+                    if isfile(path):
+                        leaves.append(child)
+                    else:
+                        roots.append(path)
+        if use_cache:
+            self.leaves = leaves
+        return leaves
+        
     def id_to_path(self, id):
         if id not in self.table:
             self.table[id] = Scanner._scan([self.root], id)
