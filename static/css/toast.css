@@ -1,0 +1,102 @@
+:root {
+  --toast-width: 270px;
+  --toast-border-radius: 5px;
+  --toast-theme-default: #fff;
+  --toast-theme-dark: #212529;
+  --toast-theme-success: #198754;
+  --toast-theme-wa: #dc3545;
+  --toast-theme-unchecked: #ffc107;
+  --top-margin: 15px;
+  --right-margin: 15px;
+}
+
+/* Контейнер сообщений */
+.toast-container {
+  position: fixed;
+  top: var(--top-margin);
+  right: var(--right-margin);
+  width: var(--toast-width);
+}
+
+/* Каркас сообщений */
+.toast {
+  font-size: 0.875rem;
+  background-clip: padding-box;
+  border: 1px solid rgba(0, 0, 0, 0.05);
+  border-radius: var(--toast-border-radius);
+  box-shadow: 0 .125rem .25rem rgba(0, 0, 0, 0.075);
+  position: relative;
+  overflow: hidden;
+  transition: 0.3s opacity;
+}
+
+/* Разные темы сообщений */
+.toast_success {
+  color: var(--toast-theme-default);
+  background-color: var(--toast-theme-success);
+}
+
+.toast_wa {
+  color: var(--toast-theme-default);
+  background-color: var(--toast-theme-wa);
+}
+
+.toast_unchecked {
+  color: var(--toast-theme-dark);
+  background-color: var(--toast-theme-unchecked);
+}
+
+/* Инвертирование цвета кнопок на сообщениях, где необходимо */
+.toast_success .toast__close,
+.toast_wa .toast__close {
+  filter: invert(1);
+}
+
+/* Настройка перехода во вторую колонку */
+.toast:not(:last-child) {
+  margin-bottom: 0.75rem;
+}
+
+/* Скрытие закрытых уведомлений */
+.toast:not(.toast_show) {
+  display: none;
+}
+
+.toast_showing {
+  opacity: 0;
+}
+
+/* Настройки заголовка уведомления */
+.toast__header {
+  position: relative;
+  padding: 0.5rem 2.25rem 0.5rem 1rem;
+  background-color: rgba(0, 0, 0, 0.03);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+/* Скрытие сообщение вручную */
+.toast__close {
+  content: "";
+  position: absolute;
+  top: 0.75rem;
+  right: 0.75rem;
+  width: 0.875em;
+  height: 0.875em;
+  background: transparent url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='%23000'%3e%3cpath d='M.293.293a1 1 0 011.414 0L8 6.586 14.293.293a1 1 0 111.414 1.414L9.414 8l6.293 6.293a1 1 0 01-1.414 1.414L8 9.414l-6.293 6.293a1 1 0 01-1.414-1.414L6.586 8 .293 1.707a1 1 0 010-1.414z'/%3e%3c/svg%3e") center/0.875em auto no-repeat;
+  border: 0;
+  opacity: 0.5;
+  cursor: pointer;
+  transition: opacity 0.1s ease-in-out;
+}
+
+.toast__close:hover {
+  opacity: 1;
+}
+
+.toast__body {
+  padding: 1rem;
+}
+
+.toast_message .toast__body {
+  padding-right: 2.25rem;
+}
