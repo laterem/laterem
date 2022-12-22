@@ -1,4 +1,5 @@
 from extratypes import Literal, Flag, Scanner
+from os.path import join as pathjoin
 
 # Модуль инициализации и расположения объектов, общих для всех модулей системы
 
@@ -8,14 +9,7 @@ DEBUG_DBSamples = Flag.new()
 
 LATEREM_FLAGS = LTC_CheckerShortcuts | LTC_SingleStorage | DEBUG_DBSamples
 
-
-from sys import platform
-if platform == 'darwin':
-    SEPARATOR = '/'
-else:
-    SEPARATOR = '\\'
-
-LTM_SCANNER = Scanner('data' + SEPARATOR + 'tasks' + SEPARATOR)
+LTM_SCANNER = Scanner(pathjoin('data', 'tasks'))
 SPACE_REPLACER = '§'
 
 USER_DEFAULT_SETTINGS = {

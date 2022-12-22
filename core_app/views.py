@@ -2,7 +2,7 @@ from django.http import HttpResponse, FileResponse
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
 from django.core.exceptions import PermissionDenied
-from context_objects import SEPARATOR, LTM_SCANNER
+from context_objects import LTM_SCANNER
 from os.path import join as pathjoin
 from .views_functions import render_args, change_color_theme, DEBUG_assure_admin, get_category_for_work
 from .models import *

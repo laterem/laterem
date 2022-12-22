@@ -3,7 +3,6 @@ from django.utils.safestring import SafeString
 from dbapi.solutions import Verdicts
 from dbapi.users import User
 from dbapi.tasks import Work
-from context_objects import SEPARATOR
 
 register = template.Library()
 
