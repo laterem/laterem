@@ -35,7 +35,7 @@ class User(DBHybrid):
         return new
     
     def has_access(self, work):
-        for group in self.groups:
+        for group in self.groups():
             assignments = LateremAssignment.objects.filter(group=group.dbmodel, work=work.dbmodel)
             if assignments: return True
         assignments = LateremAssignment.objects.filter(user=self.dbmodel, work=work.dbmodel) 

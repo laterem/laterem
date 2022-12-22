@@ -7,7 +7,7 @@ from os.path import join as pathjoin
 from .views_functions import render_args, change_color_theme, DEBUG_assure_admin, get_category_for_work
 from .models import *
 from django.contrib.auth.decorators import login_required
-from .forms import LoginForm, NewUser, EditUser, AddMember, AddTask
+from .forms import LoginForm, NewUser, EditUser, AddMember, AddTask, AssignWork
 
 from dbapi.users import User
 from dbapi.tasks import Task, CompiledTask, Work, Category
@@ -171,6 +171,7 @@ def group_panel(request):
 @permission_required("can_manage_groups")
 def manage_group(request, group_id):
     group = Group.by_id(group_id)
+    me = User(request.user)
 
     if request.method == 'POST':
         for signal in request.POST:
@@ -184,11 +185,18 @@ def manage_group(request, group_id):
             user = User.get(email=add_member_form.cleaned_data['email'])
             group.add_member(user)
             return redirect(request.path)
+        assign_work_form = AssignWork(request.POST)
+        if assign_work_form.is_valid():
+            work = Work.by_id(assign_work_form.cleaned_data['id'])
+            group.assign(work, me)
+            return redirect(request.path)
     else:
         add_member_form=AddMember()
+        assign_work_form=AssignWork()
 
     return render(request, 'teacher_panel/group_manage.html', render_args(current_group=group,
-                                                                          additional={"add_member_form":add_member_form}))
+                                                                          additional={"add_member_form": add_member_form,
+                                                                                      "assign_work_form": assign_work_form}))
 
 # Рендер страницы работы
 @login_required

@@ -50,7 +50,10 @@ def render_args(*,
     ret = {}
 
     if me is not NotSpecified:
-        ret['workdir'] = Category.global_tree(me)
+        if meta_all_works_available:
+            ret['workdir'] = Category.global_tree()
+        else:
+            ret['workdir'] = Category.global_tree(me)
         ret['user'] = me
         ret['theme'] = me.get_setting('theme')
         ret['is_teacher'] = True

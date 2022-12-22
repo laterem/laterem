@@ -94,10 +94,10 @@ class WorkCategory(DBHybrid):
 
     def works(self, accesible_for=None):
         if accesible_for:
-            return [Work(x) for x in LateremWork.objects.filter(category=self.dbmodel)]
-        else:
             return [Work(x) for x in LateremWork.objects.filter(category=self.dbmodel)
                     if accesible_for.has_access(Work(x))]
+        else:
+            return [Work(x) for x in LateremWork.objects.filter(category=self.dbmodel)]
 
 class Category(DBHybrid):
     __dbmodel__ = LateremCategoryCategory

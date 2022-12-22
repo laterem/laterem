@@ -69,9 +69,9 @@ def _submenu(inp, user: User, path=[], outer=False, fillable=False, first_active
                     gray_len = stats[Verdicts.NO_ANSWER]
 
                     line_args = [("correct", green_len), ("unchecked", orange_len), ("wrong", red_len), ("no-answer", gray_len)]
-                    output += '<li><a href="' + 'http://localhost:8000/works/' + addr + '">' + name + '</a>' + draw_progress_line(line_args) + '</li>'
+                    output += '<li><a href="' + '/works/' + addr + '">' + name + '</a>' + draw_progress_line(line_args) + '</li>'
                 else:
-                    output += '<li><a href="' + 'http://localhost:8000/works/' + addr + '">' + name + '</a>' + '</li>'
+                    output += '<li><a href="' + '/teacher/works/' + addr + '">' + name + '</a>' + '</li>'
             output += '</ul></li>'
 
     output += '</ul>'
@@ -79,6 +79,7 @@ def _submenu(inp, user: User, path=[], outer=False, fillable=False, first_active
 
 @register.simple_tag(takes_context=True)
 def tree(context, treename):
+    return 'I AM A TREE'
     try:
         user = context['user']
         return SafeString(_submenu(context[treename], user, outer=True))

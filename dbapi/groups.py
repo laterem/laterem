@@ -1,4 +1,4 @@
-from core_app.models import LateremGroupMembership, LateremGroup, LateremUser, LateremWork
+from core_app.models import LateremGroupMembership, LateremGroup, LateremUser, LateremWork, LateremAssignment
 from extratypes import DBHybrid
 from .tasks import Work
 
@@ -36,6 +36,13 @@ class Group(DBHybrid):
         member = Member(user.dbmodel, self)
         return member
     
+    def assign(self, work, assigner):
+        assignment = LateremAssignment.objects.filter(group=self.dbmodel, work=work.dbmodel)
+        if not assignment:
+            assignment = LateremAssignment.objects.create(group=self.dbmodel, work=work.dbmodel, teacher=assigner.dbmodel)
+            assignment.save()
+        return assignment
+
     def remove_member(self, user):
         membership = LateremGroupMembership.objects.get(user=user.dbmodel,
                                                         group=self.dbmodel
