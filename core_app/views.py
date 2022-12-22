@@ -209,6 +209,10 @@ def manage_group(request, group_id):
                                                                                       "users": users,
                                                                                       }))
 
+@permission_required("can_manage_tasks")
+def task_panel(request):
+    ...
+
 # Рендер страницы работы
 @login_required
 def render_work(request, work_id):
