@@ -7,7 +7,11 @@
         </tr>
         <tr>
             <td>Имя шаблона:</td>
-            <td><input name="task_type"/></td>
+            <td><select name="task_type">
+                {% for task in all_task_types %}
+                    <option value="{{task}}"> {{task}} </option>
+                {% endfor %}
+            </select></td>
         </tr>
         <tr>
             <td colspan="2"><button type="submit" name="newtask" class="button">Добавить задачу в работу</button></td>

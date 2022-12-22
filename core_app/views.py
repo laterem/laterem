@@ -167,7 +167,8 @@ def manage_work(request, work_id):
     else:
         add_task_form = AddTask()
 
-    return render(request, 'teacher_panel/work_manage.html', render_args(additional={"add_task_form":add_task_form, 
+    return render(request, 'teacher_panel/work_manage.html', render_args(additional={"add_task_form": add_task_form,
+                                                                                    'all_task_types': ['градиенты', 'Устное перемножение', 'фрейд'],
                                                                                      'work': work}))
 
 
