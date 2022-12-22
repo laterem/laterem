@@ -33,3 +33,21 @@ class AddTask(forms.Form):
 
 class AssignWork(forms.Form):
     id = forms.IntegerField(label='ID работы')
+
+#class RenameForm(forms.Form):
+  #  name = forms.CharField(
+   #                 widget=forms.TextInput(
+  #                      attrs={
+     #                       "type":"text",
+         #                   "disabled":"true",
+          #                  "style":"font-size: larger;",
+           #                 "class":"group-info"
+           #             }))
+
+class RenameForm(forms.Form):
+    name = forms.CharField(widget=forms.TextInput(
+                        attrs={
+                            #"disabled":"true",
+                            "style":"font-size: larger;",
+                            #"class":"group-info"
+                        }))

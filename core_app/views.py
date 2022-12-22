@@ -7,7 +7,7 @@ from os.path import join as pathjoin
 from .views_functions import render_args, change_color_theme, DEBUG_assure_admin, get_category_for_work
 from .models import *
 from django.contrib.auth.decorators import login_required
-from .forms import LoginForm, NewUser, EditUser, AddMember, AddTask, AssignWork
+from .forms import LoginForm, NewUser, EditUser, AddMember, AddTask, AssignWork, RenameForm
 
 from dbapi.users import User
 from dbapi.tasks import Task, CompiledTask, Work, Category
@@ -145,6 +145,13 @@ def manage_work(request, work_id):
                 task = Task.by_id(id)
                 work.remove_task(task)
                 return redirect(request.path)
+        rename_form = RenameForm(request.POST)
+        if rename_form.is_valid():
+            name = rename_form.cleaned_data['name']
+            print(name)
+            work.dbmodel.name = name
+            work.dbmodel.save()
+            return redirect(request.path)
         add_task_form = AddTask(request.POST)
         if add_task_form.is_valid():
             task = work.add_task(name=add_task_form.cleaned_data['name'], 
@@ -152,8 +159,11 @@ def manage_work(request, work_id):
             return redirect(request.path)
     else:
         add_task_form = AddTask()
+        rename_form=RenameForm(initial={'name': work.name})
 
-    return render(request, 'teacher_panel/work_manage.html', render_args(additional={"add_task_form":add_task_form, 'work': work}))
+    return render(request, 'teacher_panel/work_manage.html', render_args(additional={"add_task_form":add_task_form, 
+                                                                                     "rename_form":rename_form,
+                                                                                     'work': work}))
 
 
 
@@ -173,6 +183,14 @@ def manage_group(request, group_id):
     me = User(request.user)
 
     if request.method == 'POST':
+        rename_form = RenameForm(request.POST)
+        if rename_form.is_valid():
+            name = rename_form.cleaned_data['name']
+            print(name)
+            group.dbmodel.name = name
+            group.dbmodel.save()
+            return redirect(request.path)
+
         for signal in request.POST:
             if signal.startswith('delete:'):
                 email = signal.lstrip('delete:')
@@ -192,10 +210,12 @@ def manage_group(request, group_id):
     else:
         add_member_form=AddMember()
         assign_work_form=AssignWork()
+        rename_form=RenameForm(initial={'name': group.name})
 
     return render(request, 'teacher_panel/group_manage.html', render_args(current_group=group,
                                                                           additional={"add_member_form": add_member_form,
-                                                                                      "assign_work_form": assign_work_form}))
+                                                                                      "assign_work_form": assign_work_form,
+                                                                                      "rename_form":rename_form}))
 
 # Рендер страницы работы
 @login_required
