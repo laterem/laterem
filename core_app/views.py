@@ -183,6 +183,10 @@ def manage_group(request, group_id):
     me = User(request.user)
 
     if request.method == 'POST':
+        if 'delete_group' in request.POST:
+            group.dbmodel.delete()
+            return redirect('/teacher/groups/')
+
         rename_form = RenameForm(request.POST)
         if rename_form.is_valid():
             name = rename_form.cleaned_data['name']

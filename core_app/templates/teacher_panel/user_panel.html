@@ -57,7 +57,7 @@
                     <button type="submit" name="delete:{{user.email}}" class="button-icon"><div style="width: 1.5em">{% include "icons/delete-icon.html" %}</div></button>
                 </form>
             </div>
-            <div style="grid-column: 4; padding: 0; border-left: none;" class="user-table-element">
+            <!-- <div style="grid-column: 4; padding: 0; border-left: none;" class="user-table-element">
                 <button type="submit" name="edit:{{user.email}}" class="button-icon"onclick="
                         edits = document.getElementsByClassName('{{user.email}}');
                         for (i=0; i<edits.length; i++) {
@@ -70,7 +70,7 @@
                             document.getElementById('main-form').method = 'dialog';
                         };
                     "><div style="width: 1.5em">{% include "icons/pencil-icon.html" %}</div></button>
-            </div>
+            </div> -->
         {% endfor %}
     </div>
     <button id="blackout" style="display: none;" onclick="
