@@ -3,7 +3,13 @@
     <table id="add-group-member" style="display: none;">
         <tr>
             <td>Почта:</td>
-            <td>{{add_member_form.email}}</td>
+            <td><select name="user_email">
+                {% if users %}
+                {% for user in users %}
+                    <option value="{{user.dbmodel.email}}">{{user.email}}</option>
+                {% endfor %}
+                {% endif %}
+            </select></td>
         </tr>
         <tr>
             <td colspan="2"><button type="submit" name="newuser" class="button">Добавить нового участника</button></td>

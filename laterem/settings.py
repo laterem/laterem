@@ -25,9 +25,11 @@ from secret_data import DJANGO_SECRET_KEY
 SECRET_KEY = DJANGO_SECRET_KEY
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
+# SESSION_COOKIE_SECURE = True
+# CSRF_COOKIE_SECURE = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['localhost', 'laterem2.pythonanywhere.com']
 
 
 # Application definition
@@ -122,10 +124,12 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
 
+# The URL to use when referring to static files (where they will be served from)
 STATIC_URL = 'static/'
 
 LOGIN_URL = '/login/'
 
+STATIC_ROOT = BASE_DIR / "static/"
 
 STATICFILES_DIRS = [
     BASE_DIR / "core_app/static",

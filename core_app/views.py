@@ -7,7 +7,7 @@ from os.path import join as pathjoin
 from .views_functions import render_args, change_color_theme, DEBUG_assure_admin, get_category_for_work
 from .models import *
 from django.contrib.auth.decorators import login_required
-from .forms import LoginForm, NewUser, EditUser, AddMember, AddTask, AssignWork, RenameForm
+from .forms import LoginForm, NewUser, AddMember, AssignWork
 
 from dbapi.users import User
 from dbapi.tasks import Task, CompiledTask, Work, Category
@@ -82,28 +82,25 @@ def users_panel(request):
             flag = False
             for signal in request.POST:
                 if signal.startswith('delete:'):
-                    email = signal.lstrip('delete:')
+                    email = signal[len('delete:'):]
                     user = LateremUser.objects.get(email=email)
                     user.delete()
                     flag = True
                     break
-            form = NewUser()
-        # <Не тестилось, технически должно работать>
-            if not flag:
-                editform = EditUser(request.POST)
-                if editform.is_valid():
-                    for signal in request.POST:
-                        if signal.startswith('edit:'):
-                            email = signal.lstrip('edit:')
-                            user = LateremUser.objects.get(email=email)
-                            user.email = editform.email
-                            user.password = editform.password
-                            user.first_name = editform.first_name
-                            user.last_name = editform.last_name
-                            user.save()
-        # </Не тестилось, технически должно работать>
-    # </Плохо! Переписать>
-
+                elif signal.startswith('edit:'):
+                    email = signal.lstrip('edit:')
+                    user = LateremUser.objects.get(email=email)
+                    print('±\tИзменение пользователя', email)
+                    print('±\tНовые данные:')
+                    print('±\t\tИмя:', request.POST.get('user_name'))
+                    print('±\t\tФамилия:', request.POST.get('user_lastname'))
+                    print('±\t\tПочта:', request.POST.get('user_email'))
+                    print('±\t\tПароль:', request.POST.get('user_password'))
+                    user.email = request.POST.get('user_email')
+                    user.password = request.POST.get('user_password')
+                    user.first_name = request.POST.get('user_name')
+                    user.last_name = request.POST.get('user_lastname')
+                    user.save()
     else:
         form = NewUser()
     return render(request, "teacher_panel/user_panel.html", render_args(meta_all_users_available=True,
@@ -145,24 +142,17 @@ def manage_work(request, work_id):
                 task = Task.by_id(id)
                 work.remove_task(task)
                 return redirect(request.path)
-        rename_form = RenameForm(request.POST)
-        if rename_form.is_valid():
-            name = rename_form.cleaned_data['name']
-            print(name)
+        if 'edit_data' in request.POST:
+            name = request.POST.get('work_name')
             work.dbmodel.name = name
             work.dbmodel.save()
             return redirect(request.path)
-        add_task_form = AddTask(request.POST)
-        if add_task_form.is_valid():
-            task = work.add_task(name=add_task_form.cleaned_data['task_name'], 
-                                 task_type=add_task_form.cleaned_data['task_type'])
+        if 'newtask' in request.POST:
+            task = work.add_task(name=request.POST.get('task_name'), 
+                                 task_type=request.POST.get('task_type'))
             return redirect(request.path)
-    else:
-        add_task_form = AddTask()
-        rename_form=RenameForm(initial={'name': work.name})
 
-    return render(request, 'teacher_panel/work_manage.html', render_args(additional={"add_task_form":add_task_form, 
-                                                                                     "rename_form":rename_form,
+    return render(request, 'teacher_panel/work_manage.html', render_args(additional={'all_task_types': ['градиенты', 'Устное перемножение', 'фрейд'],
                                                                                      'work': work}))
 
 
@@ -189,20 +179,20 @@ def manage_group(request, group_id):
 
         if 'edit_data' in request.POST:
             name = request.POST.get('group_name', 'Empty')
-            print('§§§', request.POST, name)
+            description = request.POST.get('group_description')
             group.dbmodel.name = name
+            # group.dbmodel.description = description
             group.dbmodel.save()
             return redirect(request.path)
 
         for signal in request.POST:
             if signal.startswith('delete:'):
-                email = signal.lstrip('delete:')
+                email = signal[len('delete:'):]
                 user = User.get(email=email)
                 group.remove_member(user)
                 return redirect(request.path)
-        add_member_form = AddMember(request.POST)
-        if add_member_form.is_valid():
-            user = User.get(email=add_member_form.cleaned_data['email'])
+        if 'newuser' in request.POST:
+            user = User.get(email=request.POST.get('user_email'))
             group.add_member(user)
             return redirect(request.path)
         assign_work_form = AssignWork(request.POST)
@@ -211,14 +201,19 @@ def manage_group(request, group_id):
             group.assign(work, me)
             return redirect(request.path)
     else:
-        add_member_form=AddMember()
         assign_work_form=AssignWork()
-        rename_form=RenameForm(initial={'name': group.name})
+        
+
+    users = list()
+
+    for user in map(User, LateremUser.objects.all()):
+        if user not in group.get_members():
+            users.append(user)
 
     return render(request, 'teacher_panel/group_manage.html', render_args(current_group=group,
-                                                                          additional={"add_member_form": add_member_form,
-                                                                                      "assign_work_form": assign_work_form,
-                                                                                      "rename_form":rename_form}))
+                                                                          additional={"assign_work_form": assign_work_form,
+                                                                                      "users": users,
+                                                                                      }))
 
 # Рендер страницы работы
 @login_required

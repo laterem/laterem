@@ -3,11 +3,16 @@
     <table id="add-task" style="display: none;">
         <tr>
             <td>Название задачи:</td>
-            <td>{{add_task_form.task_name}}</td>
+
+            <td><input name="task_name"/></td>
         </tr>
         <tr>
             <td>Имя шаблона:</td>
-            <td>{{add_task_form.task_type}}</td>
+            <td><select name="task_type">
+                {% for task in all_task_types %}
+                    <option value="{{task}}"> {{task}} </option>
+                {% endfor %}
+            </select></td>
         </tr>
         <tr>
             <td colspan="2"><button type="submit" name="newtask" class="button">Добавить задачу в работу</button></td>

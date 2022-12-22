@@ -3,25 +3,22 @@
 {% load laterem %}
 
 {% block content %}
-
+    <script>is_editing=false;</script>
     <form method="post" id="main-form">
         {% csrf_token %}
         <div style="display: grid; grid-template-columns: auto max-content; align-items: center;">
             <div style="grid-column: 1;">
-                    {{rename_form.name}}
-                    <button type="submit" style="grid-column: 2;" class="button-icon"><div style="width: 2em; padding: 0;">{% include "icons/pencil-icon.html" %}</div></button>
+                <div style="grid-column: 1;"><input value="{{work.name}}" disabled="true" style="font-size: larger;" id="work_name" name="work_name"/></div>
             </div>
-            <!-- <button style="grid-column: 2;" class="button-icon" onclick="
+            <button type="button" id="edit_data" name="edit_data" style="grid-column: 2;" class="button-icon" onclick="
                     edit = document.getElementById('work_name');
-                    edit.disabled = !edit.disabled;
-                    if (!edit.disabled) {
-                        document.getElementById('main-form').method = 'dialog';
-                    }
-                    else {
-                        document.getElementById('main-form').method = 'post';
-                    }
-                    document.getElementsById('work_name') = edit;
-                "><div style="width: 2em; padding: 0;">{% include "icons/pencil-icon.html" %}</div></button> -->
+                    if (is_editing) {
+                        document.getElementById('edit_data').type = 'submit';
+                    };
+                    is_editing = !is_editing;
+                    edit.disabled = false;
+                    document.getElementById('work_name') = edit;
+                "><div style="width: 2em; padding: 0;">{% include "icons/pencil-icon.html" %}</div></button>
         </div>
         ID: {{work.id}}
     </form>

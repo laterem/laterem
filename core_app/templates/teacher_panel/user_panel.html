@@ -3,6 +3,7 @@
 {% load laterem %}
 
 {% block content %}
+<script>is_editing = false;</script>
 <form method="dialog" id="main-form">
     {% csrf_token %}  
     <div id="user-table-header">
@@ -46,10 +47,10 @@
     <div id="user-table">
         {% for user in allusers %}
             <div style="grid-column: 1; border-left: none;" class="user-table-element">
-                <input value="{{user.first_name}}" class="{{user.email}}" disabled="true"/> <input value="{{user.last_name}}" class="{{user.email}}" disabled="true"/>
+                <input value="{{user.first_name}}" class="{{user.email}}" disabled="true" name="user_name"/> <input value="{{user.last_name}}" class="{{user.email}}" disabled="true" name="user_lastname"/>
             </div>
             <div style="grid-column: 2;" class="user-table-element">
-                <input value="{{user.email}}" class="{{user.email}}" disabled="true"/>
+                <input value="{{user.email}}" class="{{user.email}}" disabled="true" name="user_email"/> <input class="{{user.email}}" disabled="true" name="user_password"/>
             </div> 
             <div style="grid-column: 3; padding: 0;" class="user-table-element">
                 <form method="post">
@@ -57,20 +58,19 @@
                     <button type="submit" name="delete:{{user.email}}" class="button-icon"><div style="width: 1.5em">{% include "icons/delete-icon.html" %}</div></button>
                 </form>
             </div>
-            <!-- <div style="grid-column: 4; padding: 0; border-left: none;" class="user-table-element">
-                <button type="submit" name="edit:{{user.email}}" class="button-icon"onclick="
+            <div style="grid-column: 4; padding: 0; border-left: none;" class="user-table-element">
+                <button id="edit_button" type="button" name="edit:{{user.email}}" class="button-icon"onclick="
                         edits = document.getElementsByClassName('{{user.email}}');
-                        for (i=0; i<edits.length; i++) {
-                            edits[i].disabled = !edits[i].disabled;
-                        }
-                        if (edits[0].disabled) {
+                        if (is_editing) {
+                            document.getElementById('edit_button').type = 'submit';
                             document.getElementById('main-form').method = 'post';
                         }
-                        else{
-                            document.getElementById('main-form').method = 'dialog';
-                        };
+                        for (i=0; i<edits.length; i++) {
+                            edits[i].disabled = false;
+                        }
+                        is_editing = !is_editing;
                     "><div style="width: 1.5em">{% include "icons/pencil-icon.html" %}</div></button>
-            </div> -->
+            </div>
         {% endfor %}
     </div>
     <button id="blackout" style="display: none;" onclick="
