@@ -207,9 +207,8 @@ def manage_group(request, group_id):
                 user = User.get(email=email)
                 group.remove_member(user)
                 return redirect(request.path)
-        add_member_form = AddMember(request.POST)
-        if add_member_form.is_valid():
-            user = User.get(email=add_member_form.cleaned_data['email'])
+        if 'newuser' in request.POST:
+            user = User.get(email=request.POST.get('user_email'))
             group.add_member(user)
             return redirect(request.path)
         assign_work_form = AssignWork(request.POST)
@@ -222,9 +221,16 @@ def manage_group(request, group_id):
         assign_work_form=AssignWork()
         rename_form=RenameForm(initial={'name': group.name})
 
+    users = list()
+
+    for user in map(User, LateremUser.objects.all()):
+        if user not in group.get_members():
+            users.append(user)
+
     return render(request, 'teacher_panel/group_manage.html', render_args(current_group=group,
                                                                           additional={"add_member_form": add_member_form,
                                                                                       "assign_work_form": assign_work_form,
+                                                                                      "users": users,
                                                                                       "rename_form":rename_form}))
 
 # Рендер страницы работы
