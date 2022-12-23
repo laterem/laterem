@@ -51,7 +51,13 @@ def _submenu(inp, user: User, outer=False, editable=False, unravel=False):
                 output += _submenu(child, user, editable=True)
             output += '</ul>'
             output += '</li>' + '</ul>'
-            return  output 
+            return  output
+    elif outer:
+        output = '<ul id="myUL">' 
+        for child in inp.children():
+            output += _submenu(child, user)
+        output += '</ul>'
+        return  output
     
     output = ''
 
