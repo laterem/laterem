@@ -17,6 +17,7 @@ class LateremGroup(models.Model):
 class LateremGroupMembership(models.Model):
     user = models.ForeignKey(LateremUser, on_delete=models.CASCADE)
     group = models.ForeignKey(LateremGroup, on_delete=models.CASCADE)
+    description = models.TextField(max_length=526)
     # Local Permissions
     is_group_admin = models.BooleanField(default=False)
     can_manage_group_data = models.BooleanField(default=False)

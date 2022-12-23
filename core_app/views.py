@@ -95,8 +95,7 @@ def users_panel(request):
                     user.first_name = request.POST.get('user_name')
                     user.last_name = request.POST.get('user_lastname')
                     user.save()
-    else:
-        form = NewUser()
+    form = NewUser()
     return render(request, "teacher_panel/user_panel.html", render_args(meta_all_users_available=True,
                                                                         additional={'newuserform': form}))
 
@@ -133,9 +132,14 @@ def work_panel(request):
                                                                          )) as new:
                         return redirect(request.path)
             elif signal.startswith('edit-'):
-                category = signal[len('edit-'):]
-                # Изменение имени категории с id = category на request.POST.get('input-' + category)
-
+                s_cat_id = signal[len('edit-'):]
+                # /!\ Typecast warning
+                cat_id = int(s_cat_id)
+                with Category.by_id(cat_id) as cat:
+                    cat.dbmodel.name = request.POST.get('input-' + s_cat_id, 'Empty')
+                    cat.dbmodel.save()
+                    return redirect(request.path)
+    
     return render(request, "teacher_panel/work_panel.html", render_args(meta_all_works_available=True,
                                                                         me=User(request.user),
                                                                         ))
@@ -190,7 +194,7 @@ def manage_group(request, group_id):
             name = request.POST.get('group_name', 'Empty')
             description = request.POST.get('group_description')
             group.dbmodel.name = name
-            # group.dbmodel.description = description
+            group.dbmodel.description = description
             group.dbmodel.save()
             return redirect(request.path)
 
