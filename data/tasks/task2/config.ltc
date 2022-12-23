@@ -1,3 +1,0 @@
-id1 = Rand10(1, 10)
-id2 = Rand10(1, 10)
-answer?Sum(id1, id2)

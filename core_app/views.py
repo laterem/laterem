@@ -112,7 +112,8 @@ def users_panel(request):
                     email = signal.lstrip('edit:')
                     user = LateremUser.objects.get(email=email)
                     user.email = request.POST.get('user_email')
-                    user.password = request.POST.get('user_password')
+                    #if request.POST.get('user_password'):
+                     #   user.password = request.POST.get('user_password')
                     user.first_name = request.POST.get('user_name')
                     user.last_name = request.POST.get('user_lastname')
                     user.save()
