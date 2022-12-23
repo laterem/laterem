@@ -182,6 +182,7 @@ class Category(DBHybrid):
         return self.categories(*args, **kwargs) + self.works(*args, **kwargs)
 
 class RootsMimic:
+    __dbmodel__ = None
     has_children = True
 
     def children(self, accesible_for=NotSpecified, access_buffer=NotSpecified):
