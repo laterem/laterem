@@ -1,0 +1,21 @@
+<form method="post">
+    {% csrf_token %}
+    <table id="add-task" style="display: none;">
+        <tr>
+            <td>{{ newtaskform.task_type_name.label_tag }}</td>
+            <td>{{ newtaskform.task_type_name }}</td>
+        </tr>
+        <tr>
+            <td>{{ newtaskform.config.label_tag }}</td>
+            <td>{{ newtaskform.config }}</td>
+        </tr>
+        <tr>
+            <td>{{ newtaskform.view.label_tag }}</td>
+            <td>{{ newtaskform.view }}</td>
+        </tr>
+        <tr></tr>
+        <tr>
+            <td colspan="2"><button type="submit" name="newtask" class="button">Отправить шаблон задачи</button></td>
+        </tr>
+    </table>
+</form>
