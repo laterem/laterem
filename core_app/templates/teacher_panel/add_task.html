@@ -2,20 +2,20 @@
     {% csrf_token %}
     <table id="add-task" style="display: none;">
         <tr>
-            <td>{{ newtaskform.task_type_name.label_tag }}</td>
-            <td>{{ newtaskform.task_type_name }}</td>
+            <td>Имя шаблона: </td>
+            <td><input type="text" name="task_type_name"/></td>
         </tr>
         <tr>
-            <td>{{ newtaskform.config.label_tag }}</td>
-            <td>{{ newtaskform.config }}</td>
+            <td>LTC: </td>
+            <td><input type="file" name="config_file"></td>
         </tr>
         <tr>
-            <td>{{ newtaskform.view.label_tag }}</td>
-            <td>{{ newtaskform.view }}</td>
+            <td>HTML</td>
+            <td><input type="file" name="view_file"/></td>
         </tr>
         <tr></tr>
         <tr>
-            <td colspan="2"><button type="submit" name="newtask" class="button">Отправить шаблон задачи</button></td>
+            <td colspan="2"><div style="width:100%; display:grid;"><button type="submit" name="newtask" class="button" style="justify-self: center;">Отправить шаблон задачи</button></div></td>
         </tr>
     </table>
 </form>

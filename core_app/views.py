@@ -253,13 +253,12 @@ def manage_group(request, group_id):
 @permission_required("can_manage_tasks")
 def task_panel(request):
     if request.method == "POST":
-        newtaskform = UploadTask(request.POST, request.FILES)
-        if newtaskform.is_valid():
-            name = newtaskform.cleaned_data['task_type_name']
+        if 'newtask' in request.POST:
+            name = request.POST.get('task_type_name')
             path = pathjoin('data', 'tasks', name)
             mkdir(path)
-            config = request.FILES['config']
-            view = request.FILES['view']
+            config = request.FILES.get('config_file')
+            view = request.FILES.get('view_file')
             with open(pathjoin(path, 'config.ltc'), 'wb+') as dest:
                 for chunk in config.chunks():
                     dest.write(chunk)
@@ -267,9 +266,7 @@ def task_panel(request):
                 for chunk in view.chunks():
                     dest.write(chunk)
         return redirect(request.path)
-    newtaskform = UploadTask()
-    return render(request, 'teacher_panel/task_panel.html', render_args(additional={"all_templates": LTM_SCANNER.all_shoots(),
-                                                                                    "newtaskform": newtaskform}))
+    return render(request, 'teacher_panel/task_panel.html', render_args(additional={"all_templates": LTM_SCANNER.all_shoots()}))
 
 # Рендер страницы работы
 @login_required
