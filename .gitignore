@@ -6,3 +6,4 @@ core_app/templates/static_copies/*
 **/menu.html
 data/userdata/*
 10_1-dew.md
+data/tasks/*

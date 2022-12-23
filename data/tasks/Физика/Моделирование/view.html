@@ -1,8 +1,0 @@
-{% load laterem %}
-<h2>На рисунке изображена траектория тела:</h2>
-<img src="{% asset 'Полет тела.png' %}" width="50%" style="border-radius: 5px">
-<br/>
-<h2>Выберите из следующих утверждений верные:</h2>
-{% with checkbox_items=answer_variants button_text='Проверить' id='checks' %}
-    {% include "checkbox.html" %}
-{% endwith %}
