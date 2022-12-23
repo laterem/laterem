@@ -62,7 +62,7 @@ def _submenu(inp, user: User, outer=False, editable=False, unravel=False):
     output = ''
 
     if inp.has_children:
-        output += '<li>' + '<span class="caret">' + '<input value="' + inp.name + '" id="input-' + str(inp.id) + '" disabled="true"/>' + '</span>'
+        output += '<li>' + '<span class="caret">' + '<input value="' + inp.name + '" name="input-' + str(inp.id) + '" id="input-' + str(inp.id) + '" disabled="true"/>' + '</span>'
         if editable:
             change_name = "edit=getElementById('input-" + str(inp.id) + "'); if (tree_is_editing) {document.getElementById('edit-" + str(inp.id) + "').type = 'submit';}; tree_is_editing = !tree_is_editing; edit.disabled = false; getElementById('input-" + str(inp.id) + "') = edit;"
             output += '<button type="button" name="edit-' + str(inp.id) + '" id="edit-' + str(inp.id) + '" class="button-icon" style="margin-left: 10px;" onclick="' + change_name + '">' + pencil_icon + '</button>'

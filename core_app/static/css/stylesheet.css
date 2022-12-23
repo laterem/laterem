@@ -448,7 +448,7 @@ div#user-table, div#all-groups-table, div#task-table {
     width: 100%;
 }
 
-div#all-groups-table div#task-table {
+div#all-groups-table, div#task-table {
     grid-template-columns: 100%;
 }
 
