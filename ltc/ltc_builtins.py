@@ -70,6 +70,26 @@ class Multiply(LTCFunction):
     def call(self):
         return float(self.args[0]) * float(self.args[1])
 
+class Divide(LTCFunction):
+    expected_argsc = 2
+    def call(self):
+        return float(self.args[0]) / float(self.args[1])
+
+class Mod(LTCFunction):
+    expected_argsc = 2
+    def call(self):
+        return float(self.args[0]) % float(self.args[1])
+
+class Power(LTCFunction):
+    expected_argsc = 2
+    def call(self):
+        return float(self.args[0]) ** float(self.args[1])
+
+class Substract(LTCFunction):
+    expected_argsc = 2
+    def call(self):
+        return float(self.args[0]) - float(self.args[1])
+
 class Round(LTCFunction):
     expected_argsc = 2
     def call(self):
@@ -142,6 +162,10 @@ KEYWORD_TABLE = {
     'Rand10': RandomNum10,
     'Sum': Sum,
     'Multiply': Multiply,
+    'Divide': Divide,
+    'Mod': Mod,
+    'Power': Power, 
+    'Substract': Substract,
     'Reversed': IsReversed,
     'Reverse': ReverseList,
     'Roots': Roots,
