@@ -20,7 +20,8 @@ if DEBUG_DBSamples in LATEREM_FLAGS:
                                                 can_solve_tasks=True,
                                                 can_manage_groups=True,
                                                 can_manage_users=True,
-                                                can_manage_works=True)
+                                                can_manage_works=True,
+                                                can_manage_tasks=True)
 
             with Group(admins) as gr:
                 gr.add_member(User(admin), is_group_admin=True)

@@ -17,3 +17,8 @@ class AddMember(forms.Form):
 
 class AssignWork(forms.Form):
     id = forms.IntegerField(label='ID работы')
+
+class UploadTask(forms.Form):
+    task_type_name = forms.CharField(label='Имя шаблона', max_length=128)
+    config = forms.FileField(label='Файл конфигурации LTC')
+    view = forms.FileField(label='Файл разметки HTML')

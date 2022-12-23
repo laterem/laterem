@@ -4,10 +4,11 @@ from django.contrib.auth import authenticate, login, logout
 from django.core.exceptions import PermissionDenied
 from context_objects import LTM_SCANNER
 from os.path import join as pathjoin
+from os import mkdir
 from .views_functions import render_args, change_color_theme, DEBUG_assure_admin
 from .models import *
 from django.contrib.auth.decorators import login_required
-from .forms import LoginForm, NewUser, AddMember, AssignWork
+from .forms import LoginForm, NewUser, AddMember, AssignWork, UploadTask
 
 from dbapi.users import User
 from dbapi.tasks import Task, CompiledTask, Work, Category
@@ -20,6 +21,26 @@ def permission_required(permission):
             if not User(request.user).has_global_permission(permission):
                 raise PermissionDenied()
             return function(request, *args, **kwargs)
+        return login_required(wrap)
+    return wrapper
+
+def every_permission_required(*permissions):
+    def wrapper(function):
+        def wrap(request, *args, **kwargs):
+            for permission in permissions:
+                if not User(request.user).has_global_permission(permission):
+                    raise PermissionDenied()
+            return function(request, *args, **kwargs)
+        return login_required(wrap)
+    return wrapper
+
+def any_permission_required(*permissions):
+    def wrapper(function):
+        def wrap(request, *args, **kwargs):
+            for permission in permissions:
+                if User(request.user).has_global_permission(permission):
+                    return function(request, *args, **kwargs)
+            raise PermissionDenied()
         return login_required(wrap)
     return wrapper
 
@@ -57,7 +78,7 @@ def profile_view(request):
                                                                 additional={'title': 'Laterem Настройки', 
                                                                 'workdir': dict()})) # <- Костыыыль! 
 
-@login_required
+@any_permission_required("can_manage_users", "can_manage_works", "can_manage_groups", "can_manage_tasks")
 def teacher_hub(request):
     return render(request, "teacher_panel/teacher_panel_base.html", render_args())
 
@@ -228,9 +249,26 @@ def manage_group(request, group_id):
                                                                                       "users": users,
                                                                                       }))
 
-# @permission_required("can_manage_tasks")
+@permission_required("can_manage_tasks")
 def task_panel(request):
-    return render(request, 'teacher_panel/task_panel.html', render_args(additional={"all_templates": LTM_SCANNER.all_shoots()}))
+    if request.method == "POST":
+        newtaskform = UploadTask(request.POST, request.FILES)
+        if newtaskform.is_valid():
+            name = newtaskform.cleaned_data['task_type_name']
+            path = pathjoin('data', 'tasks', name)
+            mkdir(path)
+            config = request.FILES['config']
+            view = request.FILES['view']
+            with open(pathjoin(path, 'config.ltc'), 'wb+') as dest:
+                for chunk in config.chunks():
+                    dest.write(chunk)
+            with open(pathjoin(path, 'view.html'), 'wb+') as dest:
+                for chunk in view.chunks():
+                    dest.write(chunk)
+        return redirect(request.path)
+    newtaskform = UploadTask()
+    return render(request, 'teacher_panel/task_panel.html', render_args(additional={"all_templates": LTM_SCANNER.all_shoots(),
+                                                                                    "newtaskform": newtaskform}))
 
 # Рендер страницы работы
 @login_required
