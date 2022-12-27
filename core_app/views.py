@@ -188,12 +188,16 @@ def manage_work(request, work_id):
             return redirect(request.path)
         if 'appoint_to_group' in request.POST:
             group = Group.by_id(request.POST.get('group_name'))
-            group.assign(work, me)
+            group.assign(work, User(request.user))
             return redirect(request.path)
-
+    groups_to_appoint = list()
+    for group in User(request.user).groups():
+        if not work in group.get_works():
+            groups_to_appoint.append((group.id, group.name))
     return render(request, 'teacher_panel/work_manage.html', render_args(meta_all_task_types_available=True,
                                                                          me=User(request.user),
-                                                                         additional={'work': work}))
+                                                                         additional={'work': work,
+                                                                         'groups_to_appoint': groups_to_appoint}))
 
 
 

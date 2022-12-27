@@ -4,8 +4,8 @@
         <tr>
             <td>Имя группы:</td>
             <td><select name="group_name">
-                {% for group in user.groups %}
-                    <option value="{{ group.id }}"> {{ group.name }} (ID: {{ group.id }}) </option>
+                {% for id, name in groups_to_appoint %}
+                    <option value="{{ id }}"> {{ name }} (ID: {{ id }}) </option>
                 {% endfor %}
             </select></td>
         </tr>
