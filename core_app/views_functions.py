@@ -102,7 +102,11 @@ def render_args(*,
         ret['allworks'] = map(Work, LateremWork.objects.all())
 
     if meta_all_task_types_available:
-        ret['alltasktypes'] = LTM_SCANNER.all_shoots()
+        try:
+            ret['alltasktypes'] = LTM_SCANNER.all_shoots()
+        except NotADirectoryError:
+            print('! ERROR !\tДирректория data/tasks пуста. Нет доступных шаблонов')
+            ret['alltasktypes'] = ""
 
     for key, value in additional.items():
         ret[key] = value

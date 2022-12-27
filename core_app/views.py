@@ -186,8 +186,13 @@ def manage_work(request, work_id):
             task = work.add_task(name=request.POST.get('task_name'), 
                                  task_type=request.POST.get('task_type'))
             return redirect(request.path)
+        if 'appoint_to_group' in request.POST:
+            group = Group.by_id(request.POST.get('group_name'))
+            group.assign(work, me)
+            return redirect(request.path)
 
     return render(request, 'teacher_panel/work_manage.html', render_args(meta_all_task_types_available=True,
+                                                                         me=User(request.user),
                                                                          additional={'work': work}))
 
 
@@ -266,7 +271,12 @@ def task_panel(request):
                 for chunk in view.chunks():
                     dest.write(chunk)
         return redirect(request.path)
-    return render(request, 'teacher_panel/task_panel.html', render_args(additional={"all_templates": LTM_SCANNER.all_shoots()}))
+    # Временное решение
+    try:
+        return render(request, 'teacher_panel/task_panel.html', render_args(additional={"all_templates": LTM_SCANNER.all_shoots()}))
+    except NotADirectoryError:
+        print('! ERROR !\tДирректория data/tasks пуста. Нет доступных шаблонов')
+        return render(request, 'teacher_panel/task_panel.html', render_args(additional={"all_templates": ""}))
 
 # Рендер страницы работы
 @login_required

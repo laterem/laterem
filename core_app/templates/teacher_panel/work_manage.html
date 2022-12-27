@@ -3,7 +3,7 @@
 {% load laterem %}
 
 {% block content %}
-    <script>is_editing=false;</script>
+    <script>is_editing=false; is_blackout=false;</script>
     <form method="post" id="main-form">
         {% csrf_token %}
         <div style="display: grid; grid-template-columns: auto max-content; align-items: center;">
@@ -20,41 +20,43 @@
                     document.getElementById('work_name') = edit;
                 "><div style="width: 2em; padding: 0;">{% include "icons/pencil-icon.html" %}</div></button>
         </div>
-        ID: {{work.id}}
+        <p>ID: {{work.id}}</p>
+        <button type="button" id="appoint" name="appoint" onclick="
+                is_blackout = !is_blackout;
+                if (is_blackout) {
+                    document.getElementById('appoint-work').style.display = 'block';
+                    document.getElementById('blackout').style.display = 'block';
+                } else {
+                    document.getElementById('appoint-work').style.display = 'none';
+                    document.getElementById('blackout').style.display = 'none';
+                };
+            ">Назначить группе</button>
     </form>
     
     <div id="work-table-header">
         <div style="grid-column: 1;"><span style="font-size: larger;">Задания</span></div>
         <div style="grid-column: 2;">
             <button class="button" onclick="
-                disp = document.getElementById('add-task').style.display;
-                switch (disp) {
-                    case 'none': disp = 'block';
-                    break;
-        
-                    case 'block': disp = 'none';
-                    break;
-        
-                    default: disp = 'block';
+                is_blackout = !is_blackout;
+                if (is_blackout) {
+                    document.getElementById('add-task').style.display = 'block';
+                    document.getElementById('blackout').style.display = 'block';
+                } else {
+                    document.getElementById('add-task').style.display = 'none';
+                    document.getElementById('blackout').style.display = 'none';
                 };
-                document.getElementById('add-task').style.display = disp;
-                document.getElementById('blackout').style.display = disp;
             ">{% include "icons/add-user-icon.html" %} &nbsp; Добавить &nbsp;</button>
         </div>
         <div style="grid-column: 3;">
             <button class="button" onclick="
-                disp = document.getElementById('add-task').style.display;
-                switch (disp) {
-                    case 'none': disp = 'block';
-                    break;
-        
-                    case 'block': disp = 'none';
-                    break;
-        
-                    default: disp = 'block';
+                is_blackout = !is_blackout;
+                if (is_blackout) {
+                    document.getElementById('add-task').style.display = 'block';
+                    document.getElementById('blackout').style.display = 'block';
+                } else {
+                    document.getElementById('add-task').style.display = 'none';
+                    document.getElementById('blackout').style.display = 'none';
                 };
-                document.getElementById('add-task').style.display = disp;
-                document.getElementById('blackout').style.display = disp;
             ">{% include "icons/import-from-file-icon.html" %} &nbsp; Импорт &nbsp;</button>
         </div>
     </div>
@@ -75,18 +77,11 @@
     {% endfor %}
     </div>
     <button id="blackout" style="display: none;" onclick="
-        disp = document.getElementById('add-task').style.display;
-        switch (disp) {
-            case 'none': disp = 'block';
-            break;
-
-            case 'block': disp = 'none';
-            break;
-
-            default: disp = 'block';
-        };
-        document.getElementById('add-task').style.display = disp;
-        document.getElementById('blackout').style.display = disp;
+        is_blackout = false;
+        document.getElementById('add-task').style.display = 'none';
+        document.getElementById('blackout').style.display = 'none';
+        document.getElementById('appoint-work').style.display = 'none';
     "></button>
     {% include "./work_add_task.html" %}
+    {% include "./work_appoint_work.html" %}
 {% endblock %}
