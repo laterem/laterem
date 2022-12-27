@@ -158,6 +158,26 @@ inputg?Equal(f)
                       }):
         raise TestFailed(str(ft) + ' (must be )')
 
+@test('8 Basic Algebra')
+def test8():
+    ltcc = LTCCompiler()
+    string = """
+a = 10
+b = 5
+c = Divide(a, b)
+d = Substract(b, a)
+e = Power(a, b)
+
+"""
+    ltc = ltcc.compile(string)
+    ltc.execute()
+    ft = ltc.field_table
+    if ft['c'] != 2:
+        raise TestFailed('Division')
+    elif ft['d'] != -5:
+        raise TestFailed('Substract')
+    elif ft['e'] != 10 ** 5:
+        raise TestFailed('Exponention')
 
 if __name__ == '__main__':
     test1()
@@ -167,4 +187,5 @@ if __name__ == '__main__':
     test5()
     test6()
     test7()
+    test8()
 
