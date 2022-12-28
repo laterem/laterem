@@ -1,4 +1,4 @@
-<form method="post">
+<form method="post" enctype="multipart/form-data">
     {% csrf_token %}
     <table id="add-task" style="display: none;">
         <tr>
@@ -10,7 +10,7 @@
             <td><input type="file" name="config_file"></td>
         </tr>
         <tr>
-            <td>HTML</td>
+            <td>HTML: </td>
             <td><input type="file" name="view_file"/></td>
         </tr>
         <tr></tr>

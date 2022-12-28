@@ -7,3 +7,4 @@ core_app/templates/static_copies/*
 data/userdata/*
 10_1-dew.md
 data/tasks/*
+**/.DS_Store

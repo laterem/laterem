@@ -162,7 +162,7 @@ def work_panel(request):
                     cat.dbmodel.save()
                     return redirect(request.path)
     
-    return render(request, "teacher_panel/work_panel.html", render_args(meta_all_works_available=True,
+    return render(request, "teacher_panel/work_panel/work_panel.html", render_args(meta_all_works_available=True,
                                                                         me=User(request.user),
                                                                         ))
 
@@ -194,7 +194,7 @@ def manage_work(request, work_id):
     for group in User(request.user).groups():
         if not work in group.get_works():
             groups_to_appoint.append((group.id, group.name))
-    return render(request, 'teacher_panel/work_manage.html', render_args(meta_all_task_types_available=True,
+    return render(request, 'teacher_panel/work_panel/work_manage.html', render_args(meta_all_task_types_available=True,
                                                                          me=User(request.user),
                                                                          additional={'work': work,
                                                                          'groups_to_appoint': groups_to_appoint}))
@@ -208,7 +208,7 @@ def group_panel(request):
             with Group(LateremGroup.objects.create(name="Новая группа")) as new:
                 new.add_member(User(request.user), is_group_admin=True)
                 return redirect('/teacher/groups/' + str(new.id))
-    return render(request, "teacher_panel/group_panel.html", render_args(meta_all_groups_available=True,
+    return render(request, "teacher_panel/group_panel/group_panel.html", render_args(meta_all_groups_available=True,
                                                                           ))
 
 @permission_required("can_manage_groups")
@@ -254,7 +254,7 @@ def manage_group(request, group_id):
         if user not in group.get_members():
             users.append(user)
 
-    return render(request, 'teacher_panel/group_manage.html', render_args(current_group=group,
+    return render(request, 'teacher_panel/group_panel/group_manage.html', render_args(current_group=group,
                                                                           additional={"assign_work_form": assign_work_form,
                                                                                       "users": users,
                                                                                       }))
@@ -268,6 +268,7 @@ def task_panel(request):
             mkdir(path)
             config = request.FILES.get('config_file')
             view = request.FILES.get('view_file')
+            print('POST:', request.POST, '; FILES:', request.FILES)
             with open(pathjoin(path, 'config.ltc'), 'wb+') as dest:
                 for chunk in config.chunks():
                     dest.write(chunk)
@@ -276,11 +277,11 @@ def task_panel(request):
                     dest.write(chunk)
         return redirect(request.path)
     # Временное решение
-    try:
-        return render(request, 'teacher_panel/task_panel.html', render_args(additional={"all_templates": LTM_SCANNER.all_shoots()}))
-    except NotADirectoryError:
-        print('! ERROR !\tДирректория data/tasks пуста. Нет доступных шаблонов')
-        return render(request, 'teacher_panel/task_panel.html', render_args(additional={"all_templates": ""}))
+    # try:
+    return render(request, 'teacher_panel/task_panel/task_panel.html', render_args(additional={"all_templates": LTM_SCANNER.all_shoots()}))
+    # except NotADirectoryError:
+    #     print('! ERROR !\tДирректория data/tasks пуста. Нет доступных шаблонов')
+    #     return render(request, 'teacher_panel/task_panel/task_panel.html', render_args(additional={"all_templates": ""}))
 
 # Рендер страницы работы
 @login_required
