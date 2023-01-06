@@ -39,21 +39,20 @@ def _submenu(inp, user: User, outer=False, editable=False, unravel=False):
                             </g>
                          </svg>"""
         if outer:
-            output = '<ul id="myUL">' + '<li>' + '<span class="caret caret-down" style="font-size: larger;">'
+            output = '<h1 class="title">'
             output += "Работы"
-            output += "</span>"
-            output += '<button type="submit" name="add-category-mother" class="button-icon" style="margin-left: 10px; height: min-content">'
-            output += folder_plus
-            output += '&nbsp; Добавить &nbsp;'
-            output += '</button>'
-            output += '<ul class="nested active">'
+            # output += '<button type="submit" name="add-category-mother" class="button-icon" style="margin-left: 10px; height: min-content">'
+            # output += folder_plus
+            # output += '&nbsp; Добавить &nbsp;'
+            # output += '</button>'
+            output += '</h1>'
+            output += '<ul class="wtree">'
             for child in inp.children():
                 output += _submenu(child, user, editable=True)
             output += '</ul>'
-            output += '</li>' + '</ul>'
             return  output
     elif outer:
-        output = '<ul id="myUL">' 
+        output = '<ul class="wtree">'
         for child in inp.children():
             output += _submenu(child, user)
         output += '</ul>'
@@ -62,16 +61,17 @@ def _submenu(inp, user: User, outer=False, editable=False, unravel=False):
     output = ''
 
     if inp.has_children:
-        output += '<li>' + '<span class="caret">' + '<input value="' + inp.name + '" name="input-' + str(inp.id) + '" id="input-' + str(inp.id) + '" disabled="true"/>' + '</span>'
+        output += '<li>' + '<span>' + '<input value="' + inp.name + '" name="input-' + str(inp.id) + '" id="input-' + str(inp.id) + '" disabled="true"/>'
         if editable:
             change_name = "edit=getElementById('input-" + str(inp.id) + "'); if (tree_is_editing) {document.getElementById('edit-" + str(inp.id) + "').type = 'submit';}; tree_is_editing = !tree_is_editing; edit.disabled = false; getElementById('input-" + str(inp.id) + "') = edit;"
             output += '<button type="button" name="edit-' + str(inp.id) + '" id="edit-' + str(inp.id) + '" class="button-icon" style="margin-left: 10px;" onclick="' + change_name + '">' + pencil_icon + '</button>'
             output += '<button type="submit" name="add-category-' + str(inp.id) + '" class="button-icon" style="margin-left: 10px; height: min-content">' + folder_plus + '</button>'
             output += '<button type="submit" name="add-work-' + str(inp.id) + '" class="button-icon" style="margin-left: 10px;">' + book_plus + '</button>'
+        output += '</span>'
         if unravel:
-            output += '<ul class="nested active">'
+            output += '<ul>'
         else:
-            output += '<ul class="nested">' 
+            output += '<ul>' 
         for child in inp.children():
             output +=  _submenu(child, user, editable=editable) 
         output +=  '</ul>' + '</li>'
@@ -87,9 +87,9 @@ def _submenu(inp, user: User, outer=False, editable=False, unravel=False):
             gray_len = stats[Verdicts.NO_ANSWER]
 
             line_args = [("correct", green_len), ("unchecked", orange_len), ("wrong", red_len), ("no-answer", gray_len)]
-            output = '<li><a href="' + '/works/' + addr + '">' + name + '</a>' + draw_progress_line(line_args) + '</li>'
+            output = '<li><span><a href="' + '/works/' + addr + '">' + name + '</a></span>' + draw_progress_line(line_args) + '</li>'
         else:
-            output = '<li><a href="' + '/teacher/works/' + addr + '">' + name + '</a>' + '</li>'
+            output = '<li><span style="border: none"><a href="' + '/teacher/works/' + addr + '">' + name + '</a></span>' + '</li>'
     print(output[:20] + " <...> " + output[-20:])
     assert output.count('<li') == output.count('</li>')
     assert output.count('<ul') == output.count('</ul>')
