@@ -2,7 +2,9 @@
 {% load laterem %}
 
 {% block left-side %}
-    {% tree "workdir" %}
+    {% with tree_title="Доступные работы" %}
+        {% tree "workdir" %}
+    {% endwith %}
 {% endblock %}
 
 {% block content %}

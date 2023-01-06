@@ -20,7 +20,7 @@ def draw_progress_line(args):
     ret += '</tr></table>'
     return ret
 
-def _submenu(inp, user: User, outer=False, editable=False, unravel=False):
+def _submenu(inp, user: User, outer=False, editable=False, unravel=False, title='Доступные работы'):
     if editable:
         book_plus = """<svg class="svg-icon" style="width: 1.5em; height: 1.5em; vertical-align: middle;fill: currentColor;overflow: hidden;" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg">
                        <path d="M768 938.666667H256a85.333333 85.333333 0 0 1-85.333333-85.333334V170.666667a85.333333 85.333333 0 0 1 85.333333-85.333334h42.666667v298.666667l106.666666-64L512 384V85.333333h256a85.333333 85.333333 0 0 1 85.333333 85.333334v682.666666a85.333333 85.333333 0 0 1-85.333333 85.333334m-170.666667-85.333334h85.333334v-85.333333h85.333333v-85.333333h-85.333333v-85.333334h-85.333334v85.333334h-85.333333v85.333333h85.333333v85.333333z" fill="" />
@@ -40,11 +40,11 @@ def _submenu(inp, user: User, outer=False, editable=False, unravel=False):
                          </svg>"""
         if outer:
             output = '<h1 class="title">'
-            output += "Работы"
-            # output += '<button type="submit" name="add-category-mother" class="button-icon" style="margin-left: 10px; height: min-content">'
-            # output += folder_plus
-            # output += '&nbsp; Добавить &nbsp;'
-            # output += '</button>'
+            output += title
+            output += '<button type="submit" name="add-category-mother" class="button-icon" style="margin-left: 10px; height: min-content">'
+            output += folder_plus
+            output += '&nbsp; Добавить &nbsp;'
+            output += '</button>'
             output += '</h1>'
             output += '<ul class="wtree">'
             for child in inp.children():
@@ -52,7 +52,10 @@ def _submenu(inp, user: User, outer=False, editable=False, unravel=False):
             output += '</ul>'
             return  output
     elif outer:
-        output = '<ul class="wtree">'
+        output = '<h1 class="title">'
+        output += title
+        output += '</h1>'
+        output += '<ul class="wtree">'
         for child in inp.children():
             output += _submenu(child, user)
         output += '</ul>'
@@ -65,7 +68,7 @@ def _submenu(inp, user: User, outer=False, editable=False, unravel=False):
         if editable:
             change_name = "edit=getElementById('input-" + str(inp.id) + "'); if (tree_is_editing) {document.getElementById('edit-" + str(inp.id) + "').type = 'submit';}; tree_is_editing = !tree_is_editing; edit.disabled = false; getElementById('input-" + str(inp.id) + "') = edit;"
             output += '<button type="button" name="edit-' + str(inp.id) + '" id="edit-' + str(inp.id) + '" class="button-icon" style="margin-left: 10px;" onclick="' + change_name + '">' + pencil_icon + '</button>'
-            output += '<button type="submit" name="add-category-' + str(inp.id) + '" class="button-icon" style="margin-left: 10px; height: min-content">' + folder_plus + '</button>'
+            output += '<button type="submit" name="add-category-' + str(inp.id) + '" class="button-icon" style="margin-left: 10px">' + folder_plus + '</button>'
             output += '<button type="submit" name="add-work-' + str(inp.id) + '" class="button-icon" style="margin-left: 10px;">' + book_plus + '</button>'
         output += '</span>'
         if unravel:
@@ -87,7 +90,7 @@ def _submenu(inp, user: User, outer=False, editable=False, unravel=False):
             gray_len = stats[Verdicts.NO_ANSWER]
 
             line_args = [("correct", green_len), ("unchecked", orange_len), ("wrong", red_len), ("no-answer", gray_len)]
-            output = '<li><span><a href="' + '/works/' + addr + '">' + name + '</a></span>' + draw_progress_line(line_args) + '</li>'
+            output = '<li><span style="border: none"><a href="' + '/works/' + addr + '">' + name + '</a></span>' + draw_progress_line(line_args) + '</li>'
         else:
             output = '<li><span style="border: none"><a href="' + '/teacher/works/' + addr + '">' + name + '</a></span>' + '</li>'
     print(output[:20] + " <...> " + output[-20:])
@@ -135,7 +138,7 @@ def _submenu(inp, user: User, outer=False, editable=False, unravel=False):
 def tree(context, treename):
     try:
         user = context['user']
-        return SafeString(_submenu(context[treename], user, outer=True))
+        return SafeString(_submenu(context[treename], user, outer=True, title=context.get('tree_title', 'Доступные работы')))
     except KeyError:
         return ''
 
@@ -143,6 +146,6 @@ def tree(context, treename):
 def fillable_tree(context, treename):
     try:
         user = context['user']
-        return SafeString(_submenu(context[treename], user, outer=True, editable=True))
+        return SafeString(_submenu(context[treename], user, outer=True, editable=True, title=context.get('tree_title', 'Доступные работы')))
     except KeyError:
         return ''
