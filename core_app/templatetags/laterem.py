@@ -64,17 +64,19 @@ def _submenu(inp, user: User, outer=False, editable=False, unravel=False, title=
     output = ''
 
     if inp.has_children:
-        output += '<li>' + '<span>' + '<input value="' + inp.name + '" name="input-' + str(inp.id) + '" id="input-' + str(inp.id) + '" disabled="true"/>'
         if editable:
+            output += '<li>' + '<span class="caret">' + '<input value="' + inp.name + '" name="input-' + str(inp.id) + '" id="input-' + str(inp.id) + '" disabled="true"/>'
             change_name = "edit=getElementById('input-" + str(inp.id) + "'); if (tree_is_editing) {document.getElementById('edit-" + str(inp.id) + "').type = 'submit';}; tree_is_editing = !tree_is_editing; edit.disabled = false; getElementById('input-" + str(inp.id) + "') = edit;"
-            output += '<button type="button" name="edit-' + str(inp.id) + '" id="edit-' + str(inp.id) + '" class="button-icon" style="margin-left: 10px;" onclick="' + change_name + '">' + pencil_icon + '</button>'
-            output += '<button type="submit" name="add-category-' + str(inp.id) + '" class="button-icon" style="margin-left: 10px">' + folder_plus + '</button>'
-            output += '<button type="submit" name="add-work-' + str(inp.id) + '" class="button-icon" style="margin-left: 10px;">' + book_plus + '</button>'
+            output += '<button type="button" name="edit-' + str(inp.id) + '" id="edit-' + str(inp.id) + '" class="button-icon" onclick="' + change_name + '">' + pencil_icon + '</button>'
+            output += '<button type="submit" name="add-category-' + str(inp.id) + '" class="button-icon">' + folder_plus + '</button>'
+            output += '<button type="submit" name="add-work-' + str(inp.id) + '" class="button-icon">' + book_plus + '</button>'
+        else:
+            output += '<li>' + '<span class="caret">' + inp.name
         output += '</span>'
         if unravel:
-            output += '<ul>'
+            output += '<ul class="nested active">'
         else:
-            output += '<ul>' 
+            output += '<ul class="nested">' 
         for child in inp.children():
             output +=  _submenu(child, user, editable=editable) 
         output +=  '</ul>' + '</li>'

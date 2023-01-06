@@ -4,7 +4,7 @@
         {% if ctask == task %}
             <button type="submit" name="redirect:task{{ctask.id}}" class="{{verdict_style}}" id="choosed">{{ctask.name}}</button>
         {% else %}
-            <button type="submit" name="redirect:task{{ctask.id}}" class="{{verdict_style}}">{{ctask.name}}</button>
+            <button type="submit" name="redirect:task{{ctask.id}}" class="{{verdict_style}}" id="non-choosed">{{ctask.name}}</button>
         {% endif %}
     {% endfor %}
 </form>

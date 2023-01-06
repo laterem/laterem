@@ -72,7 +72,7 @@ aside#menu {
     background: var(--content-background-color);
     box-shadow: 4px 4px 4px var(--content-shadow-color);
     
-    overflow-x: hidden;
+    overflow-x: scroll;
 }
 #menu li {
     margin: 5px 0px 5px 0px;
@@ -93,6 +93,10 @@ aside#menu {
 
 #menu a:hover {
     background-color: var(--content-hover-color);
+}
+
+#menu .title {
+    font-size: large;
 }
 
     /* Блок с заданием */
@@ -295,21 +299,26 @@ ul.wtree, .wtree ul {
     padding: 10px;
     color: var(--body-font-color);
     text-decoration: none;
-    height: 1em;
+    /* height: 1em; */
 }
 
 .wtree span input {
-    width: -moz-available;
+    min-width: -moz-available;
+    min-width: -webkit-fill-available;
+    min-width: -ms-available;
+
+    max-width: max-content;
 }
 
 .wtree span button {
     position: relative;
-    top: -0.75em;
     width: 40px;
     justify-content: center;
     align-content: center;
-    height: 1.75em;
+    height: 2em;
     padding: 0.5em;
+    right: 130px;
+    margin-left: 2.5px;
 }
 
 .wtree li span:hover, .wtree li span:focus {
@@ -343,6 +352,8 @@ ul.wtree, .wtree ul {
     display: inline-block;
     margin-right: 10px;
     color: var(--body-font-color);
+    height: 15px;
+    align-self: center;
 }
 
 button#right-side {
@@ -421,7 +432,11 @@ button.no-answer {
 }
 
 button#choosed {
-    box-shadow: 0 3px var(--choosed-color);
+    box-shadow: inset 0px -3px 0px rgba(0, 0, 0, 0.4);
+}
+
+button#non-choosed {
+    box-shadow: inset 0px 3px 0px rgba(255, 255, 255, 0.4);
 }
 
 .correct, .partial,
