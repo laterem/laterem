@@ -215,6 +215,13 @@ button.wrong, button {
     color: var(--dark-font-color);
 
     box-shadow: 2px 2px 2px var(--foot-shadow-color);
+    align-items: center;
+    display: inline-flex;
+}
+
+.button * {
+    display: inline-block;
+    align-self: center;
 }
 
 input {
@@ -372,9 +379,6 @@ button#right-side {
     display: none;
 }
 
-.active {
-    display: block;
-}
 
 /* Иконка сайта */
 #main-icon {
@@ -383,14 +387,19 @@ button#right-side {
     padding: 5px;
     padding-bottom: 2px;
     border-radius: 30%;
-    background: var(--icon-background-color);
+    background: var(--header-dropdown-color);
     position: relative;
+    box-shadow: none;
 }
 
 /* Шапка сайта */
 .header {
     display: flex;
     align-self: center;
+}
+
+.header p {
+    margin: 0;
 }
     
 header.header {
@@ -496,9 +505,20 @@ td.wrong {
     display: inline-block;
 }
 
-.dropdown {
+.dropdown-toggle {
+    display: grid;
+    position: relative;
+    align-self: baseline;
+    grid-template-rows: 60px auto;
+    align-items: center;
+    cursor: pointer;
+}
+
+.dropdown-content {
     overflow: hidden;
-    padding: 5px;
+    display: none;
+    padding: 5px 0 5px 0;
+    margin: 0;
 
     background-color: var(--foot-background-color);
     border: 1px solid var(--foot-border-color);
@@ -511,8 +531,8 @@ td.wrong {
     align-self: flex-start;
 }
 
-#header-dropdown-item {
-    display: block;
+#header-dropdown-item * {
+    display: flex;
     padding: 5px;
     background-color: var(--header-dropdown-color);
 }
@@ -523,8 +543,13 @@ td.wrong {
     border-radius: 5px;
 }
 
-#header-dropdown-item:hover {
+#header-dropdown-item *:hover {
     background-color: var(--header-dropdown-lighted-color);
+}
+
+.dropdown-content hr, #header-dropdown-item hr {
+    display: block;
+    padding: 0;
 }
 
 table#add-user, table#add-group-member, table#add-task, table#appoint-work {
@@ -661,4 +686,8 @@ div#work-table  {
 #group-manage-header div:nth-of-type(2n) {
     justify-items: end;
     justify-self: end;
+}
+
+.active {
+    display: block;
 }

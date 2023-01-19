@@ -1,8 +1,7 @@
 {% extends 'base.html' %}
 
 {% block left-side %}
-Профиль<br>
-Внешний вид сайта
+Профиль
 {% endblock %}
 
 {% block content %}
@@ -13,12 +12,5 @@
         <a class="button" href="/logout">Выйти</a>
     </div>
 </div>
-<hr/>
-<h1>Настройки сайта</h1>
-    <form method="post">
-        {% csrf_token %}
-        <h2>Внешний вид сайта</h2>
-        <p>Тема: <button type="submit" class="button" name="change-color-theme" style="padding: 2px 4px 2px 4px;">{% include "icons/change-color-icon.html" %}</button> {{theme}}</p>
-    </form>
 
 {% endblock %}
