@@ -2,33 +2,47 @@
     --body-background-color: rgb(var(--base-r), var(--base-g), var(--base-b));
     --body-font-color: rgb(var(--font-r), var(--font-g), var(--font-b));
 
-    --foot-background-color: rgba(calc(var(--base-r) * 0.8), calc(var(--base-g) * 0.8), calc(var(--base-b) * 0.8), 0.9);
-    --foot-shadow-color: rgba(calc(var(--base-r) * 0.73), calc(var(--base-g) * 0.73), calc(var(--base-b) * 0.73), 0.25);
-    --foot-border-color: rgba(calc(var(--base-r) * 0.6), calc(var(--base-g) * 0.6), calc(var(--base-b) * 0.6), 0.6);
+    --foot-background-k: 0.8;
+    --foot-background-a: 0.9;
+    --foot-background-color: rgba(calc(var(--base-r) * var(--foot-background-k)), calc(var(--base-g) * var(--foot-background-k)), calc(var(--base-b) * var(--foot-background-k)), var(--foot-background-a));
+    
+    --foot-shadow-k: 0.9;
+    --foot-shadow-a: 0.25;
+    --foot-shadow-color: rgba(calc(var(--base-r) * var(--foot-background-k) * var(--foot-shadow-k)), calc(var(--base-g) * var(--foot-background-k) * var(--foot-shadow-k)), calc(var(--base-b) * var(--foot-background-k) * var(--foot-shadow-k)), var(--foot-shadow-a));
+    
+    --foot-border-k: 0.75;
+    --foot-border-a: 0.6;
+    --foot-border-color: rgba(calc(var(--base-r) * var(--foot-background-k) * var(--foot-border-k)), calc(var(--base-g) * var(--foot-background-k) * var(--foot-border-k)), calc(var(--base-b) * var(--foot-background-k) * var(--foot-border-k)), var(--foot-border-a));
 
-    --content-background-color: rgb(calc(var(--base-r) * 1.1), calc(var(--base-g) * 1.1), calc(var(--base-b) * 1.1));
-    --content-shadow-color: rgba(calc(var(--base-r) * 0.8), calc(var(--base-g) * 0.8), calc(var(--base-b) * 0.8), 0.5);
+    --content-background-k: 1.1;
+    --content-background-color: rgb(calc(var(--base-r) * var(--content-background-k)), calc(var(--base-g) * var(--content-background-k)), calc(var(--base-b) * var(--content-background-k)));
+    
+    --content-shadow-k: 0.72;
+    --content-shadow-a: 0.5;
+    --content-shadow-color: rgba(calc(var(--base-r) * var(--content-background-k) * var(--content-shadow-k)), calc(var(--base-g) * var(--content-background-k) * var(--content-shadow-k)), calc(var(--base-b) * var(--content-background-k) * var(--content-shadow-k)), var(--content-shadow-a));
 
 
-    --icon-background-color: rgb(calc(var(--base-r) * 1.06), calc(var(--base-g) * 1.06), calc(var(--base-b) * 1.06));
     --header-gradient-top: rgb(calc(var(--base-r) + 5), calc(var(--base-g) + 5), calc(var(--base-b) + 5));
     --header-gradient-bottom: rgb(calc(var(--base-r) - 5), calc(var(--base-g) - 5), calc(var(--base-b) - 5));
 
+    --content-hover-k: 1.3;
+    --content-hover-a: 0.9;
+
     --header-dropdown-color: rgba(0, 0, 0, 0);
-    --header-dropdown-lighted-color: rgba(calc(var(--base-r) * 1.1), calc(var(--base-g) * 1.1), calc(var(--base-b) * 1.1), 0.9);
  
-    --content-hover-color: rgb(calc(var(--base-r) * 1.3), calc(var(--base-g) * 1.3), calc(var(--base-b) * 1.3));
+    --content-hover-color: rgba(calc(var(--base-r) * var(--content-hover-k)), calc(var(--base-g) * var(--content-hover-k)), calc(var(--base-b) * var(--content-hover-k)), var(--content-hover-a));
 
     --button-background-color: rgb(var(--button-r), var(--button-g), var(--button-b));
-    --button-icon-background-color: rgb(calc(var(--button-r) * 0.7), calc(var(--button-g) * 0.7), calc(var(--button-b) * 0.7));
+    --button-icon-background-k: 0.7;
+    --button-icon-background-color: rgb(calc(var(--button-r) * var(--button-icon-background-k)), calc(var(--button-g) * var(--button-icon-background-k)), calc(var(--button-b) * var(--button-icon-background-k)));
 
     --blackout-color: rgba(0, 0, 0, var(--blackout-alpha));
     --blackout-shadow-color: rgb(10, 10, 10);
 
-    --border-k: 0.3;
+    --border-k: 0.33;
 
-    --border: rgb(calc(var(--base-r) * 1.1 * var(--border-k)), calc(var(--base-g) * 1.1 * var(--border-k)), calc(var(--base-b) * 1.1 * var(--border-k)));
-    --border-hover: rgb(calc(var(--base-r) * 1.3 * var(--border-k)), calc(var(--base-g) * 1.3 * var(--border-k)), calc(var(--base-b) * 1.3 * var(--border-k)));
+    --border: rgb(calc(var(--base-r) * var(--border-k)), calc(var(--base-g) * var(--border-k)), calc(var(--base-b) * var(--border-k)));
+    --border-hover: rgba(calc(var(--base-r) * var(--border-k) * var(--content-hover-k)), calc(var(--base-g) * var(--border-k) * var(--content-hover-k)), calc(var(--base-b) * var(--border-k) * var(--content-hover-k)),  var(--content-hover-a));
     --ident: 20px;
     --left: calc(-1 * var(--ident));
 }
@@ -544,7 +558,7 @@ td.wrong {
 }
 
 #header-dropdown-item *:hover {
-    background-color: var(--header-dropdown-lighted-color);
+    background-color: var(--content-hover-color);
 }
 
 .dropdown-content hr, #header-dropdown-item hr {
