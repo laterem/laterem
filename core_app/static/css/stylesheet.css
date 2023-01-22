@@ -4,22 +4,27 @@
 
     --is-light: 0;
 
-    --foot-background-k: calc(var(--is-light) * (1/0.8) - calc(var(--is-light) - 1) * 0.8);
+    --foot-background-k: 0.8;
+    /* --foot-background-k: calc(var(--is-light) * (1/0.8) - calc(var(--is-light) - 1) * 0.8); */
     --foot-background-a: 0.9;
     --foot-background-color: rgba(calc(var(--base-r) * var(--foot-background-k)), calc(var(--base-g) * var(--foot-background-k)), calc(var(--base-b) * var(--foot-background-k)), var(--foot-background-a));
     
-    --foot-shadow-k: calc(var(--is-light) * (1/0.9) - calc(var(--is-light) - 1) * 0.9);
+    --foot-shadow-k: 0.9;
+    /* --foot-shadow-k: calc(var(--is-light) * (1/0.9) - calc(var(--is-light) - 1) * 0.9); */
     --foot-shadow-a: 0.25;
     --foot-shadow-color: rgba(calc(var(--base-r) * var(--foot-background-k) * var(--foot-shadow-k)), calc(var(--base-g) * var(--foot-background-k) * var(--foot-shadow-k)), calc(var(--base-b) * var(--foot-background-k) * var(--foot-shadow-k)), var(--foot-shadow-a));
     
-    --foot-border-k: calc(var(--is-light) * (1/0.75) - calc(var(--is-light) - 1) * 0.75);
+    --foot-border-k: 0.75;
+    /* --foot-border-k: calc(var(--is-light) * (1/0.75) - calc(var(--is-light) - 1) * 0.75); */
     --foot-border-a: 0.6;
     --foot-border-color: rgba(calc(var(--base-r) * var(--foot-background-k) * var(--foot-border-k)), calc(var(--base-g) * var(--foot-background-k) * var(--foot-border-k)), calc(var(--base-b) * var(--foot-background-k) * var(--foot-border-k)), var(--foot-border-a));
 
-    --content-background-k: calc(var(--is-light) * (1/1.1) - calc(var(--is-light) - 1) * 1.1);
+    --content-background-k: 1.1;
+    /* --content-background-k: calc(var(--is-light) * (1/1.1) - calc(var(--is-light) - 1) * 1.1); */
     --content-background-color: rgb(calc(var(--base-r) * var(--content-background-k)), calc(var(--base-g) * var(--content-background-k)), calc(var(--base-b) * var(--content-background-k)));
     
-    --content-shadow-k: calc(var(--is-light) * (1/0.72) - calc(var(--is-light) - 1) * 0.72);
+    --content-shadow-k: 0.72;
+    /* --content-shadow-k: calc(var(--is-light) * (1/0.72) - calc(var(--is-light) - 1) * 0.72); */
     --content-shadow-a: 0.5;
     --content-shadow-color: rgba(calc(var(--base-r) * var(--content-background-k) * var(--content-shadow-k)), calc(var(--base-g) * var(--content-background-k) * var(--content-shadow-k)), calc(var(--base-b) * var(--content-background-k) * var(--content-shadow-k)), var(--content-shadow-a));
 
@@ -41,7 +46,8 @@
     --blackout-color: rgba(0, 0, 0, var(--blackout-alpha));
     --blackout-shadow-color: rgb(10, 10, 10);
 
-    --border-k: calc(var(--is-light) * (1/0.33) - calc(var(--is-light) - 1) * 0.33);
+    --border-k: 0.33;
+    /* --border-k: calc(var(--is-light) * (1/0.33) - calc(var(--is-light) - 1) * 0.33); */
 
     --border: rgb(calc(var(--base-r) * var(--border-k)), calc(var(--base-g) * var(--border-k)), calc(var(--base-b) * var(--border-k)));
     --border-hover: rgba(calc(var(--base-r) * var(--border-k) * var(--content-hover-k)), calc(var(--base-g) * var(--border-k) * var(--content-hover-k)), calc(var(--base-b) * var(--border-k) * var(--content-hover-k)),  var(--content-hover-a));
