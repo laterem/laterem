@@ -5,7 +5,7 @@ from django.core.exceptions import PermissionDenied
 from context_objects import LTM_SCANNER
 from os.path import join as pathjoin
 from os import mkdir
-from .views_functions import render_args, change_color_theme, DEBUG_assure_admin
+from .views_functions import render_args, change_color_theme, DEBUG_assure_admin, general_POST_handling
 from .models import *
 from django.contrib.auth.decorators import login_required
 from .forms import LoginForm, NewUser, AddMember, AssignWork, UploadTask
@@ -67,23 +67,21 @@ def login_view(request):
 
 @login_required
 def profile_view(request):
-    if request.method == 'POST':  
-        # Обработка кнопки смены темы
-        if 'change-color-theme' in request.POST:
-            with User(request.user) as user:
-                change_color_theme(user, request)
-                return redirect(request.path)
+    general_POST_handling(request)
     with User(request.user) as user:
         return render(request, 'profile_page.html', render_args(me=user, 
+                                                                request=request,
                                                                 additional={'title': 'Laterem Настройки', 
                                                                 'workdir': dict()})) # <- Костыыыль! 
 
 @any_permission_required("can_manage_users", "can_manage_works", "can_manage_groups", "can_manage_tasks")
 def teacher_hub(request):
-    return render(request, "teacher_panel/teacher_panel_base.html", render_args())
+    general_POST_handling(request)
+    return render(request, "teacher_panel/teacher_panel_base.html", render_args(request=request))
 
 @permission_required("can_manage_users")
 def users_panel(request):
+    general_POST_handling(request)
     if request.method == 'POST':
         if "newuser" in request.POST:
             form = NewUser(request.POST)
@@ -119,10 +117,12 @@ def users_panel(request):
                     user.save()
     form = NewUser()
     return render(request, "teacher_panel/user_panel.html", render_args(meta_all_users_available=True,
+                                                                        request=request,
                                                                         additional={'newuserform': form}))
 
 @permission_required("can_manage_works")
 def work_panel(request):
+    general_POST_handling(request)
     if request.method == 'POST':
         for signal in request.POST:
             if signal.startswith('add-work-'):
@@ -163,11 +163,13 @@ def work_panel(request):
                     return redirect(request.path)
     
     return render(request, "teacher_panel/work_panel/work_panel.html", render_args(meta_all_works_available=True,
+                                                                        request=request,
                                                                         me=User(request.user),
                                                                         ))
 
 @permission_required("can_manage_works")
 def manage_work(request, work_id):
+    general_POST_handling(request)
     work = Work.by_id(work_id)
 
     if request.method == 'POST':
@@ -196,6 +198,7 @@ def manage_work(request, work_id):
             groups_to_appoint.append((group.id, group.name))
     return render(request, 'teacher_panel/work_panel/work_manage.html', render_args(meta_all_task_types_available=True,
                                                                          me=User(request.user),
+                                                                         request=request,
                                                                          additional={'work': work,
                                                                          'groups_to_appoint': groups_to_appoint}))
 
@@ -203,16 +206,19 @@ def manage_work(request, work_id):
 
 @permission_required("can_manage_groups")
 def group_panel(request):
+    general_POST_handling(request)
     if request.method == 'POST':
         if 'new-group' in request.POST:
             with Group(LateremGroup.objects.create(name="Новая группа")) as new:
                 new.add_member(User(request.user), is_group_admin=True)
                 return redirect('/teacher/groups/' + str(new.id))
     return render(request, "teacher_panel/group_panel/group_panel.html", render_args(meta_all_groups_available=True,
+                                                                         request=request,
                                                                           ))
 
 @permission_required("can_manage_groups")
 def manage_group(request, group_id):
+    general_POST_handling(request)
     group = Group.by_id(group_id)
     me = User(request.user)
 
@@ -255,12 +261,14 @@ def manage_group(request, group_id):
             users.append(user)
 
     return render(request, 'teacher_panel/group_panel/group_manage.html', render_args(current_group=group,
+                                                                          request=request,
                                                                           additional={"assign_work_form": assign_work_form,
                                                                                       "users": users,
                                                                                       }))
 
 @permission_required("can_manage_tasks")
 def task_panel(request):
+    general_POST_handling(request)
     if request.method == "POST":
         if 'newtask' in request.POST:
             name = request.POST.get('task_type_name')
@@ -278,7 +286,7 @@ def task_panel(request):
         return redirect(request.path)
     # Временное решение
     # try:
-    return render(request, 'teacher_panel/task_panel/task_panel.html', render_args(additional={"all_templates": LTM_SCANNER.all_shoots()}))
+    return render(request, 'teacher_panel/task_panel/task_panel.html', render_args(request=request, additional={"all_templates": LTM_SCANNER.all_shoots()}))
     # except NotADirectoryError:
     #     print('! ERROR !\tДирректория data/tasks пуста. Нет доступных шаблонов')
     #     return render(request, 'teacher_panel/task_panel/task_panel.html', render_args(additional={"all_templates": ""}))
@@ -286,6 +294,7 @@ def task_panel(request):
 # Рендер страницы работы
 @login_required
 def render_work(request, work_id):
+    general_POST_handling(request)
     work_id = int(work_id)
 
     work = Work.by_id(work_id)
@@ -305,6 +314,7 @@ def getasset(request, taskname, filename):
 # Функция рендера (обработки и конечного представления на сайте) задачи по имени (имя берётся из адресной строки)
 @login_required
 def task_view(request, stask_id):
+    general_POST_handling(request)
     if 'compiled_tasks' not in request.session: 
         request.session['compiled_tasks'] = {}
 
@@ -334,25 +344,30 @@ def task_view(request, stask_id):
             user.solve(task, dict(request.POST), Verdicts.WRONG_ANSWER)
         return redirect(request.path)
     return render(request, "work_base.html", render_args(me=User(request.user),
+                                                         request=request,
                                                          current_task=task,
                                                          additional=compiled_task.ltc.field_table))
 
 # Базовая страница сайта
 @login_required
 def student_page_render(request):
+    general_POST_handling(request)
     with User(request.user) as user:
         if not request.session.get('color-theme'):
             request.session['color-theme'] = user.get_setting('theme')
         return render(request, 'student.html', render_args(me=User(request.user),
+                                                           request=request,
                                                          additional={'title': 'Laterem',
                                                                      'text': 'Это базовая страница',
                                                                      'text2': 'Перейдите на нужную работу по ссылке слева'}))
 
 def main_page_render(request):
+    general_POST_handling(request)
     with User(request.user) as user:
         return render(request,
                     'main.html',
-                    {
-                        'title': 'Laterem'
-                    }
+                    render_args(request=request,
+                                additional={'title': 'Laterem'
+                                },
+                                )
                     )

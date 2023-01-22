@@ -44,6 +44,7 @@
         <script src="{% static 'js/caret-manager.js' %}"></script>
     </body>
     <header role="banner" class="header">
+    
         <div class="header">
             <a id="main-icon" class="header button" href="/">
                 {% include "icons/main-icon.html" %}
@@ -59,16 +60,15 @@
             <ul class="dropdown-content" id="header-dropdown-item" style="grid-row: 2; grid-column-start: 1; grid-column-end: 3;">
                 <li><a href="/profile">Профиль</a></li>
                 <li style="display: block;"><hr/></li>
-                <li><button type="submit" class="button" name="change-color-theme" style="padding: 2px 4px 2px 4px;">{% include "icons/change-color-icon.html" %} <p style="color: var(--body-font-color);">Тема {{theme}}</p></button></li>
+                <li><form method="post">{% csrf_token %}<button type="submit" class="button" name="change-color-theme" style="padding: 2px 4px 2px 4px;">{% include "icons/change-color-icon.html" %} <p style="color: var(--body-font-color);">Тема {{theme}}</p></button></form></li>
                 <li style="display: block;"><hr/></li>
                 <li><a class="button" href="/logout">Выйти</a></li>
-            
             </ul>
         </div>
 
         <script src="{% static 'js/dropdown-manage.js' %}"></script>
 
-        <div width="100vh" style="background-color: var(--header-gradient-bottom); height: 1px; position: fixxed; bottom: 0px;">
-        </div>
+        <div width="100vh" style="background-color: var(--header-gradient-bottom); height: 1px; position: fixxed; bottom: 0px;"></div>
+    
     </header>
 </html>

@@ -6,6 +6,7 @@ from dbapi.users import User
 from .models import LateremUser
 from extratypes import NotSpecified
 from context_objects import LATEREM_FLAGS, DEBUG_DBSamples, LTM_SCANNER
+from django.shortcuts import redirect
 
 if DEBUG_DBSamples in LATEREM_FLAGS:
     from secret_data import ADMIN_PASSWORD
@@ -43,6 +44,7 @@ def render_args(*,
                 current_task=NotSpecified,
                 current_work=NotSpecified,
                 current_group=NotSpecified,
+                request=NotSpecified,
                 meta_all_users_available=False,
                 meta_all_groups_available=False,
                 meta_all_works_available=False,
@@ -92,6 +94,10 @@ def render_args(*,
     if current_group is not NotSpecified:
         ret['group'] = current_group
 
+    if request is not NotSpecified:
+        if ret.get('theme') == None:
+            ret['theme'] = request.session.get('color-theme')
+
     if meta_all_users_available:
         ret['allusers'] = map(User, LateremUser.objects.all())
     
@@ -111,6 +117,8 @@ def render_args(*,
     for key, value in additional.items():
         ret[key] = value
 
+    print(ret.get('theme'))
+
     return ret
 
 
@@ -124,3 +132,11 @@ def change_color_theme(user, request):
     
     user.set_settings(theme=usertheme)
     request.session['color-theme'] = usertheme
+
+def general_POST_handling(request):
+    if request.method == 'POST':  
+        # Обработка кнопки смены темы
+        if 'change-color-theme' in request.POST:
+            with User(request.user) as user:
+                change_color_theme(user, request)
+                return redirect(request.path)
