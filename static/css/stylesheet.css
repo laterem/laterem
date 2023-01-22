@@ -2,28 +2,51 @@
     --body-background-color: rgb(var(--base-r), var(--base-g), var(--base-b));
     --body-font-color: rgb(var(--font-r), var(--font-g), var(--font-b));
 
-    --foot-background-color: rgba(calc(var(--base-r) * 0.8), calc(var(--base-g) * 0.8), calc(var(--base-b) * 0.8), 0.9);
-    --foot-shadow-color: rgba(calc(var(--base-r) * 0.73), calc(var(--base-g) * 0.73), calc(var(--base-b) * 0.73), 0.25);
-    --foot-border-color: rgba(calc(var(--base-r) * 0.6), calc(var(--base-g) * 0.6), calc(var(--base-b) * 0.6), 0.6);
+    --is-light: 0;
 
-    --content-background-color: rgb(calc(var(--base-r) * 1.1), calc(var(--base-g) * 1.1), calc(var(--base-b) * 1.1));
-    --content-shadow-color: rgba(calc(var(--base-r) * 0.8), calc(var(--base-g) * 0.8), calc(var(--base-b) * 0.8), 0.5);
+    --foot-background-k: calc(var(--is-light) * (1/0.8) - calc(var(--is-light) - 1) * 0.8);
+    --foot-background-a: 0.9;
+    --foot-background-color: rgba(calc(var(--base-r) * var(--foot-background-k)), calc(var(--base-g) * var(--foot-background-k)), calc(var(--base-b) * var(--foot-background-k)), var(--foot-background-a));
+    
+    --foot-shadow-k: calc(var(--is-light) * (1/0.9) - calc(var(--is-light) - 1) * 0.9);
+    --foot-shadow-a: 0.25;
+    --foot-shadow-color: rgba(calc(var(--base-r) * var(--foot-background-k) * var(--foot-shadow-k)), calc(var(--base-g) * var(--foot-background-k) * var(--foot-shadow-k)), calc(var(--base-b) * var(--foot-background-k) * var(--foot-shadow-k)), var(--foot-shadow-a));
+    
+    --foot-border-k: calc(var(--is-light) * (1/0.75) - calc(var(--is-light) - 1) * 0.75);
+    --foot-border-a: 0.6;
+    --foot-border-color: rgba(calc(var(--base-r) * var(--foot-background-k) * var(--foot-border-k)), calc(var(--base-g) * var(--foot-background-k) * var(--foot-border-k)), calc(var(--base-b) * var(--foot-background-k) * var(--foot-border-k)), var(--foot-border-a));
+
+    --content-background-k: calc(var(--is-light) * (1/1.1) - calc(var(--is-light) - 1) * 1.1);
+    --content-background-color: rgb(calc(var(--base-r) * var(--content-background-k)), calc(var(--base-g) * var(--content-background-k)), calc(var(--base-b) * var(--content-background-k)));
+    
+    --content-shadow-k: calc(var(--is-light) * (1/0.72) - calc(var(--is-light) - 1) * 0.72);
+    --content-shadow-a: 0.5;
+    --content-shadow-color: rgba(calc(var(--base-r) * var(--content-background-k) * var(--content-shadow-k)), calc(var(--base-g) * var(--content-background-k) * var(--content-shadow-k)), calc(var(--base-b) * var(--content-background-k) * var(--content-shadow-k)), var(--content-shadow-a));
 
 
-    --icon-background-color: rgb(calc(var(--base-r) * 1.06), calc(var(--base-g) * 1.06), calc(var(--base-b) * 1.06));
     --header-gradient-top: rgb(calc(var(--base-r) + 5), calc(var(--base-g) + 5), calc(var(--base-b) + 5));
     --header-gradient-bottom: rgb(calc(var(--base-r) - 5), calc(var(--base-g) - 5), calc(var(--base-b) - 5));
 
+    --content-hover-k: calc(var(--is-light) * (1/1.3) - calc(var(--is-light) - 1) * 1.3);
+    --content-hover-a: 0.9;
+
     --header-dropdown-color: rgba(0, 0, 0, 0);
-    --header-dropdown-lighted-color: rgba(calc(var(--base-r) * 1.1), calc(var(--base-g) * 1.1), calc(var(--base-b) * 1.1), 0.9);
  
-    --content-hover-color: rgb(calc(var(--base-r) * 1.3), calc(var(--base-g) * 1.3), calc(var(--base-b) * 1.3));
+    --content-hover-color: rgba(calc(var(--base-r) * var(--content-hover-k)), calc(var(--base-g) * var(--content-hover-k)), calc(var(--base-b) * var(--content-hover-k)), var(--content-hover-a));
 
     --button-background-color: rgb(var(--button-r), var(--button-g), var(--button-b));
-    --button-icon-background-color: rgb(calc(var(--button-r) * 0.7), calc(var(--button-g) * 0.7), calc(var(--button-b) * 0.7));
+    --button-icon-background-k: calc(var(--is-light) * (1/0.7) - calc(var(--is-light) - 1) * 0.7);
+    --button-icon-background-color: rgb(calc(var(--button-r) * var(--button-icon-background-k)), calc(var(--button-g) * var(--button-icon-background-k)), calc(var(--button-b) * var(--button-icon-background-k)));
 
     --blackout-color: rgba(0, 0, 0, var(--blackout-alpha));
     --blackout-shadow-color: rgb(10, 10, 10);
+
+    --border-k: calc(var(--is-light) * (1/0.33) - calc(var(--is-light) - 1) * 0.33);
+
+    --border: rgb(calc(var(--base-r) * var(--border-k)), calc(var(--base-g) * var(--border-k)), calc(var(--base-b) * var(--border-k)));
+    --border-hover: rgba(calc(var(--base-r) * var(--border-k) * var(--content-hover-k)), calc(var(--base-g) * var(--border-k) * var(--content-hover-k)), calc(var(--base-b) * var(--border-k) * var(--content-hover-k)),  var(--content-hover-a));
+    --ident: 20px;
+    --left: calc(-1 * var(--ident));
 }
 
 /* Общий стиль */
@@ -65,7 +88,7 @@ aside#menu {
     background: var(--content-background-color);
     box-shadow: 4px 4px 4px var(--content-shadow-color);
     
-    overflow-x: hidden;
+    overflow-x: scroll;
 }
 #menu li {
     margin: 5px 0px 5px 0px;
@@ -86,6 +109,10 @@ aside#menu {
 
 #menu a:hover {
     background-color: var(--content-hover-color);
+}
+
+#menu .title {
+    font-size: large;
 }
 
     /* Блок с заданием */
@@ -204,6 +231,13 @@ button.wrong, button {
     color: var(--dark-font-color);
 
     box-shadow: 2px 2px 2px var(--foot-shadow-color);
+    align-items: center;
+    display: inline-flex;
+}
+
+.button * {
+    display: inline-block;
+    align-self: center;
 }
 
 input {
@@ -231,6 +265,103 @@ ul, #myUL {
     color: var(--body-font-color);
 }
 
+ul.wtree, .wtree ul {
+    margin-left: var(--ident);
+}
+
+.wtree {
+    padding: 0;
+    --radius: 10px;
+}
+
+.wtree * {
+    padding: 0;
+}
+
+.wtree a {
+    text-decoration: none;
+    color: var(--body-font-color);
+}
+
+.wtree li {
+    list-style-type: none;
+    margin: 10px 0 10px 10px;
+    position: relative;
+}
+
+.wtree li:before {
+    content: "";
+    position: absolute;
+    top: -10px;
+    left: var(--left);
+    border-left: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    border-radius: 0 var(--radius);
+    width: var(--ident);
+    height: 1.75em;
+}
+
+.wtree li:after {
+    position: absolute;
+    content: "";
+    top: 0;
+    left: var(--left);
+    border-left: 1px solid var(--border);
+    width: var(--ident);
+    height: 100%;
+}
+
+.wtree li:last-child:after {
+    display: none;
+}
+
+.wtree span {
+    display: flex;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 10px;
+    color: var(--body-font-color);
+    text-decoration: none;
+    /* height: 1em; */
+}
+
+.wtree span input {
+    min-width: -moz-available;
+    min-width: -webkit-fill-available;
+    min-width: -ms-available;
+
+    max-width: max-content;
+}
+
+.wtree span button {
+    position: relative;
+    width: 40px;
+    justify-content: center;
+    align-content: center;
+    height: 2em;
+    padding: 0.5em;
+    right: 130px;
+    margin-left: 2.5px;
+}
+
+.wtree li span:hover, .wtree li span:focus {
+    background: var(--content-hover-color); 
+    color: var(--body-font-color); 
+    border: 1px solid var(--border-hover);
+    border-radius: var(--radius);
+}
+.wtree li span:hover + ul li span, .wtree li span:focus + ul li span {
+    background: var(--content-hover-color); 
+    color: var(--body-font-color); 
+    border: 1px solid var(--border-hover);
+    border-radius: var(--radius);
+}
+
+.wtree li span:hover ul li:before, .wtree li span:focus ul li:before,
+.wtree li span:hover ul li:after, .wtree li span:focus ul li:after {
+    border-color: var(--border-hover);
+}
+
 .caret {
     cursor: pointer;
     -webkit-user-select: none; /* Safari 3.1+ */
@@ -244,6 +375,8 @@ ul, #myUL {
     display: inline-block;
     margin-right: 10px;
     color: var(--body-font-color);
+    height: 15px;
+    align-self: center;
 }
 
 button#right-side {
@@ -262,9 +395,6 @@ button#right-side {
     display: none;
 }
 
-.active {
-    display: block;
-}
 
 /* Иконка сайта */
 #main-icon {
@@ -273,14 +403,19 @@ button#right-side {
     padding: 5px;
     padding-bottom: 2px;
     border-radius: 30%;
-    background: var(--icon-background-color);
+    background: var(--header-dropdown-color);
     position: relative;
+    box-shadow: none;
 }
 
 /* Шапка сайта */
 .header {
     display: flex;
     align-self: center;
+}
+
+.header p {
+    margin: 0;
 }
     
 header.header {
@@ -322,7 +457,11 @@ button.no-answer {
 }
 
 button#choosed {
-    box-shadow: 0 3px var(--choosed-color);
+    box-shadow: inset 0px -3px 0px rgba(0, 0, 0, 0.4);
+}
+
+button#non-choosed {
+    box-shadow: inset 0px 3px 0px rgba(255, 255, 255, 0.4);
 }
 
 .correct, .partial,
@@ -382,9 +521,20 @@ td.wrong {
     display: inline-block;
 }
 
-.dropdown {
+.dropdown-toggle {
+    display: grid;
+    position: relative;
+    align-self: baseline;
+    grid-template-rows: 60px auto;
+    align-items: center;
+    cursor: pointer;
+}
+
+.dropdown-content {
     overflow: hidden;
-    padding: 5px;
+    display: none;
+    padding: 5px 0 5px 0;
+    margin: 0;
 
     background-color: var(--foot-background-color);
     border: 1px solid var(--foot-border-color);
@@ -397,8 +547,8 @@ td.wrong {
     align-self: flex-start;
 }
 
-#header-dropdown-item {
-    display: block;
+#header-dropdown-item * {
+    display: flex;
     padding: 5px;
     background-color: var(--header-dropdown-color);
 }
@@ -409,8 +559,13 @@ td.wrong {
     border-radius: 5px;
 }
 
-#header-dropdown-item:hover {
-    background-color: var(--header-dropdown-lighted-color);
+#header-dropdown-item *:hover {
+    background-color: var(--content-hover-color);
+}
+
+.dropdown-content hr, #header-dropdown-item hr {
+    display: block;
+    padding: 0;
 }
 
 table#add-user, table#add-group-member, table#add-task, table#appoint-work {
@@ -547,4 +702,8 @@ div#work-table  {
 #group-manage-header div:nth-of-type(2n) {
     justify-items: end;
     justify-self: end;
+}
+
+.active {
+    display: block;
 }

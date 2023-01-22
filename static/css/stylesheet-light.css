@@ -1,6 +1,8 @@
 @import './stylesheet.css';
 
 :root { 
+    --is-light: 1;
+
     --base-r: 227;
     --base-g: 228;
     --base-b: 230;
