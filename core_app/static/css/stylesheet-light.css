@@ -22,8 +22,6 @@
     --wrong-color: rgb(240, 57, 63);
     --no-answer-background-color: rgb(215, 215, 215);
     --dark-font-color: rgb(0, 10, 25);
-
-    --choosed-color: #ee8f6d;
 }
 
 .caret::before {
