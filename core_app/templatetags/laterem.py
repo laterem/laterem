@@ -95,7 +95,7 @@ def _submenu(inp, user: User, outer=False, editable=False, unravel=False, title=
             output = '<li><span style="border: none"><a href="' + '/works/' + addr + '">' + name + '</a></span>' + draw_progress_line(line_args) + '</li>'
         else:
             output = '<li><span style="border: none"><a href="' + '/teacher/works/' + addr + '">' + name + '</a></span>' + '</li>'
-    print(output[:20] + " <...> " + output[-20:])
+    # print(output[:20] + " <...> " + output[-20:])
     assert output.count('<li') == output.count('</li>')
     assert output.count('<ul') == output.count('</ul>')
     return output

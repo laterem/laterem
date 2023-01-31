@@ -52,6 +52,7 @@ def render_args(*,
                 additional={}
                 ):
     ret = {}
+    print(additional)
 
     if me is not NotSpecified:
         #if meta_all_works_available:
@@ -117,7 +118,7 @@ def render_args(*,
     for key, value in additional.items():
         ret[key] = value
 
-    print(ret.get('theme'))
+    # print(ret.get('theme'))
 
     return ret
 
