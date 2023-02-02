@@ -609,8 +609,12 @@ div#user-table, div#all-groups-table, div#task-table {
     width: 100%;
 }
 
-div#all-groups-table, div#task-table {
+div#all-groups-table {
     grid-template-columns: 100%;
+}
+
+div#task-table {
+    grid-template-columns: auto 40px 40px;
 }
 
 .group-table-element, .user-table-element,
@@ -628,7 +632,8 @@ div#all-groups-table, div#task-table {
 .all-groups-table-element:nth-of-type(2n+1),
 .work-table-element:nth-of-type(6n+1), .work-table-element:nth-of-type(6n+2),
 .work-table-element:nth-of-type(6n+3),
-.task-table-element:nth-of-type(2n+1) {
+.task-table-element:nth-of-type(6n+1), .task-table-element:nth-of-type(6n+2),
+.task-table-element:nth-of-type(6n+3) {
     background-color: var(--content-hover-color);
 }
 
