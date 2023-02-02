@@ -330,8 +330,6 @@ def task_view(request, stask_id):
         compiled_task = CompiledTask.from_JSON(request.session['compiled_tasks'][stask_id])
 
     if request.method == 'POST':
-        print(request.POST)
-
         if request.POST.get('student_tree'):
             print('\n\nCATCHED student_tree!!!\n\n\n\t', request.POST.get('student_tree'), '\n\n\n')
             request.session['student_tree'] = request.POST.get('student_tree')
@@ -352,6 +350,8 @@ def task_view(request, stask_id):
         with User(request.user) as user:
             user.solve(task, dict(request.POST), Verdicts.WRONG_ANSWER)
         return redirect(request.path)
+    if request.session.get('student_tree'):
+        additional_render_args['student_tree'] = request.session.get('student_tree')
     additional_render_args.update(compiled_task.ltc.field_table)
     return render(request, "work_base.html", render_args(me=User(request.user),
                                                          request=request,
