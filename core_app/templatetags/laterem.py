@@ -50,7 +50,7 @@ def _submenu(inp, user: User, outer=False, editable=False, unravel=None, title='
             output += '</h1>'
             output += '<ul class="wtree">'
             for child in inp.children():
-                output += _submenu(child, user, editable=True)
+                output += _submenu(child, user, editable=True, unravel=unravel)
             output += '</ul>'
             return  output
     elif outer:
@@ -59,7 +59,7 @@ def _submenu(inp, user: User, outer=False, editable=False, unravel=None, title='
         output += '</h1>'
         output += '<ul class="wtree">'
         for child in inp.children():
-            output += _submenu(child, user)
+            output += _submenu(child, user, unravel=unravel)
         output += '</ul>'
         return  output
     
@@ -75,12 +75,13 @@ def _submenu(inp, user: User, outer=False, editable=False, unravel=None, title='
         else:
             output += '<li>' + '<span class="caret">' + inp.name
         output += '</span>'
-        if inp.dbmodel.id in unravel:
+        print(unravel)
+        if f"category-id-{inp.dbmodel.id}" in unravel:
             output += f'<ul id="category-id-{inp.dbmodel.id}" class="nested active">'
         else:
             output += f'<ul id="category-id-{inp.dbmodel.id}" class="nested">' 
         for child in inp.children():
-            output +=  _submenu(child, user, editable=editable) 
+            output +=  _submenu(child, user, unravel=unravel, editable=editable) 
         output +=  '</ul>' + '</li>'
     else:
         name = inp.name
@@ -142,14 +143,14 @@ def _submenu(inp, user: User, outer=False, editable=False, unravel=None, title='
 def tree(context, treename):
     try:
         user = context['user']
-        return SafeString(_submenu(context[treename], user, outer=True, title=context.get('tree_title', 'Доступные работы')))
-    except KeyError:
-        return ''
+        return SafeString(_submenu(context[treename], user, outer=True, unravel=context['unraveled_categories'], title=context.get('tree_title', 'Доступные работы')))
+    except KeyError as e:
+        return str(e)
 
 @register.simple_tag(takes_context=True)
 def fillable_tree(context, treename):
     try:
         user = context['user']
-        return SafeString(_submenu(context[treename], user, outer=True, editable=True, title=context.get('tree_title', 'Доступные работы')))
-    except KeyError:
-        return ''
+        return SafeString(_submenu(context[treename], user, outer=True, unravel=context['unraveled_categories'], editable=True, title=context.get('tree_title', 'Доступные работы')))
+    except KeyError as e:
+        return str(e)
