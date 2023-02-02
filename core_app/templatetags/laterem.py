@@ -20,7 +20,9 @@ def draw_progress_line(args):
     ret += '</tr></table>'
     return ret
 
-def _submenu(inp, user: User, outer=False, editable=False, unravel=False, title='Доступные работы'):
+def _submenu(inp, user: User, outer=False, editable=False, unravel=None, title='Доступные работы'):
+    if unravel == None:
+        unravel = set()
     if editable:
         book_plus = """<svg class="svg-icon" style="width: 1.5em; height: 1.5em; vertical-align: middle;fill: currentColor;overflow: hidden;" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg">
                        <path d="M768 938.666667H256a85.333333 85.333333 0 0 1-85.333333-85.333334V170.666667a85.333333 85.333333 0 0 1 85.333333-85.333334h42.666667v298.666667l106.666666-64L512 384V85.333333h256a85.333333 85.333333 0 0 1 85.333333 85.333334v682.666666a85.333333 85.333333 0 0 1-85.333333 85.333334m-170.666667-85.333334h85.333334v-85.333333h85.333333v-85.333333h-85.333333v-85.333334h-85.333334v85.333334h-85.333333v85.333333h85.333333v85.333333z" fill="" />
@@ -73,10 +75,10 @@ def _submenu(inp, user: User, outer=False, editable=False, unravel=False, title=
         else:
             output += '<li>' + '<span class="caret">' + inp.name
         output += '</span>'
-        if unravel:
-            output += '<ul class="nested active">'
+        if inp.dbmodel.id in unravel:
+            output += f'<ul id="{inp.dbmodel.id}" class="nested active">'
         else:
-            output += '<ul class="nested">' 
+            output += f'<ul id="{inp.dbmodel.id}" class="nested">' 
         for child in inp.children():
             output +=  _submenu(child, user, editable=editable) 
         output +=  '</ul>' + '</li>'
