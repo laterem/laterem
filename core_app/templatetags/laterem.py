@@ -76,9 +76,9 @@ def _submenu(inp, user: User, outer=False, editable=False, unravel=None, title='
             output += '<li>' + '<span class="caret">' + inp.name
         output += '</span>'
         if inp.dbmodel.id in unravel:
-            output += f'<ul id="{inp.dbmodel.id}" class="nested active">'
+            output += f'<ul id="category-id-{inp.dbmodel.id}" class="nested active">'
         else:
-            output += f'<ul id="{inp.dbmodel.id}" class="nested">' 
+            output += f'<ul id="category-id-{inp.dbmodel.id}" class="nested">' 
         for child in inp.children():
             output +=  _submenu(child, user, editable=editable) 
         output +=  '</ul>' + '</li>'

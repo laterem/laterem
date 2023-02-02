@@ -2,13 +2,13 @@
 {% load laterem %}
 
 {% block left-side %}
-    {% if student_tree %}
+    {% comment %} {% if student_tree %}
         {{ student_tree | safe }}
-    {% else %}
+    {% else %} {% endcomment %}
         {% with tree_title="Доступные работы" %}
             {% tree "workdir" %}
         {% endwith %}
-    {% endif %}
+    {% comment %} {% endif %} {% endcomment %}
 {% endblock %}
 
 {% block content %}
@@ -32,8 +32,10 @@
     
             var student_tree = $("#menu").html();
     
-            new_data.push({name: 'student_tree', value: student_tree});
-    
+            var active_ids = $('.active').map(function(_, x) { return x.id; }).get();
+
+            new_data.push({name: 'active_ids', value: active_ids});
+
             // console.log(jQuery.param(new_data));
     
             $.ajax({
