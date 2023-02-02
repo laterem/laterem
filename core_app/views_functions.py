@@ -52,7 +52,7 @@ def render_args(*,
                 additional={}
                 ):
     ret = {}
-    print(additional)
+    # print(additional)
 
     if me is not NotSpecified:
         #if meta_all_works_available:
@@ -98,12 +98,6 @@ def render_args(*,
     if request is not NotSpecified:
         if ret.get('theme') == None:
             ret['theme'] = request.session.get('color-theme')
-        active_ids = request.POST.get('active_ids')
-        print(request.POST)
-        if active_ids:
-            ret['unraveled_categories'] = active_ids
-        else:
-            ret['unraveled_categories'] = set()
 
     if meta_all_users_available:
         ret['allusers'] = map(User, LateremUser.objects.all())

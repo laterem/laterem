@@ -66,19 +66,27 @@ def _submenu(inp, user: User, outer=False, editable=False, unravel=None, title='
     output = ''
 
     if inp.has_children:
-        if editable:
-            output += '<li>' + '<span class="caret">' + '<input value="' + inp.name + '" name="input-' + str(inp.id) + '" id="input-' + str(inp.id) + '" disabled="true"/>'
-            change_name = "edit=getElementById('input-" + str(inp.id) + "'); if (tree_is_editing) {document.getElementById('edit-" + str(inp.id) + "').type = 'submit';}; tree_is_editing = !tree_is_editing; edit.disabled = false; getElementById('input-" + str(inp.id) + "') = edit;"
-            output += '<button type="button" name="edit-' + str(inp.id) + '" id="edit-' + str(inp.id) + '" class="button-icon" onclick="' + change_name + '">' + pencil_icon + '</button>'
-            output += '<button type="submit" name="add-category-' + str(inp.id) + '" class="button-icon">' + folder_plus + '</button>'
-            output += '<button type="submit" name="add-work-' + str(inp.id) + '" class="button-icon">' + book_plus + '</button>'
-        else:
-            output += '<li>' + '<span class="caret">' + inp.name
-        output += '</span>'
-        print(unravel)
         if f"category-id-{inp.dbmodel.id}" in unravel:
+            if editable:
+                output += '<li>' + '<span class="caret caret-down">' + '<input value="' + inp.name + '" name="input-' + str(inp.id) + '" id="input-' + str(inp.id) + '" disabled="true"/>'
+                change_name = "edit=getElementById('input-" + str(inp.id) + "'); if (tree_is_editing) {document.getElementById('edit-" + str(inp.id) + "').type = 'submit';}; tree_is_editing = !tree_is_editing; edit.disabled = false; getElementById('input-" + str(inp.id) + "') = edit;"
+                output += '<button type="button" name="edit-' + str(inp.id) + '" id="edit-' + str(inp.id) + '" class="button-icon" onclick="' + change_name + '">' + pencil_icon + '</button>'
+                output += '<button type="submit" name="add-category-' + str(inp.id) + '" class="button-icon">' + folder_plus + '</button>'
+                output += '<button type="submit" name="add-work-' + str(inp.id) + '" class="button-icon">' + book_plus + '</button>'
+            else:
+                output += '<li>' + '<span class="caret caret-down">' + inp.name
+            output += '</span>'
             output += f'<ul id="category-id-{inp.dbmodel.id}" class="nested active">'
         else:
+            if editable:
+                output += '<li>' + '<span class="caret">' + '<input value="' + inp.name + '" name="input-' + str(inp.id) + '" id="input-' + str(inp.id) + '" disabled="true"/>'
+                change_name = "edit=getElementById('input-" + str(inp.id) + "'); if (tree_is_editing) {document.getElementById('edit-" + str(inp.id) + "').type = 'submit';}; tree_is_editing = !tree_is_editing; edit.disabled = false; getElementById('input-" + str(inp.id) + "') = edit;"
+                output += '<button type="button" name="edit-' + str(inp.id) + '" id="edit-' + str(inp.id) + '" class="button-icon" onclick="' + change_name + '">' + pencil_icon + '</button>'
+                output += '<button type="submit" name="add-category-' + str(inp.id) + '" class="button-icon">' + folder_plus + '</button>'
+                output += '<button type="submit" name="add-work-' + str(inp.id) + '" class="button-icon">' + book_plus + '</button>'
+            else:
+                output += '<li>' + '<span class="caret">' + inp.name
+            output += '</span>'
             output += f'<ul id="category-id-{inp.dbmodel.id}" class="nested">' 
         for child in inp.children():
             output +=  _submenu(child, user, unravel=unravel, editable=editable) 
@@ -142,8 +150,10 @@ def _submenu(inp, user: User, outer=False, editable=False, unravel=None, title='
 @register.simple_tag(takes_context=True)
 def tree(context, treename):
     try:
+        print(context.get('unraveled_categories'))
         user = context['user']
-        return SafeString(_submenu(context[treename], user, outer=True, unravel=context['unraveled_categories'], title=context.get('tree_title', 'Доступные работы')))
+        unraveled_categories = context['unraveled_categories'] if 'unraveled_categories' in context else None
+        return SafeString(_submenu(context[treename], user, outer=True, unravel=unraveled_categories, title=context.get('tree_title', 'Доступные работы')))
     except KeyError as e:
         return str(e)
 
@@ -151,6 +161,7 @@ def tree(context, treename):
 def fillable_tree(context, treename):
     try:
         user = context['user']
-        return SafeString(_submenu(context[treename], user, outer=True, unravel=context['unraveled_categories'], editable=True, title=context.get('tree_title', 'Доступные работы')))
+        unraveled_categories = context['unraveled_categories'] if 'unraveled_categories' in context else None
+        return SafeString(_submenu(context[treename], user, outer=True, unravel=unraveled_categories, editable=True, title=context.get('tree_title', 'Доступные работы')))
     except KeyError as e:
         return str(e)
