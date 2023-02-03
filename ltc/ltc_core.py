@@ -11,6 +11,11 @@ class LTCObject:
     def __call__(self):
         return self.value
 
+KEYWORD_TABLE = {}
+
+def register_function(**kwargs):
+    KEYWORD_TABLE.update(kwargs)
+
 NResult = object()
 
 class LTCFunction:
