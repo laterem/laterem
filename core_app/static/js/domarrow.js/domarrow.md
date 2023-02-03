@@ -1,8 +1,8 @@
 # Дока как использовать domarrow.js - Соединение стрелкой 2 элементов
-Скрипт взят [отсюда](https://www.cssscript.com/connect-elements-directional-arrow/)
+Скрипт взят [отсюда](https://www.cssscript.com/connect-elements-directional-arrow/) ([github](https://github.com/schaumb/domarrow.js))
 
 ## Подготовка
-Нужно подключить скрипт написав `<script type="text/javascript" src="../domarrow.js"></script>` где-то перед использованием функционала
+Нужно подключить скрипт написав `<script type="text/javascript" src="{% static 'js//domarrow.js/domarrow.js' %}"></script>` где-то перед использованием функционала
 
 ## Основной элемент
 Все взаимодействие со скриптом происходит через парный тэг `<connection></connection>`

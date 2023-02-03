@@ -315,6 +315,8 @@ def getasset(request, taskname, filename):
 @login_required
 def task_view(request, stask_id):
     general_POST_handling(request)
+    additional_render_args = {}
+
     if 'compiled_tasks' not in request.session: 
         request.session['compiled_tasks'] = {}
 
@@ -328,6 +330,11 @@ def task_view(request, stask_id):
         compiled_task = CompiledTask.from_JSON(request.session['compiled_tasks'][stask_id])
 
     if request.method == 'POST':
+        print(request.POST)
+        active_ids = request.POST.get('active_ids')
+        if active_ids:
+            request.session['active_ids'] = active_ids
+
         # Проверка - есть ли нажатая нами кнопка в списке задач (нужно для переадрессации на другие задачи)
         for el in request.POST:
             if el.startswith('redirect:task'):
@@ -343,10 +350,12 @@ def task_view(request, stask_id):
         with User(request.user) as user:
             user.solve(task, dict(request.POST), Verdicts.WRONG_ANSWER)
         return redirect(request.path)
+    additional_render_args['unraveled_categories'] = request.session.get('active_ids')
+    additional_render_args.update(compiled_task.ltc.field_table)
     return render(request, "work_base.html", render_args(me=User(request.user),
                                                          request=request,
                                                          current_task=task,
-                                                         additional=compiled_task.ltc.field_table))
+                                                         additional=additional_render_args))
 
 # Базовая страница сайта
 @login_required
