@@ -1,11 +1,13 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 
+
 class LateremUser(AbstractUser):
     settings = models.TextField()
 
+
 class LateremGroup(models.Model):
-    id = models.AutoField(primary_key=True,unique=True)
+    id = models.AutoField(primary_key=True, unique=True)
     name = models.CharField(max_length=128)
     # Global Permissions (temporary)
     can_solve_tasks = models.BooleanField(default=True)
@@ -13,6 +15,7 @@ class LateremGroup(models.Model):
     can_manage_users = models.BooleanField(default=False)
     can_manage_works = models.BooleanField(default=False)
     can_manage_tasks = models.BooleanField(default=False)
+
 
 class LateremGroupMembership(models.Model):
     user = models.ForeignKey(LateremUser, on_delete=models.CASCADE)
@@ -29,26 +32,42 @@ class LateremGroupMembership(models.Model):
     can_examine_solutions = models.BooleanField(default=False)
     can_solve_works = models.BooleanField(default=True)
 
+
 class LateremCategory(models.Model):
     name = models.CharField(max_length=128)
     root_category = models.IntegerField(null=True)
-    
+
+
 class LateremWork(models.Model):
-    id = models.AutoField(primary_key=True,unique=True)
+    id = models.AutoField(primary_key=True, unique=True)
     name = models.CharField(max_length=128)
     author = models.ForeignKey(LateremUser, on_delete=models.DO_NOTHING)
-    category = models.ForeignKey(LateremCategory, null=True, on_delete=models.SET_NULL)
+    category = models.ForeignKey(
+        LateremCategory, null=True, on_delete=models.SET_NULL
+    )
+
 
 class LateremTask(models.Model):
     name = models.CharField(max_length=128)
     work = models.ForeignKey(LateremWork, on_delete=models.CASCADE)
     task_type = models.CharField(max_length=128)
-    
+
+
 class LateremAssignment(models.Model):
-    teacher = models.ForeignKey(LateremUser, on_delete=models.DO_NOTHING, related_name='assigner')
-    user = models.ForeignKey(LateremUser, null=True, on_delete=models.CASCADE, related_name='assigned_to')
-    group = models.ForeignKey(LateremGroup, null=True, on_delete=models.CASCADE)
+    teacher = models.ForeignKey(
+        LateremUser, on_delete=models.DO_NOTHING, related_name="assigner"
+    )
+    user = models.ForeignKey(
+        LateremUser,
+        null=True,
+        on_delete=models.CASCADE,
+        related_name="assigned_to",
+    )
+    group = models.ForeignKey(
+        LateremGroup, null=True, on_delete=models.CASCADE
+    )
     work = models.ForeignKey(LateremWork, on_delete=models.CASCADE)
+
 
 class LateremSolution(models.Model):
     user = models.ForeignKey(LateremUser, on_delete=models.CASCADE)

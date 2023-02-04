@@ -9,157 +9,362 @@ import django.utils.timezone
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('auth', '0012_alter_user_first_name_max_length'),
-        ('core_app', '0001_initial'),
+        ("auth", "0012_alter_user_first_name_max_length"),
+        ("core_app", "0001_initial"),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='LateremUser',
+            name="LateremUser",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('password', models.CharField(max_length=128, verbose_name='password')),
-                ('last_login', models.DateTimeField(blank=True, null=True, verbose_name='last login')),
-                ('is_superuser', models.BooleanField(default=False, help_text='Designates that this user has all permissions without explicitly assigning them.', verbose_name='superuser status')),
-                ('username', models.CharField(error_messages={'unique': 'A user with that username already exists.'}, help_text='Required. 150 characters or fewer. Letters, digits and @/./+/-/_ only.', max_length=150, unique=True, validators=[django.contrib.auth.validators.UnicodeUsernameValidator()], verbose_name='username')),
-                ('first_name', models.CharField(blank=True, max_length=150, verbose_name='first name')),
-                ('last_name', models.CharField(blank=True, max_length=150, verbose_name='last name')),
-                ('email', models.EmailField(blank=True, max_length=254, verbose_name='email address')),
-                ('is_staff', models.BooleanField(default=False, help_text='Designates whether the user can log into this admin site.', verbose_name='staff status')),
-                ('is_active', models.BooleanField(default=True, help_text='Designates whether this user should be treated as active. Unselect this instead of deleting accounts.', verbose_name='active')),
-                ('date_joined', models.DateTimeField(default=django.utils.timezone.now, verbose_name='date joined')),
-                ('settings', models.TextField()),
-                ('groups', models.ManyToManyField(blank=True, help_text='The groups this user belongs to. A user will get all permissions granted to each of their groups.', related_name='user_set', related_query_name='user', to='auth.group', verbose_name='groups')),
-                ('user_permissions', models.ManyToManyField(blank=True, help_text='Specific permissions for this user.', related_name='user_set', related_query_name='user', to='auth.permission', verbose_name='user permissions')),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                (
+                    "password",
+                    models.CharField(max_length=128, verbose_name="password"),
+                ),
+                (
+                    "last_login",
+                    models.DateTimeField(
+                        blank=True, null=True, verbose_name="last login"
+                    ),
+                ),
+                (
+                    "is_superuser",
+                    models.BooleanField(
+                        default=False,
+                        help_text="Designates that this user has all permissions without explicitly assigning them.",
+                        verbose_name="superuser status",
+                    ),
+                ),
+                (
+                    "username",
+                    models.CharField(
+                        error_messages={
+                            "unique": "A user with that username already exists."
+                        },
+                        help_text="Required. 150 characters or fewer. Letters, digits and @/./+/-/_ only.",
+                        max_length=150,
+                        unique=True,
+                        validators=[
+                            django.contrib.auth.validators.UnicodeUsernameValidator()
+                        ],
+                        verbose_name="username",
+                    ),
+                ),
+                (
+                    "first_name",
+                    models.CharField(
+                        blank=True, max_length=150, verbose_name="first name"
+                    ),
+                ),
+                (
+                    "last_name",
+                    models.CharField(
+                        blank=True, max_length=150, verbose_name="last name"
+                    ),
+                ),
+                (
+                    "email",
+                    models.EmailField(
+                        blank=True,
+                        max_length=254,
+                        verbose_name="email address",
+                    ),
+                ),
+                (
+                    "is_staff",
+                    models.BooleanField(
+                        default=False,
+                        help_text="Designates whether the user can log into this admin site.",
+                        verbose_name="staff status",
+                    ),
+                ),
+                (
+                    "is_active",
+                    models.BooleanField(
+                        default=True,
+                        help_text="Designates whether this user should be treated as active. Unselect this instead of deleting accounts.",
+                        verbose_name="active",
+                    ),
+                ),
+                (
+                    "date_joined",
+                    models.DateTimeField(
+                        default=django.utils.timezone.now,
+                        verbose_name="date joined",
+                    ),
+                ),
+                ("settings", models.TextField()),
+                (
+                    "groups",
+                    models.ManyToManyField(
+                        blank=True,
+                        help_text="The groups this user belongs to. A user will get all permissions granted to each of their groups.",
+                        related_name="user_set",
+                        related_query_name="user",
+                        to="auth.group",
+                        verbose_name="groups",
+                    ),
+                ),
+                (
+                    "user_permissions",
+                    models.ManyToManyField(
+                        blank=True,
+                        help_text="Specific permissions for this user.",
+                        related_name="user_set",
+                        related_query_name="user",
+                        to="auth.permission",
+                        verbose_name="user permissions",
+                    ),
+                ),
             ],
             options={
-                'verbose_name': 'user',
-                'verbose_name_plural': 'users',
-                'abstract': False,
+                "verbose_name": "user",
+                "verbose_name_plural": "users",
+                "abstract": False,
             },
             managers=[
-                ('objects', django.contrib.auth.models.UserManager()),
+                ("objects", django.contrib.auth.models.UserManager()),
             ],
         ),
         migrations.CreateModel(
-            name='LateremAssignment',
+            name="LateremAssignment",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
             ],
         ),
         migrations.CreateModel(
-            name='LateremCategoryCategory',
+            name="LateremCategoryCategory",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('name', models.CharField(max_length=128)),
-                ('root_category', models.IntegerField(null=True)),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("name", models.CharField(max_length=128)),
+                ("root_category", models.IntegerField(null=True)),
             ],
         ),
         migrations.CreateModel(
-            name='LateremGroup',
+            name="LateremGroup",
             fields=[
-                ('id', models.AutoField(primary_key=True, serialize=False, unique=True)),
-                ('name', models.CharField(max_length=128)),
-                ('can_solve_tasks', models.BooleanField(default=True)),
-                ('can_manage_groups', models.BooleanField(default=False)),
-                ('can_manage_users', models.BooleanField(default=False)),
-                ('can_manage_works', models.BooleanField(default=False)),
+                (
+                    "id",
+                    models.AutoField(
+                        primary_key=True, serialize=False, unique=True
+                    ),
+                ),
+                ("name", models.CharField(max_length=128)),
+                ("can_solve_tasks", models.BooleanField(default=True)),
+                ("can_manage_groups", models.BooleanField(default=False)),
+                ("can_manage_users", models.BooleanField(default=False)),
+                ("can_manage_works", models.BooleanField(default=False)),
             ],
         ),
         migrations.CreateModel(
-            name='LateremGroupMembership',
+            name="LateremGroupMembership",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('is_group_admin', models.BooleanField(default=False)),
-                ('can_manage_group_data', models.BooleanField(default=False)),
-                ('can_manage_members', models.BooleanField(default=False)),
-                ('can_view_members', models.BooleanField(default=True)),
-                ('can_manage_permissions', models.BooleanField(default=False)),
-                ('can_add_members', models.BooleanField(default=False)),
-                ('can_assign_works', models.BooleanField(default=False)),
-                ('can_examine_solutions', models.BooleanField(default=False)),
-                ('can_solve_works', models.BooleanField(default=True)),
-                ('group', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='core_app.lateremgroup')),
-                ('user', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL)),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("is_group_admin", models.BooleanField(default=False)),
+                ("can_manage_group_data", models.BooleanField(default=False)),
+                ("can_manage_members", models.BooleanField(default=False)),
+                ("can_view_members", models.BooleanField(default=True)),
+                ("can_manage_permissions", models.BooleanField(default=False)),
+                ("can_add_members", models.BooleanField(default=False)),
+                ("can_assign_works", models.BooleanField(default=False)),
+                ("can_examine_solutions", models.BooleanField(default=False)),
+                ("can_solve_works", models.BooleanField(default=True)),
+                (
+                    "group",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to="core_app.lateremgroup",
+                    ),
+                ),
+                (
+                    "user",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to=settings.AUTH_USER_MODEL,
+                    ),
+                ),
             ],
         ),
         migrations.CreateModel(
-            name='LateremSolution',
+            name="LateremSolution",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('verdict', models.CharField(max_length=2)),
-                ('timestamp', models.DateTimeField()),
-                ('answers', models.TextField()),
-                ('teacher_comment', models.TextField()),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("verdict", models.CharField(max_length=2)),
+                ("timestamp", models.DateTimeField()),
+                ("answers", models.TextField()),
+                ("teacher_comment", models.TextField()),
             ],
         ),
         migrations.CreateModel(
-            name='LateremTask',
+            name="LateremTask",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('name', models.CharField(max_length=128)),
-                ('task_type', models.CharField(max_length=128)),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("name", models.CharField(max_length=128)),
+                ("task_type", models.CharField(max_length=128)),
             ],
         ),
         migrations.CreateModel(
-            name='LateremWork',
+            name="LateremWork",
             fields=[
-                ('id', models.AutoField(primary_key=True, serialize=False, unique=True)),
-                ('name', models.CharField(max_length=128)),
-                ('author', models.ForeignKey(on_delete=django.db.models.deletion.DO_NOTHING, to=settings.AUTH_USER_MODEL)),
+                (
+                    "id",
+                    models.AutoField(
+                        primary_key=True, serialize=False, unique=True
+                    ),
+                ),
+                ("name", models.CharField(max_length=128)),
+                (
+                    "author",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.DO_NOTHING,
+                        to=settings.AUTH_USER_MODEL,
+                    ),
+                ),
             ],
         ),
         migrations.CreateModel(
-            name='LateremWorkCategory',
+            name="LateremWorkCategory",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('name', models.CharField(max_length=128)),
-                ('root_category', models.ForeignKey(null=True, on_delete=django.db.models.deletion.SET_NULL, to='core_app.lateremcategorycategory')),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("name", models.CharField(max_length=128)),
+                (
+                    "root_category",
+                    models.ForeignKey(
+                        null=True,
+                        on_delete=django.db.models.deletion.SET_NULL,
+                        to="core_app.lateremcategorycategory",
+                    ),
+                ),
             ],
         ),
         migrations.DeleteModel(
-            name='task_1',
+            name="task_1",
         ),
         migrations.AddField(
-            model_name='lateremwork',
-            name='category',
-            field=models.ForeignKey(null=True, on_delete=django.db.models.deletion.SET_NULL, to='core_app.lateremworkcategory'),
+            model_name="lateremwork",
+            name="category",
+            field=models.ForeignKey(
+                null=True,
+                on_delete=django.db.models.deletion.SET_NULL,
+                to="core_app.lateremworkcategory",
+            ),
         ),
         migrations.AddField(
-            model_name='lateremtask',
-            name='work',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='core_app.lateremwork'),
+            model_name="lateremtask",
+            name="work",
+            field=models.ForeignKey(
+                on_delete=django.db.models.deletion.CASCADE,
+                to="core_app.lateremwork",
+            ),
         ),
         migrations.AddField(
-            model_name='lateremsolution',
-            name='task',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='core_app.lateremtask'),
+            model_name="lateremsolution",
+            name="task",
+            field=models.ForeignKey(
+                on_delete=django.db.models.deletion.CASCADE,
+                to="core_app.lateremtask",
+            ),
         ),
         migrations.AddField(
-            model_name='lateremsolution',
-            name='user',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL),
+            model_name="lateremsolution",
+            name="user",
+            field=models.ForeignKey(
+                on_delete=django.db.models.deletion.CASCADE,
+                to=settings.AUTH_USER_MODEL,
+            ),
         ),
         migrations.AddField(
-            model_name='lateremassignment',
-            name='group',
-            field=models.ForeignKey(null=True, on_delete=django.db.models.deletion.CASCADE, to='core_app.lateremgroup'),
+            model_name="lateremassignment",
+            name="group",
+            field=models.ForeignKey(
+                null=True,
+                on_delete=django.db.models.deletion.CASCADE,
+                to="core_app.lateremgroup",
+            ),
         ),
         migrations.AddField(
-            model_name='lateremassignment',
-            name='teacher',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.DO_NOTHING, related_name='assigner', to=settings.AUTH_USER_MODEL),
+            model_name="lateremassignment",
+            name="teacher",
+            field=models.ForeignKey(
+                on_delete=django.db.models.deletion.DO_NOTHING,
+                related_name="assigner",
+                to=settings.AUTH_USER_MODEL,
+            ),
         ),
         migrations.AddField(
-            model_name='lateremassignment',
-            name='user',
-            field=models.ForeignKey(null=True, on_delete=django.db.models.deletion.CASCADE, related_name='assigned_to', to=settings.AUTH_USER_MODEL),
+            model_name="lateremassignment",
+            name="user",
+            field=models.ForeignKey(
+                null=True,
+                on_delete=django.db.models.deletion.CASCADE,
+                related_name="assigned_to",
+                to=settings.AUTH_USER_MODEL,
+            ),
         ),
         migrations.AddField(
-            model_name='lateremassignment',
-            name='work',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='core_app.lateremwork'),
+            model_name="lateremassignment",
+            name="work",
+            field=models.ForeignKey(
+                on_delete=django.db.models.deletion.CASCADE,
+                to="core_app.lateremwork",
+            ),
         ),
     ]

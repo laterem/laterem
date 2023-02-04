@@ -6,22 +6,38 @@ from dbapi.tasks import Work
 
 register = template.Library()
 
+
 @register.simple_tag(takes_context=True)
 def asset(context, format_string):
-    taskname = context['task'].task_type
-    path = '/taskasset' + '/' + taskname + '/' + format_string
+    taskname = context["task"].task_type
+    path = "/taskasset" + "/" + taskname + "/" + format_string
     return path
+
 
 def draw_progress_line(args):
     ret = '<table class="progress_line" cellpadding="0px"><tr>'
     for verdict, l in args:
         if l > 0:
-            ret += '<td class="' + verdict + '" height="4px" width=' + str(l * 100).replace('.', ',')  + '%></td>'
-    ret += '</tr></table>'
+            ret += (
+                '<td class="'
+                + verdict
+                + '" height="4px" width='
+                + str(l * 100).replace(".", ",")
+                + "%></td>"
+            )
+    ret += "</tr></table>"
     return ret
 
-def _submenu(inp, user: User, outer=False, editable=False, unravel=None, title='Доступные работы'):
-    if unravel == None:
+
+def _submenu(
+    inp,
+    user: User,
+    outer=False,
+    editable=False,
+    unravel=None,
+    title="Доступные работы",
+):
+    if unravel is None:
         unravel = set()
     if editable:
         book_plus = """<svg class="svg-icon" style="width: 1.5em; height: 1.5em; vertical-align: middle;fill: currentColor;overflow: hidden;" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg">
@@ -45,52 +61,134 @@ def _submenu(inp, user: User, outer=False, editable=False, unravel=None, title='
             output += title
             output += '<button type="submit" name="add-category-mother" class="button-icon" style="margin-left: 10px; height: min-content">'
             output += folder_plus
-            output += '&nbsp; Добавить &nbsp;'
-            output += '</button>'
-            output += '</h1>'
+            output += "&nbsp; Добавить &nbsp;"
+            output += "</button>"
+            output += "</h1>"
             output += '<ul class="wtree">'
             for child in inp.children():
                 output += _submenu(child, user, editable=True, unravel=unravel)
-            output += '</ul>'
-            return  output
+            output += "</ul>"
+            return output
     elif outer:
         output = '<h1 class="title">'
         output += title
-        output += '</h1>'
+        output += "</h1>"
         output += '<ul class="wtree">'
         for child in inp.children():
             output += _submenu(child, user, unravel=unravel)
-        output += '</ul>'
-        return  output
-    
-    output = ''
+        output += "</ul>"
+        return output
+
+    output = ""
 
     if inp.has_children:
         if f"category-id-{inp.dbmodel.id}" in unravel:
             if editable:
-                output += '<li>' + '<span class="caret caret-down">' + '<input value="' + inp.name + '" name="input-' + str(inp.id) + '" id="input-' + str(inp.id) + '" disabled="true"/>'
-                change_name = "edit=getElementById('input-" + str(inp.id) + "'); if (tree_is_editing) {document.getElementById('edit-" + str(inp.id) + "').type = 'submit';}; tree_is_editing = !tree_is_editing; edit.disabled = false; getElementById('input-" + str(inp.id) + "') = edit;"
-                output += '<button type="button" name="edit-' + str(inp.id) + '" id="edit-' + str(inp.id) + '" class="button-icon" onclick="' + change_name + '">' + pencil_icon + '</button>'
-                output += '<button type="submit" name="add-category-' + str(inp.id) + '" class="button-icon">' + folder_plus + '</button>'
-                output += '<button type="submit" name="add-work-' + str(inp.id) + '" class="button-icon">' + book_plus + '</button>'
+                output += (
+                    "<li>"
+                    + '<span class="caret caret-down">'
+                    + '<input value="'
+                    + inp.name
+                    + '" name="input-'
+                    + str(inp.id)
+                    + '" id="input-'
+                    + str(inp.id)
+                    + '" disabled="true"/>'
+                )
+                change_name = (
+                    "edit=getElementById('input-"
+                    + str(inp.id)
+                    + "'); if (tree_is_editing) {document.getElementById('edit-"
+                    + str(inp.id)
+                    + "').type = 'submit';}; tree_is_editing = !tree_is_editing; edit.disabled = false; getElementById('input-"
+                    + str(inp.id)
+                    + "') = edit;"
+                )
+                output += (
+                    '<button type="button" name="edit-'
+                    + str(inp.id)
+                    + '" id="edit-'
+                    + str(inp.id)
+                    + '" class="button-icon" onclick="'
+                    + change_name
+                    + '">'
+                    + pencil_icon
+                    + "</button>"
+                )
+                output += (
+                    '<button type="submit" name="add-category-'
+                    + str(inp.id)
+                    + '" class="button-icon">'
+                    + folder_plus
+                    + "</button>"
+                )
+                output += (
+                    '<button type="submit" name="add-work-'
+                    + str(inp.id)
+                    + '" class="button-icon">'
+                    + book_plus
+                    + "</button>"
+                )
             else:
-                output += '<li>' + '<span class="caret caret-down">' + inp.name
-            output += '</span>'
-            output += f'<ul id="category-id-{inp.dbmodel.id}" class="nested active">'
+                output += "<li>" + '<span class="caret caret-down">' + inp.name
+            output += "</span>"
+            output += (
+                f'<ul id="category-id-{inp.dbmodel.id}" class="nested active">'
+            )
         else:
             if editable:
-                output += '<li>' + '<span class="caret">' + '<input value="' + inp.name + '" name="input-' + str(inp.id) + '" id="input-' + str(inp.id) + '" disabled="true"/>'
-                change_name = "edit=getElementById('input-" + str(inp.id) + "'); if (tree_is_editing) {document.getElementById('edit-" + str(inp.id) + "').type = 'submit';}; tree_is_editing = !tree_is_editing; edit.disabled = false; getElementById('input-" + str(inp.id) + "') = edit;"
-                output += '<button type="button" name="edit-' + str(inp.id) + '" id="edit-' + str(inp.id) + '" class="button-icon" onclick="' + change_name + '">' + pencil_icon + '</button>'
-                output += '<button type="submit" name="add-category-' + str(inp.id) + '" class="button-icon">' + folder_plus + '</button>'
-                output += '<button type="submit" name="add-work-' + str(inp.id) + '" class="button-icon">' + book_plus + '</button>'
+                output += (
+                    "<li>"
+                    + '<span class="caret">'
+                    + '<input value="'
+                    + inp.name
+                    + '" name="input-'
+                    + str(inp.id)
+                    + '" id="input-'
+                    + str(inp.id)
+                    + '" disabled="true"/>'
+                )
+                change_name = (
+                    "edit=getElementById('input-"
+                    + str(inp.id)
+                    + "'); if (tree_is_editing) {document.getElementById('edit-"
+                    + str(inp.id)
+                    + "').type = 'submit';}; tree_is_editing = !tree_is_editing; edit.disabled = false; getElementById('input-"
+                    + str(inp.id)
+                    + "') = edit;"
+                )
+                output += (
+                    '<button type="button" name="edit-'
+                    + str(inp.id)
+                    + '" id="edit-'
+                    + str(inp.id)
+                    + '" class="button-icon" onclick="'
+                    + change_name
+                    + '">'
+                    + pencil_icon
+                    + "</button>"
+                )
+                output += (
+                    '<button type="submit" name="add-category-'
+                    + str(inp.id)
+                    + '" class="button-icon">'
+                    + folder_plus
+                    + "</button>"
+                )
+                output += (
+                    '<button type="submit" name="add-work-'
+                    + str(inp.id)
+                    + '" class="button-icon">'
+                    + book_plus
+                    + "</button>"
+                )
             else:
-                output += '<li>' + '<span class="caret">' + inp.name
-            output += '</span>'
-            output += f'<ul id="category-id-{inp.dbmodel.id}" class="nested">' 
+                output += "<li>" + '<span class="caret">' + inp.name
+            output += "</span>"
+            output += f'<ul id="category-id-{inp.dbmodel.id}" class="nested">'
         for child in inp.children():
-            output +=  _submenu(child, user, unravel=unravel, editable=editable) 
-        output +=  '</ul>' + '</li>'
+            output += _submenu(child, user, unravel=unravel, editable=editable)
+        output += "</ul>" + "</li>"
     else:
         name = inp.name
         addr = str(inp.id)
@@ -98,24 +196,46 @@ def _submenu(inp, user: User, outer=False, editable=False, unravel=None, title='
             stats = user.get_work_stats(inp, True)
 
             green_len = stats[Verdicts.OK]
-            orange_len = stats[Verdicts.SENT] + stats[Verdicts.PARTIALLY_SOLVED]
+            orange_len = (
+                stats[Verdicts.SENT] + stats[Verdicts.PARTIALLY_SOLVED]
+            )
             red_len = stats[Verdicts.WRONG_ANSWER]
             gray_len = stats[Verdicts.NO_ANSWER]
 
-            line_args = [("correct", green_len), ("unchecked", orange_len), ("wrong", red_len), ("no-answer", gray_len)]
-            output = '<li><span style="border: none"><a href="' + '/works/' + addr + '">' + name + '</a></span>' + draw_progress_line(line_args) + '</li>'
+            line_args = [
+                ("correct", green_len),
+                ("unchecked", orange_len),
+                ("wrong", red_len),
+                ("no-answer", gray_len),
+            ]
+            output = (
+                '<li><span style="border: none"><a href="'
+                + "/works/"
+                + addr
+                + '">'
+                + name
+                + "</a></span>"
+                + draw_progress_line(line_args)
+                + "</li>"
+            )
         else:
-            output = '<li><span style="border: none"><a href="' + '/teacher/works/' + addr + '">' + name + '</a></span>' + '</li>'
+            output = (
+                '<li><span style="border: none"><a href="'
+                + "/teacher/works/"
+                + addr
+                + '">'
+                + name
+                + "</a></span>"
+                + "</li>"
+            )
     # print(output[:20] + " <...> " + output[-20:])
-    assert output.count('<li') == output.count('</li>')
-    assert output.count('<ul') == output.count('</ul>')
+    assert output.count("<li") == output.count("</li>")
+    assert output.count("<ul") == output.count("</ul>")
     return output
-
-    
 
 
 # Кол-во вызовов = кол-во словарей в mask_tree(WORK_DIR, user.raw_available_branches)
-#def _submenu(inp, user: User, path=[], outer=False, fillable=False, first_active=False):
+# def _submenu(inp, user: User, path=[], outer=False, fillable=False, first_active=False):
 #    for key, value in inp.items():
 #        if isinstance(value, dict):
 #            output += '<li><span class="caret">' + key + '</span>'
@@ -147,21 +267,48 @@ def _submenu(inp, user: User, outer=False, editable=False, unravel=None, title='
 #    output += '</ul>'
 #    return output
 
+
 @register.simple_tag(takes_context=True)
 def tree(context, treename):
     try:
-        print(context.get('unraveled_categories'))
-        user = context['user']
-        unraveled_categories = context['unraveled_categories'] if 'unraveled_categories' in context else None
-        return SafeString(_submenu(context[treename], user, outer=True, unravel=unraveled_categories, title=context.get('tree_title', 'Доступные работы')))
+        print(context.get("unraveled_categories"))
+        user = context["user"]
+        unraveled_categories = (
+            context["unraveled_categories"]
+            if "unraveled_categories" in context
+            else None
+        )
+        return SafeString(
+            _submenu(
+                context[treename],
+                user,
+                outer=True,
+                unravel=unraveled_categories,
+                title=context.get("tree_title", "Доступные работы"),
+            )
+        )
     except KeyError as e:
         return str(e)
+
 
 @register.simple_tag(takes_context=True)
 def fillable_tree(context, treename):
     try:
-        user = context['user']
-        unraveled_categories = context['unraveled_categories'] if 'unraveled_categories' in context else None
-        return SafeString(_submenu(context[treename], user, outer=True, unravel=unraveled_categories, editable=True, title=context.get('tree_title', 'Доступные работы')))
+        user = context["user"]
+        unraveled_categories = (
+            context["unraveled_categories"]
+            if "unraveled_categories" in context
+            else None
+        )
+        return SafeString(
+            _submenu(
+                context[treename],
+                user,
+                outer=True,
+                unravel=unraveled_categories,
+                editable=True,
+                title=context.get("tree_title", "Доступные работы"),
+            )
+        )
     except KeyError as e:
         return str(e)
