@@ -5,6 +5,8 @@ from django.core.exceptions import PermissionDenied
 from context_objects import LTM_SCANNER
 from os.path import join as pathjoin
 from os import mkdir
+from shutil import rmtree
+import os
 from .views_functions import render_args, change_color_theme, DEBUG_assure_admin, general_POST_handling
 from .models import *
 from django.contrib.auth.decorators import login_required
@@ -283,10 +285,19 @@ def task_panel(request):
             with open(pathjoin(path, 'view.html'), 'wb+') as dest:
                 for chunk in view.chunks():
                     dest.write(chunk)
+        else:
+            flag = False
+            for signal in request.POST:
+                if signal.startswith('delete:'):
+                    ID = signal[len('delete:'):]
+                    dirr = pathjoin('data', 'tasks', ID)
+                    if os.path.isdir(dirr):
+                       rmtree(dirr) 
+                    break
         return redirect(request.path)
     # Временное решение
     # try:
-    return render(request, 'teacher_panel/task_panel/task_panel.html', render_args(request=request, additional={"all_templates": LTM_SCANNER.all_shoots()}))
+    return render(request, 'teacher_panel/task_panel/task_panel.html', render_args(request=request, additional={"all_templates": LTM_SCANNER.all_shoots(use_cache=False)}))
     # except NotADirectoryError:
     #     print('! ERROR !\tДирректория data/tasks пуста. Нет доступных шаблонов')
     #     return render(request, 'teacher_panel/task_panel/task_panel.html', render_args(additional={"all_templates": ""}))

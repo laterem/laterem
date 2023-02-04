@@ -46,6 +46,7 @@ class LTC:
         return ltc
 
     def to_dict(self):
+        INVERSE_TABLE = dict((v,k) for k,v in KEYWORD_TABLE.items())
         if not self.executed: self.execute()
         mainobj = {}
         mainobj['field_values'] = self.field_table
@@ -98,6 +99,7 @@ class LTC:
         return valid
 
     def check(self, fields):
+        print(fields, self.field_table)
         valid = True
         for field, checker in self.checker_functions:
             valid = valid and checker(fields[field])

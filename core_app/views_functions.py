@@ -110,7 +110,7 @@ def render_args(*,
 
     if meta_all_task_types_available:
         try:
-            ret['alltasktypes'] = LTM_SCANNER.all_shoots()
+            ret['alltasktypes'] = LTM_SCANNER.all_shoots(use_cache=False)
         except NotADirectoryError:
             print('! ERROR !\tДирректория data/tasks пуста. Нет доступных шаблонов')
             ret['alltasktypes'] = ""
