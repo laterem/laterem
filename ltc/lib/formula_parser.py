@@ -1,4 +1,7 @@
-from extratypes import NotSpecified
+try:
+    from extratypes import NotSpecified
+except ModuleNotFoundError:
+    NotSpecified = object()
 
 class Operator:
     def __init__(self, priority, function):
@@ -103,4 +106,4 @@ class FormulaParser:
                           variables=variables)
     
     def polish_stack(self, string):
-        return self._polish(self._parse(_raw_parse))
+        return self._polish(self._raw_parse(string))

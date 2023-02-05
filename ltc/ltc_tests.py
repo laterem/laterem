@@ -179,6 +179,25 @@ e = Power(a, b)
     elif ft['e'] != 10 ** 5:
         raise TestFailed('Exponention')
 
+@test('9 Parser Test')
+def test9():
+    string = '''
+a = Calc("42 / 2 + (-1) * 10")
+b = Calc("2*(2*(9 - 12) ^ 2)")
+'''
+
+    ltcc = LTCCompiler()
+
+    ltc = ltcc.compile(string)
+    ltc.execute()
+    
+    a, b = ltc.field_table['a'], ltc.field_table['b']
+
+    if a != 42 / 2 + (-1) * 10:
+        raise TestFailed(str(a))
+    if b != 2*(2*(9 - 12) ** 2):
+        raise TestFailed(str(b))
+
 if __name__ == '__main__':
     test1()
     test2()
@@ -188,4 +207,5 @@ if __name__ == '__main__':
     test6()
     test7()
     test8()
+    test9()
 
