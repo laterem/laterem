@@ -4,9 +4,10 @@ except ModuleNotFoundError:
     NotSpecified = object()
 
 class Operator:
-    def __init__(self, priority, function):
+    def __init__(self, priority, function, arity=2):
         self.priority = priority
         self.function = function
+        self.arity = arity
 
     def __call__(self, *args):
         return self.function(*args)
@@ -25,7 +26,7 @@ class FormulaParser:
     @staticmethod
     def object_convert(string, variables):
         if string in variables:
-            return variables[y]
+            return variables[string]
         else:
             return float(string)
 
@@ -34,10 +35,12 @@ class FormulaParser:
         if not string.strip():
             return False
 
+        # <Костыль>
         UNARY_OPERATORS = '-'
         for op in UNARY_OPERATORS:
             if string.strip() == op:
                 return False
+        # </Костыль>
         return True
 
     @staticmethod
@@ -116,12 +119,14 @@ class FormulaParser:
             variables = {}
         stack = []
         for token in polish:
+            print(token, end=' ')
             if token in cls.operators: 
-                y, x = stack.pop(), stack.pop()
-                x, y = cls.object_convert(x, variables), cls.object_convert(y, variables)
-                stack.append(cls.operators[token](x, y)) 
+                oper = cls.operators[token]
+                args = [cls.object_convert(stack.pop(), variables) for _ in range(oper.arity)]
+                stack.append(oper(*reversed(args))) 
             else:
                 stack.append(token)
+        print()
         return stack[0]
 
     def eval(self, string, variables=NotSpecified):

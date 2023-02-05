@@ -182,8 +182,9 @@ e = Power(a, b)
 @test('9 Parser Test')
 def test9():
     string = '''
-a = Calc("42 / 2 + -(1 * 10)")
-b = Calc("2*(2*(9 - 12) ^ 2)")
+_ = Calc("3*(2-1)")
+a = Calc("42 / 2 + (1 * 10)")
+b = Calc("(2*(9 - 12) ^ 2) * 2")
 c = Calc("0.1 + 0.02 + (3 / 1000)")
 '''
 
@@ -193,17 +194,30 @@ c = Calc("0.1 + 0.02 + (3 / 1000)")
     ltc.execute()
     
     a, b, c = ltc.field_table['a'], ltc.field_table['b'], ltc.field_table['c']
-    correct_a = 42 / 2 + -(1 * 10)
-    correct_b = 2*(2*(9-12) ** 2)
+    correct_a = 42 / 2 + (1 * 10)
+    correct_b = (2*(9-12) ** 2) * 2
     correct_c = 0.1 + 0.02 + (3 / 1000)
-
-
     if a != correct_a:
         raise TestFailed('A: ' + str(a) + ' instead of ' + str(correct_a))
     if b != correct_b:
         raise TestFailed('B: ' + str(b) + ' instead of ' + str(correct_b))
     if c != correct_c:
         raise TestFailed('C: ' + str(c) + ' instead of ' + str(correct_c))
+
+@test('10 Parser Unary Minus Problem Test')
+def test10():
+    string = '''
+a = Calc("42 / 2 + (-(1 * 10))")
+'''
+    ltcc = LTCCompiler()
+
+    ltc = ltcc.compile(string)
+    ltc.execute()
+    
+    a = ltc.field_table['a']
+    correct_a = 42 / 2 + (-(1 * 10))
+    if a != correct_a:
+        raise TestFailed('A: ' + str(a) + ' instead of ' + str(correct_a))
 
 if __name__ == '__main__':
     test1()
@@ -215,4 +229,5 @@ if __name__ == '__main__':
     test7()
     test8()
     test9()
+    test10()
 
