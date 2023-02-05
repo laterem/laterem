@@ -182,7 +182,7 @@ e = Power(a, b)
 @test('9 Parser Test')
 def test9():
     string = '''
-a = Calc("42 / 2 + (-1) * 10")
+a = Calc("42 / 2 + -(1 * 10)")
 b = Calc("2*(2*(9 - 12) ^ 2)")
 c = Calc("0.1 + 0.02 + (3 / 1000)")
 '''
@@ -193,7 +193,7 @@ c = Calc("0.1 + 0.02 + (3 / 1000)")
     ltc.execute()
     
     a, b, c = ltc.field_table['a'], ltc.field_table['b'], ltc.field_table['c']
-    correct_a = 42 / 2 + (-1) * 10
+    correct_a = 42 / 2 + -(1 * 10)
     correct_b = 2*(2*(9-12) ** 2)
     correct_c = 0.1 + 0.02 + (3 / 1000)
 
