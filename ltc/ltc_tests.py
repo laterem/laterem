@@ -184,6 +184,7 @@ def test9():
     string = '''
 a = Calc("42 / 2 + (-1) * 10")
 b = Calc("2*(2*(9 - 12) ^ 2)")
+c = Calc("0.1 + 0.02 + (3 / 1000)")
 '''
 
     ltcc = LTCCompiler()
@@ -191,12 +192,18 @@ b = Calc("2*(2*(9 - 12) ^ 2)")
     ltc = ltcc.compile(string)
     ltc.execute()
     
-    a, b = ltc.field_table['a'], ltc.field_table['b']
+    a, b, c = ltc.field_table['a'], ltc.field_table['b'], ltc.field_table['c']
+    correct_a = 42 / 2 + (-1) * 10
+    correct_b = 2*(2*(9-12) ** 2)
+    correct_c = 0.1 + 0.02 + (3 / 1000)
 
-    if a != 42 / 2 + (-1) * 10:
-        raise TestFailed(str(a))
-    if b != 2*(2*(9 - 12) ** 2):
-        raise TestFailed(str(b))
+
+    if a != correct_a:
+        raise TestFailed('A: ' + str(a) + ' instead of ' + str(correct_a))
+    if b != correct_b:
+        raise TestFailed('B: ' + str(b) + ' instead of ' + str(correct_b))
+    if c != correct_c:
+        raise TestFailed('C: ' + str(c) + ' instead of ' + str(correct_c))
 
 if __name__ == '__main__':
     test1()

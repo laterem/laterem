@@ -30,6 +30,17 @@ class FormulaParser:
             return float(string)
 
     @staticmethod
+    def object_validation(string):
+        if not string.strip():
+            return False
+
+        UNARY_OPERATORS = '-'
+        for op in UNARY_OPERATORS:
+            if string.strip() == op:
+                return False
+        return True
+
+    @staticmethod
     def object_identification(symbol, carry):
         VARIABLE = 'abcdefghijklmnopqrstuvwxyz'
         VARIABLE += VARIABLE.upper()
@@ -40,8 +51,9 @@ class FormulaParser:
 
         clean = not carry
         is_variable = (not clean) and carry.isalpha()
-        is_number = (not clean) and carry[1:].isdigit() and (carry[0] in NUMBER or carry[0] in UNARY_PREFIX)
-
+        cndot = carry.replace('.', '')
+        is_number = (not clean) and (len(cndot) == 1 or cndot[1:].isdigit()) and (carry[0] in NUMBER or carry[0] in UNARY_PREFIX)
+        
         if (is_variable or clean) and symbol in VARIABLE:
             return True
         if (is_number or clean) and symbol in NUMBER:
@@ -56,13 +68,24 @@ class FormulaParser:
     def _raw_parse(cls, formula_string):
         number = ''
         for s in formula_string:
+            # Проверка на то, является ли символ частью математического объекта (числа)
             if cls.object_identification(s, number):
                 number += s  
-            elif number: 
-                yield number
-                number = ''
-            if s in cls.operators or s in "()": 
-                yield s 
+            else:
+                # Дополнительная проверка на то, является ли собранное число 
+                # корректным объектом (защита от ложного определения дуальных операторов
+                # частью конструкций с унарными)
+                if cls.object_validation(number): 
+                    yield number
+                    number = ''
+                else:
+                    # В случае ошибки, проверка на то, не был ли потерян оператор 
+                    if len(number.strip()) and (number in cls.operators or number in "()"): 
+                        yield number 
+                    number = ''
+                # Если символ являтся оператором, отправить его в стэк
+                if s in cls.operators or s in "()": 
+                    yield s 
         if number: 
             yield number
     
@@ -102,7 +125,8 @@ class FormulaParser:
         return stack[0]
 
     def eval(self, string, variables=NotSpecified):
-        return self._calc(self.polish_stack(string),
+        ps = self.polish_stack(string)
+        return self._calc(ps,
                           variables=variables)
     
     def polish_stack(self, string):
