@@ -6,6 +6,8 @@ except ImportError:
 from random import randint
 from math import sqrt, copysign, fabs, floor, isfinite, modf
 
+import lib.formula_parser as fparse
+
 def call_ltc_function(function, *args):
     func = function(*args)
     return func()
@@ -166,6 +168,12 @@ class Round(LTCFunction):
         except ValueError:
             return self.args[0]
 
+class Calc(LTCFunction):
+    expected_argsc = 1
+    def call(self):
+        string = self.args[0]
+        return fparse.FormulaParser().eval(string)
+
 class IsEqual(LTCCheckerFunction):
     expected_argsc = 1
     def call(self, field):
@@ -240,7 +248,7 @@ builtintable = {
     'MetricEqual': IsMetricEqual,
     'Round': Round,
     'ConvertBase': ConvertBase,
-    #'FloatBin': FloatBin, 
+    'Calc': Calc, 
     'Rand10': RandomNum10,
     'Rand2': RandomNum2,
     'RandFloat10': RandomFloat10,
