@@ -402,6 +402,31 @@ def task_panel(request):
     #     return render(request, 'teacher_panel/task_panel/task_panel.html', render_args(additional={"all_templates": ""}))
 
 
+# Unfinished
+@permission_required("can_manage_tasks")
+def manage_task(request, task_id):
+    general_POST_handling(request)
+    # Get task object from task_id
+    me = User(request.user)
+
+    if request.method == "POST":
+        if "delete_task" in request.POST:
+            # Deleting task
+            return redirect("/teacher/tasks/")
+
+        if "edit_data" in request.POST:
+            # rename task dirrectory
+            return redirect(request.path)
+
+    return render(
+        request,
+        "teacher_panel/task_panel/manage_task.html",
+        render_args(
+            request=request,
+        ),
+    )
+
+
 # Рендер страницы работы
 @login_required
 def render_work(request, work_id):
@@ -409,9 +434,9 @@ def render_work(request, work_id):
     work_id = int(work_id)
 
     work = Work.by_id(work_id)
-    # if 'compiled_tasks' in request.session:
-    #   request.session.modified = True
-    #  request.session['compiled_tasks'] = {}
+    if 'compiled_tasks' in request.session:
+        request.session.modified = True
+        request.session['compiled_tasks'] = {}
     return redirect("/task/" + str(work.tasks()[0].id))
 
 

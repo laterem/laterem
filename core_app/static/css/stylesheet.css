@@ -698,7 +698,7 @@ div#work-table  {
     margin: 1px;
 }
 
-#group-manage-header {
+#group-manage-header, #task-manage-header {
     display: grid;
     grid-template-columns: auto max-content;
     align-items: center;
@@ -710,7 +710,7 @@ div#work-table  {
     background-color: var(--header-dropdown-color);
 }
 
-#group-manage-header div:nth-of-type(2n) {
+#group-manage-header div:nth-of-type(2n), #task-manage-header div:nth-of-type(2n) {
     justify-items: end;
     justify-self: end;
 }
