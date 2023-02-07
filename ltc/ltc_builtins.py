@@ -6,7 +6,7 @@ except ImportError:
 from random import randint
 from math import sqrt, copysign, fabs, floor, isfinite, modf
 
-import lib.formula_parser as fparse
+from .lib.formula_parser import FormulaParser
 
 def call_ltc_function(function, *args):
     func = function(*args)
@@ -172,7 +172,7 @@ class Calc(LTCFunction):
     expected_argsc = 1
     def call(self):
         string = self.args[0]
-        return fparse.FormulaParser().eval(string)
+        return FormulaParser().eval(string)
 
 class IsEqual(LTCCheckerFunction):
     expected_argsc = 1

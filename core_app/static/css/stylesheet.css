@@ -719,6 +719,14 @@ div#work-table  {
     display: block;
 }
 
+connection {
+    height: 0;
+    display: block;
+    position: fixed;
+    top: 0;
+    left: 0;
+}
+
 connection .line .arrow {
     top: -5px;
     height: 0px;
@@ -750,4 +758,13 @@ connection .line {
     height:2px;
 
     background-color: black;
+}
+
+.table {
+    display: grid;
+    grid-template-columns: 50% 50%;
+}
+
+.table div {
+    width: fit-content;
 }

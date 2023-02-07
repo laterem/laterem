@@ -271,7 +271,7 @@ def _submenu(
 @register.simple_tag(takes_context=True)
 def tree(context, treename):
     try:
-        print(context.get("unraveled_categories"))
+        # print(context.get("unraveled_categories"))
         user = context["user"]
         unraveled_categories = (
             context["unraveled_categories"]

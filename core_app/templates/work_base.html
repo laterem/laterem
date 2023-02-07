@@ -36,6 +36,10 @@
 
             new_data.push({name: 'active_ids', value: active_ids});
 
+            if ( connections ) {
+                new_data.push({name: 'connections', value: Array.from(connections)})
+            };
+
             // console.log(jQuery.param(new_data));
     
             $.ajax({

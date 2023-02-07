@@ -469,7 +469,7 @@ def task_view(request, stask_id):
         )
 
     if request.method == "POST":
-        print(request.POST)
+        # print(request.POST)
         active_ids = request.POST.get("active_ids")
         if active_ids:
             request.session["active_ids"] = active_ids
