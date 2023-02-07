@@ -98,9 +98,13 @@ def _submenu(
                 change_name = (
                     "edit=getElementById('input-"
                     + str(inp.id)
-                    + "'); if (tree_is_editing) {document.getElementById('edit-"
+                    + "');"
+                    + "if (tree_is_editing) {document.getElementById('edit-"
                     + str(inp.id)
-                    + "').type = 'submit';}; tree_is_editing = !tree_is_editing; edit.disabled = false; getElementById('input-"
+                    + "').type = 'submit';};"
+                    + "tree_is_editing = !tree_is_editing;"
+                    + "edit.disabled = false;"
+                    + "getElementById('input-"
                     + str(inp.id)
                     + "') = edit;"
                 )
@@ -151,9 +155,13 @@ def _submenu(
                 change_name = (
                     "edit=getElementById('input-"
                     + str(inp.id)
-                    + "'); if (tree_is_editing) {document.getElementById('edit-"
+                    + "');"
+                    + "if (tree_is_editing) {document.getElementById('edit-"
                     + str(inp.id)
-                    + "').type = 'submit';}; tree_is_editing = !tree_is_editing; edit.disabled = false; getElementById('input-"
+                    + "').type = 'submit';};"
+                    + "tree_is_editing = !tree_is_editing;"
+                    + "edit.disabled = false;"
+                    + "getElementById('input-"
                     + str(inp.id)
                     + "') = edit;"
                 )
@@ -232,40 +240,6 @@ def _submenu(
     assert output.count("<li") == output.count("</li>")
     assert output.count("<ul") == output.count("</ul>")
     return output
-
-
-# Кол-во вызовов = кол-во словарей в mask_tree(WORK_DIR, user.raw_available_branches)
-# def _submenu(inp, user: User, path=[], outer=False, fillable=False, first_active=False):
-#    for key, value in inp.items():
-#        if isinstance(value, dict):
-#            output += '<li><span class="caret">' + key + '</span>'
-#            if fillable:
-#                output += '<button type="submit" name="new-folder_' + key + '" class="button-icon" style="margin-left: 10px; height: min-content">' + folder_plus + '&nbsp; Добавить &nbsp;</button>'
-#            output += '</span>' + _submenu(value, user, path=path + [key], fillable=fillable) + '</li>'
-#        else:
-#            output += '<li><span class="caret">' + key + '</span>'
-#            if fillable:
-#                output += '<button type="submit" name="new-work_' + key + '" class="button-icon" style="margin-left: 10px;">' + book_plus + '&nbsp; Добавить &nbsp;</button>'
-#            output += '<ul class="nested">'
-#            for work in value:
-#                name = work.name
-#                addr = str(work.id)
-#                if not fillable:
-#                    stats = user.get_work_stats(work, True)
-#
-#                    green_len = stats[Verdicts.OK]
-#                    orange_len = stats[Verdicts.SENT] + stats[Verdicts.PARTIALLY_SOLVED]
-#                    red_len = stats[Verdicts.WRONG_ANSWER]
-#                    gray_len = stats[Verdicts.NO_ANSWER]
-
-#                    line_args = [("correct", green_len), ("unchecked", orange_len), ("wrong", red_len), ("no-answer", gray_len)]
-#                    output += '<li><a href="' + '/works/' + addr + '">' + name + '</a>' + draw_progress_line(line_args) + '</li>'
-#                else:
-#                    output += '<li><a href="' + '/teacher/works/' + addr + '">' + name + '</a>' + '</li>'
-#            output += '</ul></li>'
-
-#    output += '</ul>'
-#    return output
 
 
 @register.simple_tag(takes_context=True)

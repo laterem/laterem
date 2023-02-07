@@ -129,7 +129,8 @@ def users_panel(request):
                     email=form.cleaned_data["email"]
                 )
                 if test:
-                    # Пользователь с такой почтой уже есть, надо как-то оповестить
+                    # Пользователь с такой почтой уже есть,
+                    # надо как-то оповестить
                     pass
                 else:
                     LateremUser.objects.create_user(
@@ -398,8 +399,16 @@ def task_panel(request):
         ),
     )
     # except NotADirectoryError:
-    #     print('! ERROR !\tДирректория data/tasks пуста. Нет доступных шаблонов')
-    #     return render(request, 'teacher_panel/task_panel/task_panel.html', render_args(additional={"all_templates": ""}))
+    #     print(
+    # '! ERROR !\tДирректория data/tasks пуста. Нет доступных шаблонов'
+    # )
+    #     return render(
+    # request,
+    # 'teacher_panel/task_panel/task_panel.html',
+    # render_args(
+    # additional={
+    # "all_templates": ""
+    # }))
 
 
 # Unfinished
@@ -448,7 +457,8 @@ def getasset(request, taskname, filename):
     return FileResponse(open(path, "rb"))
 
 
-# Функция рендера (обработки и конечного представления на сайте) задачи по имени (имя берётся из адресной строки)
+# Функция рендера (обработки и конечного представления на сайте)
+# задачи по имени (имя берётся из адресной строки)
 @login_required
 def task_view(request, stask_id):
     general_POST_handling(request)
