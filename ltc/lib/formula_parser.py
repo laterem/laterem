@@ -4,10 +4,11 @@ except ModuleNotFoundError:
     NotSpecified = object()
 
 class Operator:
-    def __init__(self, priority, function, arity=2):
+    def __init__(self, priority, function, arity=2, name='no name given'):
         self.priority = priority
         self.function = function
         self.arity = arity
+        self.name = name
 
     def __call__(self, *args):
         return self.function(*args)
@@ -32,16 +33,21 @@ class FormulaParser:
 
     @staticmethod
     def object_validation(string):
+        # Функция возвращает кортеж из двух флагов.
+        # [0]: Является ли строка объектом?
+        # [1]: Является ли строка объектом-переменной?
         if not string.strip():
-            return False
+            return False, False
 
         # <Костыль>
         UNARY_OPERATORS = '-'
         for op in UNARY_OPERATORS:
             if string.strip() == op:
-                return False
+                return False, False
         # </Костыль>
-        return True
+        if string.strip().isalpha():
+            return True, True
+        return True, False
 
     @staticmethod
     def object_identification(symbol, carry):
@@ -68,6 +74,43 @@ class FormulaParser:
         return False
 
     @classmethod
+    def _collect_variables(cls, formula_string):
+        return cls._collect_info(formula_string)[0]
+    
+    @classmethod
+    def _collect_operators(cls, formula_string):
+        return cls._collect_info(formula_string)[1]
+
+    @classmethod
+    def _collect_info(cls, formula_string):
+        number = ''
+        variables = set()
+        operators = set()
+        for s in formula_string:
+            if cls.object_identification(s, number):
+                number += s  
+            else:
+                valid, is_var = cls.object_validation(number)
+                if valid: 
+                    if is_var:
+                        variables.add(number)
+                    number = ''
+                else:
+                    if len(number.strip()) and (number in cls.operators): 
+                        operators.add(cls.operators[number]) 
+                    number = ''
+                if s in cls.operators: 
+                    operators.add(cls.operators[s])
+        valid, is_var = cls.object_validation(number)
+        if valid: 
+            if is_var:
+                variables.add(number)
+        else:
+            if len(number.strip()) and (number in cls.operators): 
+                operators.add(cls.operators[number]) 
+        return variables, operators
+
+    @classmethod
     def _raw_parse(cls, formula_string):
         number = ''
         for s in formula_string:
@@ -78,7 +121,8 @@ class FormulaParser:
                 # Дополнительная проверка на то, является ли собранное число 
                 # корректным объектом (защита от ложного определения дуальных операторов
                 # частью конструкций с унарными)
-                if cls.object_validation(number): 
+                valid, _ = cls.object_validation(number)
+                if valid: 
                     yield number
                     number = ''
                 else:
@@ -89,8 +133,12 @@ class FormulaParser:
                 # Если символ являтся оператором, отправить его в стэк
                 if s in cls.operators or s in "()": 
                     yield s 
-        if number: 
+        valid, _ = cls.object_validation(number)
+        if valid: 
             yield number
+        else:
+            if len(number.strip()) and (number in cls.operators or number in "()"): 
+                yield number 
     
     @classmethod
     def _polish(cls, parsed_formula):
@@ -119,14 +167,12 @@ class FormulaParser:
             variables = {}
         stack = []
         for token in polish:
-            print(token, end=' ')
             if token in cls.operators: 
                 oper = cls.operators[token]
                 args = [cls.object_convert(stack.pop(), variables) for _ in range(oper.arity)]
                 stack.append(oper(*reversed(args))) 
             else:
                 stack.append(token)
-        print()
         return stack[0]
 
     def eval(self, string, variables=NotSpecified):

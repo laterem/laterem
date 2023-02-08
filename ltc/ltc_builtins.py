@@ -6,7 +6,7 @@ except ImportError:
 from random import randint
 from math import sqrt, copysign, fabs, floor, isfinite, modf
 
-from .lib.formula_parser import FormulaParser
+from lib.formula_parser import FormulaParser
 
 def call_ltc_function(function, *args):
     func = function(*args)

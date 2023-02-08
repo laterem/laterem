@@ -219,6 +219,25 @@ a = Calc("42 / 2 + (-(1 * 10))")
     if a != correct_a:
         raise TestFailed('A: ' + str(a) + ' instead of ' + str(correct_a))
 
+@test('11 Manual boolean parser test')
+def test11():
+    from lib.booleans import BooleanParser, BooleanFormula
+    f1 = BooleanFormula('!(A&B)')
+    f2 = BooleanFormula('!A | !B')
+    tt1 = f1.truth_table()
+    tt2 = f2.truth_table()
+    if tt1 != {(0, 0): True, (1, 0): True, (0, 1): True, (1, 1): False}:
+        raise TestFailed('TT incorrect ' + str(tt1))
+    if tt1 != tt2:
+        raise TestFailed('Truth tables not equal')
+    if not f1.is_equal(f2):
+        raise TestFailed('Formulas not equal')
+    if set(f1.operators(True)) != {'NOT', 'AND'}:
+        raise TestFailed('f1 operators ' + str(f1.operators(True)))
+    if set(f2.operators(True)) != {'NOT', 'OR'}:
+        raise TestFailed('f2 operators ' + str(f2.operators(True)))
+
+
 if __name__ == '__main__':
     test1()
     test2()
@@ -230,4 +249,5 @@ if __name__ == '__main__':
     test8()
     test9()
     test10()
+    test11()
 
