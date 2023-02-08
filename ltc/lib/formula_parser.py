@@ -18,11 +18,11 @@ class FormulaParser:
     # Based on the tutorial from https://habr.com/ru/post/273253/
     # To be reworked
 
-    operators = {'+': Operator(0, lambda a, b: a + b), 
-                 '-': Operator(0, lambda a, b: a - b), 
-                 '*': Operator(1, lambda a, b: a * b), 
-                 '/': Operator(1, lambda a, b: a / b), 
-                 '^': Operator(2, lambda a, b: pow(a, b))}
+    operators = {'+': Operator(0, lambda a, b: a + b,     name='ADD'), 
+                 '-': Operator(0, lambda a, b: a - b,     name='SUB'), 
+                 '*': Operator(1, lambda a, b: a * b,     name='MUL'), 
+                 '/': Operator(1, lambda a, b: a / b,     name='DIV'), 
+                 '^': Operator(2, lambda a, b: pow(a, b), name='POW')}
 
     @staticmethod
     def object_convert(string, variables):

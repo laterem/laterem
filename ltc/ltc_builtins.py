@@ -1,12 +1,18 @@
 try:
     from .ltc_core import *
+    from .lib.formula_parser import FormulaParser
 except ImportError:
     from ltc_core import *
+    from lib.formula_parser import FormulaParser
 
 from random import randint
 from math import sqrt, copysign, fabs, floor, isfinite, modf
 
-from lib.formula_parser import FormulaParser
+# Подключение пакетов
+try:
+    from .lib.booleans import *
+except ImportError:
+    from lib.booleans import *
 
 def call_ltc_function(function, *args):
     func = function(*args)

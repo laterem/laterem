@@ -1,4 +1,6 @@
 from .formula_parser import FormulaParser, Operator
+from ltc.ltc_core import LTCFunction, LTCCheckerFunction, register_function
+
 
 class BooleanParser(FormulaParser):
     operators = {'|': Operator(0, lambda a, b: a or b, name='OR'), 
@@ -76,8 +78,8 @@ class BooleanFormula:
 
     def is_equal(self, other):
         volume = len(self.variables)
-        if len(other.variables) != volume:
-            return False
+        #if len(other.variables) != volume:
+        #    return False
         variables = 0
         final = int('1' * volume, 2) + 1
         while variables != final:
@@ -88,7 +90,46 @@ class BooleanFormula:
                 intrepp //= 2
             result1 = self.calc(**prompt)
             result2 = other.calc(**prompt)
+            print(prompt, result1, result2)
             if result1 != result2:
                 return False
             variables += 1
         return True
+
+
+# LTC Функции для работы с булевыми формулами
+
+class EvalBoolean(LTCFunction):
+    expected_argsc = 2
+    def call(self):
+        func, values = self.args
+        func = BooleanFormula(func)
+        variables = list(func.variables)
+        return func.calc({var: val for var, val in zip(sorted(variables), values)}) 
+
+class IsBooleanIdentical(LTCCheckerFunction):
+    expected_argsc = 1
+    def call(self, field):
+        bf1, = self.args
+        bf1 = BooleanFormula(bf1)
+        bf2 = BooleanFormula(field)
+        if bf1.is_equal(bf2):
+            return True
+        return False
+
+class BooleanFormulaOperators(LTCFunction):
+    expected_argsc = 1
+    def call(self):
+        f, = self.args
+        return [op.name for op in BooleanParser._collect_operators(f)]
+
+class IsBooleanFormulaOperators(LTCCheckerFunction):
+    expected_argsc = 1
+    def call(self, field):
+        ops = set(self.args[0])
+        return ops == set([op.name for op in BooleanParser._collect_operators(field)])
+
+register_function(BooleanFormulaOperators=BooleanFormulaOperators,
+                  IsBooleanIdentical=IsBooleanIdentical,
+                  IsBooleanFormulaOperators=IsBooleanFormulaOperators,
+                  EvalBoolean=EvalBoolean)
