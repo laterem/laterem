@@ -282,6 +282,47 @@ def manage_work(request, work_id):
     )
 
 
+class Log():
+    def __init__(self, user_name, task_name, verdict, user_answer, correct_answer):
+        self.user_name = user_name
+        self.task_name = task_name
+        self.verdict = verdict
+        self.user_answer = user_answer
+        self.correct_answer = correct_answer
+
+
+class Group_Logs():
+    def __init__(self, name, logs):
+        self.name = name
+        self.logs = logs
+
+
+
+@permission_required("can_manage_works")
+def show_work_stats(request, work_id):
+    general_POST_handling(request)
+    work = Work.by_id(work_id)
+
+    log1 = Log("Жура", "Что-то умное", "OK", 42, 42)
+    log2 = Log("Спайд", "Что-то сложное", "OK", 179, 179)
+
+    group_logs = Group_Logs("Разрабы", [log1, log2])
+
+    return render(
+        request,
+        "teacher_panel/work_panel/work_stats.html",
+        render_args(
+            meta_all_task_types_available=True,
+            me=User(request.user),
+            request=request,
+            additional={
+                "work": work,
+                "group_list": [group_logs]
+            },
+        ),
+    )
+
+
 @permission_required("can_manage_groups")
 def group_panel(request):
     general_POST_handling(request)

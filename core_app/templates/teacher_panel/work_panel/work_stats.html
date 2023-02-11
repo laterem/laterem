@@ -1,0 +1,60 @@
+{% extends 'teacher_panel/teacher_panel_base.html' %}
+{% load static %}
+{% load laterem %}
+
+{% block content %}
+    <form method="post" id="main-form">
+        {% csrf_token %}
+        <div style="display: grid; grid-template-columns: auto max-content; align-items: center;">
+            <div style="grid-column: 1;">
+                <div style="grid-column: 1;"><input value="{{work.name}}" disabled="true" style="font-size: larger;" id="work_name" name="work_name"/></div>
+            </div>
+            <button type="button" id="edit_data" name="edit_data" style="grid-column: 2;" class="button-icon" onclick="
+                    edit = document.getElementById('work_name');
+                    if (is_editing) {
+                        document.getElementById('edit_data').type = 'submit';
+                    };
+                    is_editing = !is_editing;
+                    edit.disabled = false;
+                    document.getElementById('work_name') = edit;
+                "><div style="width: 2em; padding: 0;">{% include "icons/pencil-icon.html" %}</div></button>
+        </div>
+        <p>ID: {{work.id}}</p>
+        <button type="button" id="appoint" name="appoint" onclick="
+                is_blackout = !is_blackout;
+                if (is_blackout) {
+                    document.getElementById('appoint-work').style.display = 'block';
+                    document.getElementById('blackout').style.display = 'block';
+                } else {
+                    document.getElementById('appoint-work').style.display = 'none';
+                    document.getElementById('blackout').style.display = 'none';
+                };
+            ">Назначить группе</button>
+    </form>
+
+    {% for group in group_list %}
+        <div id="work-stats-table-header">
+            <div style="grid-column: 1;"><span style="font-size: larger;">{{ group.name }}</span></div>
+        </div>
+        <div id="work-stats-table">
+            <!-- Ученик | Задача | Вердикт | Ответ ученика | Правильный ответ -->
+            {% for log in group.logs %}
+                <div style="grid-column: 1;">
+                    {{ log.user_name }}
+                </div>
+                <div style="grid-column: 2;">
+                    {{ log.task_name }}
+                </div>
+                <div style="grid-column: 3;">
+                    {{ log.verdict }}
+                </div>
+                <div style="grid-column: 4;">
+                    {{ log.user_answer }}
+                </div>
+                <div style="grid-column: 5;">
+                    {{ log.correct_answer }}
+                </div>
+            {% endfor %}
+        </div>
+    {% endfor %}
+{% endblock %}

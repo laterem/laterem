@@ -22,7 +22,7 @@ from django.urls import re_path
 from django.views.static import serve
 from core_app.views import main_page_render, student_page_render, login_view, profile_view, manage_group
 from core_app.views import task_view, render_work, getasset, logout_view
-from core_app.views import users_panel, teacher_hub, group_panel, work_panel, manage_work, task_panel
+from core_app.views import users_panel, teacher_hub, group_panel, work_panel, manage_work, show_work_stats, task_panel
 
 
 urlpatterns = [
@@ -39,6 +39,7 @@ urlpatterns = [
     path('teacher/users/', users_panel),
     path('teacher/works/', work_panel),
     path('teacher/works/<str:work_id>', manage_work),
+    path('teacher/works/<str:work_id>/answer_stats', show_work_stats),
     path('teacher/groups/', group_panel),
     path('teacher/groups/<str:group_id>', manage_group),
     path('teacher/tasks/', task_panel)
