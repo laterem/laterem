@@ -193,6 +193,11 @@ class IsEqual(LTCCheckerFunction):
         except ValueError:
             return False
 
+class IsEqualSet(LTCCheckerFunction):
+    expected_argsc = 1
+    def call(self, field):
+        return set(self.args[0]) == set(field)
+
 class IsEqualText(LTCCheckerFunction):
     expected_argsc = 1
     def call(self, field):
@@ -239,6 +244,7 @@ builtintable = {
     'GenerateLine': GenerateLine,
     'Equal': IsEqual,
     'EqualText': IsEqualText,
+    'EqualSet': IsEqualSet,
     'NotEqual': IsNotEqual,
     'Sum': Sum,
     'Multiply': Multiply,
