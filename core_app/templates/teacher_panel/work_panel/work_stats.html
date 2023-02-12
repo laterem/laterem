@@ -32,28 +32,30 @@
             ">Назначить группе</button>
     </form>
 
-    {% for group in group_list %}
+    {% for name, answers in group_answers %}
         <div id="work-stats-table-header">
-            <div style="grid-column: 1;"><span style="font-size: larger;">{{ group.name }}</span></div>
+            <div style="grid-column: 1;"><span style="font-size: larger;">{{ name }}</span></div>
         </div>
         <div id="work-stats-table">
             <!-- Ученик | Задача | Вердикт | Ответ ученика | Правильный ответ -->
-            {% for log in group.logs %}
+            {% for log in answers %}
                 <div style="grid-column: 1;">
-                    {{ log.user_name }}
+                    {{ log.user.name }}
                 </div>
                 <div style="grid-column: 2;">
-                    {{ log.task_name }}
+                    {{ log.task.name }}
                 </div>
                 <div style="grid-column: 3;">
                     {{ log.verdict }}
                 </div>
                 <div style="grid-column: 4;">
-                    {{ log.user_answer }}
+                    {% for key, val in log.items_answers %}
+                        {{ key }}: {{ val }} <br/>
+                    {% endfor %}
                 </div>
-                <div style="grid-column: 5;">
-                    {{ log.correct_answer }}
-                </div>
+                 <div style="grid-column: 5;">
+                    <!-- {{ log.correct_answer }} -->
+                </div> 
             {% endfor %}
         </div>
     {% endfor %}

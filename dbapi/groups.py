@@ -1,6 +1,5 @@
 from core_app.models import LateremGroupMembership, LateremGroup, LateremUser, LateremWork, LateremAssignment
 from extratypes import DBHybrid
-from .tasks import Work
 
 class Member(DBHybrid):
     __dbmodel__ = LateremUser
@@ -26,6 +25,7 @@ class Group(DBHybrid):
         return [Member(x, self) for x in LateremUser.objects.filter(lateremgroupmembership__group=self.dbmodel)]
     
     def get_works(self):
+        from .tasks import Work
         return [Work(x) for x in LateremWork.objects.filter(lateremassignment__group=self.dbmodel)]
     
     def add_member(self, user, **permissions):
