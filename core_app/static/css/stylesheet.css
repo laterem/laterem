@@ -676,7 +676,8 @@ div#task-table, div#task-table-header {
     padding: 4px;
 }
 
-div#group-table, div#work-table, div#work-stats-table {
+div#group-table, div#work-table,
+div#work-stats-table {
     display: grid; 
     grid-template-columns: auto auto 40px 40px;
     
@@ -696,6 +697,27 @@ div#work-table  {
 
 div#work-stats-table {
     grid-template-columns: repeat(5, auto);
+}
+
+div#task-manage-table {
+    display: grid;
+    grid-template-columns: auto 10px auto;
+    overflow: scroll;
+
+    border-radius: 10px;
+    border-width: 1px;
+    border-color: var(--dark-font-color);
+    border-style: solid;
+    width: 100%;
+
+    margin-bottom: 10px;
+}
+
+#task-manage-table div:nth-of-type(2n + 1) {
+    border-radius: 10px;
+    padding: 5px;
+
+    background-color: var(--content-hover-color);
 }
 
 #group-table-header *, #work-table-header *,

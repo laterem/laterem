@@ -417,7 +417,7 @@ def task_panel(request):
 @permission_required("can_manage_tasks")
 def manage_task(request, task_id):
     general_POST_handling(request)
-    # Get task object from task_id
+    task = TaskTemplate.by_id(task_id)
     me = User(request.user)
 
     if request.method == "POST":
@@ -428,12 +428,23 @@ def manage_task(request, task_id):
         if "edit_data" in request.POST:
             # rename task dirrectory
             return redirect(request.path)
+    
+    with open(task.ltc_path, "r") as f:
+        ltc_text_lines = f.readlines()
+
+    with open(task.view_path_absolute, "r") as f:
+        html_text_lines = f.readlines()
 
     return render(
         request,
         "teacher_panel/task_panel/manage_task.html",
         render_args(
             request=request,
+            additional={
+                "task": task,
+                "ltc_text_lines": ltc_text_lines,
+                "html_text_lines": html_text_lines
+            },
         ),
     )
 

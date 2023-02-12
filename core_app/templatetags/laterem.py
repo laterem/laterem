@@ -220,7 +220,7 @@ def _submenu(
                 '<li><span style="border: none"><a href="'
                 + "/works/"
                 + addr
-                + '">'
+                + '/">'
                 + name
                 + "</a></span>"
                 + draw_progress_line(line_args)
@@ -231,7 +231,7 @@ def _submenu(
                 '<li><span style="border: none"><a href="'
                 + "/teacher/works/"
                 + addr
-                + '">'
+                + '/">'
                 + name
                 + "</a></span>"
                 + "</li>"

@@ -26,7 +26,7 @@
 <div id="task-table">
 {% for temp in alltasktypes %}
     <div style="border-left: none;" class="task-table-element">
-        {{ temp.name }}
+        <a href="{{ temp.id }}/">{{ temp.name }}</a>
     </div>
     <div style="grid-column: 2; padding: 0;" class="task-table-element">
         <form method="post">
