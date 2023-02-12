@@ -417,36 +417,18 @@ def task_panel(request):
             flag = False
             for signal in request.POST:
                 if signal.startswith("delete:"):
-                    ID = signal[len("delete:"):]
-                    dirr = pathjoin("data", "tasks", ID)
-                    if os.path.isdir(dirr):
-                        rmtree(dirr)
+                    ID = int(signal[len("delete:"):])
+                    TaskTemplate.delete(ID)
                     break
         return redirect(request.path)
-    # Временное решение
-    # try:
     return render(
         request,
         "teacher_panel/task_panel/task_panel.html",
         render_args(
             request=request,
-            additional={
-                "all_templates": TASK_SCANNER.all_shoots(use_cache=False)
-            },
+            meta_all_task_types_available=True,
         ),
     )
-    # except NotADirectoryError:
-    #     print(
-    # '! ERROR !\tДирректория data/tasks пуста. Нет доступных шаблонов'
-    # )
-    #     return render(
-    # request,
-    # 'teacher_panel/task_panel/task_panel.html',
-    # render_args(
-    # additional={
-    # "all_templates": ""
-    # }))
-
 
 # Unfinished
 @permission_required("can_manage_tasks")

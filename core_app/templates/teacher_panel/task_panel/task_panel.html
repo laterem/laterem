@@ -24,20 +24,20 @@
     </div>
 </div>
 <div id="task-table">
-{% for temp in all_templates %}
+{% for temp in alltasktypes %}
     <div style="border-left: none;" class="task-table-element">
-        {{ temp }}
+        {{ temp.name }}
     </div>
     <div style="grid-column: 2; padding: 0;" class="task-table-element">
         <form method="post">
             {% csrf_token %}
-            <button type="submit" name="delete:{{ temp }}" class="button-icon"><div style="width: 1.5em">{% include "icons/delete-icon.html" %}</div></button>
+            <button type="submit" name="delete:{{ temp.id }}" class="button-icon"><div style="width: 1.5em">{% include "icons/delete-icon.html" %}</div></button>
         </form>
     </div>
     <div style="grid-column: 3; padding: 0; border-left: none;" class="task-table-element">
         <form method="post">
             {% csrf_token %}
-            <button type="submit" name="edit:{{ temp }}" class="button-icon"><div style="width: 1.5em">{% include "icons/pencil-icon.html" %}</div></button>
+            <button type="submit" name="edit:{{ temp.id }}" class="button-icon"><div style="width: 1.5em">{% include "icons/pencil-icon.html" %}</div></button>
         </form>
     </div>
 {% endfor %}

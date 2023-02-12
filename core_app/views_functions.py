@@ -1,6 +1,6 @@
 from .forms import *
 from dbapi.solutions import Verdicts
-from dbapi.tasks import Category, Work, RootsMimic
+from dbapi.tasks import Category, Work, RootsMimic, TaskTemplate
 from dbapi.groups import Group
 from dbapi.users import User
 from .models import LateremUser
@@ -128,18 +128,10 @@ def render_args(
         ret["allworks"] = map(Work, LateremWork.objects.all())
 
     if meta_all_task_types_available:
-        try:
-            ret["alltasktypes"] = TASK_SCANNER.all_shoots(use_cache=False)
-        except NotADirectoryError:
-            print(
-                "! ERROR !\tДирректория data/tasks пуста. Нет доступных шаблонов"
-            )
-            ret["alltasktypes"] = ""
+        ret["alltasktypes"] = map(TaskTemplate, LateremTaskTemplate.objects.all())
 
     for key, value in additional.items():
         ret[key] = value
-
-    # print(ret.get('theme'))
 
     return ret
 

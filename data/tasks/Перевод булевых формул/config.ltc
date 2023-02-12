@@ -1,5 +1,0 @@
-formula = '(!A&B) | (C|!B)'
-answer?IsBooleanIdentical(formula)
-answer?IsBooleanFormulaOperators(['OR', 'NOT'])
-
-# Ответ: (C|!A|!B)

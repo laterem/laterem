@@ -1,14 +1,13 @@
 import os
 from os.path import join as pathjoin
-import shutil
 import json
 from ltc.ltc_compiler import LTCCompiler, LTC
 from context_objects import TASK_SCANNER, TASK_UPLOAD_PATH, TASK_VIEW_UPLOAD_PATH
 from extratypes import DBHybrid, NotSpecified
 from core_app.models import LateremTask, LateremCategory, LateremWork, LateremTaskTemplate
+from shutil import rmtree
 
-
-TEMPLATES_VIEW_PATH = pathjoin('core_app/templates/', TASK_VIEW_UPLOAD_PATH)
+TEMPLATES_VIEW_PATH = pathjoin('core_app', 'templates', TASK_VIEW_UPLOAD_PATH)
 if not os.path.exists(TASK_UPLOAD_PATH):
     os.makedirs(TASK_UPLOAD_PATH)
 if not os.path.exists(TEMPLATES_VIEW_PATH):
@@ -37,15 +36,25 @@ class TaskTemplate(DBHybrid):
         dbobj.save()
         tt = cls(dbobj)
         path = pathjoin(TASK_UPLOAD_PATH, tt.identificator())
+        os.makedirs(path)
 
         with open(pathjoin(path, "config.ltc"), "wb+") as dest:
             for chunk in config.chunks():
                 dest.write(chunk)
-        with open(pathjoin(TASK_VIEW_UPLOAD_PATH, f"{tt}.html"), "wb+") as dest:
+        with open(pathjoin(TEMPLATES_VIEW_PATH, f"{tt}.html"), "wb+") as dest:
             for chunk in view.chunks():
                 dest.write(chunk)
 
         return tt
+
+    @classmethod
+    def delete(cls, id):
+        this = cls.by_id(id)
+        if os.path.isdir(this.dir_path):
+            rmtree(this.dir_path)
+        if os.path.isfile(this.view_path_absolute):
+            os.remove(this.view_path_absolute)
+        this.dbmodel.delete()
 
     @property
     def dir_path(self):
@@ -53,8 +62,12 @@ class TaskTemplate(DBHybrid):
     
     @property
     def view_path(self):
-        return pathjoin(TEMPLATES_VIEW_PATH, str(self) + '.html')
+        return pathjoin(TASK_VIEW_UPLOAD_PATH, str(self) + '.html')
     
+    @property
+    def view_path_absolute(self):
+        return pathjoin(TEMPLATES_VIEW_PATH, str(self) +'.html')
+
     @property
     def ltc_path(self):
         return pathjoin(TASK_UPLOAD_PATH, str(self), 'config.ltc')
@@ -148,8 +161,11 @@ class Work(DBHybrid):
         return user.has_access(self)
     
     def add_task(self, name, task_type):
+        if isinstance(task_type, str):
+            task_type = TaskTemplate.by_id(int(task_type[len('ID'):task_type.find('-')])) 
+
         task = Task(LateremTask.objects.create(name=name,
-                                               task_type=task_type,
+                                               task_type=task_type.dbmodel,
                                                work=self.dbmodel))
         task.dbmodel.save()
         return task
