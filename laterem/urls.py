@@ -38,8 +38,8 @@ urlpatterns = [
     path('teacher/', teacher_hub),
     path('teacher/users/', users_panel),
     path('teacher/works/', work_panel),
-    path('teacher/works/<str:work_id>', manage_work),
-    path('teacher/works/<str:work_id>/answer_stats', show_work_stats),
+    path('teacher/works/<str:work_id>/', manage_work),
+    path('teacher/works/<str:work_id>/answer_stats/', show_work_stats),
     path('teacher/groups/', group_panel),
     path('teacher/groups/<str:group_id>', manage_group),
     path('teacher/tasks/', task_panel)

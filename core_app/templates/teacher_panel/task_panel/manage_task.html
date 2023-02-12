@@ -7,8 +7,9 @@
         {% csrf_token %}
         <div id="task-manage-header">
             <div style="grid-column: 1;">
-               <input type="text" name="task_name" value="{{task.name}}" disabled="true" style="font-size: larger;" class="task-info"/>
+               <input type="text" name="task_name" value="{{ task.name }}" disabled="true" style="font-size: larger;" class="task-info"/>
             </div>
+            <p>ID: {{ task.id }}</p>
             <div style="grid-column: 2;">
                 <button type="button" id="edit_button" name="edit_data" class="button-icon" onclick="
                     edits = document.getElementsByClassName('task-info');
