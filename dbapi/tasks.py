@@ -1,15 +1,18 @@
 import os
+from os.path import join as pathjoin
 import shutil
 import json
 from ltc.ltc_compiler import LTCCompiler, LTC
-from context_objects import LTM_SCANNER
+from context_objects import TASK_SCANNER, TASK_UPLOAD_PATH, TASK_VIEW_UPLOAD_PATH
 from extratypes import DBHybrid, NotSpecified
-from core_app.models import LateremTask, LateremCategory, LateremWork
+from core_app.models import LateremTask, LateremCategory, LateremWork, LateremTaskTemplate
 
 
-TEMPLATE_CLONING_PATH = 'core_app/templates/static_copies/'
-if not os.path.exists(TEMPLATE_CLONING_PATH):
-    os.makedirs(TEMPLATE_CLONING_PATH)
+TEMPLATES_VIEW_PATH = pathjoin('core_app/templates/', TASK_VIEW_UPLOAD_PATH)
+if not os.path.exists(TASK_UPLOAD_PATH):
+    os.makedirs(TASK_UPLOAD_PATH)
+if not os.path.exists(TEMPLATES_VIEW_PATH):
+    os.makedirs(TEMPLATES_VIEW_PATH)    
 
 def open_ltc(path):
     if not path.endswith('.ltc'):
@@ -21,6 +24,50 @@ def open_ltc(path):
     ltc.execute()
     return ltc
 
+class TaskTemplate(DBHybrid):
+    __dbmodel__ = LateremTaskTemplate
+
+    def __str__(self):
+        return self.identificator()
+    
+    @classmethod
+    def new(cls, name, config, view, author):
+        dbobj = cls.__dbmodel__.objects.create(name=name,
+                                               author=author.dbmodel)
+        dbobj.save()
+        tt = cls(dbobj)
+        path = pathjoin(TASK_UPLOAD_PATH, tt.identificator())
+
+        with open(pathjoin(path, "config.ltc"), "wb+") as dest:
+            for chunk in config.chunks():
+                dest.write(chunk)
+        with open(pathjoin(TASK_VIEW_UPLOAD_PATH, f"{tt}.html"), "wb+") as dest:
+            for chunk in view.chunks():
+                dest.write(chunk)
+
+        return tt
+
+    @property
+    def dir_path(self):
+        return pathjoin(TASK_UPLOAD_PATH, str(self))
+    
+    @property
+    def view_path(self):
+        return pathjoin(TEMPLATES_VIEW_PATH, str(self) + '.html')
+    
+    @property
+    def ltc_path(self):
+        return pathjoin(TASK_UPLOAD_PATH, str(self), 'config.ltc')
+    
+    def open_view(self):
+        return open(self.view_path)
+    
+    def open_ltc(self):
+        return open(self.ltc_path)
+    
+    def identificator(self):
+        return f'ID{self.dbmodel.id}-{self.dbmodel.name}'
+
 class Task(DBHybrid):
     __dbmodel__ = LateremTask
 
@@ -29,29 +76,23 @@ class Task(DBHybrid):
         return Work(self.dbmodel.work)
 
     @property
-    def template_path(self):
-        task_type = self.dbmodel.task_type
-        tmpviewpath = task_type + '_view' + '.html'
-        return 'static_copies/' + tmpviewpath
+    def template(self):
+        return TaskTemplate(self.dbmodel.task_type)
+
+    @property
+    def view_path(self):
+        return self.template.view_path
 
     def compile(self):
-        task_type = self.dbmodel.task_type
-        path = LTM_SCANNER.id_to_path(task_type)
-        ltcpath = os.path.join(path, 'config.ltc')
-        viewpath = os.path.join(path, 'view.html')
-        tmpviewpath = task_type + '_view' + '.html'
-
-        shutil.copyfile(viewpath, TEMPLATE_CLONING_PATH + tmpviewpath)
-        
-        ltc = open_ltc(ltcpath)
-        template = self.template_path
-        return CompiledTask(ltc, template)
+        ltc = open_ltc(self.template.ltc_path)
+        view = self.view_path
+        return CompiledTask(ltc, view)
 
 
 class CompiledTask():
-    def __init__(self, ltc, template) -> None:
+    def __init__(self, ltc, view) -> None:
         self.ltc = ltc
-        self.template = template
+        self.template = view
 
     @classmethod
     def from_JSON(cls, data):
