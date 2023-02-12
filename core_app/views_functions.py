@@ -5,7 +5,7 @@ from dbapi.groups import Group
 from dbapi.users import User
 from .models import LateremUser
 from extratypes import NotSpecified
-from context_objects import LATEREM_FLAGS, DEBUG_DBSamples, LTM_SCANNER
+from context_objects import LATEREM_FLAGS, DEBUG_DBSamples, TASK_SCANNER
 from django.shortcuts import redirect
 
 if DEBUG_DBSamples in LATEREM_FLAGS:
@@ -129,7 +129,7 @@ def render_args(
 
     if meta_all_task_types_available:
         try:
-            ret["alltasktypes"] = LTM_SCANNER.all_shoots(use_cache=False)
+            ret["alltasktypes"] = TASK_SCANNER.all_shoots(use_cache=False)
         except NotADirectoryError:
             print(
                 "! ERROR !\tДирректория data/tasks пуста. Нет доступных шаблонов"

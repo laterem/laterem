@@ -2,7 +2,7 @@ from django.http import HttpResponse, FileResponse
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
 from django.core.exceptions import PermissionDenied
-from context_objects import LTM_SCANNER
+from context_objects import TASK_SCANNER
 from os.path import join as pathjoin
 from os import mkdir
 from shutil import rmtree
@@ -18,7 +18,7 @@ from django.contrib.auth.decorators import login_required
 from .forms import LoginForm, NewUser, AddMember, AssignWork, UploadTask
 
 from dbapi.users import User
-from dbapi.tasks import Task, CompiledTask, Work, Category
+from dbapi.tasks import Task, CompiledTask, Work, Category, TaskTemplate
 from dbapi.solutions import Verdicts
 from dbapi.groups import Group
 
@@ -403,20 +403,16 @@ def manage_group(request, group_id):
 @permission_required("can_manage_tasks")
 def task_panel(request):
     general_POST_handling(request)
+    me = User(request.user)
     if request.method == "POST":
         if "newtask" in request.POST:
             name = request.POST.get("task_type_name")
-            path = pathjoin("data", "tasks", name)
-            mkdir(path)
             config = request.FILES.get("config_file")
             view = request.FILES.get("view_file")
-            print("POST:", request.POST, "; FILES:", request.FILES)
-            with open(pathjoin(path, "config.ltc"), "wb+") as dest:
-                for chunk in config.chunks():
-                    dest.write(chunk)
-            with open(pathjoin(path, "view.html"), "wb+") as dest:
-                for chunk in view.chunks():
-                    dest.write(chunk)
+            TaskTemplate.new(name=name,
+                             author=me,
+                             config=config,
+                             view=view)
         else:
             flag = False
             for signal in request.POST:
@@ -435,7 +431,7 @@ def task_panel(request):
         render_args(
             request=request,
             additional={
-                "all_templates": LTM_SCANNER.all_shoots(use_cache=False)
+                "all_templates": TASK_SCANNER.all_shoots(use_cache=False)
             },
         ),
     )
@@ -493,7 +489,7 @@ def render_work(request, work_id):
 def getasset(request, taskname, filename):
     if filename == "view.html" or filename == "config.ltc":
         raise PermissionDenied()
-    path = LTM_SCANNER.id_to_path(taskname)
+    path = TASK_SCANNER.id_to_path(taskname)
     path = pathjoin(path, filename)
     return FileResponse(open(path, "rb"))
 

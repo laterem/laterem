@@ -3,7 +3,7 @@ from django.contrib.auth.models import AbstractUser
 
 
 class LateremUser(AbstractUser):
-    settings = models.TextField()
+    settings = models.TextField(default='{}')
 
 
 class LateremGroup(models.Model):
@@ -46,12 +46,16 @@ class LateremWork(models.Model):
         LateremCategory, null=True, on_delete=models.SET_NULL
     )
 
+class LateremTaskTemplate(models.Model):
+    id = models.AutoField(primary_key=True, unique=True)
+    name = models.CharField(max_length=128)
+    author = models.ForeignKey(LateremUser, on_delete=models.DO_NOTHING)
 
 class LateremTask(models.Model):
     name = models.CharField(max_length=128)
     work = models.ForeignKey(LateremWork, on_delete=models.CASCADE)
-    task_type = models.CharField(max_length=128)
-
+    task_type = models.ForeignKey(LateremTaskTemplate, on_delete=models.CASCADE)
+    field_overrides = models.TextField(default='{}')
 
 class LateremAssignment(models.Model):
     teacher = models.ForeignKey(
