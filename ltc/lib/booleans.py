@@ -1,6 +1,8 @@
 from .formula_parser import FormulaParser, Operator
-from ltc.ltc_core import LTCFunction, LTCCheckerFunction, register_function
-
+try:
+    from ltc.ltc_core import LTCFunction, LTCCheckerFunction, register_function
+except ModuleNotFoundError:
+    from ltc_core import LTCFunction, LTCCheckerFunction, register_function
 
 class BooleanParser(FormulaParser):
     operators = {'|': Operator(0, lambda a, b: a or b, name='OR'), 

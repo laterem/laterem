@@ -237,6 +237,23 @@ def test11():
     if set(f2.operators(True)) != {'NOT', 'OR'}:
         raise TestFailed('f2 operators ' + str(f2.operators(True)))
 
+@test('12 Exporting fields detection')
+def test12():
+    string = '''
+a = 1
+>b = 10
+c = 42
+>c
+>d
+'''
+    ltcc = LTCCompiler()
+
+    ltc = ltcc.compile(string)
+    ltc.execute()
+    
+    a = ltc.exporting_fields
+    if a != {'b', 'c', 'd'}:
+        raise TestFailed(str(a))
 
 if __name__ == '__main__':
     test1()
@@ -250,4 +267,5 @@ if __name__ == '__main__':
     test9()
     test10()
     test11()
+    test12()
 
