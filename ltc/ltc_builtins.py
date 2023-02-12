@@ -94,7 +94,7 @@ class RandomFloat2(LTCFunction):
 class ReverseList(LTCFunction):
     expected_argsc = 1
     def call(self):
-        return reversed(self.args[0])
+        return list(reversed(self.args[0]))
 
 class Veclen(LTCFunction):
     expected_argsc = 2
@@ -228,7 +228,6 @@ class Roots(LTCCheckerFunction):
         if not a:
             return inp == round(-b/c, accuracy)
         D = b*b - 4 * a * c
-        print(a, b, c, D)
         if D >= 0:
             sqrtd = sqrt(D)
             a2 = 2*a

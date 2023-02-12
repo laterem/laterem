@@ -2,6 +2,12 @@ from ltc_builtins import *
 from ltc_compiler import *
 from ltc_core import *
 
+all_tests = []
+
+def run_tests():
+    for test in all_tests:
+        test()
+
 class TestFailed(Exception):
     pass
 
@@ -17,6 +23,7 @@ def test(name):
                 print(f'[!] <Test {name}>' + '\t' + 'Runtime error occured: ' + type(e).__name__ + ': ' + str(e))
             else:
                 print(f'[ ] <Test {name}>' + '\t' + 'Test passed successfully!')
+        all_tests.append(new)
         return new
     return wrapper
 
@@ -87,9 +94,10 @@ input?Reverse(a)'''
 
     ltc = ltcc.compile(string)
     ltc.execute()
+    correct = [0, 1, 2, 3, 4, "[I'm no list, capiche?]", list(reversed(['But', 'I', 'am!']))]
     
-    if not ltc.field_table['a'] == [0, 1, 2, 3, 4, "[I'm no list, capiche?]", reversed(['But', 'I', 'am!'])]:
-        raise TestFailed('list is ' + str(ltc.field_table['a']))
+    if not ltc.field_table['a'] == correct:
+        raise TestFailed('list is ' + str(ltc.field_table['a']) + ', should be ' + str(correct))
 
     input = reversed([0, 1, 2, 3, 4, "[I'm no list, capiche?]", reversed(['But', 'I', 'am!'])])
 
@@ -256,16 +264,5 @@ c = 42
         raise TestFailed(str(a))
 
 if __name__ == '__main__':
-    test1()
-    test2()
-    test3()
-    test4()
-    test5()
-    test6()
-    test7()
-    test8()
-    test9()
-    test10()
-    test11()
-    test12()
+    run_tests()
 

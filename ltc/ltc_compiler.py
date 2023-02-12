@@ -101,7 +101,6 @@ class LTC:
         return valid
 
     def check(self, fields):
-        print(fields, self.field_table)
         valid = True
         for field, checker in self.checker_functions:
             valid = valid and checker(fields[field])
@@ -337,10 +336,5 @@ a = Rand10(0, 10)
     for _ in range(1000):
         ltc = ltcc.compile(test)
         ltc.execute()
-        print(ltc.field_table)
 
     raise   
-    print(ltc.field_table)
-    print(ltc.check({'input': '42'}))
-    print(ltc.check({'input': 'bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb'}))
-    print(ltc.to_dict())

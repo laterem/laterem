@@ -92,7 +92,6 @@ class BooleanFormula:
                 intrepp //= 2
             result1 = self.calc(**prompt)
             result2 = other.calc(**prompt)
-            print(prompt, result1, result2)
             if result1 != result2:
                 return False
             variables += 1
