@@ -29,19 +29,20 @@
             </div>
             <p>ID: {{ task.id }}</p>
         </div>
-        <div style="display: grid; grid-template-columns: repeat(2, auto);">
-            <div style="grid-column: 1; font-size: large;">
-                LTC
-            </div>
-            <div style="grid-column: 2; font-size: large;">
-                HTML
-            </div>
+        <div id="task-manage-table">
             <div style="grid-column: 1;">
+                <div style="font-size: large;">
+                    LTC
+                </div>
                 {% for l in ltc_text_lines %}
                     {{ l }}<br/>
                 {% endfor %}
             </div>
-            <div style="grid-column: 2;">
+            <div width="10px" style="grid-column: 2;"></div>
+            <div style="grid-column: 3;">
+                <div style="font-size: large;">
+                    HTML
+                </div>
                 {% for l in html_text_lines %}
                     {{ l }}<br/>
                 {% endfor %}
