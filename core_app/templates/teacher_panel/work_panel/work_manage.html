@@ -6,7 +6,7 @@
     <script>is_editing=false; is_blackout=false;</script>
     <form method="post" id="main-form">
         {% csrf_token %}
-        <div style="display: grid; grid-template-columns: auto max-content; align-items: center;">
+        <div style="display: grid; grid-template-columns: auto max-content max-content; align-items: center;">
             <div style="grid-column: 1;">
                 <div style="grid-column: 1;"><input value="{{work.name}}" disabled="true" style="font-size: larger;" id="work_name" name="work_name"/></div>
             </div>
@@ -19,6 +19,7 @@
                     edit.disabled = false;
                     document.getElementById('work_name') = edit;
                 "><div style="width: 2em; padding: 0;">{% include "icons/pencil-icon.html" %}</div></button>
+            <button class="button-icon" name="delete_work" style="grid-column: 3;"><div style="width: 2em; padding: 0;">{% include "icons/delete-icon.html" %}</div><span>Удалить</span></button>
         </div>
         <p>ID: {{work.id}}</p>
         <button type="button" id="appoint" name="appoint" onclick="
