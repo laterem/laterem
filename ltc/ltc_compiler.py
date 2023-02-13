@@ -8,16 +8,18 @@ except ImportError:
     LTC_CheckerShortcuts = LTC_SingleStorage = True
     LATEREM_FLAGS = {True}
 
-VERSION = 0.4
+VERSION = 0.5
 RECOMPILATION_ATTEMPTS = 100
 
 
 class LTC:
-    def __init__(self, field_table, namespace, checker_functions, forbidden_cases):
+    def __init__(self, field_table, namespace, checker_functions, forbidden_cases,
+                 exporting_fields):
         self.field_table = field_table
         self.checker_functions = checker_functions
         self.forbidden_cases = forbidden_cases
         self.namespace = namespace
+        self.exporting_fields = exporting_fields
         self.executed = False
     
     def get_answer_fields(self):
@@ -99,7 +101,6 @@ class LTC:
         return valid
 
     def check(self, fields):
-        print(fields, self.field_table)
         valid = True
         for field, checker in self.checker_functions:
             valid = valid and checker(fields[field])
@@ -170,7 +171,7 @@ class LTCCompiler:
         kws[origin] = ff
 
     def compile(self, txt):
-        COMPILER_VERSION = 0.4
+        COMPILER_VERSION = 0.5
         if COMPILER_VERSION != VERSION:
             raise NotImplemented
 
@@ -179,7 +180,7 @@ class LTCCompiler:
         else:
             namespace = {}
             field_table = {}
-
+        exported_fields = set()
         checker_functions = []
         forbidden_cases = []
         if txt[:9] == '[VERBAL]\n':
@@ -205,6 +206,9 @@ class LTCCompiler:
             elif '?' in line:
                 linemode = 'check'
                 line = line.replace('?', ' ')
+            elif line.startswith('>'):
+                linemode = 'export_only'
+                line = line[1:]
             else:
                 raise LTCCompileError('LTC line has no known operators: ' + line)
             kws = LTCCompiler._combine_kws(line.strip().split())
@@ -213,6 +217,10 @@ class LTCCompiler:
                     field = kws[0]
                     value = kws[1]
                     value = LTCCompiler._typevalue(value)
+                    if field[0] == '>':
+                        field = field[1:].strip()
+                        exported_fields.add(field)
+
                     field_table[field] = value
                     if 'as' in kws:
                         allias = kws[kws.index('as') + 1]
@@ -250,11 +258,15 @@ class LTCCompiler:
                     forbidden_cases.append((field, function))
                 except IndexError:
                     raise LTCCompileError('Uncomplete operation: not enough keywords in ' + line)
-            
+            elif linemode == 'export_only':
+                field = kws[0]
+                exported_fields.add(field)
+
         return LTC(field_table=field_table, 
                    namespace=namespace, 
                    checker_functions=checker_functions,
-                   forbidden_cases=forbidden_cases)
+                   forbidden_cases=forbidden_cases,
+                   exporting_fields=exported_fields)
 
 
     def compile_alt(self, txt):
@@ -324,10 +336,5 @@ a = Rand10(0, 10)
     for _ in range(1000):
         ltc = ltcc.compile(test)
         ltc.execute()
-        print(ltc.field_table)
 
     raise   
-    print(ltc.field_table)
-    print(ltc.check({'input': '42'}))
-    print(ltc.check({'input': 'bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb'}))
-    print(ltc.to_dict())

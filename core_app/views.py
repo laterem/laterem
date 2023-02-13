@@ -281,43 +281,26 @@ def manage_work(request, work_id):
         ),
     )
 
-
-class Log():
-    def __init__(self, user_name, task_name, verdict, user_answer, correct_answer):
-        self.user_name = user_name
-        self.task_name = task_name
-        self.verdict = verdict
-        self.user_answer = user_answer
-        self.correct_answer = correct_answer
-
-
-class Group_Logs():
-    def __init__(self, name, logs):
-        self.name = name
-        self.logs = logs
-
-
-
 @permission_required("can_manage_works")
 def show_work_stats(request, work_id):
     general_POST_handling(request)
     work = Work.by_id(work_id)
 
-    log1 = Log("Жура", "Что-то умное", "OK", 42, 42)
-    log2 = Log("Спайд", "Что-то сложное", "OK", 179, 179)
+    group_answers_pair = [(group.name, work.get_answers(group=group)) for group in work.groups()]
 
-    group_logs = Group_Logs("Разрабы", [log1, log2])
 
     return render(
         request,
         "teacher_panel/work_panel/work_stats.html",
         render_args(
+            current_work=work,
             meta_all_task_types_available=True,
+           # meta_all_groups_available=True,
             me=User(request.user),
             request=request,
             additional={
                 "work": work,
-                "group_list": [group_logs]
+                "group_answers": group_answers_pair
             },
         ),
     )
@@ -522,16 +505,18 @@ def task_view(request, stask_id):
                 return redirect("/task/" + l_task_id)
 
         # Анализ ответа
-        if compiled_task.test(dict(request.POST)):
+        answers = dict(request.POST)
+        del answers['csrfmiddlewaretoken']
+        if compiled_task.test(answers):
             with User(request.user) as user:
                 user.solve(
                     task,
-                    compiled_task.ltc.mask_answer_dict(dict(request.POST)),
+                    compiled_task.ltc.mask_answer_dict(answers),
                     Verdicts.OK,
                 )
             return redirect(request.path)
         with User(request.user) as user:
-            user.solve(task, dict(request.POST), Verdicts.WRONG_ANSWER)
+            user.solve(task, answers, Verdicts.WRONG_ANSWER)
         return redirect(request.path)
     additional_render_args["unraveled_categories"] = request.session.get(
         "active_ids"

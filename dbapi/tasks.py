@@ -4,8 +4,9 @@ import json
 from ltc.ltc_compiler import LTCCompiler, LTC
 from context_objects import TASK_SCANNER, TASK_UPLOAD_PATH, TASK_VIEW_UPLOAD_PATH
 from extratypes import DBHybrid, NotSpecified
-from core_app.models import LateremTask, LateremCategory, LateremWork, LateremTaskTemplate
+from core_app.models import LateremGroup, LateremUser, LateremSolution, LateremTask, LateremCategory, LateremWork, LateremTaskTemplate
 from shutil import rmtree
+from .solutions import Solution
 
 TEMPLATES_VIEW_PATH = pathjoin('core_app', 'templates', TASK_VIEW_UPLOAD_PATH)
 if not os.path.exists(TASK_UPLOAD_PATH):
@@ -96,6 +97,14 @@ class Task(DBHybrid):
     def view_path(self):
         return self.template.view_path
 
+    def solutions(self, group=NotSpecified):
+        if group is NotSpecified:
+            return map(Solution, LateremSolution.objects.filter(task=self.dbmodel))
+        else:
+            users = LateremUser.objects.filter(lateremgroupmembership__group=group.dbmodel)
+            return map(Solution, LateremSolution.objects.filter(task=self.dbmodel,
+                                                                user__in=users))
+
     def compile(self):
         ltc = open_ltc(self.template.ltc_path)
         view = self.view_path
@@ -135,6 +144,16 @@ class Work(DBHybrid):
     def tasks(self):
         return [Task(x) for x in LateremTask.objects.filter(work=self.dbmodel)]
     
+    def groups(self):
+        from .groups import Group
+        return [Group(x) for x in LateremGroup.objects.filter(lateremassignment__work=self.dbmodel)]
+
+    def get_answers(self, group=NotSpecified):
+        ret = []
+        for task in self.tasks():
+            ret.extend(list(task.solutions(group=group)))
+        return ret
+
     def is_valid(self):
         return not not self.tasks()
     

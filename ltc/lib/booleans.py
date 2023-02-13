@@ -1,6 +1,8 @@
 from .formula_parser import FormulaParser, Operator
-from ltc.ltc_core import LTCFunction, LTCCheckerFunction, register_function
-
+try:
+    from ltc.ltc_core import LTCFunction, LTCCheckerFunction, register_function
+except ModuleNotFoundError:
+    from ltc_core import LTCFunction, LTCCheckerFunction, register_function
 
 class BooleanParser(FormulaParser):
     operators = {'|': Operator(0, lambda a, b: a or b, name='OR'), 
@@ -90,7 +92,6 @@ class BooleanFormula:
                 intrepp //= 2
             result1 = self.calc(**prompt)
             result2 = other.calc(**prompt)
-            print(prompt, result1, result2)
             if result1 != result2:
                 return False
             variables += 1
