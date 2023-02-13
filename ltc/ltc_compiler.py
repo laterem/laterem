@@ -35,6 +35,7 @@ class LTC:
         field_table = data['field_values']
         checker_functions = []
         forbidden_cases = []
+        exporting_fields = set(data[exporting_fields])
         for checkerobj in data['checkers']:
             function = KEYWORD_TABLE[checkerobj['function']](*checkerobj['args'])
             field = checkerobj['field']
@@ -43,7 +44,7 @@ class LTC:
             function = KEYWORD_TABLE[checkerobj['function']](*checkerobj['args'])
             field = checkerobj['field']
             forbidden_cases.append((field, function))
-        ltc = cls(field_table, namespace, checker_functions, forbidden_cases)
+        ltc = cls(field_table, namespace, checker_functions, forbidden_cases, exporting_fields)
         ltc.executed = executed 
         return ltc
 
@@ -54,6 +55,7 @@ class LTC:
         mainobj['field_values'] = self.field_table
         mainobj['checkers'] = []
         mainobj['forbidders'] = []
+        mainobj['exporting_fields'] = list(self.exporting_fields)
         for field, checker in self.checker_functions:
             checkerobj = {}
             checkerobj['function'] = INVERSE_TABLE[checker.__class__]
