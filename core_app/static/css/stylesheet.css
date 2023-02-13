@@ -730,6 +730,8 @@ div#task-manage-table {
 
 #task-manage-table div:nth-of-type(2n + 1) div {
     overflow: hidden;
+    padding: 0px;
+    border-radius: 0px;
 }
 
 div#task-manage-table-column-header {

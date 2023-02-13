@@ -429,10 +429,10 @@ def manage_task(request, task_id):
             # rename task dirrectory
             return redirect(request.path)
     
-    with open(task.ltc_path, "r") as f:
+    with open(task.ltc_path, "r", encoding="utf-8") as f:
         ltc_text = f.read()
 
-    with open(task.view_path_absolute, "r") as f:
+    with open(task.view_path_absolute, "r", encoding="utf-8") as f:
         html_text = f.read()
 
     return render(
