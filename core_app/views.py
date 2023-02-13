@@ -447,10 +447,10 @@ def manage_task(request, task_id):
             return redirect(request.path)
     
     with open(task.ltc_path, "r") as f:
-        ltc_text_lines = f.readlines()
+        ltc_text = f.read()
 
     with open(task.view_path_absolute, "r") as f:
-        html_text_lines = f.readlines()
+        html_text = f.read()
 
     return render(
         request,
@@ -459,8 +459,8 @@ def manage_task(request, task_id):
             request=request,
             additional={
                 "task": task,
-                "ltc_text_lines": ltc_text_lines,
-                "html_text_lines": html_text_lines
+                "ltc_text": ltc_text,
+                "html_text": html_text
             },
         ),
     )

@@ -31,21 +31,23 @@
         </div>
         <div id="task-manage-table">
             <div style="grid-column: 1;">
-                <div style="font-size: large;">
-                    LTC
+                <div id="task-manage-table-column-header">
+                    <p>LTC</p>
+                    <button></button>
                 </div>
-                {% for l in ltc_text_lines %}
-                    {{ l }}<br/>
-                {% endfor %}
+                <pre>
+{{ ltc_text }}
+                </pre>
             </div>
             <div width="10px" style="grid-column: 2;"></div>
             <div style="grid-column: 3;">
-                <div style="font-size: large;">
-                    HTML
+                <div id="task-manage-table-column-header">
+                    <p>HTML</p>
+                    <button></button>
                 </div>
-                {% for l in html_text_lines %}
-                    {{ l }}<br/>
-                {% endfor %}
+                <pre>
+{{ html_text }}
+                </pre>
             </div>
         </div>
     </form>
