@@ -3,13 +3,18 @@ from os.path import join as pathjoin
 
 # Модуль инициализации и расположения объектов, общих для всех модулей системы
 
-# Флаги компилятора LTC
+# Флаги окружения
 
 LTC_SingleStorage = Flag.new()
 LTC_CheckerShortcuts = Flag.new()
 DEBUG_DBSamples = Flag.new()
 
 LATEREM_FLAGS = LTC_CheckerShortcuts | LTC_SingleStorage | DEBUG_DBSamples
+
+# Настройки компилятора LTC
+
+LTC_DEFAULT_EXPORT_VALUE = '0'
+LTC_DEFAULT_INPUT_VALUE = '0'
 
 # Определение хранилища заданий
 

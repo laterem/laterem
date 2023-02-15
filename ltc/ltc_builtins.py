@@ -6,6 +6,7 @@ except ImportError:
     from lib.formula_parser import FormulaParser
 
 from random import randint
+import random
 from math import sqrt, copysign, fabs, floor, isfinite, modf
 
 # Подключение пакетов
@@ -70,23 +71,31 @@ class GenerateLine(LTCFunction):
 class RandomNum10(LTCFunction):
     expected_argsc = 2    
     def call(self):
+        random.seed(self.metadata)
+        self.metadata.tick_seed()
         return randint(int(self.args[0]), int(self.args[1]))
 
 class RandomNum2(LTCFunction):
     expected_argsc = 2    
     def call(self):
+        random.seed(self.metadata)
+        self.metadata.tick_seed()
         n10 = randint(int(self.args[0]), int(self.args[1]))
         return call_ltc_function(ConvertBase, n10, 10, 2)
 
 class RandomFloat10(LTCFunction):
     expected_argsc = 3    
     def call(self):
+        random.seed(self.metadata)
+        self.metadata.tick_seed()
         percision = 10**int(self.args[2])
         return randint(int(float(self.args[0]) * percision), int(float(self.args[1]) * percision)) / percision
 
 class RandomFloat2(LTCFunction):
     expected_argsc = 3    
     def call(self):
+        random.seed(self.metadata)
+        self.metadata.tick_seed()
         percision = 2**int(self.args[2])
         fl10 = randint(int(float(self.args[0]) * percision), int(float(self.args[1]) * percision)) / percision
         return call_ltc_function(ConvertBase, fl10, 10, 2)

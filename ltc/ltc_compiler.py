@@ -2,15 +2,34 @@ try:
     from .ltc_builtins import *
     from .ltc_core import *
     from context_objects import LATEREM_FLAGS, LTC_CheckerShortcuts, LTC_SingleStorage
+    from context_objects import LTC_DEFAULT_EXPORT_VALUE, LTC_DEFAULT_INPUT_VALUE
 except ImportError:
     from ltc_builtins import *
     from ltc_core import *
     LTC_CheckerShortcuts = LTC_SingleStorage = True
     LATEREM_FLAGS = {True}
+    LTC_DEFAULT_EXPORT_VALUE = '0'
+    LTC_DEFAULT_INPUT_VALUE = '0'
 
 VERSION = 0.5
 RECOMPILATION_ATTEMPTS = 100
 
+class LTCMetadataManager:
+    seed: int
+    salt: int
+    xor: int
+
+    def tick_seed(self):
+        self.seed = (self.seed + self.salt) ^ self.xor
+    
+class LTCFakeMetadata:
+
+    @property
+    def seed(self):
+        return randint(0, 10000000)
+
+    def tick_seed(self):
+        pass
 
 class LTC:
     def __init__(self, field_table, namespace, checker_functions, forbidden_cases,
@@ -20,8 +39,15 @@ class LTC:
         self.forbidden_cases = forbidden_cases
         self.namespace = namespace
         self.exporting_fields = exporting_fields
+        self.known_input_fields = set()
         self.executed = False
     
+    def feed_html(self, text):
+        from bs4 import BeautifulSoup
+        soup = BeautifulSoup(text)
+        for inp in soup.find_all('input'):
+            self.known_input_fields.add(inp.get('name'))
+
     def get_answer_fields(self):
         return [x[0] for x in self.checker_functions]
     
@@ -70,22 +96,36 @@ class LTC:
             mainobj['forbidders'].append(checkerobj)
         return mainobj
     
-    def execute(self, timeout=RECOMPILATION_ATTEMPTS):
+    def execute(self, extend_ns=None, metadata=None, timeout=RECOMPILATION_ATTEMPTS):
+        if metadata is None:    
+            metadata = LTCFakeMetadata()
+
+        if extend_ns is None:
+            extend_ns = {}
+
         if not timeout:
             raise LTCError(f"LTC could not fit user forbidden cases conditions for {RECOMPILATION_ATTEMPTS} attempts of recompilation.")
         new_field_table = {}
         new_checker_functions = []
         new_forbidden_cases = []
 
+        for field in self.exporting_fields:
+            new_field_table[field] = LTC_DEFAULT_EXPORT_VALUE
+        for field in self.known_input_fields:
+            new_field_table[field] = LTC_DEFAULT_INPUT_VALUE
+        
+        new_field_table.update(extend_ns)
+        
+
         for key, value in self.field_table.items():
-            new_field_table[key] = value.compile(new_field_table)(ns=new_field_table)
+            new_field_table[key] = value.compile(new_field_table, metadata)(ns=new_field_table)
         for field, value in self.checker_functions:
-            new_checker_functions.append((field, value.compile(new_field_table)))
+            new_checker_functions.append((field, value.compile(new_field_table, metadata)))
         for field, value in self.forbidden_cases:
-            new_forbidden_cases.append((field, value.compile(new_field_table)))
+            new_forbidden_cases.append((field, value.compile(new_field_table, metadata)))
 
         if not LTC.validate(new_field_table, new_checker_functions, new_forbidden_cases):
-            return self.execute(timeout-1)
+            return self.execute(extend_ns, metadata, timeout-1)
         
         del self.field_table
         del self.checker_functions
@@ -139,7 +179,9 @@ class LTCCompiler:
         args = txt[txt.find('(') + 1:-1].split(',')
         args = LTCCompiler._combine_kws(args, ',')
         fargs = [LTCCompiler._typevalue(arg) for arg in args]
-        return func(*fargs)
+
+        funcobj = func(*fargs)
+        return funcobj
 
     def _combine_kws(kws, joiner=' '):
         for i, kw in enumerate(kws):
