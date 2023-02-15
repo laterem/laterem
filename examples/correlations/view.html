@@ -1,0 +1,10 @@
+{% with base_arg="Вставте слово" %}
+    <h2>Наличие взаимосвязи цены автомобиля с его возрастом и пробегом может объясняться тем, 
+        что чем больше возраст автомобиля, тем 
+        {% with combobox_items=variants1 id='ans1' %} {% include "combobox.html" %} {% endwith %} 
+        на нем могли проехать, и все это обуславливает 
+        {% with combobox_items=variants2 id='ans2' %} {% include "combobox.html" %} {% endwith %} 
+        износ автомобиля, что будет действовать на цену в сторону ее
+         {% with combobox_items=variants3 id='ans3' %} {% include "combobox.html" %} {% endwith %}.
+    </h2>
+{% endwith %}

@@ -1,0 +1,3 @@
+checkbox1_items = ["42", "Китай?", "Быть", "Не быть"]
+button1_text = "Испытать удачу!"
+checks?Equal(42)
