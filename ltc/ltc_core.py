@@ -35,18 +35,19 @@ class LTCFunction:
             self.result = self.call()
         return self.result
     
-    def compile(self, ns):
+    def compile(self, ns, metadata):
         nargs = self.args[:]
 
         for i, arg in enumerate(nargs):
             if callable(arg):
-                nargs[i] = arg.compile(ns)(ns)
+                nargs[i] = arg.compile(ns, metadata)(ns)
             elif isinstance(arg, list):
-                nargs[i] = [a.compile(ns)(ns) for a in arg]
+                nargs[i] = [a.compile(ns, metadata)(ns) for a in arg]
             else:
                 continue
         new = type(self)(*nargs)
         new.compiled = True
+        new.metadata = metadata
         return new
 
 class LTCCheckerFunction(LTCFunction):
