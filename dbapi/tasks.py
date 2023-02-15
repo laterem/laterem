@@ -64,10 +64,10 @@ class TaskTemplate(DBHybrid):
         return pathjoin(TASK_UPLOAD_PATH, str(self), 'config.ltc')
     
     def open_view(self):
-        return open(self.view_path_absolute)
+        return open(self.view_path_absolute, encoding='UTF-8')
     
     def open_ltc(self):
-        return open(self.ltc_path)
+        return open(self.ltc_path, encoding='UTF-8')
     
     def identificator(self):
         return f'ID{self.dbmodel.id}-{self.dbmodel.name}'

@@ -462,11 +462,12 @@ def render_work(request, work_id):
     return redirect("/task/" + str(work.tasks()[0].id))
 
 
-def getasset(request, taskname, filename):
+def getasset(request, task_id, filename):
     if filename == "view.html" or filename == "config.ltc":
         raise PermissionDenied()
-    path = TASK_SCANNER.id_to_path(taskname)
-    path = pathjoin(path, filename)
+    taskid = int(task_id)
+    task = TaskTemplate.by_id(taskid)
+    path = pathjoin(task.dir_path, filename)
     return FileResponse(open(path, "rb"))
 
 
