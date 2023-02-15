@@ -27,9 +27,9 @@ from core_app.views import users_panel, teacher_hub, group_panel, work_panel, ma
 
 urlpatterns = [
    # path('admin/', admin.site.urls),
-    path('task/<str:stask_id>', task_view),
+    path('task/<str:stask_id>/', task_view),
     path('taskasset/<str:taskname>/<str:filename>', getasset),
-    path('works/<str:work_id>', render_work),
+    path('works/<str:work_id>/', render_work),
     path('login/', login_view),
     path('logout/', logout_view),
     path('profile/', profile_view),
@@ -41,7 +41,7 @@ urlpatterns = [
     path('teacher/works/<str:work_id>/', manage_work),
     path('teacher/works/<str:work_id>/answer_stats/', show_work_stats),
     path('teacher/groups/', group_panel),
-    path('teacher/groups/<str:group_id>', manage_group),
+    path('teacher/groups/<str:group_id>/', manage_group),
     path('teacher/tasks/', task_panel),
     path('teacher/tasks/<str:task_id>/', manage_task),
 ] + [re_path(

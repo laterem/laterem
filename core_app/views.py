@@ -509,7 +509,11 @@ def task_view(request, stask_id):
         del answers['csrfmiddlewaretoken']
 
         with User(request.user) as user:
-            if task.test(user, answers):
+            test_compiled = task.compile(user, answers)
+            request.session["compiled_tasks"][stask_id] = test_compiled.as_JSON()
+            request.session.modified = True
+
+            if test_compiled.ltc.check():
                 user.solve(
                     task,
                     compiled_task.ltc.mask_answer_dict(answers),

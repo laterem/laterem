@@ -44,15 +44,16 @@ class LTC:
     
     def feed_html(self, text):
         from bs4 import BeautifulSoup
-        soup = BeautifulSoup(text)
+        soup = BeautifulSoup(text, features="html.parser")
         for inp in soup.find_all('input'):
             self.known_input_fields.add(inp.get('name'))
+        print(self.known_input_fields)
 
-    def get_answer_fields(self):
-        return [x[0] for x in self.checker_functions]
+    #def get_answer_fields(self):
+    #    return [x[0] for x in self.checker_functions]
     
     def mask_answer_dict(self, __dict):
-        return {key: __dict[key] for key in self.get_answer_fields()}
+        return {key: __dict[key] for key in self.known_input_fields}
 
     @classmethod
     def from_dict(cls, data):
@@ -61,7 +62,7 @@ class LTC:
         field_table = data['field_values']
         checker_functions = []
         forbidden_cases = []
-        exporting_fields = set(data[exporting_fields])
+        exporting_fields = set(data["exporting_fields"])
         for checkerobj in data['checkers']:
             function = KEYWORD_TABLE[checkerobj['function']](*checkerobj['args'])
             field = checkerobj['field']
@@ -116,7 +117,7 @@ class LTC:
         
         new_field_table.update(extend_ns)
         
-
+        print('FT', new_field_table)
         for key, value in self.field_table.items():
             new_field_table[key] = value.compile(new_field_table, metadata)(ns=new_field_table)
         for field, value in self.checker_functions:
@@ -146,6 +147,7 @@ class LTC:
         valid = True
         for field, checker in self.checker_functions:
             valid = valid and checker(self.field_table[field])
+            print(valid, checker, checker.args, field, self.field_table[field])
         return valid
     
 

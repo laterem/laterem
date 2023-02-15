@@ -80,6 +80,10 @@ class DBHybrid(Hybrid):
     def by_id(cls, id):
         return cls(cls.__dbmodel__.objects.get(id=id))
 
+    @property
+    def id(self):
+        return self.dbmodel.id
+
     def __enter__(self):
         return self
     

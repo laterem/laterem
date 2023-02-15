@@ -14,16 +14,6 @@ if not os.path.exists(TASK_UPLOAD_PATH):
 if not os.path.exists(TEMPLATES_VIEW_PATH):
     os.makedirs(TEMPLATES_VIEW_PATH)    
 
-def open_ltc(path):
-    if not path.endswith('.ltc'):
-        path += '.ltc'
-    with open(path, mode='r', encoding='UTF-8') as f:
-        data = f.read()
-    ltcc = LTCCompiler()
-    ltc = ltcc.compile(data)
-    ltc.execute()
-    return ltc
-
 class TaskTemplate(DBHybrid):
     __dbmodel__ = LateremTaskTemplate
 
@@ -74,7 +64,7 @@ class TaskTemplate(DBHybrid):
         return pathjoin(TASK_UPLOAD_PATH, str(self), 'config.ltc')
     
     def open_view(self):
-        return open(self.view_path)
+        return open(self.view_path_absolute)
     
     def open_ltc(self):
         return open(self.ltc_path)
@@ -128,15 +118,14 @@ class Task(DBHybrid):
         ltc = ltcc.compile(data)
         extend_ns = self.field_overrides
         extend_ns.update(answers)
+        with self.template.open_view() as io:
+            ltc.feed_html(io.read())
         metadata = self.generate_metadata(user)
         ltc.execute(extend_ns, metadata)
-        ltc = open_ltc(self.template.ltc_path)
+        print(metadata.seed)
+        
         view = self.view_path
         return CompiledTask(ltc, view)
-
-    def test(self, user, answers):
-        compiled = self.compile(user, answers)
-        return compiled.ltc.check()
 
 class CompiledTask():
     def __init__(self, ltc, view) -> None:

@@ -71,14 +71,14 @@ class GenerateLine(LTCFunction):
 class RandomNum10(LTCFunction):
     expected_argsc = 2    
     def call(self):
-        random.seed(self.metadata)
+        random.seed(self.metadata.seed)
         self.metadata.tick_seed()
         return randint(int(self.args[0]), int(self.args[1]))
 
 class RandomNum2(LTCFunction):
     expected_argsc = 2    
     def call(self):
-        random.seed(self.metadata)
+        random.seed(self.metadata.seed)
         self.metadata.tick_seed()
         n10 = randint(int(self.args[0]), int(self.args[1]))
         return call_ltc_function(ConvertBase, n10, 10, 2)
@@ -86,7 +86,7 @@ class RandomNum2(LTCFunction):
 class RandomFloat10(LTCFunction):
     expected_argsc = 3    
     def call(self):
-        random.seed(self.metadata)
+        random.seed(self.metadata.seed)
         self.metadata.tick_seed()
         percision = 10**int(self.args[2])
         return randint(int(float(self.args[0]) * percision), int(float(self.args[1]) * percision)) / percision
@@ -94,7 +94,7 @@ class RandomFloat10(LTCFunction):
 class RandomFloat2(LTCFunction):
     expected_argsc = 3    
     def call(self):
-        random.seed(self.metadata)
+        random.seed(self.metadata.seed)
         self.metadata.tick_seed()
         percision = 2**int(self.args[2])
         fl10 = randint(int(float(self.args[0]) * percision), int(float(self.args[1]) * percision)) / percision
@@ -195,7 +195,8 @@ class IsEqual(LTCCheckerFunction):
         try:
             if isinstance(self.args[0], list):
                 return sorted(field) == sorted(self.args[0])
-            elif isinstance(self.args[0], float):
+            elif isinstance(self.args[0], float) or isinstance(self.args[0], int):
+                print(float(field) == self.args[0])
                 return float(field) == self.args[0]
             else:
                 return str(field) == str(self.args[0])

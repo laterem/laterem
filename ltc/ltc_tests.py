@@ -36,18 +36,24 @@ input?Equal(a)'''
     ltcc = LTCCompiler()
 
     ltc = ltcc.compile(string)
-    ltc.execute()
+    ltc.execute(extend_ns={'input': 5})
     
-    if not ltc.check({'input': 5}):
+    if not ltc.check():
         raise TestFailed('5')
     
-    if not ltc.check({'input': '5'}):
+    ltc = ltcc.compile(string)
+    ltc.execute(extend_ns={'input': '5'})
+    if not ltc.check():
         raise TestFailed("'5'")
     
-    if ltc.check({'input': 10}):
+    ltc = ltcc.compile(string)
+    ltc.execute(extend_ns={'input': 10})
+    if ltc.check():
         raise TestFailed("10")
     
-    if ltc.check({'input': "chunky"}):
+    ltc = ltcc.compile(string)
+    ltc.execute(extend_ns={'input': "chunky"})
+    if ltc.check():
         raise TestFailed("chunky")
 
 @test('2 Functions')
@@ -59,12 +65,17 @@ input?Equal(Sum(a, b))'''
 
     ltcc = LTCCompiler()
 
+    metadata = LTCMetadataManager()
+    metadata.seed = 1
+    metadata.salt = 214
+    metadata.xor = 100
     ltc = ltcc.compile(string)
-    ltc.execute()
-    
+    ltc.execute(metadata=metadata)
     a, b = ltc.field_table['a'], ltc.field_table['b']
 
-    if not ltc.check({'input': a + b}):
+    ltc = ltcc.compile(string)
+    ltc.execute(metadata=metadata, extend_ns={'input': a + b})
+    if not ltc.check():
         raise TestFailed()
 
 @test('3 Shortcuts')
@@ -76,12 +87,17 @@ input?Sum(a, b)'''
 
     ltcc = LTCCompiler()
 
+    metadata = LTCMetadataManager()
+    metadata.seed = 1
+    metadata.salt = 214
+    metadata.xor = 100
     ltc = ltcc.compile(string)
-    ltc.execute()
-    
+    ltc.execute(metadata=metadata)
     a, b = ltc.field_table['a'], ltc.field_table['b']
 
-    if not ltc.check({'input': a + b}):
+    ltc = ltcc.compile(string)
+    ltc.execute(metadata=metadata, extend_ns={'input': a + b})
+    if not ltc.check():
         raise TestFailed()
 
 @test('4 Lists')
@@ -93,15 +109,16 @@ input?Reverse(a)'''
     ltcc = LTCCompiler()
 
     ltc = ltcc.compile(string)
-    ltc.execute()
+
+    input = reversed([0, 1, 2, 3, 4, "[I'm no list, capiche?]", reversed(['But', 'I', 'am!'])])
+
+    ltc.execute(extend_ns={'input': input})
     correct = [0, 1, 2, 3, 4, "[I'm no list, capiche?]", list(reversed(['But', 'I', 'am!']))]
     
     if not ltc.field_table['a'] == correct:
         raise TestFailed('list is ' + str(ltc.field_table['a']) + ', should be ' + str(correct))
 
-    input = reversed([0, 1, 2, 3, 4, "[I'm no list, capiche?]", reversed(['But', 'I', 'am!'])])
-
-    if not ltc.check({'input': input}):
+    if not ltc.check():
         raise TestFailed()
 
 @test('5 Forbidders 1')
@@ -157,13 +174,14 @@ inpute?Equal(21)
 inputg?Equal(f)
 '''
     ltc = ltcc.compile(string)
-    ltc.execute()
+    input = {'inputa': 7,
+             'inputc': 7,
+             'inpute': 21,
+             'inputg': 77,
+            }
+    ltc.execute(extend_ns=input)
     ft = ltc.field_table
-    if not ltc.check({'inputa': ft['a'],
-                      'inputc': ft['c'],
-                      'inpute': ft['e'],
-                      'inputg': ft['g'],
-                      }):
+    if not ltc.check():
         raise TestFailed(str(ft) + ' (must be )')
 
 @test('8 Basic Algebra')
