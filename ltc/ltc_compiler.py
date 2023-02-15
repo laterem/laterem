@@ -142,10 +142,10 @@ class LTC:
             valid = valid and not checker(field_table[field])
         return valid
 
-    def check(self, fields):
+    def check(self):
         valid = True
         for field, checker in self.checker_functions:
-            valid = valid and checker(fields[field])
+            valid = valid and checker(self.field_table[field])
         return valid
     
 

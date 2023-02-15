@@ -48,8 +48,8 @@ class User(DBHybrid):
 
     def get_task_solution(self, task):
         solutions = LateremSolution.objects.filter(user=self.dbmodel,
-                                              task=task.dbmodel,
-                                              )
+                                                   task=task.dbmodel,
+                                                  )
         if solutions:
             return Solution(solutions.latest('timestamp'))
         else:

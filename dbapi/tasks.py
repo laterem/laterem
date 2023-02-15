@@ -1,7 +1,7 @@
 import os
 from os.path import join as pathjoin
 import json
-from ltc.ltc_compiler import LTCCompiler, LTC
+from ltc.ltc_compiler import LTCCompiler, LTC, LTCMetadataManager
 from context_objects import TASK_SCANNER, TASK_UPLOAD_PATH, TASK_VIEW_UPLOAD_PATH
 from extratypes import DBHybrid, NotSpecified
 from core_app.models import LateremGroup, LateremUser, LateremSolution, LateremTask, LateremCategory, LateremWork, LateremTaskTemplate
@@ -97,6 +97,10 @@ class Task(DBHybrid):
     def view_path(self):
         return self.template.view_path
 
+    @property
+    def field_overrides(self):
+        return json.loads(self.dbmodel.field_overrides)
+
     def solutions(self, group=NotSpecified):
         if group is NotSpecified:
             return map(Solution, LateremSolution.objects.filter(task=self.dbmodel))
@@ -105,11 +109,34 @@ class Task(DBHybrid):
             return map(Solution, LateremSolution.objects.filter(task=self.dbmodel,
                                                                 user__in=users))
 
-    def compile(self):
+    def generate_metadata(self, user):
+        metadata = LTCMetadataManager()
+        metadata.seed = self.id * 109231 ^ user.id * 2913884
+        metadata.salt = self.id * 423 ^ user.id * 562
+        metadata.xor = self.id * 3294829 ^ user.id * 6456484
+        return metadata
+
+    def compile(self, user, answers=NotSpecified):
+        if answers is NotSpecified:
+            answers = {}
+        else:
+            answers = {key: (value if (len(value) - 1) else value[0])
+                       for key, value in answers.items()}
+        with open(self.template.ltc_path, mode='r', encoding='UTF-8') as f:
+            data = f.read()
+        ltcc = LTCCompiler()
+        ltc = ltcc.compile(data)
+        extend_ns = self.field_overrides
+        extend_ns.update(answers)
+        metadata = self.generate_metadata(user)
+        ltc.execute(extend_ns, metadata)
         ltc = open_ltc(self.template.ltc_path)
         view = self.view_path
         return CompiledTask(ltc, view)
 
+    def test(self, user, answers):
+        compiled = self.compile(user, answers)
+        return compiled.ltc.check()
 
 class CompiledTask():
     def __init__(self, ltc, view) -> None:
@@ -123,10 +150,10 @@ class CompiledTask():
         template = d['template']
         return cls(ltc, template)
     
-    def test(self, fields) -> int:
-        fields = {key: (value if (len(value) - 1) else value[0])
-                  for key, value in fields.items()}
-        return self.ltc.check(fields)
+    #def test(self, fields) -> int:
+    #    fields = {key: (value if (len(value) - 1) else value[0])
+    #              for key, value in fields.items()}
+    #    return self.ltc.check(fields)
     
     def as_JSON(self):
         d = self.ltc.to_dict()
