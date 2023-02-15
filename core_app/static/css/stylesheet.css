@@ -619,7 +619,8 @@ div#task-table {
 
 .group-table-element, .user-table-element,
 .all-groups-table-element, .work-table-element,
-.task-table-element, #work-stats-table * {
+.task-table-element, #work-stats-table *,
+#task-field-table * {
     display: flex;
     padding: 5px;
     border-collapse: collapse;
@@ -635,20 +636,23 @@ div#task-table {
 #work-stats-table *:nth-of-type(10n+1), #work-stats-table *:nth-of-type(10n+2),
 #work-stats-table *:nth-of-type(10n+3), #work-stats-table *:nth-of-type(10n+4),
 #work-stats-table *:nth-of-type(10n+5),
+#task-field-table *:nth-of-type(4n+1), #task-field-table *:nth-of-type(4n+2),
 .task-table-element:nth-of-type(6n+1), .task-table-element:nth-of-type(6n+2),
 .task-table-element:nth-of-type(6n+3) {
     background-color: var(--content-hover-color);
 }
 
 .user-table-element a, .all-groups-table-element a,
-.task-table-element a {
+.task-table-element a, #task-field-table a,
+#work-table a {
     text-decoration: none;
     color: var(--body-font-color);
 }
 
 div#user-table-header, div#group-table-header,
 div#all-groups-table-header, div#work-table-header,
-div#task-table-header, div#work-stats-table-header {
+div#task-table-header, div#work-stats-table-header,
+div#task-field-table-header {
     display: grid;
     border-radius: 10px 10px 0 0;
     overflow: hidden;
@@ -677,7 +681,7 @@ div#task-table, div#task-table-header {
 }
 
 div#group-table, div#work-table,
-div#work-stats-table {
+div#work-stats-table, div#task-field-table {
     display: grid; 
     grid-template-columns: auto auto 40px 40px;
     
@@ -697,6 +701,10 @@ div#work-table  {
 
 div#work-stats-table {
     grid-template-columns: repeat(5, auto);
+}
+
+div#task-field-table {
+    grid-template-columns: repeat(2, auto);
 }
 
 div#task-manage-table {
@@ -755,7 +763,7 @@ div#task-manage-table-column-header * {
 }
 
 #group-table-header *, #work-table-header *,
-#work-stats-table-header * {
+#work-stats-table-header *, #task-field-table-header * {
     display: flex;
     align-items: center;
     padding: 4px;
