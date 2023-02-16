@@ -169,3 +169,54 @@ class Scanner:
         if id not in self.table:
             self.table[id] = Scanner._scan([self.root], id)
         return self.table[id]
+
+
+def transliterate_ru_en(string) -> str:
+    alphabet = {'а': 'a',
+                'б': 'b',
+                'в': 'v',
+                'г': 'g',
+                'д': 'd',
+                'е': 'ye',
+                'ё': 'yo',
+                'ж': 'zh',
+                'з': 'z',
+                'и': 'i',
+                'к': 'k',
+                'л': 'l',
+                'м': 'm',
+                'н': 'n',
+                'о': 'o',
+                'п': 'p',
+                'р': 'r',
+                'с': 's',
+                'т': 't',
+                'у': 'u',
+                'ф': 'f',
+                'х': 'h',
+                'ц': 'ts',
+                'ч': 'ch',
+                'ш': 'sh',
+                'щ': 'sch',
+                'ъ': '',
+                'ы': 'i',
+                'ь': "'",
+                'э': 'e',
+                'ю': 'yu',
+                'я': 'ya'}
+    out = ''
+    for letter in string:
+        ll = letter.lower()
+        if ll not in alphabet:
+            out += letter
+            continue
+        add = alphabet[ll]
+        if letter.isupper():
+            out += add.upper()
+        else:
+            out += add
+    return out
+
+
+def asciify(string):
+    return transliterate_ru_en(string).encode('ascii', 'replace').decode('ascii')

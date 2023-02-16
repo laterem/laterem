@@ -3,7 +3,7 @@ from os.path import join as pathjoin
 import json
 from ltc.ltc_compiler import LTCCompiler, LTC, LTCMetadataManager
 from context_objects import TASK_SCANNER, TASK_UPLOAD_PATH, TASK_VIEW_UPLOAD_PATH
-from extratypes import DBHybrid, NotSpecified
+from extras import DBHybrid, NotSpecified
 from core_app.models import LateremGroup, LateremUser, LateremSolution, LateremTask, LateremCategory, LateremWork, LateremTaskTemplate
 from shutil import rmtree
 from .solutions import Solution

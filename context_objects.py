@@ -1,4 +1,4 @@
-from extratypes import Literal, Flag, Scanner
+from extras import Literal, Flag, Scanner
 from os.path import join as pathjoin
 
 # Модуль инициализации и расположения объектов, общих для всех модулей системы

@@ -1,5 +1,5 @@
 from core_app.models import LateremSolution
-from extratypes import DBHybrid
+from extras import DBHybrid
 import json
 
 class Verdicts:

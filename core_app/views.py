@@ -22,6 +22,7 @@ from dbapi.tasks import Task, CompiledTask, Work, Category, TaskTemplate
 from dbapi.solutions import Verdicts
 from dbapi.groups import Group
 
+from extras import asciify
 
 def permission_required(permission):
     def wrapper(function):
@@ -476,12 +477,12 @@ def manage_task(request, task_id):
         
         if "download_ltc" in request.POST:
             resp = FileResponse(open(task.ltc_path, "rb"))
-            resp['Content-Disposition'] = f'attachment; filename="{task.name.strip()}-config.ltc"'
+            resp['Content-Disposition'] = f'attachment; filename="{asciify(task.name.strip())}-config.ltc"'
             return resp
         
         if "download_html" in request.POST:
             resp = FileResponse(open(task.view_path_absolute, "rb"))
-            resp['Content-Disposition'] = f'attachment; filename="{task.name.strip()}-view.html"'
+            resp['Content-Disposition'] = f'attachment; filename="{asciify(task.name.strip())}-view.html"'
             return resp
     
     with open(task.ltc_path, "r", encoding="utf-8") as f:

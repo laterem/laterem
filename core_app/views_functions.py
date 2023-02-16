@@ -4,7 +4,7 @@ from dbapi.tasks import Category, Work, RootsMimic, TaskTemplate
 from dbapi.groups import Group
 from dbapi.users import User
 from .models import LateremUser
-from extratypes import NotSpecified
+from extras import NotSpecified
 from context_objects import LATEREM_FLAGS, DEBUG_DBSamples, TASK_SCANNER
 from django.shortcuts import redirect
 
