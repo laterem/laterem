@@ -319,6 +319,9 @@ def manage_task_in_work(request, work_id, task_id):
     for group in User(request.user).groups():
         if work not in group.get_works():
             groups_to_appoint.append((group.id, group.name))
+
+    task = Task.by_id(task_id)
+
     return render(
         request,
         "teacher_panel/work_panel/work_task_manage.html",
@@ -326,7 +329,7 @@ def manage_task_in_work(request, work_id, task_id):
             meta_all_task_types_available=True,
             me=User(request.user),
             request=request,
-            additional={"work": work, "groups_to_appoint": groups_to_appoint},
+            additional={"work": work, "groups_to_appoint": groups_to_appoint, "task": task},
         ),
     )
 

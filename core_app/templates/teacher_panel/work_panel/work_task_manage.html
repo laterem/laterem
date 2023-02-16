@@ -33,19 +33,17 @@
                 };
             ">Назначить группе</button>
     </form>
-    {% for task in work.tasks %}
-        <div id="task-field-table-header">
-            {{ task.name }}
-        </div>
-        <div id="task-field-table">
-            {% for name, value in task.ltc_fields %}
-                <div style="grid-column: 1; border-left: none;">
-                    {{ name }}
-                </div>
-                <div style="grid-column: 2;">
-                    <input name="name" value="{{ value }}"/>
-                </div> 
-            {% endfor %}
-        </div>
-    {% endfor %}
+    <div id="task-field-table-header">
+        {{ task.name }}
+    </div>
+    <div id="task-field-table">
+        {% for name, value in task.ltc_fields %}
+            <div style="grid-column: 1; border-left: none;">
+                {{ name }}
+            </div>
+            <div style="grid-column: 2;">
+                <input name="name" value="{{ value }}"/>
+            </div> 
+        {% endfor %}
+    </div>
 {% endblock %}
