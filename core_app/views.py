@@ -472,6 +472,16 @@ def manage_task(request, task_id):
         if "edit_data" in request.POST:
             # rename task dirrectory
             return redirect(request.path)
+        
+        if "download_ltc" in request.POST:
+            resp = FileResponse(open(task.ltc_path, "rb"))
+            resp['Content-Disposition'] = f'attachment; filename="{task.name.strip()}-config.ltc"'
+            return resp
+        
+        if "download_html" in request.POST:
+            resp = FileResponse(open(task.view_path_absolute, "rb"))
+            resp['Content-Disposition'] = f'attachment; filename="{task.name.strip()}-view.html"'
+            return resp
     
     with open(task.ltc_path, "r", encoding="utf-8") as f:
         ltc_text = f.read()

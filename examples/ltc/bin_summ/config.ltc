@@ -1,0 +1,8 @@
+a_10 = Rand10(1, 1024)
+b_10 = Rand10(1, 1024)
+s_10 = Sum(a_10, b_10)
+a_2 = ConvertBase(a_10, 10, 2, 1)
+b_2 = ConvertBase(b_10, 10, 2, 1)
+s_2 = ConvertBase(s_10, 10, 2, 1)
+
+answer?Equal(s_2)
