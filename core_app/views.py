@@ -2,11 +2,17 @@ from django.http import HttpResponse, FileResponse
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
 from django.core.exceptions import PermissionDenied
+from django.utils.text import slugify
+from django.contrib.auth.decorators import login_required
+
+from extras import asciify
 from context_objects import TASK_SCANNER
+
 from os.path import join as pathjoin
 from os import mkdir
 from shutil import rmtree
 import os
+
 from .views_functions import (
     render_args,
     change_color_theme,
@@ -14,7 +20,6 @@ from .views_functions import (
     general_POST_handling,
 )
 from .models import *
-from django.contrib.auth.decorators import login_required
 from .forms import LoginForm, NewUser, AddMember, AssignWork, UploadTask
 
 from dbapi.users import User
@@ -22,7 +27,6 @@ from dbapi.tasks import Task, CompiledTask, Work, Category, TaskTemplate
 from dbapi.solutions import Verdicts
 from dbapi.groups import Group
 
-from extras import asciify
 
 def permission_required(permission):
     def wrapper(function):
