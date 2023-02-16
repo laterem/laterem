@@ -281,6 +281,50 @@ def manage_work(request, work_id):
         ),
     )
 
+
+@permission_required("can_manage_works")
+def manage_task_in_work(request, work_id, task_id):
+    general_POST_handling(request)
+    work = Work.by_id(work_id)
+
+    if request.method == "POST":
+        for signal in request.POST:
+            if signal.startswith("delete:"):
+                id = int(signal.lstrip("delete:"))
+                task = Task.by_id(id)
+                work.remove_task(task)
+                return redirect(request.path)
+        if "edit_data" in request.POST:
+            name = request.POST.get("work_name")
+            work.dbmodel.name = name
+            work.dbmodel.save()
+            return redirect(request.path)
+        if "newtask" in request.POST:
+            task = work.add_task(
+                name=request.POST.get("task_name"),
+                task_type=request.POST.get("task_type"),
+            )
+            return redirect(request.path)
+        if "appoint_to_group" in request.POST:
+            group = Group.by_id(request.POST.get("group_name"))
+            group.assign(work, User(request.user))
+            return redirect(request.path)
+    groups_to_appoint = list()
+    for group in User(request.user).groups():
+        if work not in group.get_works():
+            groups_to_appoint.append((group.id, group.name))
+    return render(
+        request,
+        "teacher_panel/work_panel/work_task_manage.html",
+        render_args(
+            meta_all_task_types_available=True,
+            me=User(request.user),
+            request=request,
+            additional={"work": work, "groups_to_appoint": groups_to_appoint},
+        ),
+    )
+
+
 @permission_required("can_manage_works")
 def show_work_stats(request, work_id):
     general_POST_handling(request)
@@ -462,11 +506,12 @@ def render_work(request, work_id):
     return redirect("/task/" + str(work.tasks()[0].id))
 
 
-def getasset(request, taskname, filename):
+def getasset(request, task_id, filename):
     if filename == "view.html" or filename == "config.ltc":
         raise PermissionDenied()
-    path = TASK_SCANNER.id_to_path(taskname)
-    path = pathjoin(path, filename)
+    taskid = int(task_id)
+    task = TaskTemplate.by_id(taskid)
+    path = pathjoin(task.dir_path, filename)
     return FileResponse(open(path, "rb"))
 
 
@@ -483,7 +528,7 @@ def task_view(request, stask_id):
     task_id = int(stask_id)
     task = Task.by_id(task_id)
     if stask_id not in request.session["compiled_tasks"]:
-        compiled_task = task.compile()
+        compiled_task = task.compile(User(request.user))
         request.session["compiled_tasks"][stask_id] = compiled_task.as_JSON()
         request.session.modified = True
     else:
@@ -507,20 +552,23 @@ def task_view(request, stask_id):
         # Анализ ответа
         answers = dict(request.POST)
         del answers['csrfmiddlewaretoken']
-        if compiled_task.test(answers):
-            with User(request.user) as user:
+
+        with User(request.user) as user:
+            test_compiled = task.compile(user, answers)
+            request.session["compiled_tasks"][stask_id] = test_compiled.as_JSON()
+            request.session.modified = True
+
+            if test_compiled.ltc.check():
                 user.solve(
                     task,
                     compiled_task.ltc.mask_answer_dict(answers),
                     Verdicts.OK,
                 )
-            return redirect(request.path)
-        with User(request.user) as user:
+                return redirect(request.path)
             user.solve(task, answers, Verdicts.WRONG_ANSWER)
         return redirect(request.path)
-    additional_render_args["unraveled_categories"] = request.session.get(
-        "active_ids"
-    )
+    
+    additional_render_args["unraveled_categories"] = request.session.get("active_ids")
     additional_render_args.update(compiled_task.ltc.field_table)
     return render(
         request,

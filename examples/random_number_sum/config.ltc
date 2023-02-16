@@ -1,0 +1,3 @@
+N = Rand10(10, 100)
+test = Sum(a, b)
+test?Equal(N)
