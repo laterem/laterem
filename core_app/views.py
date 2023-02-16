@@ -242,6 +242,7 @@ def work_panel(request):
 @permission_required("can_manage_works")
 def manage_work(request, work_id):
     general_POST_handling(request)
+    # /!\ Typecast warning
     work = Work.by_id(work_id)
 
     if request.method == "POST":

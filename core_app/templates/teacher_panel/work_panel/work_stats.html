@@ -40,7 +40,7 @@
             <!-- Ученик | Задача | Вердикт | Ответ ученика | Правильный ответ -->
             {% for log in answers %}
                 <div style="grid-column: 1;">
-                    {{ log.user.name }}
+                    {{ log.user.email }}
                 </div>
                 <div style="grid-column: 2;">
                     {{ log.task.name }}
