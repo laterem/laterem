@@ -22,16 +22,6 @@
             <button class="button-icon" name="delete_work" style="grid-column: 3;"><div style="width: 2em; padding: 0;">{% include "icons/delete-icon.html" %}</div><span>Удалить</span></button>
         </div>
         <p>ID: {{work.id}}</p>
-        <button type="button" id="appoint" name="appoint" onclick="
-                is_blackout = !is_blackout;
-                if (is_blackout) {
-                    document.getElementById('appoint-work').style.display = 'block';
-                    document.getElementById('blackout').style.display = 'block';
-                } else {
-                    document.getElementById('appoint-work').style.display = 'none';
-                    document.getElementById('blackout').style.display = 'none';
-                };
-            ">Назначить группе</button>
     </form>
     <div id="task-field-table-header">
         {{ task.name }}
