@@ -98,43 +98,46 @@ class LTC:
         return mainobj
     
     def execute(self, extend_ns=None, metadata=None, timeout=RECOMPILATION_ATTEMPTS):
-        if metadata is None:    
-            metadata = LTCFakeMetadata()
+        try:
+            if metadata is None:    
+                metadata = LTCFakeMetadata()
 
-        if extend_ns is None:
-            extend_ns = {}
+            if extend_ns is None:
+                extend_ns = {}
 
-        if not timeout:
-            raise LTCError(f"LTC could not fit user forbidden cases conditions for {RECOMPILATION_ATTEMPTS} attempts of recompilation.")
-        new_field_table = {}
-        new_checker_functions = []
-        new_forbidden_cases = []
+            if not timeout:
+                raise LTCError(f"LTC could not fit user forbidden cases conditions for {RECOMPILATION_ATTEMPTS} attempts of recompilation.")
+            new_field_table = {}
+            new_checker_functions = []
+            new_forbidden_cases = []
 
-        for field in self.exporting_fields:
-            new_field_table[field] = LTC_DEFAULT_EXPORT_VALUE
-        for field in self.known_input_fields:
-            new_field_table[field] = LTC_DEFAULT_INPUT_VALUE
-        
-        new_field_table.update(extend_ns)
-        
-        print('FT', new_field_table)
-        for key, value in self.field_table.items():
-            new_field_table[key] = value.compile(new_field_table, metadata)(ns=new_field_table)
-        for field, value in self.checker_functions:
-            new_checker_functions.append((field, value.compile(new_field_table, metadata)))
-        for field, value in self.forbidden_cases:
-            new_forbidden_cases.append((field, value.compile(new_field_table, metadata)))
+            for field in self.exporting_fields:
+                new_field_table[field] = LTC_DEFAULT_EXPORT_VALUE
+            for field in self.known_input_fields:
+                new_field_table[field] = LTC_DEFAULT_INPUT_VALUE
+            
+            new_field_table.update(extend_ns)
+            
+            print('FT', new_field_table)
+            for key, value in self.field_table.items():
+                new_field_table[key] = value.compile(new_field_table, metadata)(ns=new_field_table)
+            for field, value in self.checker_functions:
+                new_checker_functions.append((field, value.compile(new_field_table, metadata)))
+            for field, value in self.forbidden_cases:
+                new_forbidden_cases.append((field, value.compile(new_field_table, metadata)))
 
-        if not LTC.validate(new_field_table, new_checker_functions, new_forbidden_cases):
-            return self.execute(extend_ns, metadata, timeout-1)
-        
-        del self.field_table
-        del self.checker_functions
-        del self.forbidden_cases
-        self.field_table = new_field_table
-        self.checker_functions = new_checker_functions
-        self.forbidden_cases = new_forbidden_cases
-        self.executed = True
+            if not LTC.validate(new_field_table, new_checker_functions, new_forbidden_cases):
+                return self.execute(extend_ns, metadata, timeout-1)
+            
+            del self.field_table
+            del self.checker_functions
+            del self.forbidden_cases
+            self.field_table = new_field_table
+            self.checker_functions = new_checker_functions
+            self.forbidden_cases = new_forbidden_cases
+            self.executed = True
+        except Exception as e:
+            raise LTCExecutionError(str(e))
     
     @staticmethod
     def validate(field_table, checker_functions, forbidden_cases):
@@ -144,11 +147,15 @@ class LTC:
         return valid
 
     def check(self):
-        valid = True
-        for field, checker in self.checker_functions:
-            valid = valid and checker(self.field_table[field])
-            print(valid, checker, checker.args, field, self.field_table[field])
-        return valid
+        try:
+            valid = True
+            for field, checker in self.checker_functions:
+                valid = valid and checker(self.field_table[field])
+                print(valid, checker, checker.args, field, self.field_table[field])
+            return valid
+        except Exception as e: # <-- ПЛОХО ОЧЕНЬ ПЛОХО но работает
+            return False
+            raise LTCExecutionError(str(e))
     
 
 class LTCCompiler:

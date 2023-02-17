@@ -484,12 +484,13 @@ def task_panel(request):
     if request.method == "POST":
         if "newtask" in request.POST:
             name = request.POST.get("task_type_name")
-            config = request.FILES.get("config_file")
-            view = request.FILES.get("view_file")
-            TaskTemplate.new(name=name,
-                             author=me,
-                             config=config,
-                             view=view)
+            if name:
+                config = request.FILES.get("config_file")
+                view = request.FILES.get("view_file")
+                TaskTemplate.new(name=name,
+                                author=me,
+                                config=config,
+                                view=view)
         else:
             flag = False
             for signal in request.POST:

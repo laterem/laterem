@@ -7,6 +7,7 @@ from .models import LateremUser
 from commons import NotSpecified
 from context_objects import LATEREM_FLAGS, DEBUG_DBSamples, TASK_SCANNER
 from django.shortcuts import redirect
+from django.contrib.auth.decorators import login_required
 
 if DEBUG_DBSamples in LATEREM_FLAGS:
     from secret_data import ADMIN_PASSWORD
@@ -146,7 +147,7 @@ def change_color_theme(user, request):
     user.set_settings(theme=usertheme)
     request.session["color-theme"] = usertheme
 
-
+@login_required
 def general_POST_handling(request):
     if request.method == "POST":
         # Обработка кнопки смены темы

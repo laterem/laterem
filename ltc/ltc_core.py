@@ -4,6 +4,9 @@ class LTCCompileError(Exception):
 class LTCError(Exception):
     pass
 
+class LTCExecutionError(Exception):
+    pass
+
 class LTCObject:
     def __init__(self, value):
         self.value = value
