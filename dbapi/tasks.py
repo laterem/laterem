@@ -152,7 +152,6 @@ class CompiledTask():
 
 class Work(DBHybrid):
     __dbmodel__ = LateremWork
-
     has_children = False
 
     def __init__(self, dbobj):
@@ -177,23 +176,9 @@ class Work(DBHybrid):
     def __hash__(self):
         return hash('WR' + str(self.id))
 
-    def is_visible(self, user, access_buffer=NotSpecified):
-        if user is None or user is NotSpecified:
-            if access_buffer is not NotSpecified:
-                access_buffer[self] = True
-            return True
-
+    def is_visible(self, user):
         if user.has_global_permission('can_manage_works'):
-            if access_buffer is not NotSpecified:
-                access_buffer[self] = True
-            return True
-
-        if access_buffer is not NotSpecified:
-            if self in access_buffer:
-                return access_buffer[self]
-            else:
-                access_buffer[self] = self.is_valid() and user.has_access(self)
-                return access_buffer[self]
+            return True        
         return user.has_access(self)
     
     def add_task(self, name, task_type):
@@ -211,7 +196,6 @@ class Work(DBHybrid):
 
 class Category(DBHybrid):
     __dbmodel__ = LateremCategory
-
     has_children = True
         
     @staticmethod
@@ -223,52 +207,26 @@ class Category(DBHybrid):
     def __hash__(self):
         return hash('CC' + str(self.id))
     
-    def is_visible(self, user, access_buffer=NotSpecified):
-        if user is None or user is NotSpecified:
-            if access_buffer is not NotSpecified:
-                access_buffer[self] = True
-            return True
-        if user.has_global_permission('can_manage_works'):
-            if access_buffer is not NotSpecified:
-                access_buffer[self] = True
-            return True
-        if access_buffer is not NotSpecified:
-            if self in access_buffer:
-                return access_buffer[self]
-            else:
-                result = any(map(lambda x: x.is_visible(user, access_buffer), self.children()))
-                access_buffer[self] = result
-                return result
-        return any(map(lambda x: x.is_visible(user, access_buffer), self.children()))
+    def is_valid(self):
+        return not not self.children()
 
-    def categories(self, accessible_for=NotSpecified, access_buffer=NotSpecified):
+    def is_visible(self, user):
+        if user.has_global_permission('can_manage_works'):
+            return True
+        return any(map(lambda x: x.is_visible(user), self.children()))
+
+    def categories(self):
         result = []
         for x in LateremCategory.objects.filter(root_category=self.dbmodel.id):
             cat = Category(x)
-            if accessible_for is not NotSpecified:
-                if cat.is_visible(accessible_for, access_buffer):
-                    result.append(cat)
-            else:
-                 result.append(cat)
+            result.append(cat)
         return result
 
-    def works(self, accesible_for=NotSpecified, access_buffer=NotSpecified):
+    def works(self):
         result = []
         for x in LateremWork.objects.filter(category=self.dbmodel):
             work = Work(x)
-            if accesible_for is not NotSpecified:
-                if work in access_buffer:
-                    if access_buffer[work]:
-                        result.append(work)
-                    continue
-                if accesible_for.has_access(work):
-                    if access_buffer is not NotSpecified:
-                        access_buffer[work] = True
-                    result.append(work)
-            else:
-                if access_buffer is not NotSpecified:
-                    access_buffer[work] = True
-                result.append(work)
+            result.append(work)
         return result
 
     def children(self, *args, **kwargs):
@@ -277,11 +235,33 @@ class Category(DBHybrid):
 class RootsMimic:
     __dbmodel__ = None
     has_children = True
+    def children(self, **kwargs):
+        return Category.roots()
 
-    def children(self, accesible_for=NotSpecified, access_buffer=NotSpecified):
-        if access_buffer is NotSpecified:
-            access_buffer = {}
 
-        roots = Category.roots()
+class WorkTreeView:
+    def __init__(self, root, filter=NotSpecified, buffer=NotSpecified):
+        if filter is NotSpecified:
+            filter = lambda x: True
+        if buffer is NotSpecified:
+            buffer = {}
 
-        return [root for root in roots if root.is_visible(accesible_for, access_buffer)]
+        self.root = root
+        self.filter = filter
+        self.buffer = buffer
+    
+    def children(self):
+        for child in self.root.children():
+            if child in self.buffer:
+                flag = self.buffer[child]
+            else:
+                flag = self.filter(child)
+            if flag:
+                yield WorkTreeView(child, filter=self.filter, buffer=self.buffer)
+    
+    @staticmethod
+    def user_access_filter(user, ensure_validation=True):
+        if ensure_validation:
+             return lambda x: x.is_visible(user) and x.is_valid()
+        return lambda x: x.is_visible(user)
+    

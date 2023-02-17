@@ -148,7 +148,6 @@ def users_panel(request):
                     )
 
         else:
-            # <Плохо! Переписать>
             flag = False
             for signal in request.POST:
                 if signal.startswith("delete:"):

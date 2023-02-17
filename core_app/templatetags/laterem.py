@@ -29,14 +29,9 @@ def draw_progress_line(args):
     return ret
 
 
-def _submenu(
-    inp,
-    user: User,
-    outer=False,
-    editable=False,
-    unravel=None,
-    title="Доступные работы",
-):
+def _submenu(root, user: User, outer=False, editable=False, unravel=None, title="Доступные работы"):
+    #inp = root.root
+
     if unravel is None:
         unravel = set()
     if editable:
@@ -90,7 +85,7 @@ def _submenu(
             output += "</button>"
             output += "</h1>"
             output += '<ul class="wtree">'
-            for child in inp.children():
+            for child in root.children():
                 output += _submenu(child, user, editable=True, unravel=unravel)
             output += "</ul>"
             return output
@@ -99,52 +94,52 @@ def _submenu(
         output += title
         output += "</h1>"
         output += '<ul class="wtree">'
-        for child in inp.children():
+        for child in root.children():
             output += _submenu(child, user, unravel=unravel)
         output += "</ul>"
         return output
 
     output = ""
 
-    if inp.has_children:
-        if f"category-id-{inp.dbmodel.id}" in unravel:
+    if root.root.has_children:
+        if f"category-id-{root.root.dbmodel.id}" in unravel:
             if editable:
                 output += (
                     "<li>"
                     + '<span class="caret caret-down">'
                     + '<input value="'
-                    + inp.name
+                    + root.root.name
                     + '" name="input-'
-                    + str(inp.id)
+                    + str(root.root.id)
                     + '" id="input-'
-                    + str(inp.id)
+                    + str(root.root.id)
                     + '" disabled="true"/>'
                 )
                 change_name = (
                     "edit=getElementById('input-"
-                    + str(inp.id)
+                    + str(root.root.id)
                     + "');"
                     + "if (tree_is_editing) {document.getElementById('edit-"
-                    + str(inp.id)
+                    + str(root.root.id)
                     + "').type = 'submit';};"
                     + "tree_is_editing = !tree_is_editing;"
                     + "edit.disabled = false;"
                     + "getElementById('input-"
-                    + str(inp.id)
+                    + str(root.root.id)
                     + "') = edit;"
                 )
                 output += (
                     '<button type="submit" name="delete-'
-                    + str(inp.id)
+                    + str(root.root.id)
                     + '" class="button-icon">'
                     + del_icon
                     + "</button>"
                 )
                 output += (
                     '<button type="button" name="edit-'
-                    + str(inp.id)
+                    + str(root.root.id)
                     + '" id="edit-'
-                    + str(inp.id)
+                    + str(root.root.id)
                     + '" class="button-icon" onclick="'
                     + change_name
                     + '">'
@@ -153,23 +148,23 @@ def _submenu(
                 )
                 output += (
                     '<button type="submit" name="add-category-'
-                    + str(inp.id)
+                    + str(root.root.id)
                     + '" class="button-icon">'
                     + folder_plus
                     + "</button>"
                 )
                 output += (
                     '<button type="submit" name="add-work-'
-                    + str(inp.id)
+                    + str(root.root.id)
                     + '" class="button-icon">'
                     + book_plus
                     + "</button>"
                 )
             else:
-                output += "<li>" + '<span class="caret caret-down">' + inp.name
+                output += "<li>" + '<span class="caret caret-down">' + root.root.name
             output += "</span>"
             output += (
-                f'<ul id="category-id-{inp.dbmodel.id}" class="nested active">'
+                f'<ul id="category-id-{root.root.dbmodel.id}" class="nested active">'
             )
         else:
             if editable:
@@ -177,38 +172,38 @@ def _submenu(
                     "<li>"
                     + '<span class="caret">'
                     + '<input value="'
-                    + inp.name
+                    + root.root.name
                     + '" name="input-'
-                    + str(inp.id)
+                    + str(root.root.id)
                     + '" id="input-'
-                    + str(inp.id)
+                    + str(root.root.id)
                     + '" disabled="true"/>'
                 )
                 change_name = (
                     "edit=getElementById('input-"
-                    + str(inp.id)
+                    + str(root.root.id)
                     + "');"
                     + "if (tree_is_editing) {document.getElementById('edit-"
-                    + str(inp.id)
+                    + str(root.root.id)
                     + "').type = 'submit';};"
                     + "tree_is_editing = !tree_is_editing;"
                     + "edit.disabled = false;"
                     + "getElementById('input-"
-                    + str(inp.id)
+                    + str(root.root.id)
                     + "') = edit;"
                 )
                 output += (
                     '<button type="submit" name="delete-'
-                    + str(inp.id)
+                    + str(root.root.id)
                     + '" class="button-icon">'
                     + del_icon
                     + "</button>"
                 )
                 output += (
                     '<button type="button" name="edit-'
-                    + str(inp.id)
+                    + str(root.root.id)
                     + '" id="edit-'
-                    + str(inp.id)
+                    + str(root.root.id)
                     + '" class="button-icon" onclick="'
                     + change_name
                     + '">'
@@ -217,30 +212,30 @@ def _submenu(
                 )
                 output += (
                     '<button type="submit" name="add-category-'
-                    + str(inp.id)
+                    + str(root.root.id)
                     + '" class="button-icon">'
                     + folder_plus
                     + "</button>"
                 )
                 output += (
                     '<button type="submit" name="add-work-'
-                    + str(inp.id)
+                    + str(root.root.id)
                     + '" class="button-icon">'
                     + book_plus
                     + "</button>"
                 )
             else:
-                output += "<li>" + '<span class="caret">' + inp.name
+                output += "<li>" + '<span class="caret">' + root.root.name
             output += "</span>"
-            output += f'<ul id="category-id-{inp.dbmodel.id}" class="nested">'
-        for child in inp.children():
+            output += f'<ul id="category-id-{root.root.dbmodel.id}" class="nested">'
+        for child in root.children():
             output += _submenu(child, user, unravel=unravel, editable=editable)
         output += "</ul>" + "</li>"
     else:
-        name = inp.name
-        addr = str(inp.id)
+        name = root.root.name
+        addr = str(root.root.id)
         if not editable:
-            stats = user.get_work_stats(inp, True)
+            stats = user.get_work_stats(root.root, True)
 
             green_len = stats[Verdicts.OK]
             orange_len = (

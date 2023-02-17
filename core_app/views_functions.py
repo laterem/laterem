@@ -1,6 +1,6 @@
 from .forms import *
 from dbapi.solutions import Verdicts
-from dbapi.tasks import Category, Work, RootsMimic, TaskTemplate
+from dbapi.tasks import Category, Work, RootsMimic, TaskTemplate, WorkTreeView
 from dbapi.groups import Group
 from dbapi.users import User
 from .models import LateremUser
@@ -68,11 +68,10 @@ def render_args(
     # print(additional)
 
     if me is not NotSpecified:
-        # if meta_all_works_available:
-        #    ret['workdir'] = RootsMimic.children()
-        # else:
-        #    ret['workdir'] = RootsMimic.children(me)
-        ret["workdir"] = RootsMimic()
+        if meta_all_works_available:
+           ret['workdir'] = WorkTreeView(RootsMimic())
+        else:
+           ret['workdir'] = WorkTreeView(RootsMimic(), filter=WorkTreeView.user_access_filter(me, True))
         ret["user"] = me
         ret["theme"] = me.get_setting("theme")
         ret["is_teacher"] = True
