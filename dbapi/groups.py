@@ -1,5 +1,5 @@
 from core_app.models import LateremGroupMembership, LateremGroup, LateremUser, LateremWork, LateremAssignment
-from extras import DBHybrid
+from commons import DBHybrid
 
 class Member(DBHybrid):
     __dbmodel__ = LateremUser

@@ -1,11 +1,11 @@
-from django.http import HttpResponse, FileResponse
+from django.http import HttpResponse, FileResponse, Http404
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
 from django.core.exceptions import PermissionDenied
 from django.utils.text import slugify
 from django.contrib.auth.decorators import login_required
 
-from extras import asciify
+from commons import asciify, LateremNotFound
 from context_objects import TASK_SCANNER
 
 from os.path import join as pathjoin
@@ -105,7 +105,7 @@ def profile_view(request):
                 request=request,
                 additional={"title": "Laterem Настройки", "workdir": dict()},
             ),
-        )  # <- Костыыыль!
+        )  # <- Костыыыль! # где костыль нормально всё вроде
 
 
 @any_permission_required(
@@ -135,7 +135,7 @@ def users_panel(request):
                 )
                 if test:
                     # Пользователь с такой почтой уже есть,
-                    # надо как-то оповестить
+                    # надо(!!!!!!) как-то оповестить
                     pass
                 else:
                     LateremUser.objects.create_user(
@@ -152,13 +152,19 @@ def users_panel(request):
             for signal in request.POST:
                 if signal.startswith("delete:"):
                     email = signal[len("delete:"):]
-                    user = LateremUser.objects.get(email=email)
+                    try:
+                        user = LateremUser.objects.get(email=email)
+                    except LateremUser.DoesNotExist:
+                        continue
                     user.delete()
                     flag = True
                     break
                 elif signal.startswith("edit:"):
                     email = signal.lstrip("edit:")
-                    user = LateremUser.objects.get(email=email)
+                    try:
+                        user = LateremUser.objects.get(email=email)
+                    except LateremUser.DoesNotExist:
+                        continue
                     user.email = request.POST.get("user_email")
                     # if request.POST.get('user_password'):
                     #   user.password = request.POST.get('user_password')
@@ -193,8 +199,10 @@ def work_panel(request):
                     ) as new:
                         return redirect("/teacher/works/" + str(new.id))
                 else:
-                    # /!\ Typecast warning
-                    cat = Category.by_id(int(cat_id))
+                    try:
+                        cat = Category.by_id(cat_id)
+                    except LateremNotFound:
+                        continue
                     with Work(
                         LateremWork.objects.create(
                             name="Новая работа",
@@ -213,8 +221,13 @@ def work_panel(request):
                     ) as new:
                         return redirect(request.path)
                 else:
-                    # /!\ Typecast warning
-                    cat = int(cat_id)
+                    try:
+                        cat = int(cat_id)
+                    except ValueError:
+                        continue
+                    test = Category.__dbmodel__.objects.filter(id=cat)
+                    if not test:
+                        continue
                     with Category(
                         LateremCategory.objects.create(
                             name="Новая категория", root_category=cat
@@ -223,14 +236,15 @@ def work_panel(request):
                         return redirect(request.path)
             elif signal.startswith("edit-"):
                 s_cat_id = signal[len("edit-"):]
-                # /!\ Typecast warning
-                cat_id = int(s_cat_id)
-                with Category.by_id(cat_id) as cat:
-                    cat.dbmodel.name = request.POST.get(
-                        "input-" + s_cat_id, "Empty"
-                    )
-                    cat.dbmodel.save()
-                    return redirect(request.path)
+                try:
+                    with Category.by_id(s_cat_id) as cat:
+                        cat.dbmodel.name = request.POST.get(
+                            "input-" + s_cat_id, "Empty"
+                        )
+                        cat.dbmodel.save()
+                        return redirect(request.path)
+                except LateremNotFound:
+                    continue
 
     return render(
         request,
@@ -246,14 +260,19 @@ def work_panel(request):
 @permission_required("can_manage_works")
 def manage_work(request, work_id):
     general_POST_handling(request)
-    # /!\ Typecast warning
-    work = Work.by_id(work_id)
+    try:
+        work = Work.by_id(work_id)
+    except LateremNotFound:
+        raise Http404('Work not found')
 
     if request.method == "POST":
         for signal in request.POST:
             if signal.startswith("delete:"):
                 id = int(signal.lstrip("delete:"))
-                task = Task.by_id(id)
+                try:
+                    task = Task.by_id(id)
+                except LateremNotFound:
+                    continue
                 work.remove_task(task)
                 return redirect(request.path)
         if "edit_data" in request.POST:
@@ -262,13 +281,20 @@ def manage_work(request, work_id):
             work.dbmodel.save()
             return redirect(request.path)
         if "newtask" in request.POST:
-            task = work.add_task(
-                name=request.POST.get("task_name"),
-                task_type=request.POST.get("task_type"),
-            )
+            name = request.POST.get("task_name")
+            task_type = request.POST.get("task_type")
+            # /!\ Existence warning
+            if name and task_type:
+                task = work.add_task(
+                    name=request.POST.get("task_name"),
+                    task_type=request.POST.get("task_type"),
+                )
             return redirect(request.path)
         if "appoint_to_group" in request.POST:
-            group = Group.by_id(request.POST.get("group_name"))
+            try:
+                group = Group.by_id(request.POST.get("group_name"))
+            except LateremNotFound:
+                return redirect(request.path)
             group.assign(work, User(request.user))
             return redirect(request.path)
     groups_to_appoint = list()
@@ -290,7 +316,12 @@ def manage_work(request, work_id):
 @permission_required("can_manage_works")
 def manage_task_in_work(request, work_id, task_id):
     general_POST_handling(request)
-    work = Work.by_id(work_id)
+    try:
+        work = Work.by_id(work_id)
+    except LateremNotFound:
+        raise Http404('Work not found')
+    
+    # Спайд: Допишу ловлю исключений когда вью будет в итоговом состоянии
 
     if request.method == "POST":
         for signal in request.POST:
@@ -336,7 +367,10 @@ def manage_task_in_work(request, work_id, task_id):
 @permission_required("can_manage_works")
 def show_work_stats(request, work_id):
     general_POST_handling(request)
-    work = Work.by_id(work_id)
+    try:
+        work = Work.by_id(work_id)
+    except LateremNotFound:
+        raise Http404('Work not found')
 
     group_answers_pair = [(group.name, work.get_answers(group=group)) for group in work.groups()]
 
@@ -381,7 +415,10 @@ def group_panel(request):
 @permission_required("can_manage_groups")
 def manage_group(request, group_id):
     general_POST_handling(request)
-    group = Group.by_id(group_id)
+    try:
+        group = Group.by_id(group_id)
+    except LateremNotFound:
+        raise Http404('Group not found')
     me = User(request.user)
 
     if request.method == "POST":
@@ -401,16 +438,21 @@ def manage_group(request, group_id):
             if signal.startswith("delete:"):
                 email = signal[len("delete:"):]
                 user = User.get(email=email)
-                group.remove_member(user)
+                if user is not None:
+                    group.remove_member(user)
                 return redirect(request.path)
         assign_work_form = AssignWork(request.POST)
         if assign_work_form.is_valid():
-            work = Work.by_id(assign_work_form.cleaned_data["id"])
+            try:
+                work = Work.by_id(assign_work_form.cleaned_data["id"])
+            except LateremNotFound:
+                return redirect(request.path)
             group.assign(work, me)
             return redirect(request.path)
         if "newuser" in request.POST:
             user = User.get(email=request.POST.get("user_email"))
-            group.add_member(user)
+            if user is not None:
+                group.add_member(user)
             return redirect(request.path)
     else:
         assign_work_form = AssignWork()
@@ -429,7 +471,7 @@ def manage_group(request, group_id):
             request=request,
             additional={
                 "assign_work_form": assign_work_form,
-                "users": users,
+                "users": users, # Избыточная информация. Можно получить из current_group; Переделать
             },
         ),
     )
@@ -452,8 +494,13 @@ def task_panel(request):
             flag = False
             for signal in request.POST:
                 if signal.startswith("delete:"):
-                    ID = int(signal[len("delete:"):])
-                    TaskTemplate.delete(ID)
+                    try:
+                        ID = int(signal[len("delete:"):])
+                        TaskTemplate.delete(ID)
+                    except LateremNotFound:
+                        pass
+                    except ValueError:
+                        pass
                     break
         return redirect(request.path)
     return render(
@@ -469,12 +516,15 @@ def task_panel(request):
 @permission_required("can_manage_tasks")
 def manage_task(request, task_id):
     general_POST_handling(request)
-    task = TaskTemplate.by_id(task_id)
+    try:
+        task = TaskTemplate.by_id(task_id)
+    except LateremNotFound:
+        raise Http404('Task not found')
     me = User(request.user)
 
     if request.method == "POST":
         if "delete_task" in request.POST:
-            # Deleting task
+            TaskTemplate.delete(task_id)
             return redirect("/teacher/tasks/")
 
         if "edit_data" in request.POST:
@@ -515,9 +565,12 @@ def manage_task(request, task_id):
 @login_required
 def render_work(request, work_id):
     general_POST_handling(request)
-    work_id = int(work_id)
-
-    work = Work.by_id(work_id)
+    try:
+        work = Work.by_id(work_id)
+    except LateremNotFound:
+        raise Http404('Work not found')
+    if not work.is_valid():
+        raise Http404('Work not found')
     if 'compiled_tasks' in request.session:
         request.session.modified = True
         request.session['compiled_tasks'] = {}
@@ -530,7 +583,10 @@ def getasset(request, task_id, filename):
     taskid = int(task_id)
     task = TaskTemplate.by_id(taskid)
     path = pathjoin(task.dir_path, filename)
-    return FileResponse(open(path, "rb"))
+    try:
+        return FileResponse(open(path, "rb"))
+    except FileNotFoundError:
+        raise Http404('Asset not found')
 
 
 # Функция рендера (обработки и конечного представления на сайте)
@@ -542,9 +598,14 @@ def task_view(request, stask_id):
 
     if "compiled_tasks" not in request.session:
         request.session["compiled_tasks"] = {}
+    try:
+        task = Task.by_id(stask_id)
+    except LateremNotFound:
+        raise Http404('Task not found')
+    
+    if not task.work.is_visible(User(request.user)):
+        raise PermissionDenied
 
-    task_id = int(stask_id)
-    task = Task.by_id(task_id)
     if stask_id not in request.session["compiled_tasks"]:
         compiled_task = task.compile(User(request.user))
         request.session["compiled_tasks"][stask_id] = compiled_task.as_JSON()
@@ -555,7 +616,6 @@ def task_view(request, stask_id):
         )
 
     if request.method == "POST":
-        # print(request.POST)
         active_ids = request.POST.get("active_ids")
         if active_ids:
             request.session["active_ids"] = active_ids

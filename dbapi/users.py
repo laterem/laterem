@@ -3,7 +3,7 @@ from .solutions import Verdicts, Solution, NASolution
 from .tasks import Work
 from .groups import Group
 from core_app.models import LateremAssignment, LateremUser, LateremGroup, LateremWork, LateremSolution
-from extras import DBHybrid
+from commons import DBHybrid
 import json
 import datetime
 

@@ -1,6 +1,9 @@
 from os import listdir
 from os.path import isfile, join
 
+class LateremNotFound(Exception):
+    pass
+
 class NotSpecified:
     def __bool__(self):
         return False
@@ -78,7 +81,13 @@ class DBHybrid(Hybrid):
     
     @classmethod
     def by_id(cls, id):
-        return cls(cls.__dbmodel__.objects.get(id=id))
+        try:
+            id = int(id)
+            return cls(cls.__dbmodel__.objects.get(id=id))
+        except cls.__dbmodel__.DoesNotExist:
+            raise LateremNotFound
+        except ValueError:
+            raise LateremNotFound
 
     @property
     def id(self):
