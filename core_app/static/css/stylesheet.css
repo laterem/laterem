@@ -574,7 +574,8 @@ td.wrong {
     padding: 0;
 }
 
-table#add-user, table#add-group-member, table#add-task, table#appoint-work {
+table#add-user, table#add-group-member,
+table#add-task, table#appoint-work {
     border-radius: 10px;
     padding: 5px;
     background-color: var(--content-background-color);
@@ -597,7 +598,8 @@ table#add-user, table#add-group-member, table#add-task, table#appoint-work {
     backdrop-filter: blur(1px);
 }
  
-div#user-table, div#all-groups-table, div#task-table {
+div#user-table, div#all-groups-table,
+div#task-table, div#task-field-table {
     display: grid; 
     grid-template-columns: auto auto 40px 40px;
     
@@ -666,7 +668,8 @@ div#task-field-table-header {
 
 div#user-table-header, div#user-table,
 div#all-groups-table, div#all-groups-table-header,
-div#task-table, div#task-table-header {
+div#task-table, div#task-table-header,
+div#task-field-table, div#task-field-table-header {
     margin-left: -10px;
     margin-right: -10px;
     border: none;
@@ -681,7 +684,7 @@ div#task-table, div#task-table-header {
 }
 
 div#group-table, div#work-table,
-div#work-stats-table, div#task-field-table {
+div#work-stats-table{
     display: grid; 
     grid-template-columns: auto auto 40px 40px;
     
