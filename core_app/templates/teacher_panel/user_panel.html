@@ -4,6 +4,7 @@
 
 {% block content %}
 <script>is_editing = false;</script>
+<script src="{% static 'js/manage-blackout.js' %}"></script>
 <form method="dialog" id="main-form">
     {% csrf_token %}  
     <div id="user-table-header">
@@ -11,36 +12,10 @@
             <span style="font-size: larger; margin-left: 5px;">Все пользователи сайта</span>
         </div>
         <div style="grid-column: 2;">
-            <button class="button" onclick="
-                disp = document.getElementById('add-user').style.display;
-                switch (disp) {
-                    case 'none': disp = 'block';
-                    break;
-        
-                    case 'block': disp = 'none';
-                    break;
-        
-                    default: disp = 'block';
-                };
-                document.getElementById('add-user').style.display = disp;
-                document.getElementById('blackout').style.display = disp;
-            ">{% include "icons/add-user-icon.html" %} &nbsp; Добавить &nbsp;</button>
+            <button class="button" onclick="disp_dialog($('#add-user')[0])">{% include "icons/add-user-icon.html" %} &nbsp; Добавить &nbsp;</button>
         </div>
         <div style="grid-column: 3;">
-            <button class="button" onclick="
-                disp = document.getElementById('add-user').style.display;
-                switch (disp) {
-                    case 'none': disp = 'block';
-                    break;
-        
-                    case 'block': disp = 'none';
-                    break;
-        
-                    default: disp = 'block';
-                };
-                document.getElementById('add-user').style.display = disp;
-                document.getElementById('blackout').style.display = disp;
-            ">{% include "icons/import-from-file-icon.html" %} &nbsp; Импорт &nbsp;</button>
+            <button class="button" onclick="disp_dialog($('#add-user')[0])">{% include "icons/import-from-file-icon.html" %} &nbsp; Импорт &nbsp;</button>
         </div>
     </div>
 
@@ -73,20 +48,7 @@
             </div>
         {% endfor %}
     </div>
-    <button id="blackout" style="display: none;" onclick="
-            disp = document.getElementById('add-user').style.display;
-            switch (disp) {
-                case 'none': disp = 'block';
-                break;
-
-                case 'block': disp = 'none';
-                break;
-
-                default: disp = 'block';
-            };
-            document.getElementById('add-user').style.display = disp;
-            document.getElementById('blackout').style.display = disp;
-        "></button>
+    <button id="blackout" style="display: none;" onclick="disp_dialog($('#add-user'))"></button>
     {% include "./add_user.html" %}
 </form>
 {% endblock %}
