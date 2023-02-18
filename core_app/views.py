@@ -213,7 +213,7 @@ def work_panel(request):
                         if not cat.is_valid():
                             cat.delete()
                         else:
-                            # Вызвать варнинг: удалять можно только пустые категории
+                            # Вызвать тост: удалять можно только пустые категории
                             pass
                         return redirect(request.path)
                 except LateremNotFound:
