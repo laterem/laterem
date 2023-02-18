@@ -18,6 +18,9 @@ from .views_functions import (
     change_color_theme,
     DEBUG_assure_admin,
     general_POST_handling,
+    any_permission_required,
+    every_permission_required,
+    permission_required
 )
 from .models import *
 from .forms import LoginForm, NewUser, AddMember, AssignWork, UploadTask
@@ -27,43 +30,6 @@ from dbapi.tasks import Task, CompiledTask, Work, Category, TaskTemplate
 from dbapi.solutions import Verdicts
 from dbapi.groups import Group
 
-
-def permission_required(permission):
-    def wrapper(function):
-        def wrap(request, *args, **kwargs):
-            if not User(request.user).has_global_permission(permission):
-                raise PermissionDenied()
-            return function(request, *args, **kwargs)
-
-        return login_required(wrap)
-
-    return wrapper
-
-
-def every_permission_required(*permissions):
-    def wrapper(function):
-        def wrap(request, *args, **kwargs):
-            for permission in permissions:
-                if not User(request.user).has_global_permission(permission):
-                    raise PermissionDenied()
-            return function(request, *args, **kwargs)
-
-        return login_required(wrap)
-
-    return wrapper
-
-
-def any_permission_required(*permissions):
-    def wrapper(function):
-        def wrap(request, *args, **kwargs):
-            for permission in permissions:
-                if User(request.user).has_global_permission(permission):
-                    return function(request, *args, **kwargs)
-            raise PermissionDenied()
-
-        return login_required(wrap)
-
-    return wrapper
 
 
 def logout_view(request):
@@ -108,12 +74,7 @@ def profile_view(request):
         )  # <- Костыыыль! # где костыль нормально всё вроде
 
 
-@any_permission_required(
-    "can_manage_users",
-    "can_manage_works",
-    "can_manage_groups",
-    "can_manage_tasks",
-)
+@any_permission_required("can_manage_users", "can_manage_works", "can_manage_groups", "can_manage_tasks")
 def teacher_hub(request):
     general_POST_handling(request)
     return render(
@@ -245,6 +206,18 @@ def work_panel(request):
                         return redirect(request.path)
                 except LateremNotFound:
                     continue
+            elif signal.startswith("delete-"):
+                s_cat_id = signal[len("delete-"):]
+                try:
+                    with Category.by_id(s_cat_id) as cat:
+                        if not cat.is_valid():
+                            cat.delete()
+                        else:
+                            # Вызвать варнинг: удалять можно только пустые категории
+                            pass
+                        return redirect(request.path)
+                except LateremNotFound:
+                    continue
 
     return render(
         request,
@@ -297,6 +270,10 @@ def manage_work(request, work_id):
                 return redirect(request.path)
             group.assign(work, User(request.user))
             return redirect(request.path)
+        if "delete_work" in request.POST:
+            work.delete()
+            return redirect('/teacher/works/')
+
     groups_to_appoint = list()
     for group in User(request.user).groups():
         if work not in group.get_works():
@@ -423,7 +400,7 @@ def manage_group(request, group_id):
 
     if request.method == "POST":
         if "delete_group" in request.POST:
-            group.dbmodel.delete()
+            group.delete()
             return redirect("/teacher/groups/")
 
         if "edit_data" in request.POST:
