@@ -58,8 +58,9 @@ class ConvertBase(LTCFunction):
         num = int(integral + fractional, base_from) * base_from ** -len(fractional)
         precision = len(fractional) if precision is None else int(precision)
         s = _int_to_base(int(round(num / base_to ** -precision)), base_to)
-        if precision:
-            return s[:-precision] + _POINT + s[-precision:]
+        part = s[-precision:]
+        if precision and int(part):
+            return s[:-precision] + _POINT + part
         else:
             return s
 
@@ -195,10 +196,9 @@ class IsEqual(LTCCheckerFunction):
         try:
             if isinstance(self.args[0], list):
                 return sorted(field) == sorted(self.args[0])
-            elif isinstance(self.args[0], float) or isinstance(self.args[0], int):
-                print(float(field) == self.args[0])
-                return float(field) == self.args[0]
-            else:
+            try:
+                return float(field) == float(self.args[0])
+            except ValueError:
                 return str(field) == str(self.args[0])
         except ValueError:
             return False
