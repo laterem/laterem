@@ -1,3 +1,8 @@
+# OUTDATED! 
+
+Документ не соответствует текущей версии LTC (0.5).
+Ожидайте обновления документа.
+
 # LTC 0.1 (LTC 0.1.A, LTC 0.1.B)
 
 LTC - Laterem Task Configuration 
