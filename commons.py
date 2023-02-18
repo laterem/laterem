@@ -92,6 +92,9 @@ class DBHybrid(Hybrid):
     @property
     def id(self):
         return self.dbmodel.id
+    
+    def delete(self):
+        self.dbmodel.delete()
 
     def __enter__(self):
         return self

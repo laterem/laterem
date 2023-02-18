@@ -6,8 +6,10 @@ from dbapi.users import User
 from .models import LateremUser
 from commons import NotSpecified
 from context_objects import LATEREM_FLAGS, DEBUG_DBSamples, TASK_SCANNER
+
 from django.shortcuts import redirect
 from django.contrib.auth.decorators import login_required
+from django.core.exceptions import PermissionDenied
 
 if DEBUG_DBSamples in LATEREM_FLAGS:
     from secret_data import ADMIN_PASSWORD
@@ -155,3 +157,40 @@ def general_POST_handling(request):
             with User(request.user) as user:
                 change_color_theme(user, request)
                 return redirect(request.path)
+
+def permission_required(permission):
+    def wrapper(function):
+        def wrap(request, *args, **kwargs):
+            if not User(request.user).has_global_permission(permission):
+                raise PermissionDenied()
+            return function(request, *args, **kwargs)
+
+        return login_required(wrap)
+
+    return wrapper
+
+
+def every_permission_required(*permissions):
+    def wrapper(function):
+        def wrap(request, *args, **kwargs):
+            for permission in permissions:
+                if not User(request.user).has_global_permission(permission):
+                    raise PermissionDenied()
+            return function(request, *args, **kwargs)
+
+        return login_required(wrap)
+
+    return wrapper
+
+
+def any_permission_required(*permissions):
+    def wrapper(function):
+        def wrap(request, *args, **kwargs):
+            for permission in permissions:
+                if User(request.user).has_global_permission(permission):
+                    return function(request, *args, **kwargs)
+            raise PermissionDenied()
+
+        return login_required(wrap)
+
+    return wrapper
