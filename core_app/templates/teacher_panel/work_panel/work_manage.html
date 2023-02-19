@@ -3,7 +3,8 @@
 {% load laterem %}
 
 {% block content %}
-    <script>is_editing=false; is_blackout=false;</script>
+    <script>is_editing=false;</script>
+    <script src="{% static 'js/manage-blackout.js' %}"></script>
     <form method="post" id="main-form">
         {% csrf_token %}
         <div style="display: grid; grid-template-columns: auto max-content max-content; align-items: center;">
@@ -22,43 +23,13 @@
             <button class="button-icon" name="delete_work" style="grid-column: 3;"><div style="width: 2em; padding: 0;">{% include "icons/delete-icon.html" %}</div><span>Удалить</span></button>
         </div>
         <p>ID: {{work.id}}</p>
-        <button type="button" id="appoint" name="appoint" onclick="
-                is_blackout = !is_blackout;
-                if (is_blackout) {
-                    document.getElementById('appoint-work').style.display = 'block';
-                    document.getElementById('blackout').style.display = 'block';
-                } else {
-                    document.getElementById('appoint-work').style.display = 'none';
-                    document.getElementById('blackout').style.display = 'none';
-                };
-            ">Назначить группе</button>
+        <button type="button" id="appoint" name="appoint" onclick="disp_dialog($('#appoint-work'))">Назначить группе</button>
     </form>
     
     <div id="work-table-header">
         <div style="grid-column: 1;"><span style="font-size: larger;">Задания</span></div>
         <div style="grid-column: 2;">
-            <button class="button" onclick="
-                is_blackout = !is_blackout;
-                if (is_blackout) {
-                    document.getElementById('add-task').style.display = 'block';
-                    document.getElementById('blackout').style.display = 'block';
-                } else {
-                    document.getElementById('add-task').style.display = 'none';
-                    document.getElementById('blackout').style.display = 'none';
-                };
-            ">{% include "icons/add-user-icon.html" %} &nbsp; Добавить &nbsp;</button>
-        </div>
-        <div style="grid-column: 3;">
-            <button class="button" onclick="
-                is_blackout = !is_blackout;
-                if (is_blackout) {
-                    document.getElementById('add-task').style.display = 'block';
-                    document.getElementById('blackout').style.display = 'block';
-                } else {
-                    document.getElementById('add-task').style.display = 'none';
-                    document.getElementById('blackout').style.display = 'none';
-                };
-            ">{% include "icons/import-from-file-icon.html" %} &nbsp; Импорт &nbsp;</button>
+            <button class="button" onclick="disp_dialog($('#add-task'))">{% include "icons/add-user-icon.html" %} &nbsp; Добавить &nbsp;</button>
         </div>
     </div>
     <div id="work-table">
@@ -80,12 +51,7 @@
     <a href="answer_stats/" class="button">Данные по сданным ответам</a>
 
 
-    <button id="blackout" style="display: none;" onclick="
-        is_blackout = false;
-        document.getElementById('add-task').style.display = 'none';
-        document.getElementById('blackout').style.display = 'none';
-        document.getElementById('appoint-work').style.display = 'none';
-    "></button>
+    <button id="blackout" style="display: none;" onclick="disp_dialog([$('#appoint-work'), $('#add-task')])"></button>
     {% include "./work_add_task.html" %}
     {% include "./work_appoint_work.html" %}
 {% endblock %}

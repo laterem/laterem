@@ -3,12 +3,13 @@
 {% load laterem %}
 
 {% block content %}
-<script>is_blackout = false;is_editing = false;</script>
+<script>is_editing = false;</script>
+<script src="{% static 'js/manage-blackout.js' %}"></script>
 <form method="post" id="main-form">
     {% csrf_token %}  
     <div id="group-manage-header">
         <div style="grid-column: 1;">
-           <input type="text" name="group_name" value="{{group.name}}" disabled="true" style="font-size: larger;" class="group-info"/>
+           <input type="text" name="group_name" value="{{ group.name }}" disabled="true" style="font-size: larger;" class="group-info"/>
         </div>
         <div style="grid-column: 2;">
             <button type="button" id="edit_button" name="edit_data" class="button-icon" onclick="
@@ -28,66 +29,21 @@
             "><div style="width: 2em; padding: 0;">{% include "icons/pencil-icon.html" %}</div><span id="edit-span">Редактировать</span></button>
             <button class="button-icon" name="delete_group"><div style="width: 2em; padding: 0;">{% include "icons/delete-icon.html" %}</div><span>Удалить</span></button>
         </div>
-        <div style="grid-column: 1;">
-            <input type="text" name="group_description" value="{{ group.description }}" disabled="true" class="group-info"/>
-        </div>
     </div>
 </form>
 <form method="dialog">
     <div style="grid-column: 2;">
-        <button class="button-icon" onclick="
-        disp = document.getElementById('appoint-work').style.display;
-                switch (is_blackout) {
-                    case false: disp = 'block';
-                    break;
-        
-                    case true: disp = 'none';
-                    break;
-        
-                    default: disp = 'block';
-                };
-                is_blackout = !is_blackout;
-                document.getElementById('appoint-work').style.display = disp;
-                document.getElementById('blackout').style.display = disp
-        "><div style="width: 2em; padding: 0;">{% include "icons/book-plus.html" %}</div><span>Назначить работу</span></button>
+        <button class="button-icon" onclick="disp_dialog($('#appoint-work'))"><div style="width: 2em; padding: 0;">{% include "icons/book-plus.html" %}</div><span>Назначить работу</span></button>
     </div>
 </form>
     <hr style="margin-top: 15px; margin-bottom: 15px;"/>
     <div id="group-table-header">
         <span style="grid-column: 1; font-size: larger; margin-left: 5px;">Участники</span>
         <div style="grid-column: 2;">
-            <button class="button" onclick="
-                disp = document.getElementById('add-group-member').style.display;
-                switch (is_blackout) {
-                    case false: disp = 'block';
-                    break;
-        
-                    case true: disp = 'none';
-                    break;
-        
-                    default: disp = 'block';
-                };
-                is_blackout = !is_blackout;
-                document.getElementById('add-group-member').style.display = disp;
-                document.getElementById('blackout').style.display = disp;
-            ">{% include "icons/add-user-icon.html" %} &nbsp; Добавить &nbsp;</button>
+            <button class="button" onclick="disp_dialog($('#add-group-member'))">{% include "icons/add-user-icon.html" %} &nbsp; Добавить &nbsp;</button>
         </div>
         <div style="grid-column: 3;">
-            <button class="button" onclick="
-                disp = document.getElementById('add-group-member').style.display;
-                switch (is_blackout) {
-                    case false: disp = 'block';
-                    break;
-        
-                    case true: disp = 'none';
-                    break;
-        
-                    default: disp = 'block';
-                };
-                is_blackout = !is_blackout;
-                document.getElementById('add-group-member').style.display = disp;
-                document.getElementById('blackout').style.display = disp;
-            ">{% include "icons/import-from-file-icon.html" %} &nbsp; Импорт &nbsp;</button>
+            <button class="button" onclick="disp_dialog($('#add-group-member'))">{% include "icons/import-from-file-icon.html" %} &nbsp; Импорт &nbsp;</button>
         </div>
     </div>
     <div id="group-table">
@@ -112,24 +68,7 @@
         </div>
     {% endfor %}
     </div>
-    <button id="blackout" style="display: none;" onclick="
-        switch (is_blackout) {
-            case false: disp = 'block';
-            break;
-
-            case true: disp = 'none';
-            break;
-
-            default: disp = 'block';
-        };
-
-        is_blackout = !is_blackout;
-
-        document.getElementById('add-group-member').style.display = disp;
-        document.getElementById('appoint-work').style.display = disp;
-        document.getElementById('blackout').style.display = disp;
-
-    "></button>
+    <button id="blackout" style="display: none;" onclick="disp_dialog([$('#add-group-member'), $('#appoint-work')])"></button>
     {% include "./add_group_member.html" %}
     {% include "./appoint_work.html" %}
 {% endblock %}
