@@ -432,7 +432,7 @@ header.header {
     position: fixed;
     background: inherit;
     display: grid;
-    grid-template-columns: min-content auto;
+    grid-template-columns: auto repeat(2, min-content);
     grid-template-rows: 100% max-content;  
     background-image: linear-gradient(var(--header-gradient-top), var(--header-gradient-bottom));
 }

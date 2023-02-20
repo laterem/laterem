@@ -1,0 +1,10 @@
+{% extends 'base.html' %}
+{% load laterem %}
+
+{% block content %}
+<form method="post">
+    {% csrf_token %}
+    <textarea name="report_text"></textarea><br/>
+    <button name="submit_report">Отправить сообщение</button>
+</form>
+{% endblock %}

@@ -671,3 +671,15 @@ def main_page_render(request):
                 additional={"title": "Laterem"},
             ),
         )
+
+
+def bug_report_render(request):
+    general_POST_handling(request)
+    if request.method == 'POST':
+        if 'submit_report' in request.POST:
+            print(request.POST.get('report_text'))
+    with User(request.user) as user:
+        return render(
+            request,
+            "bug_report.html"
+        )
