@@ -107,7 +107,10 @@ def users_panel(request):
                         last_name=form.cleaned_data["second_name"],
                         settings="{}",
                     )
-
+        elif "submit_import_users" in request.POST:
+            # Импорт из файла
+            import_file = request.FILES.get("import_file")
+            # Обработка таблицы
         else:
             flag = False
             for signal in request.POST:
