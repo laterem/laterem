@@ -99,18 +99,30 @@ def users_panel(request):
                     # надо(!!!!!!) как-то оповестить
                     pass
                 else:
-                    LateremUser.objects.create_user(
-                        email=form.cleaned_data["email"],
-                        password=form.cleaned_data["password"],
-                        username=form.cleaned_data["email"],
-                        first_name=form.cleaned_data["first_name"],
-                        last_name=form.cleaned_data["second_name"],
-                        settings="{}",
-                    )
+                    User.create(email=form.cleaned_data["email"],
+                                password=form.cleaned_data["password"],
+                                first_name=form.cleaned_data["first_name"],
+                                last_name=form.cleaned_data["second_name"])
         elif "submit_import_users" in request.POST:
             # Импорт из файла
             import_file = request.FILES.get("import_file")
-            # Обработка таблицы
+            header = True 
+            for line in import_file:
+                line = line.decode().strip()
+                if header:
+                    keys = line.split(';')
+                    header = False
+                    print(keys)
+                    if set(keys) != {'email', 'password', 'first_name', 'last_name'}:
+                        # Таблица неполная, оповестить пользователя
+                        break
+                    continue
+                args = line.split(';')
+                if len(args) != 4:
+                    # Таблица некорректная, оповестить пользователя
+                    break
+                # Добавить проверку корректности данных
+                User.create(**dict(zip(keys, args)))
         else:
             flag = False
             for signal in request.POST:

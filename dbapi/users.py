@@ -3,7 +3,7 @@ from .solutions import Verdicts, Solution, NASolution
 from .tasks import Work
 from .groups import Group
 from core_app.models import LateremAssignment, LateremUser, LateremGroup, LateremWork, LateremSolution
-from commons import DBHybrid
+from commons import DBHybrid, NotSpecified
 import json
 import datetime
 
@@ -12,6 +12,21 @@ class User(DBHybrid):
 
     def __init__(self, dbobj):
         super().__init__(dbobj)
+    
+    @classmethod
+    def create(cls, email, password, first_name=NotSpecified, last_name=NotSpecified):
+        if first_name is NotSpecified:
+            first_name = email
+        if last_name is NotSpecified:
+            last_name = ''
+        LateremUser.objects.create_user(
+                        email=email,
+                        password=password,
+                        username=email,
+                        first_name=first_name,
+                        last_name=last_name,
+                        settings="{}"
+                    )
 
     def groups(self):
         return [Group(x) for x in LateremGroup.objects.filter(lateremgroupmembership__user=self.dbmodel)]
