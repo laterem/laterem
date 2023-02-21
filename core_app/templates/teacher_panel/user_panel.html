@@ -15,7 +15,7 @@
             <button class="button" onclick="disp_dialog($('#add-user')[0])">{% include "icons/add-user-icon.html" %} &nbsp; Добавить &nbsp;</button>
         </div>
         <div style="grid-column: 3;">
-            <button class="button" onclick="disp_dialog($('#add-user')[0])">{% include "icons/import-from-file-icon.html" %} &nbsp; Импорт &nbsp;</button>
+            <button class="button" onclick="disp_dialog($('#import-users')[0])">{% include "icons/import-from-file-icon.html" %} &nbsp; Импорт &nbsp;</button>
         </div>
     </div>
 
@@ -48,7 +48,8 @@
             </div>
         {% endfor %}
     </div>
-    <button id="blackout" style="display: none;" onclick="disp_dialog($('#add-user'))"></button>
+    <button id="blackout" style="display: none;" onclick="disp_dialog([$('#add-user'), $('#import-users')])"></button>
     {% include "./add_user.html" %}
+    {% include "./import_users.html" %}
 </form>
 {% endblock %}

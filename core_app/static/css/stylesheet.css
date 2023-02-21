@@ -575,7 +575,8 @@ td.wrong {
 }
 
 table#add-user, table#add-group-member,
-table#add-task, table#appoint-work {
+table#add-task, table#appoint-work,
+table#import-users {
     border-radius: 10px;
     padding: 5px;
     background-color: var(--content-background-color);

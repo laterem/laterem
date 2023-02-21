@@ -1,0 +1,13 @@
+<form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    <table id="import-users" style="display: none;">
+        <tr>
+            <td>CSV файл: </td>
+            <td><input type="file" name="import_file"></td>
+        </tr>
+        <tr></tr>
+        <tr>
+            <td colspan="2"><div style="width:100%; display:grid;"><button type="submit" name="submit_import_users" class="button" style="justify-self: center;">Отправить шаблон задачи</button></div></td>
+        </tr>
+    </table>
+</form>
