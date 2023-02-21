@@ -80,3 +80,8 @@ class LateremSolution(models.Model):
     timestamp = models.DateTimeField()
     answers = models.TextField()
     teacher_comment = models.TextField()
+
+class LateremBugReport(models.Model):
+    user = models.ForeignKey(LateremUser, on_delete=models.CASCADE)
+    text = models.TextField()
+    attachment = models.FileField(null=True)
