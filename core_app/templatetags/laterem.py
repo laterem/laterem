@@ -77,26 +77,27 @@ def _submenu(root, user: User, outer=False, editable=False, unravel=None, title=
 </svg>
 """
         if outer:
-            output = '<h1 class="title">'
-            output += title
-            output += '<button type="submit" name="add-category-mother" class="button-icon" style="margin-left: 10px; height: min-content">'
-            output += folder_plus
-            output += "&nbsp; Добавить &nbsp;"
-            output += "</button>"
-            output += "</h1>"
-            output += '<ul class="wtree">'
+            output = f'''
+                <h1 class="title">\n
+                    {title}\n
+                    <button type="submit" name="add-category-mother" class="button-icon" style="margin-left: 10px; height: min-content">\n
+                        {folder_plus} &nbsp; Добавить &nbsp;\n
+                    </button>\n
+                </h1>\n
+                <ul class="wtree">\n'''
             for child in root.children():
                 output += _submenu(child, user, editable=True, unravel=unravel)
-            output += "</ul>"
+            output += "</ul>\n"
             return output
     elif outer:
-        output = '<h1 class="title">'
-        output += title
-        output += "</h1>"
-        output += '<ul class="wtree">'
+        output = f'''\
+            <h1 class="title">\n
+                {title}\n
+            </h1>\n
+            <ul class="wtree">\n'''
         for child in root.children():
             output += _submenu(child, user, unravel=unravel)
-        output += "</ul>"
+        output += "</ul>\n"
         return output
 
     output = ""
@@ -104,62 +105,39 @@ def _submenu(root, user: User, outer=False, editable=False, unravel=None, title=
     if root.root.has_children:
         if f"category-id-{root.root.dbmodel.id}" in unravel:
             if editable:
-                output += (
-                    "<li>"
-                    + '<span class="caret caret-down">'
-                    + '<input value="'
-                    + root.root.name
-                    + '" name="input-'
-                    + str(root.root.id)
-                    + '" id="input-'
-                    + str(root.root.id)
-                    + '" disabled="true"/>'
-                )
-                change_name = (
-                    "edit=getElementById('input-"
-                    + str(root.root.id)
-                    + "');"
-                    + "if (tree_is_editing) {document.getElementById('edit-"
-                    + str(root.root.id)
-                    + "').type = 'submit';};"
-                    + "tree_is_editing = !tree_is_editing;"
-                    + "edit.disabled = false;"
-                    + "getElementById('input-"
-                    + str(root.root.id)
-                    + "') = edit;"
-                )
-                output += (
-                    '<button type="submit" name="delete-'
-                    + str(root.root.id)
-                    + '" class="button-icon">'
-                    + del_icon
-                    + "</button>"
-                )
-                output += (
-                    '<button type="button" name="edit-'
-                    + str(root.root.id)
-                    + '" id="edit-'
-                    + str(root.root.id)
-                    + '" class="button-icon" onclick="'
-                    + change_name
-                    + '">'
-                    + pencil_icon
-                    + "</button>"
-                )
-                output += (
-                    '<button type="submit" name="add-category-'
-                    + str(root.root.id)
-                    + '" class="button-icon">'
-                    + folder_plus
-                    + "</button>"
-                )
-                output += (
-                    '<button type="submit" name="add-work-'
-                    + str(root.root.id)
-                    + '" class="button-icon">'
-                    + book_plus
-                    + "</button>"
-                )
+                output += f'''
+                    <li>
+                        <span class="caret caret-down">
+                        <input value="{root.root.name}" name="input-{str(root.root.id)}" id="input-{str(root.root.id)}" disabled="true"/>'''
+                change_name = '''
+                    edit=getElementById("input-{str(root.root.id)}");\n
+                    if (tree_is_editing) {\n
+                        document.getElementById("edit-' + str(root.root.id) + '").type = "submit";\n
+                    };\n
+                    tree_is_editing = !tree_is_editing;\n
+                    edit.disabled = false;\n
+                    getElementById("input-' + str(root.root.id)+ '") = edit;\n'''
+                output += f'''
+                    <button type="submit" name="delete-{str(root.root.id)}" class="button-icon">\n
+                        {del_icon}\n
+                    </button>\n
+                    <button
+                        type="button"
+                        name="edit-{str(root.root.id)}"
+                        id="edit-{str(root.root.id)}"
+                        class="button-icon"
+                        onclick="{change_name}"
+                    >\n {pencil_icon}\n </button>\n
+                    <button
+                        type="submit"
+                        name="add-category-{str(root.root.id)}"
+                        class="button-icon"
+                    >\n {folder_plus}\n </button>\n
+                    <button
+                        type="submit"
+                        name="add-work-{str(root.root.id)}"
+                        class="button-icon"
+                    >\n {book_plus}\n </button>\n'''
             else:
                 output += "<li>" + '<span class="caret caret-down">' + root.root.name
             output += "</span>"
