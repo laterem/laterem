@@ -1,6 +1,6 @@
 <form method="post" enctype="multipart/form-data">
     {% csrf_token %}
-    <table id="import-users" style="display: none;">
+    <table id="import-users" style="display: none;" class="dialog-table">
         <tr>
             <td>CSV файл: </td>
             <td><input type="file" name="import_file"></td>

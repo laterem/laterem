@@ -1,6 +1,6 @@
 <form method="post">
     {% csrf_token %}
-    <table id="add-user" style="display: none;">
+    <table id="add-user" style="display: none;" class="dialog-table">
         <tr>
             <td>{{ newuserform.first_name.label_tag }}</td> <td>{{ newuserform.first_name }}</td>
         </tr>
