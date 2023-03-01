@@ -82,6 +82,6 @@ class LateremSolution(models.Model):
     teacher_comment = models.TextField()
 
 class LateremBugReport(models.Model):
+    id = models.AutoField(primary_key=True, unique=True)
     user = models.ForeignKey(LateremUser, on_delete=models.CASCADE)
     text = models.TextField()
-    attachment = models.FileField(null=True)

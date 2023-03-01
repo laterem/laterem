@@ -29,6 +29,7 @@ from dbapi.users import User
 from dbapi.tasks import Task, CompiledTask, Work, Category, TaskTemplate
 from dbapi.solutions import Verdicts
 from dbapi.groups import Group
+from dbapi.bug_reports import BugReport
 
 
 
@@ -692,8 +693,10 @@ def bug_report_render(request):
     general_POST_handling(request)
     user = User(request.user)
     if request.method == 'POST':
-        LateremBugReport.objects.create(user=user.dbmodel,
-                                        text=request.POST.get('report_text'))
+        print(request.FILES)
+        BugReport.new_report(user, 
+                             request.POST.get('report_text'), 
+                             request.FILES.get('files'))
         return redirect('/')
     return render(
         request,

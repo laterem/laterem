@@ -23,6 +23,10 @@ TASK_VIEW_UPLOAD_PATH = 'task_views'
 TASK_SCANNER = Scanner(TASK_UPLOAD_PATH)
 SPACE_REPLACER = '§'
 
+# Определение хранилища багрепортов
+
+BUGREPORT_UPLOAD_PATH = pathjoin('data', 'bug-reports')
+
 # Конфигурация пользовательских настроек
 
 USER_DEFAULT_SETTINGS = {

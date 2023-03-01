@@ -1,4 +1,4 @@
-var drop = $("input");
+var drop = $("input#files");
 drop.on('dragenter', function (e) {
   $(".drop").css({
     "border": "4px dashed #09f",
