@@ -693,7 +693,6 @@ def bug_report_render(request):
     general_POST_handling(request)
     user = User(request.user)
     if request.method == 'POST':
-        # print(request.POST, request.FILES, request)
         BugReport.new_report(user, 
                              request.POST.get('report_text'), 
                              request.FILES.get('files'))

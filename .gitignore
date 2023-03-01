@@ -6,6 +6,6 @@ core_app/templates/task_views/*
 **/menu.html
 data/userdata/*
 10_1-dew.md
-data/tasks/*
+data/*
 static/*
 **/.DS_Store
