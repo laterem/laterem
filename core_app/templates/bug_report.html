@@ -5,6 +5,8 @@
 <form method="post">
     {% csrf_token %}
     <textarea name="report_text"></textarea><br/>
+    Прикрепите скриншоты ошибки ниже:
+    {% include "./file-drop.html" %}
     <button name="submit_report">Отправить сообщение</button>
 </form>
 {% endblock %}
