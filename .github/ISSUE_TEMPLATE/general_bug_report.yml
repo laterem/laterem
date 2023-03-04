@@ -2,19 +2,17 @@ name: General Bug Report
 description: Create a report to help us improve
 title: "[Bug]: "
 labels: ["bug"]
-assignees:
+assignees: []
 body:
   - type: markdown
     attributes:
-      value: |
-        Thanks for taking the time to fill out this bug report!
+      value: Thanks for taking the time to fill out this bug report!
   - type: textarea
     id: what-happened
     attributes:
       label: Describe the bug _Опишите баг_
       description: "A clear and concise description of what the bug is.\n_Четкое и лаконичное описания ошибки_"
       placeholder: Tell us what you see! _Напишите нам что произошло_
-      value: ""
     validations:
       required: true
   - type: textarea
@@ -32,7 +30,6 @@ body:
       label: Expected behavior _Ожидаемое поведение_
       description: "A clear and concise description of what you expected to happen.\n_Четкое и лаконичное описание ожидаемого результата действий_"
       placeholder: Write what did you except _Напишите чего вы ожидали_
-      value: ""
     validations:
       required: false
   - type: imagepicker
@@ -67,6 +64,5 @@ body:
       label: Additional context _Дополнительная информация_
       description: "Add any other context about the problem here.\n_Впишите сюда любую другую информацию о контексте возникновения проблемы_"
       placeholder: Tell us what you see! _Напишите нам что произошло_
-      value: ""
     validations:
       required: true
