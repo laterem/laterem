@@ -32,11 +32,10 @@ body:
       placeholder: Write what did you except _Напишите чего вы ожидали_
     validations:
       required: false
-  - type: imagepicker
+  - type: markdown
     id: screenshot
     attributes:
-      label: Screenshots _Скриншоты_
-      description: "If applicable, add screenshots to help explain your problem.\n_Если возможно, прикрепите скриншот проблемы_"
+      label: "Screenshots _Скриншоты_ If applicable, add screenshots to help explain your problem (by drag&drop).\n_Если возможно, прикрепите скриншот проблемы (методом drag&drop)_"
     validations:
       required: false
   - type: dropdown
