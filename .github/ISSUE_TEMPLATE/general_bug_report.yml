@@ -35,7 +35,7 @@ body:
   - type: markdown
     id: screenshot
     attributes:
-      label: "Screenshots _Скриншоты_ If applicable, add screenshots to help explain your problem (by drag&drop).\n_Если возможно, прикрепите скриншот проблемы (методом drag&drop)_"
+      value: "Screenshots _Скриншоты_ If applicable, add screenshots to help explain your problem (by drag&drop).\n_Если возможно, прикрепите скриншот проблемы (методом drag&drop)_"
     validations:
       required: false
   - type: dropdown
