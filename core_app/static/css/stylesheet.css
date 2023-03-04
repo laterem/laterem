@@ -442,9 +442,10 @@ header.header {
     background-image: linear-gradient(var(--header-gradient-top), var(--header-gradient-bottom));
 }
     
-button.header {
+button.header, .header button {
     border-radius: 20px;
     padding: 5px 10px;
+    box-shadow: none;
 }
     
 @font-face {
@@ -533,13 +534,16 @@ td.wrong {
     display: inline-block;
 }
 
-.dropdown-toggle {
+div.dropdown-toggle {
     display: grid;
-    position: relative;
-    align-self: baseline;
     grid-template-rows: 60px auto;
     align-items: center;
     cursor: pointer;
+}
+
+form.dropdown-toggle-form {
+    position: relative;
+    align-self: baseline;
 }
 
 .dropdown-content {
@@ -565,7 +569,7 @@ td.wrong {
     background-color: var(--header-dropdown-color);
 }
 
-#header-dropdown-item a {
+#header-dropdown-item a,  #header-dropdown-item button{
     color: var(--body-font-color);
     text-decoration: none;
     border-radius: 5px;

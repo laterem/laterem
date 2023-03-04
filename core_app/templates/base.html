@@ -60,19 +60,21 @@
             <a href="/report_a_bug/" class="button wrong">Сообщить об ошибке</a>
         </div>
 
-        <div style="justify-self: end; padding-right: 5px;" class="header dropdown-toggle">
-            <p id="main-icon" class="header button" style="margin-right:5px; width: 5mm; height: 5mm; grid-column: 1; justify-self: end;">
-                {% include "icons/user-icon.html" %}
-            </p>
-            <p style="grid-column: 2;">{{user.username}}</p>
-            <ul class="dropdown-content" id="header-dropdown-item" style="grid-row: 2; grid-column-start: 1; grid-column-end: 3;">
-                <li><a href="/profile">Профиль</a></li>
-                <li style="display: block;"><hr/></li>
-                <li><form method="post">{% csrf_token %}<button type="submit" class="button" name="change-color-theme" style="padding: 2px 4px 2px 4px;">{% include "icons/change-color-icon.html" %} <p style="color: var(--body-font-color);">Тема {{theme}}</p></button></form></li>
-                <li style="display: block;"><hr/></li>
-                <li><a class="button" href="/logout">Выйти</a></li>
-            </ul>
-        </div>
+        <form method="post" class="dropdown-toggle-form">
+            <div style="justify-self: end; padding-right: 5px;" class="header dropdown-toggle">
+                <p id="main-icon" class="header button" style="margin-right:5px; width: 5mm; height: 5mm; grid-column: 1; justify-self: end;">
+                    {% include "icons/user-icon.html" %}
+                </p>
+                <p style="grid-column: 2;">{{user.username}}</p>
+                <ul class="dropdown-content" id="header-dropdown-item" style="grid-row: 2; grid-column-start: 1; grid-column-end: 3;">
+                    <li><a href="/profile">Профиль</a></li>
+                    <li style="display: block;"><hr/></li>
+                    <li><button type="submit" class="button" name="change-color-theme">Тема {{ theme }}</button></li>
+                    <li style="display: block;"><hr/></li>
+                    <li><a class="button" href="/logout">Выйти</a></li>
+                </ul>
+            </div>
+        </form>
 
         <script src="{% static 'js/dropdown-manage.js' %}"></script>
 
