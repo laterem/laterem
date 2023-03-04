@@ -65,6 +65,11 @@ body {
     font-family: Arial, Helvetica, sans-serif;
 }
 
+a {
+    text-decoration: none;
+    color: var(--body-font-color);
+}
+
 /* Блоки */
 aside#menu, aside#content,
 aside#right-side {
@@ -415,7 +420,7 @@ button#right-side {
 }
 
 /* Шапка сайта */
-.header {
+.header, .header * {
     display: flex;
     align-self: center;
 }
@@ -449,6 +454,7 @@ button.header {
 
 h1.header {
     font-family:'Agency FB';
+    margin: 0px;
 }
 
 /* Стиль отметки сделанных работ */
