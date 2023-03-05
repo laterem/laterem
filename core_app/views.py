@@ -56,7 +56,7 @@ def login_view(request):
     else:
         form = LoginForm()
         return render(
-            request, "login.html", render_args(additional={"form": form})
+            request, "login.html", render_args(additional={"title": "Вход в аккаунт", "form": form})
         )
 
 
@@ -70,7 +70,7 @@ def profile_view(request):
             render_args(
                 me=user,
                 request=request,
-                additional={"title": "Laterem Настройки", "workdir": dict()},
+                additional={"title": "Настройки", "workdir": dict()},
             ),
         )  # <- Костыыыль! # где костыль нормально всё вроде
 
@@ -81,7 +81,7 @@ def teacher_hub(request):
     return render(
         request,
         "teacher_panel/teacher_panel_base.html",
-        render_args(request=request),
+        render_args(request=request, additional={"title": "Панель учителя"}),
     )
 
 
@@ -155,7 +155,8 @@ def users_panel(request):
         render_args(
             meta_all_users_available=True,
             request=request,
-            additional={"newuserform": form},
+            additional={"newuserform": form,
+                        "title": "Управление учениками"},
         ),
     )
 
@@ -242,6 +243,7 @@ def work_panel(request):
             meta_all_works_available=True,
             request=request,
             me=User(request.user),
+            additional={"title": "Управление работами"}
         ),
     )
 
@@ -301,7 +303,7 @@ def manage_work(request, work_id):
             meta_all_task_types_available=True,
             me=User(request.user),
             request=request,
-            additional={"work": work, "groups_to_appoint": groups_to_appoint},
+            additional={"title": "Работа " + work.name, "work": work, "groups_to_appoint": groups_to_appoint},
         ),
     )
 
@@ -352,7 +354,7 @@ def manage_task_in_work(request, work_id, task_id):
             meta_all_task_types_available=True,
             me=User(request.user),
             request=request,
-            additional={"work": work, "groups_to_appoint": groups_to_appoint, "task": task},
+            additional={"title": "Работа " + work.name + "; задание " + task.name, "work": work, "groups_to_appoint": groups_to_appoint, "task": task},
         ),
     )
 
@@ -378,6 +380,7 @@ def show_work_stats(request, work_id):
             me=User(request.user),
             request=request,
             additional={
+                "title": "Статистика по работе " + work.name,
                 "work": work,
                 "group_answers": group_answers_pair
             },
@@ -401,6 +404,7 @@ def group_panel(request):
         render_args(
             meta_all_groups_available=True,
             request=request,
+            additional={"title": "Управление группами"}
         ),
     )
 
@@ -463,6 +467,7 @@ def manage_group(request, group_id):
             current_group=group,
             request=request,
             additional={
+                "title": "Группа " + group.name,
                 "assign_work_form": assign_work_form,
                 "users": users, # Избыточная информация. Можно получить из current_group; Переделать
             },
@@ -503,6 +508,7 @@ def task_panel(request):
         render_args(
             request=request,
             meta_all_task_types_available=True,
+            additional={"title": "Управдение шаблонами задач"}
         ),
     )
 
@@ -547,6 +553,7 @@ def manage_task(request, task_id):
         render_args(
             request=request,
             additional={
+                "title": "Шаблон " + task.name,
                 "task": task,
                 "ltc_text": ltc_text,
                 "html_text": html_text
@@ -641,6 +648,7 @@ def task_view(request, stask_id):
         return redirect(request.path)
     
     additional_render_args["unraveled_categories"] = request.session.get("active_ids")
+    additional_render_args["title"] = task.work.name + "; " + task.name
     additional_render_args.update(compiled_task.ltc.field_table)
     return render(
         request,
@@ -668,7 +676,6 @@ def student_page_render(request):
                 me=User(request.user),
                 request=request,
                 additional={
-                    "title": "Laterem",
                     "text": "Это базовая страница",
                     "text2": "Перейдите на нужную работу по ссылке слева",
                 },
@@ -684,7 +691,6 @@ def main_page_render(request):
             "main.html",
             render_args(
                 request=request,
-                additional={"title": "Laterem"},
             ),
         )
 
@@ -699,5 +705,8 @@ def bug_report_render(request):
         return redirect('/')
     return render(
         request,
-        "bug_report.html"
+        "bug_report.html",
+        render_args(
+            additional={"title": "Баг репорт"}
+        )
     )
