@@ -17,11 +17,11 @@
         <p>ID: {{work.id}}</p>
         <button type="button" id="appoint" name="appoint" onclick="disp_dialog($('#appoint-work'))">Назначить группе</button>
     </form>
-    
+    <br/>
     <div id="work-table-header">
         <div style="grid-column: 1;"><span style="font-size: larger;">Задания</span></div>
         <div style="grid-column: 2;">
-            <button class="button" onclick="disp_dialog($('#add-task'))">{% include "icons/add-user-icon.html" %} &nbsp; Добавить &nbsp;</button>
+            <button class="button-icon" onclick="disp_dialog($('#add-task'))">{% include "icons/book-plus.html" %} &nbsp; Добавить &nbsp;</button>
         </div>
     </div>
     <div id="work-table">
@@ -40,6 +40,7 @@
         </div>
     {% endfor %}
     </div>
+    <br/>
     <a href="answer_stats/" class="button">Данные по сданным ответам</a>
 
 

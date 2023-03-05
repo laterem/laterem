@@ -233,7 +233,7 @@ h2 {
     display: inline-flex;
     margin: 4px 2px;
     cursor: pointer;
-    border-radius: 16px;
+    border-radius: 20px;
     height: fit-content;
 }
 
