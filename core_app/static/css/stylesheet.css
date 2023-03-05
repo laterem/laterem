@@ -34,8 +34,6 @@
 
     --content-hover-k: calc(var(--is-light) * (1/1.3) - calc(var(--is-light) - 1) * 1.3);
     --content-hover-a: 0.9;
-
-    --header-dropdown-color: rgba(0, 0, 0, 0);
  
     --content-hover-color: rgba(calc(var(--base-r) * var(--content-hover-k)), calc(var(--base-g) * var(--content-hover-k)), calc(var(--base-b) * var(--content-hover-k)), var(--content-hover-a));
 
@@ -80,29 +78,32 @@ aside#right-side {
     overflow: scroll;
 }
 
-::-webkit-scrollbar {
-    width: 0;
-    height: 0;
-    display: none;
-}
-
-/* ::-webkit-scrollbar-track
-{
-    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
-    background-color: var(--content-hover-color);
-}
-
-::-webkit-scrollbar
-{
-    width: 6px;
-    background-color: #F5F5F5;
-}
-
-::-webkit-scrollbar-thumb
-{
-    background-color: var(--dark-font-color);
+::-webkit-scrollbar-track {
+    background-color: transparent;
     border-radius: 10px;
-} */
+    margin: 10px;
+}
+
+::-webkit-scrollbar-track:hover {
+    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+    border-width: 1px;
+    border-color: rgba(0, 0, 0, 0.6);
+}
+
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+    background-color: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+    background-color: var(--border-hover);
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-corner {
+    background-color: transparent;
+}
 
     /* Боковое меню */
 aside#menu {
@@ -431,7 +432,7 @@ button#right-side {
     padding: 5px;
     padding-bottom: 2px;
     border-radius: 30%;
-    background: var(--header-dropdown-color);
+    background: transparent;
     position: relative;
     box-shadow: none;
 }
@@ -583,7 +584,7 @@ form.dropdown-toggle-form {
 #header-dropdown-item * {
     display: flex;
     padding: 5px;
-    background-color: var(--header-dropdown-color);
+    background-color: transparent;
 }
 
 #header-dropdown-item a,  #header-dropdown-item button{
@@ -759,6 +760,10 @@ div#task-manage-table {
     bottom: 10px;
 }
 
+#task-manage-table *::-webkit-scrollbar-track {
+    margin: 0;
+}
+
 #task-manage-table-column-header p {
     padding: 0px;
 }
@@ -815,7 +820,7 @@ div#task-manage-table-column-header * {
 .group-info:disabled, .user-table-element input:disabled, input:disabled {
     border: none;
     color: currentColor;
-    background-color: var(--header-dropdown-color);
+    background-color: transparent;
 }
 
 #group-manage-header div:nth-of-type(2n), #task-manage-header div:nth-of-type(2n) {
@@ -891,7 +896,7 @@ connection .line {
   font-family: "Montserrat", sans-serif;
   font-size: 100%;
   font-weight: 400;
-  background: var(--header-dropdown-color);
+  background: transparent;
   color: #323a44;
   min-width: 192px;
   width: min-content;
