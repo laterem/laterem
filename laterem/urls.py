@@ -23,7 +23,7 @@ from django.views.static import serve
 from core_app.views import main_page_render, student_page_render, login_view, profile_view, manage_group
 from core_app.views import task_view, render_work, getasset, logout_view
 from core_app.views import users_panel, teacher_hub, group_panel, work_panel, manage_work, show_work_stats, manage_task_in_work, task_panel, manage_task, bug_report_render
-
+from core_app.developer_views import bug_report_asset, bug_reports
 
 urlpatterns = [
    # path('admin/', admin.site.urls),
@@ -45,7 +45,11 @@ urlpatterns = [
     path('teacher/groups/<str:group_id>/', manage_group),
     path('teacher/tasks/', task_panel),
     path('teacher/tasks/<str:task_id>/', manage_task),
-    path('report_a_bug/', bug_report_render)
+    path('report_a_bug/', bug_report_render),
+
+    path('developermode/getasset/<str:br_id>/<str:filename>', bug_report_asset),
+    path('developermode/bugreports', bug_reports),
+    
 ] + [re_path(
         r"^%s(?P<path>.*)$" % re.escape(settings.STATIC_URL.lstrip("/")), serve, kwargs={'document_root': settings.STATIC_ROOT}
     ),]
