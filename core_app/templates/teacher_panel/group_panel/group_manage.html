@@ -3,30 +3,17 @@
 {% load laterem %}
 
 {% block content %}
-<script>is_editing = false;</script>
 <script src="{% static 'js/manage-blackout.js' %}"></script>
+<script src="{% static 'js/manage-data-edit.js' %}"></script>
 <form method="post" id="main-form">
     {% csrf_token %}  
     <div id="group-manage-header">
         <div style="grid-column: 1;">
            <input type="text" name="group_name" value="{{ group.name }}" disabled="true" style="font-size: larger;" class="group-info"/>
+           <button type="submit" name="edit_data" style="visibility: hidden;"></button>
         </div>
         <div style="grid-column: 2;">
-            <button type="button" id="edit_button" name="edit_data" class="button-icon" onclick="
-                edits = document.getElementsByClassName('group-info');
-                text = document.getElementById('edit-span').textContent;
-                if (is_editing) {
-                    text = 'Редактировать';
-                    document.getElementById('edit_button').type = 'submit';
-                } else {
-                    text = 'Подтвердить';
-                }
-                for (i=0; i<edits.length; i++) {
-                    edits[i].disabled = false;
-                }
-                is_editing = !is_editing;
-                document.getElementById('edit-span').textContent = text;
-            "><div style="width: 2em; padding: 0;">{% include "icons/pencil-icon.html" %}</div><span id="edit-span">Редактировать</span></button>
+            <button type="button" id="edit_button" name="edit_data" class="group-info button-icon" onclick="data_edit(this)"><div style="width: 2em; padding: 0;">{% include "icons/pencil-icon.html" %}</div><span id="edit-span">Редактировать</span></button>
             <button class="button-icon" name="delete_group"><div style="width: 2em; padding: 0;">{% include "icons/delete-icon.html" %}</div><span>Удалить</span></button>
         </div>
     </div>

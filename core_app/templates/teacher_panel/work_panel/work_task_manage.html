@@ -8,17 +8,9 @@
         {% csrf_token %}
         <div style="display: grid; grid-template-columns: auto max-content max-content; align-items: center;">
             <div style="grid-column: 1;">
-                <div style="grid-column: 1;"><input value="{{work.name}}" disabled="true" style="font-size: larger;" id="work_name" name="work_name"/></div>
+                <div style="grid-column: 1;"><input value="{{work.name}}" disabled="true" style="font-size: larger;" id="work_name" name="work_name" class="work-name"/><button type="submit" name="edit_data" style="visibility: hidden;"></button></div>
             </div>
-            <button type="button" id="edit_data" name="edit_data" style="grid-column: 2;" class="button-icon" onclick="
-                    edit = document.getElementById('work_name');
-                    if (is_editing) {
-                        document.getElementById('edit_data').type = 'submit';
-                    };
-                    is_editing = !is_editing;
-                    edit.disabled = false;
-                    document.getElementById('work_name') = edit;
-                "><div style="width: 2em; padding: 0;">{% include "icons/pencil-icon.html" %}</div></button>
+            <button type="button" id="edit_data" name="edit_data" style="grid-column: 2;" class="work-name button-icon" onclick="data_edit(this)"><div style="width: 2em; padding: 0;">{% include "icons/pencil-icon.html" %}</div></button>
             <button class="button-icon" name="delete_work" style="grid-column: 3;"><div style="width: 2em; padding: 0;">{% include "icons/delete-icon.html" %}</div><span>Удалить</span></button>
         </div>
         <p>ID: {{work.id}}</p>
