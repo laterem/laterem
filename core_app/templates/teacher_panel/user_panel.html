@@ -3,7 +3,7 @@
 {% load laterem %}
 
 {% block content %}
-<script>is_editing = false;</script>
+<script src="{% static 'js/manage-data-edit.js' %}"></script>
 <script src="{% static 'js/manage-blackout.js' %}"></script>
 <form method="dialog" id="main-form">
     {% csrf_token %}  
@@ -26,6 +26,7 @@
             </div>
             <div style="grid-column: 2;" class="user-table-element">
                 <input value="{{user.email}}" class="{{user.email}}" disabled="true" name="user_email"/> <input class="{{user.email}}" disabled="true" name="user_password"/>
+                <button style="visibility: hidden;" name="edit:{{user.email}}"></button>
             </div> 
             <div style="grid-column: 3; padding: 0;" class="user-table-element">
                 <form method="post">
@@ -34,17 +35,7 @@
                 </form>
             </div>
             <div style="grid-column: 4; padding: 0; border-left: none;" class="user-table-element">
-                <button id="edit_button" type="button" name="edit:{{user.email}}" class="button-icon"onclick="
-                        edits = document.getElementsByClassName('{{user.email}}');
-                        if (is_editing) {
-                            document.getElementById('edit_button').type = 'submit';
-                            document.getElementById('main-form').method = 'post';
-                        }
-                        for (i=0; i<edits.length; i++) {
-                            edits[i].disabled = false;
-                        }
-                        is_editing = !is_editing;
-                    "><div style="width: 1.5em">{% include "icons/pencil-icon.html" %}</div></button>
+                <button id="edit_button" type="button" name="edit:{{user.email}}" class="button-icon"onclick="data_edit(this)"><div style="width: 1.5em">{% include "icons/pencil-icon.html" %}</div></button>
             </div>
         {% endfor %}
     </div>

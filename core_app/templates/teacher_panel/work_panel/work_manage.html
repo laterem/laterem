@@ -12,7 +12,7 @@
                 <div style="grid-column: 1;"><input value="{{work.name}}" disabled="true" style="font-size: larger;" id="work_name" name="work_name" class="work-name"/><button type="submit" name="edit_data" style="visibility: hidden;"></button></div>
             </div>
             <button type="button" id="edit_data" name="edit_data" style="grid-column: 2;" class="work-name button-icon" onclick="data_edit(this)"><div style="width: 2em; padding: 0;">{% include "icons/pencil-icon.html" %}</div></button>
-            <button class="button-icon" name="delete_work" style="grid-column: 3;"><div style="width: 2em; padding: 0;">{% include "icons/delete-icon.html" %}</div><span>Удалить</span></button>
+            <button type="button" class="button-icon" style="grid-column: 3;" onclick="disp_dialog($('#delete-work-confirm'))"><div style="width: 2em; padding: 0;">{% include "icons/delete-icon.html" %}</div><span>Удалить</span></button>
         </div>
         <p>ID: {{work.id}}</p>
         <button type="button" id="appoint" name="appoint" onclick="disp_dialog($('#appoint-work'))">Назначить группе</button>
@@ -44,8 +44,18 @@
     <a href="answer_stats/" class="button">Данные по сданным ответам</a>
 
 
-    <button id="blackout" style="display: none;" onclick="disp_dialog([$('#appoint-work'), $('#add-task')])"></button>
+    <button id="blackout" style="display: none;" onclick="disp_dialog([$('#appoint-work'), $('#add-task'), $('#delete-work-confirm')])"></button>
     {% include "./work_add_task.html" %}
     {% include "./work_appoint_work.html" %}
+    <form method="post">
+        {% csrf_token %}
+        <table id="delete-work-confirm" class="dialog-table" style="display: none;">
+            <tr><td colspan="2">Вы уверены что хотите удалить работу {{ work.name }}?</td></tr>
+            <tr>
+                <td style="display: grid; justify-items: end;"><button name="delete_work" class="wrong">Подтвердить</button></td>
+                <td><button type="button" onclick="disp_dialog($('#delete-work-confirm'))">Отменить</button></td>
+            </tr>
+        </table>
+    </form>
     <script src="{% static 'js/table-blackout-manage.js' %}"></script>
 {% endblock %}

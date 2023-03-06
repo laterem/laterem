@@ -3,6 +3,7 @@
 {% load laterem %}
 
 {% block content %}
+    <script src="{% static 'js/manage-blackout.js' %}"></script>
     <script src="{% static 'js/manage-data-edit.js' %}"></script>
     <form method="post" id="main-form">
         {% csrf_token %}
@@ -13,7 +14,7 @@
             </div>
             <div style="grid-column: 2;">
                 <button type="button" id="edit_button" name="edit_data" class="edit-task-name button-icon" onclick="data_edit(this)"><div style="width: 2em; padding: 0;">{% include "icons/pencil-icon.html" %}</div><span id="edit-span">Редактировать</span></button>
-                <button class="button-icon" name="delete_task"><div style="width: 2em; padding: 0;">{% include "icons/delete-icon.html" %}</div><span>Удалить</span></button>
+                <button type="button" class="button-icon" onclick="disp_dialog($('#delete-task-confirm'))"><div style="width: 2em; padding: 0;">{% include "icons/delete-icon.html" %}</div><span>Удалить</span></button>
             </div>
             <p>ID: {{ task.id }}</p>
         </div>
@@ -38,5 +39,16 @@
                 </pre>
             </div>
         </div>
+    </form>
+    <button id="blackout" style="display: none;" onclick="disp_dialog([$('#delete-task-confirm')])"></button>
+    <form method="post">
+        {% csrf_token %}
+        <table id="delete-task-confirm" class="dialog-table" style="display: none;">
+            <tr><td colspan="2">Вы уверены что хотите удалить шаблон {{ task.name }}?</td></tr>
+            <tr>
+                <td style="display: grid; justify-items: end;"><button name="delete_task" class="wrong">Подтвердить</button></td>
+                <td><button type="button" onclick="disp_dialog($('#delete-task-confirm'))">Отменить</button></td>
+            </tr>
+        </table>
     </form>
 {% endblock %}

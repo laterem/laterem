@@ -14,7 +14,7 @@
         </div>
         <div style="grid-column: 2;">
             <button type="button" id="edit_button" name="edit_data" class="group-info button-icon" onclick="data_edit(this)"><div style="width: 2em; padding: 0;">{% include "icons/pencil-icon.html" %}</div><span id="edit-span">Редактировать</span></button>
-            <button class="button-icon" name="delete_group"><div style="width: 2em; padding: 0;">{% include "icons/delete-icon.html" %}</div><span>Удалить</span></button>
+            <button type="button" class="button-icon" onclick="disp_dialog($('#delete-group-confirm'))"><div style="width: 2em; padding: 0;">{% include "icons/delete-icon.html" %}</div><span>Удалить</span></button>
         </div>
     </div>
 </form>
@@ -52,8 +52,18 @@
         </div>
     {% endfor %}
     </div>
-    <button id="blackout" style="display: none;" onclick="disp_dialog([$('#add-group-member'), $('#appoint-work')])"></button>
+    <button id="blackout" style="display: none;" onclick="disp_dialog([$('#add-group-member'), $('#appoint-work'), $('#delete-group-confirm')])"></button>
     {% include "./add_group_member.html" %}
     {% include "./appoint_work.html" %}
+    <form method="post">
+        {% csrf_token %}
+        <table id="delete-group-confirm" class="dialog-table" style="display: none;">
+            <tr><td colspan="2">Вы уверены что хотите удалить группу {{ group.name }}?</td></tr>
+            <tr>
+                <td style="display: grid; justify-items: end;"><button name="delete_group" class="wrong">Подтвердить</button></td>
+                <td><button type="button" onclick="disp_dialog($('#delete-group-confirm'))">Отменить</button></td>
+            </tr>
+        </table>
+    </form>
     <script src="{% static 'js/table-blackout-manage.js' %}"></script>
 {% endblock %}
