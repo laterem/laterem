@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 {% load laterem %}
 
-{% block left-side %}
+{% block menu %}
     {% comment %} {% if student_tree %}
         {{ student_tree | safe }}
     {% else %} {% endcomment %}
@@ -12,67 +12,75 @@
 {% endblock %}
 
 {% block content %}
-<form method="post" id="answer-form">
-    {% csrf_token %}
-    {{ work_name }}
-    <br/>
-    {% if task.name %}
-        Задача: {{task.name}}
+<div id="content">
+    <form method="post" id="answer-form">
+        {% csrf_token %}
+        {{ work_name }}
         <br/>
-    {% endif %}
-    <div style="text-align: left;" id="task-area">
-        {% include task.view_path %}
-        <button type="submit" class="button">Проверить</button>
-    </div>
-    <script>
-        $(document).on('submit', '#answer-form', function(e){
-            // e.preventDefault();
+        {% if task.name %}
+            Задача: {{task.name}}
+            <br/>
+        {% endif %}
+        <div style="text-align: left;" id="task-area">
+            {% include task.view_path %}
+            <button type="submit" class="button">Проверить</button>
+        </div>
+        <script>
+            $(document).on('submit', '#answer-form', function(e){
+                // e.preventDefault();
+        
+                var new_data = $("#answer-form").serializeArray();
+        
+                var student_tree = $("#menu").html();
+        
+                var active_ids = $('.active').map(function(_, x) { return x.id; }).get();
     
-            var new_data = $("#answer-form").serializeArray();
+                new_data.push({name: 'active_ids', value: active_ids});
     
-            var student_tree = $("#menu").html();
+                if ( connections ) {
+                    new_data.push({name: 'connections', value: Array.from(connections)})
+                };
     
-            var active_ids = $('.active').map(function(_, x) { return x.id; }).get();
-
-            new_data.push({name: 'active_ids', value: active_ids});
-
-            if ( connections ) {
-                new_data.push({name: 'connections', value: Array.from(connections)})
-            };
-
-            // console.log(jQuery.param(new_data));
+                // console.log(jQuery.param(new_data));
+        
+                $.ajax({
+                    type: 'POST',
+                    // url: '/',
+                    // beforeSend: function(){
+                        // console.log("Send");
+                        // new_data.push({name: "zhur", value: "is the best"});
+                        // console.log(jQuery.param(new_data));
+                    // },
+                    // success: function(data){
+                        // e.preventDefault();
     
-            $.ajax({
-                type: 'POST',
-                // url: '/',
-                // beforeSend: function(){
-                    // console.log("Send");
-                    // new_data.push({name: "zhur", value: "is the best"});
-                    // console.log(jQuery.param(new_data));
-                // },
-                // success: function(data){
-                    // e.preventDefault();
-
-                    // Обраюотка результата проверки без перезагрузки страницы
-                    // Для этого необходимо как-то передать data в HttpResponse('success')
-                    // Что бы в ней были данные о новом состоянии прогрессбара и метки выполненности задания
-                // },
-                data: new_data,
-                async: false
+                        // Обраюотка результата проверки без перезагрузки страницы
+                        // Для этого необходимо как-то передать data в HttpResponse('success')
+                        // Что бы в ней были данные о новом состоянии прогрессбара и метки выполненности задания
+                    // },
+                    data: new_data,
+                    async: false
+                });
+                // return false;
             });
-            // return false;
-        });
-    </script>
-</form>
+        </script>
+    </form>
+</div>
+<aside id="left-side">
+    <form method="post" style="height: 100%;">
+        {% csrf_token %}
+        <button type="submit" name="redirect:task{{previous_task}}" id="left-side" class="button"><span></span></button>         
+    </form>
+</aside>
+<aside id="right-side">
+    <form method="post" style="height: 100%;">
+        {% csrf_token %}
+        <button type="submit" name="redirect:task{{next_task}}" id="right-side" class="button"><span></span></button>         
+    </form>
+</aside>
 {% endblock %}
 {% block foot %}
     {% with button_list_items=task_list %}
         {% include "button_list.html" %}
     {% endwith %}
-{% endblock %}
-{% block right-side %}
-    <form method="post" style="height: 100%;">
-        {% csrf_token %}
-        <button type="submit" name="redirect:task{{next_task}}" id="right-side" class="button"><span></span></button>         
-    </form>
 {% endblock %}

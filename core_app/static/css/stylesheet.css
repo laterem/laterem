@@ -69,8 +69,7 @@ a {
 }
 
 /* Блоки */
-aside#menu, aside#content,
-aside#right-side {
+aside#menu, aside#content {
     position: absolute;
     top: 65px;
     bottom: 10px;
@@ -143,33 +142,59 @@ aside#menu {
 #menu .title {
     font-size: large;
 }
+    
+    /* Левая часть сайта */
+aside#left-side {
+    position: absolute;
+    top: 0;
+    bottom: 0;
 
-    /* Блок с заданием */
-aside#content {
-    left: calc(20% + 20px);
-
-    width: calc(75% - 40px);
-
-    padding: 10px;
-    padding-bottom: 35px;
-
-    border-radius: 20px;
-    box-shadow: 4px 4px 4px var(--content-shadow-color);
-    background: var(--content-background-color);
-}
-
-    /* Правая часть сайта */
-aside#right-side {
-    right: 10px;
-
-    width: calc(5% - 20px);
+    width: 5%;
     
     border-radius: 20px;
     background: rgba(0, 0, 0, 0);
 
     overflow: hidden;
 }
-#right-side {
+
+    /* Блок с заданием */
+aside#content {
+    left: calc(20% + 20px);
+
+    width: calc(80% - 30px);
+
+    border-radius: 20px;
+    box-shadow: 4px 4px 4px var(--content-shadow-color);
+    background: var(--content-background-color);
+}
+
+div#content {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: calc(5% + 5px);
+    right: calc(5% + 5px);
+
+    padding: 10px;
+    padding-bottom: 35px;
+}
+
+    /* Правая часть сайта */
+aside#right-side {
+    position: absolute;
+    right: 0;
+    top: 0;
+    bottom: 0;
+
+    width: 5%;
+    
+    border-radius: 20px;
+    background: rgba(0, 0, 0, 0);
+
+    overflow: hidden;
+}
+
+#right-side, #left-side {
     width: 100%;
 
     background: rgba(0, 0, 0, 0);
@@ -408,12 +433,16 @@ ul.wtree, .wtree ul {
     align-self: center;
 }
 
-button#right-side {
+button#right-side, button#left-side {
     height: 100%;
 
     background-image: url("data:image/svg+xml,%3C%3Fxml version='1.0' encoding='UTF-8' standalone='no'%3F%3E%3C!-- Created with Inkscape (http://www.inkscape.org/) --%3E%3Csvg width='30' height='90' viewBox='0 0 7.9374999 23.8125' version='1.1' id='svg5' inkscape:version='1.2.1 (9c6d41e410, 2022-07-14)' sodipodi:docname='рисунок.svg' xmlns:inkscape='http://www.inkscape.org/namespaces/inkscape' xmlns:sodipodi='http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd' xmlns='http://www.w3.org/2000/svg' xmlns:svg='http://www.w3.org/2000/svg'%3E%3Csodipodi:namedview id='namedview7' pagecolor='%23505050' bordercolor='%23eeeeee' borderopacity='1' inkscape:showpageshadow='0' inkscape:pageopacity='0' inkscape:pagecheckerboard='true' inkscape:deskcolor='%23505050' inkscape:document-units='mm' showgrid='false' inkscape:zoom='4.4195761' inkscape:cx='24.097334' inkscape:cy='68.106079' inkscape:window-width='1920' inkscape:window-height='1057' inkscape:window-x='-8' inkscape:window-y='-8' inkscape:window-maximized='1' inkscape:current-layer='layer1' /%3E%3Cdefs id='defs2'%3E%3Cinkscape:path-effect effect='fillet_chamfer' id='path-effect844' is_visible='true' lpeversion='1' nodesatellites_param='F,0,0,1,0,1.5875,0,1 @ F,0,0,1,0,1.5875,0,1 @ F,0,0,1,0,1.5875,0,1' unit='px' method='auto' mode='F' radius='6' chamfer_steps='1' flexible='false' use_knot_distance='true' apply_no_radius='true' apply_with_radius='true' only_selected='false' hide_knots='false' /%3E%3C/defs%3E%3Cg inkscape:label='Слой 1' inkscape:groupmode='layer' id='layer1'%3E%3Cpath sodipodi:type='star' style='fill:%23dadada;stroke:none;stroke-width:0.266999' id='path234' inkscape:flatsided='true' sodipodi:sides='3' sodipodi:cx='1.0177258' sodipodi:cy='11.90625' sodipodi:r1='13.26136' sodipodi:r2='6.6306801' sodipodi:arg1='0' sodipodi:arg2='1.0471976' inkscape:rounded='0' inkscape:randomized='0' d='m 12.904271,12.7 -17.1424099,9.897175 a 0.91654355,0.91654355 30 0 1 -1.3748154,-0.79375 l 0,-19.7943498 a 0.91654355,0.91654355 150 0 1 1.3748154,-0.79375 L 12.904271,11.1125 a 0.91654355,0.91654355 90 0 1 0,1.5875 z' inkscape:transform-center-x='-1.3229166' transform='matrix(0.39902895,0,0,1.0367076,2.2397312,-0.43705023)' inkscape:path-effect='%23path-effect844' /%3E%3C/g%3E%3C/svg%3E%0A");
     background-repeat: no-repeat;
     background-position: 50%;
+}
+
+button#left-side {
+    transform: rotate(180deg);
 }
 
 .caret-down::before {
@@ -704,10 +733,8 @@ div#user-table-header, div#user-table,
 div#all-groups-table, div#all-groups-table-header,
 div#task-table, div#task-table-header,
 div#task-field-table, div#task-field-table-header {
-    margin-left: -10px;
-    margin-right: -10px;
     border: none;
-    width: calc(100% + 20px)
+    width: 100%;
 }
 
 #user-table-header *, #all-groups-table-header *,

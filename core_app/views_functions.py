@@ -90,6 +90,10 @@ def render_args(
             ret["next_task"] = all_tasks_in_task_work[task_index + 1].id
         else:
             ret["next_task"] = all_tasks_in_task_work[0].id
+        if (task_index >= 1):
+            ret["previous_task"] = all_tasks_in_task_work[task_index - 1].id
+        else:
+            ret["previous_task"] = all_tasks_in_task_work[-1].id
 
     if current_work is not NotSpecified:
         all_tasks_in_work = current_work.tasks()

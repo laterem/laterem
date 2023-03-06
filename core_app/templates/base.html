@@ -19,7 +19,7 @@
     <body>
         <div>
             <aside id="menu">
-                {% block left-side %}
+                {% block menu %}
                 {% endblock %}
             </aside>
             {% if task_list %}
@@ -38,10 +38,6 @@
                     </div>
                 </aside>
             {% endif %}
-            <aside id="right-side">
-                {% block right-side %}
-                {% endblock %}
-            </aside>
         </div>
         <script src="{% static 'js/caret-manager.js' %}"></script>
     </body>
