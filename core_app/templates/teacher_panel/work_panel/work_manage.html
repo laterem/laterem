@@ -7,12 +7,16 @@
     <script src="{% static 'js/manage-data-edit.js' %}"></script>
     <form method="post" id="main-form">
         {% csrf_token %}
-        <div style="display: grid; grid-template-columns: auto max-content max-content; align-items: center;">
+        <div id="work-manage-header">
             <div style="grid-column: 1;">
-                <div style="grid-column: 1;"><input value="{{work.name}}" disabled="true" style="font-size: larger;" id="work_name" name="work_name" class="work-name"/><button type="submit" name="edit_data" style="visibility: hidden;"></button></div>
+                <div style="grid-column: 1;"><input value="{{work.name}}" disabled="true" style="font-size: larger;" id="work_name" name="work_name" class="work-name"/></div>
             </div>
-            <button type="button" id="edit_data" name="edit_data" style="grid-column: 2;" class="work-name button-icon" onclick="data_edit(this)"><div style="width: 2em; padding: 0;">{% include "icons/pencil-icon.html" %}</div></button>
-            <button type="button" class="button-icon" style="grid-column: 3;" onclick="disp_dialog($('#delete-work-confirm'))"><div style="width: 2em; padding: 0;">{% include "icons/delete-icon.html" %}</div><span>Удалить</span></button>
+            <div style="grid-column: 2;">
+                <button type="submit" name="edit_data" class="work-name-confirm button-icon" style="display: none;"><div style="width: 2em; padding: 0;">{% include "icons/pencil-icon.html" %}</div>Подтвердить</button>
+                <button type="button" id="edit_button" class="work-name-undo button-icon" onclick="data_edit(this)" style="display: none;"><div style="width: 2em; padding: 0;">{% include "icons/undo-icon.html" %}</div>Отменить</button>
+                <button type="button" id="edit_button" class="work-name-edit button-icon" onclick="data_edit(this)" style="display: inline-flex;"><div style="width: 2em; padding: 0;">{% include "icons/pencil-icon.html" %}</div>Редактировать</button>
+                <button type="button" class="button-icon" style="grid-column: 3;" onclick="disp_dialog($('#delete-work-confirm'))"><div style="width: 2em; padding: 0;">{% include "icons/delete-icon.html" %}</div><span>Удалить</span></button>
+            </div>
         </div>
         <p>ID: {{work.id}}</p>
         <button type="button" id="appoint" name="appoint" onclick="disp_dialog($('#appoint-work'))">Назначить группе</button>

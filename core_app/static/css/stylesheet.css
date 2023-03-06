@@ -838,7 +838,8 @@ div#task-manage-table-column-header * {
     margin: 1px;
 }
 
-#group-manage-header, #task-manage-header {
+#group-manage-header, #task-manage-header,
+#work-manage-header {
     display: grid;
     grid-template-columns: auto max-content;
     align-items: center;
@@ -850,7 +851,8 @@ div#task-manage-table-column-header * {
     background-color: transparent;
 }
 
-#group-manage-header div:nth-of-type(2n), #task-manage-header div:nth-of-type(2n) {
+#group-manage-header div:nth-of-type(2n), #task-manage-header div:nth-of-type(2n),
+#work-manage-header div:nth-of-type(2n) {
     justify-items: end;
     justify-self: end;
 }
