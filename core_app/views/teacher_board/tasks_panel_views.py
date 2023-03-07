@@ -54,7 +54,9 @@ def manage_task(request, task_id):
             return redirect("/teacher/tasks/")
 
         if "edit_data" in request.POST:
-            # rename task dirrectory
+            name = request.POST["task_name"]
+            task.dbmodel.name = name
+            task.dbmodel.save()
             return redirect(request.path)
         
         if "download_ltc" in request.POST:

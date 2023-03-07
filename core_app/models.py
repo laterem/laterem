@@ -49,6 +49,7 @@ class LateremWork(models.Model):
 class LateremTaskTemplate(models.Model):
     id = models.AutoField(primary_key=True, unique=True)
     name = models.CharField(max_length=128)
+    birthname = models.CharField(max_length=128)
     author = models.ForeignKey(LateremUser, on_delete=models.DO_NOTHING)
 
 class LateremTask(models.Model):

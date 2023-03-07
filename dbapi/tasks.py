@@ -24,6 +24,7 @@ class TaskTemplate(DBHybrid):
     @classmethod
     def new(cls, name, config, view, author):
         dbobj = cls.__dbmodel__.objects.create(name=name,
+                                               birthname=name,
                                                author=author.dbmodel)
         dbobj.save()
         tt = cls(dbobj)
@@ -71,7 +72,7 @@ class TaskTemplate(DBHybrid):
         return open(self.ltc_path, encoding='UTF-8')
     
     def identificator(self):
-        return slugify(f'ID{self.dbmodel.id}-{transliterate_ru_en(self.dbmodel.name)}')
+        return slugify(f'ID{self.dbmodel.id}-{transliterate_ru_en(self.dbmodel.birthname)}')
 
 class Task(DBHybrid):
     __dbmodel__ = LateremTask
