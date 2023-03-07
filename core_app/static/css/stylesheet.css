@@ -599,6 +599,7 @@ div.dropdown-toggle {
 form.dropdown-toggle-form {
     position: relative;
     align-self: baseline;
+    width: max-content;
 }
 
 .dropdown-content {
