@@ -478,6 +478,7 @@ button#left-side {
 .header, .header * {
     display: flex;
     align-self: center;
+    align-items: center;
 }
 
 .header p {
@@ -589,7 +590,7 @@ td.wrong {
     display: inline-block;
 }
 
-div.dropdown-toggle {
+div.dropdown-toggle-keeper {
     display: grid;
     grid-template-rows: 60px auto;
     align-items: center;
