@@ -139,7 +139,7 @@ def render_args(
     for key, value in additional.items():
         ret[key] = value
     
-    ret["all_themes"] = ["light", "dark", "absolute-dark"]
+    ret["all_themes"] = ["light", "dark", "absolute-dark", "soft-dark"]
 
     return ret
 
