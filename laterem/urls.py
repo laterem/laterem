@@ -47,7 +47,7 @@ urlpatterns = [
     path('teacher/works/', work_panel),
     path('teacher/works/<str:work_id>/', manage_work),
     path('teacher/works/<str:work_id>/answer_stats/', show_work_stats),
-    path('teacher/works/<str:work_id>/<str:task_id>/', manage_task_in_work),
+    path('teacher/works/tasks/<str:task_id>/', manage_task_in_work),
     path('teacher/groups/', group_panel),
     path('teacher/groups/<str:group_id>/', manage_group),
     path('teacher/tasks/', task_panel),

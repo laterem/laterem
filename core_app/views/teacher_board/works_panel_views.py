@@ -149,52 +149,24 @@ def manage_work(request, work_id):
 
 
 @permission_required("can_manage_works")
-def manage_task_in_work(request, work_id, task_id):
+def manage_task_in_work(request, task_id):
     general_POST_handling(request)
     try:
-        work = Work.by_id(work_id)
+        task = Task.by_id(task_id)
     except LateremNotFound:
-        raise Http404('Work not found')
-    
-    # Спайд: Допишу ловлю исключений когда вью будет в итоговом состоянии
+        raise Http404('Task not found')
 
-    if request.method == "POST":
-        for signal in request.POST:
-            if signal.startswith("delete:"):
-                id = int(signal.lstrip("delete:"))
-                task = Task.by_id(id)
-                work.remove_task(task)
-                return redirect(request.path)
-        if "edit_data" in request.POST:
-            name = request.POST.get("work_name")
-            work.dbmodel.name = name
-            work.dbmodel.save()
-            return redirect(request.path)
-        if "newtask" in request.POST:
-            task = work.add_task(
-                name=request.POST.get("task_name"),
-                task_type=request.POST.get("task_type"),
-            )
-            return redirect(request.path)
-        if "appoint_to_group" in request.POST:
-            group = Group.by_id(request.POST.get("group_name"))
-            group.assign(work, User(request.user))
-            return redirect(request.path)
-    groups_to_appoint = list()
-    for group in User(request.user).groups():
-        if work not in group.get_works():
-            groups_to_appoint.append((group.id, group.name))
-
-    task = Task.by_id(task_id)
+    work = task.work
 
     return render(
         request,
         "teacher_panel/work_panel/work_task_manage.html",
         render_args(
-            meta_all_task_types_available=True,
             me=User(request.user),
             request=request,
-            additional={"title": "Работа " + work.name + "; задание " + task.name, "work": work, "groups_to_appoint": groups_to_appoint, "task": task},
+            current_task=task,
+            current_work=work,
+            additional={"title": "Работа " + work.name + ": задание " + task.name},
         ),
     )
 

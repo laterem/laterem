@@ -16,12 +16,12 @@
         </div>
         <p>ID: {{work.id}}</p>
     </form>
-    {% if task.ltc_fields %}
+    {% if task.field_overrides_items %}
         <div id="task-field-table-header">
             <span style="font-size: larger; margin-left: 5px;">{{ task.name }}</span>
         </div>
         <div id="task-field-table">
-            {% for name, value in task.ltc_fields %}
+            {% for name, value in task.field_overrides_items %}
                 <div style="grid-column: 1; border-left: none;">
                     {{ name }}
                 </div>
