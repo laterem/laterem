@@ -26,42 +26,32 @@
             <button type="submit" class="button">Проверить</button>
         </div>
         <script>
-            $(document).on('submit', '#answer-form', function(e){
-                // e.preventDefault();
-        
-                var new_data = $("#answer-form").serializeArray();
-        
-                var student_tree = $("#menu").html();
-        
+            $(document).on('submit', 'form', function(e){
+                var new_data = $(this).serializeArray();
                 var active_ids = $('.active').map(function(_, x) { return x.id; }).get();
-    
                 new_data.push({name: 'active_ids', value: active_ids});
     
-                if ( connections ) {
+                if ( typeof connections != "undefined" ) {
                     new_data.push({name: 'connections', value: Array.from(connections)})
                 };
-    
-                // console.log(jQuery.param(new_data));
-        
+
                 $.ajax({
                     type: 'POST',
-                    // url: '/',
-                    // beforeSend: function(){
-                        // console.log("Send");
-                        // new_data.push({name: "zhur", value: "is the best"});
-                        // console.log(jQuery.param(new_data));
-                    // },
-                    // success: function(data){
-                        // e.preventDefault();
-    
-                        // Обраюотка результата проверки без перезагрузки страницы
-                        // Для этого необходимо как-то передать data в HttpResponse('success')
-                        // Что бы в ней были данные о новом состоянии прогрессбара и метки выполненности задания
-                    // },
                     data: new_data,
                     async: false
                 });
-                // return false;
+            });
+            $(document).on('beforeunload', function(e){
+                // e.preventDefault();
+                console.log('catched!');
+                var new_data = [];
+                new_data.push({name: 'before-redirect', value: ['']});
+                var active_ids = $('.active').map(function(_, x) { return x.id; }).get();
+                new_data.push({name: 'active_ids', value: active_ids});
+                $.ajax({
+                    type: 'POST',
+                    data: new_data
+                });
             });
         </script>
     </form>

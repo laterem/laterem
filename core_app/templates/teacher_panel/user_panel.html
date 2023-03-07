@@ -32,7 +32,7 @@
             <div style="grid-column: 3; padding: 0;" class="user-table-element">
                 <form method="post">
                     {% csrf_token %}
-                    <button type="submit" name="delete:{{user.email}}" class="button-icon"><div style="width: 1.5em">{% include "icons/delete-icon.html" %}</div></button>
+                    <button title="Удалить пользователя" type="submit" name="delete:{{user.email}}" class="button-icon"><div style="width: 1.5em">{% include "icons/delete-icon.html" %}</div></button>
                 </form>
             </div>
             <div style="grid-column: 4; padding: 0; border-left: none;" class="user-table-element">

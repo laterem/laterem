@@ -123,7 +123,7 @@ class Task(DBHybrid):
             ltc.feed_html(io.read())
         metadata = self.generate_metadata(user)
         ltc.execute(extend_ns, metadata)
-        print(metadata.seed)
+        # print(metadata.seed)
         
         view = self.view_path
         return CompiledTask(ltc, view)

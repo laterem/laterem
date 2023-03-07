@@ -104,6 +104,10 @@ aside#menu, aside#content {
     background-color: transparent;
 }
 
+* {
+    scrollbar-color: var(--border-hover) transparent;
+}
+
     /* Боковое меню */
 aside#menu {
     left: 10px;

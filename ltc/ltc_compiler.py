@@ -47,7 +47,7 @@ class LTC:
         soup = BeautifulSoup(text, features="html.parser")
         for inp in soup.find_all('input'):
             self.known_input_fields.add(inp.get('name'))
-        print(self.known_input_fields)
+        # print(self.known_input_fields)
 
     #def get_answer_fields(self):
     #    return [x[0] for x in self.checker_functions]
@@ -118,7 +118,7 @@ class LTC:
             
             new_field_table.update(extend_ns)
             
-            print('FT', new_field_table)
+            # print('FT', new_field_table)
             for key, value in self.field_table.items():
                 new_field_table[key] = value.compile(new_field_table, metadata)(ns=new_field_table)
             for field, value in self.checker_functions:
@@ -151,7 +151,7 @@ class LTC:
             valid = True
             for field, checker in self.checker_functions:
                 valid = valid and checker(self.field_table[field])
-                print(valid, checker, checker.args, field, self.field_table[field])
+                # print(valid, checker, checker.args, field, self.field_table[field])
             return valid
         except Exception as e: # <-- ПЛОХО ОЧЕНЬ ПЛОХО но работает
             return False

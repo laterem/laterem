@@ -113,7 +113,7 @@ def users_panel(request):
                 if header:
                     keys = line.split(';')
                     header = False
-                    print(keys)
+                    # print(keys)
                     if set(keys) != {'email', 'password', 'first_name', 'last_name'}:
                         # Таблица неполная, оповестить пользователя
                         break
@@ -617,9 +617,9 @@ def task_view(request, stask_id):
         )
 
     if request.method == "POST":
-        active_ids = request.POST.get("active_ids")
-        if active_ids:
-            request.session["active_ids"] = active_ids
+        print(request.POST)
+        if "active_ids" in request.POST:
+            request.session["active_ids"] = request.POST.get("active_ids")
 
         # Проверка - есть ли нажатая нами кнопка в списке задач (нужно для переадрессации на другие задачи)
         for el in request.POST:

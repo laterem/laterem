@@ -139,8 +139,6 @@ def render_args(
     for key, value in additional.items():
         ret[key] = value
 
-    print(ret)
-
     return ret
 
 
