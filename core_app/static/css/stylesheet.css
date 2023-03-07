@@ -724,7 +724,8 @@ div#task-field-table-header {
     border-width: 1px;
     border-color: var(--dark-font-color);
     border-style: solid;
-    width: 100%;
+    width: calc(100% - 22px);
+    margin-left: 10px;
     grid-template-columns: auto max-content max-content;
     border-bottom: 0;
 }
@@ -735,6 +736,7 @@ div#task-table, div#task-table-header,
 div#task-field-table, div#task-field-table-header {
     border: none;
     width: 100%;
+    margin-left: 0;
 }
 
 #user-table-header *, #all-groups-table-header *,
@@ -754,9 +756,10 @@ div#work-stats-table{
     border-width: 1px;
     border-color: var(--dark-font-color);
     border-style: solid;
-    width: 100%;
+    width: calc(100% - 22px);
 
     margin-bottom: 10px;
+    margin-left: 10px;
 }
 
 div#work-table  {

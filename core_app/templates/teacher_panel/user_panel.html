@@ -1,10 +1,11 @@
 {% extends 'teacher_panel/teacher_panel_base.html' %}
 {% load static %}
 {% load laterem %}
+{% load cache_bust %}
 
 {% block content %}
-<script src="{% static 'js/manage-data-edit.js' %}"></script>
-<script src="{% static 'js/manage-blackout.js' %}"></script>
+<script src="{% static 'js/manage-data-edit.js' %}?{% cache_bust %}"></script>
+<script src="{% static 'js/manage-blackout.js' %}?{% cache_bust %}"></script>
 <form method="dialog" id="main-form">
     {% csrf_token %}  
     <div id="user-table-header">
@@ -42,6 +43,6 @@
     <button id="blackout" style="display: none;" onclick="disp_dialog([$('#add-user'), $('#import-users')])"></button>
     {% include "./add_user.html" %}
     {% include "./import_users.html" %}
-    <script src="{% static 'js/table-blackout-manage.js' %}"></script>
+    <script src="{% static 'js/table-blackout-manage.js' %}?{% cache_bust %}"></script>
 </form>
 {% endblock %}

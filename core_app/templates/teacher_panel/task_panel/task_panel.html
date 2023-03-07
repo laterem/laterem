@@ -1,9 +1,10 @@
 {% extends 'teacher_panel/teacher_panel_base.html' %}
 {% load static %}
 {% load laterem %}
+{% load cache_bust %}
 
 {% block content %}
-<script src="{% static 'js/manage-blackout.js' %}"></script>
+<script src="{% static 'js/manage-blackout.js' %}?{% cache_bust %}"></script>
 <div id="task-table-header">
     <span style="grid-column: 1; font-size: larger; margin-left: 5px;">Шаблоны задач</span>
     <div style="grid-column: 2;">
@@ -31,5 +32,5 @@
 </div>
 <button id="blackout" style="display: none;" onclick="disp_dialog($('#disp_dialog'))"></button>
 {% include "./add_task.html" %}
-<script src="{% static 'js/table-blackout-manage.js' %}"></script>
+<script src="{% static 'js/table-blackout-manage.js' %}?{% cache_bust %}"></script>
 {% endblock %}
