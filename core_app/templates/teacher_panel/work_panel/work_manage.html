@@ -34,7 +34,7 @@
             <a href="{{task.id}}/">{{task.name}}</a>
         </div>
         <div style="grid-column: 2;" class="work-table-element">
-            {{task.task_type.name}}
+            <a href="/teacher/tasks/{{ task.task_type.id }}/">{{task.task_type.name}}</a>
         </div> 
         <div style="grid-column: 3; padding: 0;" class="work-table-element">
             <form method="post">
