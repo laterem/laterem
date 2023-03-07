@@ -68,6 +68,11 @@ a {
     color: var(--body-font-color);
 }
 
+select {
+    color: var(--body-font-color);
+    border: none;
+}
+
 /* Блоки */
 aside#menu, aside#content {
     position: absolute;
@@ -247,8 +252,7 @@ h1 {
     font-size: 28px;
 }
 h2 {
-    margin-top: 0;
-    margin: 0px 5px 5px 0px;
+    margin: 5px;
     font-size: 20px;
 }
 

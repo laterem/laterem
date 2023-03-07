@@ -1,5 +1,7 @@
 {% extends 'base.html' %}
+{% load static %}
 {% load laterem %}
+{% load cache_bust %}
 
 {% block menu %}
     {% tree "workdir" %}
@@ -7,5 +9,6 @@
 
 {% block content %}
     <h2>{{text}}</h2>
-    <h3>{{text2}}</h3>        
+    <h3>{{text2}}</h3>
+    <script src="{% static 'js/navtree-state-saver.js' %}?{% cache_bust %}"></script>
 {% endblock %}

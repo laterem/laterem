@@ -1,0 +1,23 @@
+@import './stylesheet.css';
+
+:root {
+    --base-r: 30;
+    --base-g: 30;
+    --base-b: 33;
+
+    --font-r: 224;
+    --font-g: 224;
+    --font-b: 224;
+
+    --button-r: 180;
+    --button-b: 180;
+    --button-g: 180;
+
+    --blackout-alpha: 0.6;
+
+    --correct-color: rgb(10, 150, 40);
+    --unchecked-color: rgb(255, 193, 7);
+    --wrong-color: rgb(220, 10, 40);
+    --no-answer-background-color: rgb(116,116,116);
+    --dark-font-color: rgb(0, 10, 25);
+}

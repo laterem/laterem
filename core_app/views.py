@@ -617,7 +617,7 @@ def task_view(request, stask_id):
         )
 
     if request.method == "POST":
-        print(request.POST)
+        # print(request.POST)
         if "active_ids" in request.POST:
             request.session["active_ids"] = request.POST.get("active_ids")
 
@@ -666,6 +666,10 @@ def task_view(request, stask_id):
 @login_required
 def student_page_render(request):
     general_POST_handling(request)
+    if request.method == "POST":
+        # print(request.POST)
+        if "active_ids" in request.POST:
+            request.session["active_ids"] = request.POST.get("active_ids")
     with User(request.user) as user:
         if not request.session.get("color-theme"):
             request.session["color-theme"] = user.get_setting("theme")
@@ -678,6 +682,7 @@ def student_page_render(request):
                 additional={
                     "text": "Это базовая страница",
                     "text2": "Перейдите на нужную работу по ссылке слева",
+                    "unraveled_categories": request.session.get("active_ids")
                 },
             ),
         )

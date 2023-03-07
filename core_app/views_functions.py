@@ -138,17 +138,23 @@ def render_args(
 
     for key, value in additional.items():
         ret[key] = value
+    
+    ret["all_themes"] = ["light", "dark", "absolute-dark"]
 
     return ret
 
 
 def change_color_theme(user, request):
-    usertheme = user.get_setting("theme")
+    new_theme = request.POST.get("color-theme")
 
-    if usertheme == "dark":
-        usertheme = "light"
-    elif usertheme == "light":
-        usertheme = "dark"
+    if new_theme:
+        usertheme = new_theme
+    else:
+        usertheme = user.get_setting("theme")
+        if usertheme == "dark":
+            usertheme = "light"
+        elif usertheme == "light":
+            usertheme = "dark"
 
     user.set_settings(theme=usertheme)
     request.session["color-theme"] = usertheme
