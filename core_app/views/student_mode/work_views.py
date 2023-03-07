@@ -1,5 +1,6 @@
 from core_app.views.views_commons import *
 
+from ltc.ltc import LTCExecutionError
 
 # Рендер страницы работы
 @login_required
@@ -34,13 +35,33 @@ def task_view(request, stask_id):
     if not task.work.is_visible(User(request.user)):
         raise PermissionDenied
 
-    if stask_id not in request.session["compiled_tasks"]:
-        compiled_task = task.compile(User(request.user))
-        request.session["compiled_tasks"][stask_id] = compiled_task.as_JSON()
-        request.session.modified = True
-    else:
-        compiled_task = CompiledTask.from_JSON(
-            request.session["compiled_tasks"][stask_id]
+    try:
+        if stask_id not in request.session["compiled_tasks"]:
+            compiled_task = task.compile(User(request.user))
+            request.session["compiled_tasks"][stask_id] = compiled_task.as_JSON()
+            request.session.modified = True
+        else:
+            compiled_task = CompiledTask.from_JSON(
+                request.session["compiled_tasks"][stask_id]
+            )
+    except LTCExecutionError:
+        return render(
+            request,
+            "student.html",
+            render_args(
+                me=User(request.user),
+                request=request,
+                additional={
+                    "text": "Ой!",
+                    "text2": f"Что-то пошло не так при попытке открыть задание {task.name} ({task.id}) " 
+                             f"типа {task.template.name} ({task.template.id}) из работы {task.work.name} ({task.work.id}). " 
+                             f"Если эта ошибка повторяется, сообщите об этом вашему учителю или "
+                             f"заполните форму сообщениия об ошибке администрации сайта, "
+                             f"нажав на большую красную кнопку выше, прикрепив к сообщению содержание этого текста."
+                             ,
+                    "unraveled_categories": request.session.get("active_ids")
+                },
+            ),
         )
 
     if request.method == "POST":
