@@ -1,15 +1,19 @@
-from .forms import *
-from dbapi.solutions import Verdicts
-from dbapi.tasks import Category, Work, RootsMimic, TaskTemplate, WorkTreeView
-from dbapi.groups import Group
-from dbapi.users import User
-from .models import LateremUser
-from commons import NotSpecified
+from ..forms import *
+from dbapi.solutions import *
+from dbapi.tasks import *
+from dbapi.groups import *
+from dbapi.users import *
+from dbapi.bug_reports import *
+from ..models import LateremUser
+from commons import NotSpecified, asciify, LateremNotFound
 from context_objects import LATEREM_FLAGS, DEBUG_DBSamples, TASK_SCANNER
 
-from django.shortcuts import redirect
+from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
+from django.http import HttpResponse, FileResponse, Http404
 from django.core.exceptions import PermissionDenied
+
+from os.path import join as pathjoin
 
 if DEBUG_DBSamples in LATEREM_FLAGS:
     from secret_data import ADMIN_PASSWORD

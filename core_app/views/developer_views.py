@@ -1,12 +1,7 @@
-from django.http import HttpResponse, FileResponse, Http404
-from django.contrib.auth.decorators import login_required
-from django.core.exceptions import PermissionDenied
-
-from dbapi.bug_reports import BugReport
-
-from os.path import join as pathjoin
+from core_app.views.views_commons import *
 
 from context_objects import BUGREPORT_UPLOAD_PATH
+
 
 @login_required
 def bug_report_asset(request, br_id, filename):
