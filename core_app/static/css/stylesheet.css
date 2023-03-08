@@ -684,6 +684,10 @@ div#task-table, div#task-field-table {
     width: 100%;
 }
 
+div#user-table {
+    grid-template-columns: auto auto max-content 40px;
+}
+
 div#all-groups-table {
     grid-template-columns: 100%;
 }
@@ -701,8 +705,8 @@ div#task-table {
     border-collapse: collapse;
 }
 
-.group-table-element:nth-of-type(8n+4), .group-table-element:nth-of-type(8n+1),
-.group-table-element:nth-of-type(8n+2), .group-table-element:nth-of-type(8n+3),
+.group-table-element:nth-of-type(8n+3), .group-table-element:nth-of-type(8n+1),
+.group-table-element:nth-of-type(8n+2),
 .user-table-element:nth-of-type(8n+4), .user-table-element:nth-of-type(8n+1),
 .user-table-element:nth-of-type(8n+2), .user-table-element:nth-of-type(8n+3),
 .all-groups-table-element:nth-of-type(2n+1),
@@ -772,7 +776,7 @@ div#work-stats-table{
     margin-left: 10px;
 }
 
-div#work-table  {
+div#work-table, div#group-table {
     grid-template-columns: auto auto 40px;
 }
 

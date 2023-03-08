@@ -6,7 +6,7 @@
 {% block content %}
 <script src="{% static 'js/manage-data-edit.js' %}?{% cache_bust %}"></script>
 <script src="{% static 'js/manage-blackout.js' %}?{% cache_bust %}"></script>
-<form method="dialog" id="main-form">
+<form method="post" id="main-form">
     {% csrf_token %}  
     <div id="user-table-header">
         <div style="grid-column: 1;">
@@ -23,20 +23,25 @@
     <div id="user-table">
         {% for user in allusers %}
             <div style="grid-column: 1; border-left: none;" class="user-table-element">
-                <input value="{{user.first_name}}" class="{{user.email}}" disabled="true" name="user_name"/> <input value="{{user.last_name}}" class="{{user.email}}" disabled="true" name="user_lastname"/>
+                <input value="{{user.first_name}}" class="edit-user-{{user.id}}" disabled="true" name="user_name"/> <input value="{{user.last_name}}" class="edit-user-{{user.id}}" disabled="true" name="user_lastname"/>
             </div>
             <div style="grid-column: 2;" class="user-table-element">
-                <input value="{{user.email}}" class="{{user.email}}" disabled="true" name="user_email"/> <input class="{{user.email}}" disabled="true" name="user_password"/>
+                <input value="{{user.email}}" class="edit-user-{{user.id}}" disabled="true" name="user_email"/> <input class="edit-user-{{user.id}}" disabled="true" name="user_password"/>
                 <button style="visibility: hidden;" name="edit:{{user.email}}"></button>
             </div> 
             <div style="grid-column: 3; padding: 0;" class="user-table-element">
                 <form method="post">
                     {% csrf_token %}
-                    <button title="Удалить пользователя" type="submit" name="delete:{{user.email}}" class="button-icon"><div style="width: 1.5em">{% include "icons/delete-icon.html" %}</div></button>
+                    <button id="edit_button" type="submit" name="edit:{{user.email}}" class="edit-user-{{user.id}}-confirm button-icon" style="display: none;"><div style="width: 1.5em">{% include "icons/pencil-icon.html" %}</div></button>
+                    <button id="edit_button" type="button" name="edit:{{user.email}}" class="edit-user-{{user.id}}-undo button-icon" onclick="data_edit(this)" style="display: none;"><div style="width: 1.5em">{% include "icons/undo-icon.html" %}</div></button>
+                    <button id="edit_button" type="button" name="edit:{{user.email}}" class="edit-user-{{user.id}}-edit button-icon" onclick="data_edit(this)" style="display: inline-flex;"><div style="width: 1.5em">{% include "icons/pencil-icon.html" %}</div></button>
                 </form>
             </div>
             <div style="grid-column: 4; padding: 0; border-left: none;" class="user-table-element">
-                <button id="edit_button" type="button" name="edit:{{user.email}}" class="button-icon"onclick="data_edit(this)"><div style="width: 1.5em">{% include "icons/pencil-icon.html" %}</div></button>
+                <form method="post">
+                    {% csrf_token %}
+                    <button title="Удалить пользователя" type="submit" name="delete:{{user.email}}" class="button-icon"><div style="width: 1.5em">{% include "icons/delete-icon.html" %}</div></button>
+                </form>
             </div>
         {% endfor %}
     </div>

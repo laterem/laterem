@@ -46,12 +46,6 @@
                 <button type="submit" name="delete:{{member.email}}" class="button-icon"><div style="width: 1.5em">{% include "icons/delete-icon.html" %}</div></button>
             </form>
         </div>
-        <div style="grid-column: 4; padding: 0; border-left: none;" class="group-table-element">
-            <form method="post">
-                {% csrf_token %}
-                <button type="submit" name="edit_perms:{{member.email}}" class="button-icon"><div style="width: 1.5em">{% include "icons/pencil-icon.html" %}</div></button>
-            </form>
-        </div>
     {% endfor %}
     </div>
     <button id="blackout" style="display: none;" onclick="disp_dialog([$('#add-group-member'), $('#appoint-work'), $('#delete-group-confirm')])"></button>
