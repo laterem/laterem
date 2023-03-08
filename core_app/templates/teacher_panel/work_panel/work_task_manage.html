@@ -5,21 +5,20 @@
 
 {% block content %}
     <script src="{% static 'js/manage-data-edit.js' %}?{% cache_bust %}"></script>
-    <form method="post" id="main-form">
-        {% csrf_token %}
-        <div style="display: grid; grid-template-columns: auto max-content max-content; align-items: center;">
-            <div style="grid-column: 1;">
-                <div style="grid-column: 1;"><input value="{{work.name}}" disabled="true" style="font-size: larger;" id="work_name" name="work_name" class="work-name"/><button type="submit" name="edit_data" style="visibility: hidden;"></button></div>
-            </div>
-            <button type="button" id="edit_data" name="edit_data" style="grid-column: 2;" class="work-name button-icon" onclick="data_edit(this)"><div style="width: 2em; padding: 0;">{% include "icons/pencil-icon.html" %}</div></button>
-            <button class="button-icon" name="delete_work" style="grid-column: 3;"><div style="width: 2em; padding: 0;">{% include "icons/delete-icon.html" %}</div><span>Удалить</span></button>
-        </div>
-        <p>ID: {{work.id}}</p>
-    </form>
     {% if task.field_overrides_items %}
+    <form method="post">
+        {% csrf_token %}
         <div id="task-field-table-header">
-            <span style="font-size: larger; margin-left: 5px;">{{ task.name }}</span>
+            <div style="grid-column: 1;">
+                <input name="task-name" style="font-size: larger; margin-left: 5px;" value="{{ task.name }}" disabled="true" class="task-name"/>
+            </div>
+            <div style="grid-column: 2;">
+                <button type="submit" name="edit_data" class="task-name-confirm button-icon" style="display: none;"><div style="width: 2em; padding: 0;">{% include "icons/pencil-icon.html" %}</div>Подтвердить</button>
+                <button type="button" id="edit_button" class="task-name-undo button-icon" onclick="data_edit(this)" style="display: none;"><div style="width: 2em; padding: 0;">{% include "icons/undo-icon.html" %}</div>Отменить</button>
+                <button type="button" id="edit_button" class="task-name-edit button-icon" onclick="data_edit(this)" style="display: inline-flex;"><div style="width: 2em; padding: 0;">{% include "icons/pencil-icon.html" %}</div>Редактировать</button>
+            </div>
         </div>
+    </form>
         <div id="task-field-table">
             {% for name, value in task.field_overrides_items %}
                 <div style="grid-column: 1; border-left: none;">
