@@ -103,6 +103,7 @@ def task_view(request, stask_id):
         "work_base.html",
         render_args(
             me=User(request.user),
+            meta_need_task_list=True,
             request=request,
             current_task=task,
             additional=additional_render_args,

@@ -68,6 +68,10 @@ a {
     color: var(--body-font-color);
 }
 
+input {
+    background-color: white !important;
+}
+
 /* Блоки */
 aside#menu, aside#content {
     position: absolute;
@@ -865,7 +869,7 @@ div#task-manage-table-column-header * {
 .group-info:disabled, .user-table-element input:disabled, input:disabled {
     border: none;
     color: currentColor;
-    background-color: transparent;
+    background-color: transparent !important;
 }
 
 #group-manage-header div:nth-of-type(2n), #task-manage-header div:nth-of-type(2n),

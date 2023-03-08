@@ -69,6 +69,7 @@ def render_args(
     meta_all_groups_available=False,
     meta_all_works_available=False,
     meta_all_task_types_available=False,
+    meta_need_task_list=False,
     additional={},
 ):
     ret = {}
@@ -110,12 +111,12 @@ def render_args(
             Verdicts.SENT: "partial",
             Verdicts.WRONG_ANSWER: "wrong",
         }
-        if me is not NotSpecified:
+        if me is not NotSpecified and meta_need_task_list:
             ret["task_list"] = [
                 (_task, _colors[me.get_task_solution(_task).verdict])
                 for _task in all_tasks_in_work
             ]
-        else:
+        elif meta_need_task_list:
             ret["task_list"] = [
                 (_task, _colors[Verdicts.NO_ANSWER])
                 for _task in all_tasks_in_work
