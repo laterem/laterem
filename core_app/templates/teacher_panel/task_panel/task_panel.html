@@ -11,6 +11,11 @@
         <button class="button-icon" onclick="disp_dialog($('#add-task'))">{% include "icons/book-plus.html" %} &nbsp; Добавить &nbsp;</button>
     </div>
 </div>
+
+{% if notification %}
+    <div> {{ notification }} </div>
+{% endif %}
+
 <div id="task-table">
 {% for temp in alltasktypes %}
     <div style="border-left: none;" class="task-table-element">

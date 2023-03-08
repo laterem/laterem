@@ -2,7 +2,7 @@ from django.utils.text import slugify
 import os
 from os.path import join as pathjoin
 import json
-from ltc.ltc import LTCCompiler, LTC, LTCMetadataManager, LTCFakeMetadata
+from ltc.ltc import LTCCompiler, LTC, LTCMetadataManager, LTCFakeMetadata, LTCError, LTCCompileError, LTCExecutionError
 from context_objects import TASK_SCANNER, TASK_UPLOAD_PATH, TASK_VIEW_UPLOAD_PATH, LTC_DEFAULT_EXPORT_VALUE
 from commons import DBHybrid, NotSpecified, transliterate_ru_en
 from core_app.models import LateremGroup, LateremUser, LateremSolution, LateremTask, LateremCategory, LateremWork, LateremTaskTemplate
@@ -15,6 +15,9 @@ if not os.path.exists(TASK_UPLOAD_PATH):
 if not os.path.exists(TEMPLATES_VIEW_PATH):
     os.makedirs(TEMPLATES_VIEW_PATH)    
 
+class TaskTemplateValidationFailed(Exception):
+    pass
+
 class TaskTemplate(DBHybrid):
     __dbmodel__ = LateremTaskTemplate
 
@@ -22,7 +25,18 @@ class TaskTemplate(DBHybrid):
         return self.identificator()
     
     @classmethod
-    def new(cls, name, config, view, author):
+    def new(cls, name, config, view, author, check_errors=True):
+        if check_errors:
+            ltcfile = config.read().decode()
+            htmlfile = view.read().decode()
+            ltcc = LTCCompiler()
+            try:
+                ltc = ltcc.compile(ltcfile)
+                ltc.feed_html(htmlfile)
+                #ltc.execute(metadata=LTCFakeMetadata())
+            except (LTCCompileError, LTCError, LTCExecutionError) as e:
+                raise TaskTemplateValidationFailed(str(e))
+        
         dbobj = cls.__dbmodel__.objects.create(name=name,
                                                birthname=name,
                                                author=author.dbmodel)
