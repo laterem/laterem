@@ -224,7 +224,7 @@ def transliterate_ru_en(string) -> str:
             continue
         add = alphabet[ll]
         if letter.isupper():
-            out += add.upper()
+            out += add.capitalize()
         else:
             out += add
     return out

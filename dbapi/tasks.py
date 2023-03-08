@@ -2,8 +2,8 @@ from django.utils.text import slugify
 import os
 from os.path import join as pathjoin
 import json
-from ltc.ltc import LTCCompiler, LTC, LTCMetadataManager
-from context_objects import TASK_SCANNER, TASK_UPLOAD_PATH, TASK_VIEW_UPLOAD_PATH
+from ltc.ltc import LTCCompiler, LTC, LTCMetadataManager, LTCFakeMetadata, LTCError, LTCCompileError, LTCExecutionError
+from context_objects import TASK_SCANNER, TASK_UPLOAD_PATH, TASK_VIEW_UPLOAD_PATH, LTC_DEFAULT_EXPORT_VALUE
 from commons import DBHybrid, NotSpecified, transliterate_ru_en
 from core_app.models import LateremGroup, LateremUser, LateremSolution, LateremTask, LateremCategory, LateremWork, LateremTaskTemplate
 from shutil import rmtree
@@ -15,6 +15,9 @@ if not os.path.exists(TASK_UPLOAD_PATH):
 if not os.path.exists(TEMPLATES_VIEW_PATH):
     os.makedirs(TEMPLATES_VIEW_PATH)    
 
+class TaskTemplateValidationFailed(Exception):
+    pass
+
 class TaskTemplate(DBHybrid):
     __dbmodel__ = LateremTaskTemplate
 
@@ -22,8 +25,20 @@ class TaskTemplate(DBHybrid):
         return self.identificator()
     
     @classmethod
-    def new(cls, name, config, view, author):
+    def new(cls, name, config, view, author, check_errors=True):
+        if check_errors:
+            ltcfile = config.read().decode()
+            htmlfile = view.read().decode()
+            ltcc = LTCCompiler()
+            try:
+                ltc = ltcc.compile(ltcfile)
+                ltc.feed_html(htmlfile)
+                #ltc.execute(metadata=LTCFakeMetadata())
+            except (LTCCompileError, LTCError, LTCExecutionError) as e:
+                raise TaskTemplateValidationFailed(str(e))
+        
         dbobj = cls.__dbmodel__.objects.create(name=name,
+                                               birthname=name,
                                                author=author.dbmodel)
         dbobj.save()
         tt = cls(dbobj)
@@ -71,7 +86,7 @@ class TaskTemplate(DBHybrid):
         return open(self.ltc_path, encoding='UTF-8')
     
     def identificator(self):
-        return slugify(f'ID{self.dbmodel.id}-{transliterate_ru_en(self.dbmodel.name)}')
+        return slugify(f'ID{self.dbmodel.id}-{transliterate_ru_en(self.dbmodel.birthname)}')
 
 class Task(DBHybrid):
     __dbmodel__ = LateremTask
@@ -92,6 +107,16 @@ class Task(DBHybrid):
     def field_overrides(self):
         return json.loads(self.dbmodel.field_overrides)
 
+    def set_field_overrides(self, overrides):
+        cur = self.field_overrides
+        cur.update(overrides)
+        self.dbmodel.field_overrides = json.dumps(cur)
+        self.modified = True
+
+    @property
+    def field_overrides_items(self):
+        return self.field_overrides.items()
+
     def solutions(self, group=NotSpecified):
         if group is NotSpecified:
             return map(Solution, LateremSolution.objects.filter(task=self.dbmodel))
@@ -100,14 +125,17 @@ class Task(DBHybrid):
             return map(Solution, LateremSolution.objects.filter(task=self.dbmodel,
                                                                 user__in=users))
 
-    def generate_metadata(self, user):
+    def generate_metadata(self, user=NotSpecified):
+        if user is NotSpecified:
+            return LTCFakeMetadata()
+
         metadata = LTCMetadataManager()
         metadata.seed = self.id * 109231 ^ user.id * 2913884
         metadata.salt = self.id * 423 ^ user.id * 562
         metadata.xor = self.id * 3294829 ^ user.id * 6456484
         return metadata
 
-    def compile(self, user, answers=NotSpecified):
+    def compile(self, user=NotSpecified, answers=NotSpecified):
         if answers is NotSpecified:
             answers = {}
         else:
@@ -123,10 +151,18 @@ class Task(DBHybrid):
             ltc.feed_html(io.read())
         metadata = self.generate_metadata(user)
         ltc.execute(extend_ns, metadata)
-        # print(metadata.seed)
         
         view = self.view_path
         return CompiledTask(ltc, view)
+
+    def update_exporting_fields(self):
+        compiled = self.compile()
+        exporting_fields = {key: (LTC_DEFAULT_EXPORT_VALUE 
+                                  if key not in compiled.ltc.field_table 
+                                  else compiled.ltc.field_table[key])
+                            for key in compiled.ltc.exporting_fields
+                            if key not in self.field_overrides}
+        self.set_field_overrides(exporting_fields)
 
 class CompiledTask():
     def __init__(self, ltc, view) -> None:
@@ -188,6 +224,8 @@ class Work(DBHybrid):
         task = Task(LateremTask.objects.create(name=name,
                                                task_type=task_type.dbmodel,
                                                work=self.dbmodel))
+        task.update_exporting_fields()
+        task.close()
         task.dbmodel.save()
         return task
 

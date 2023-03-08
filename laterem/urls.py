@@ -20,10 +20,17 @@ from django.conf.urls.static import static
 import re
 from django.urls import re_path
 from django.views.static import serve
-from core_app.views import main_page_render, student_page_render, login_view, profile_view, manage_group
-from core_app.views import task_view, render_work, getasset, logout_view
-from core_app.views import users_panel, teacher_hub, group_panel, work_panel, manage_work, show_work_stats, manage_task_in_work, task_panel, manage_task, bug_report_render
-from core_app.developer_views import bug_report_asset, bug_reports
+from core_app.views.auth_views import *
+from core_app.views.general_views import *
+from core_app.views.developer_views import *
+from core_app.views.student_mode.student_mode_views import *
+from core_app.views.student_mode.work_views import *
+from core_app.views.teacher_board.groups_panel_views import *
+from core_app.views.teacher_board.tasks_panel_views import *
+from core_app.views.teacher_board.teacher_board_views import *
+from core_app.views.teacher_board.users_panel_views import *
+from core_app.views.teacher_board.works_panel_views import *
+
 
 urlpatterns = [
    # path('admin/', admin.site.urls),
@@ -40,7 +47,7 @@ urlpatterns = [
     path('teacher/works/', work_panel),
     path('teacher/works/<str:work_id>/', manage_work),
     path('teacher/works/<str:work_id>/answer_stats/', show_work_stats),
-    path('teacher/works/<str:work_id>/<str:task_id>/', manage_task_in_work),
+    path('teacher/works/tasks/<str:task_id>/', manage_task_in_work),
     path('teacher/groups/', group_panel),
     path('teacher/groups/<str:group_id>/', manage_group),
     path('teacher/tasks/', task_panel),

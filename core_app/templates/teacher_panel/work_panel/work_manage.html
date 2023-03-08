@@ -32,7 +32,7 @@
     <div id="work-table">
     {% for task in work.tasks %}
         <div style="grid-column: 1; border-left: none;" class="work-table-element">
-            <a href="{{task.id}}/">{{task.name}}</a>
+            <a href="/teacher/works/tasks/{{ task.id }}/">{{task.name}}</a>
         </div>
         <div style="grid-column: 2;" class="work-table-element">
             <a href="/teacher/tasks/{{ task.task_type.id }}/">{{task.task_type.name}}</a>
