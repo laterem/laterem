@@ -68,11 +68,6 @@ a {
     color: var(--body-font-color);
 }
 
-select {
-    color: var(--body-font-color);
-    border: none;
-}
-
 /* Блоки */
 aside#menu, aside#content {
     position: absolute;
@@ -595,6 +590,11 @@ div.dropdown-toggle-keeper {
     grid-template-rows: 60px auto;
     align-items: center;
     cursor: pointer;
+}
+
+.dropdown-toggle-keeper select {
+    color: var(--body-font-color);
+    border: none;
 }
 
 form.dropdown-toggle-form {
