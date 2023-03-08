@@ -18,17 +18,18 @@
                 <button type="button" id="edit_button" class="task-name-edit button-icon" onclick="data_edit(this)" style="display: inline-flex;"><div style="width: 2em; padding: 0;">{% include "icons/pencil-icon.html" %}</div>Редактировать</button>
             </div>
         </div>
-    </form>
         <div id="task-field-table">
             {% for name, value in task.field_overrides_items %}
                 <div style="grid-column: 1; border-left: none;">
                     {{ name }}
                 </div>
                 <div style="grid-column: 2;">
-                    <input name="name" value="{{ value }}"/>
+                    <input name="{{ name }}" value="{{ value }}"/>
                 </div> 
             {% endfor %}
         </div>
+        <button type="submit" name="edit-task-fields">Изменить поля</button>
+    </form>
     {% else %}
         <span style="font-size: larger;">В шаблоне {{ task.name }} нет изменяемых полей</span>
     {% endif %}
