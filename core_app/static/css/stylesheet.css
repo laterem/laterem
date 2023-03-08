@@ -693,7 +693,7 @@ div#all-groups-table {
 }
 
 div#task-table {
-    grid-template-columns: auto 40px 40px;
+    grid-template-columns: auto max-content 40px;
 }
 
 .group-table-element, .user-table-element,
