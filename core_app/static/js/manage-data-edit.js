@@ -26,28 +26,33 @@ Object.prototype.clone = Array.prototype.clone = function()
 
 function data_edit(target) {
     target_class = target.className.split(' ')[0];
-    editing_class = target_class.slice(0,target_class.lastIndexOf('-'));
-    editing_inputs = $('input.' + editing_class);
-    confirm_button = $('button.' + editing_class + '-confirm')[0];
-    undo_button = $('button.' + editing_class + '-undo')[0];
-    edit_button = $('button.' + editing_class + '-edit')[0];
-
-    if ( is_editing ) {
-        for ( let i = 0; i < editing_inputs.length; i++ ) {
-            editing_inputs[i].value = saved_inputs[i].value;
-            editing_inputs[i].disabled = true;
-        };
-        confirm_button.style.display = "none";
-        undo_button.style.display = "none";
-        edit_button.style.display = "inline-flex";
+    if (target_class.slice(target_class.lastIndexOf('-') + 1) == "confirm") {
+        target.closest('form').method = "post";
     } else {
-        saved_inputs = editing_inputs.clone();
-        for ( let i = 0; i < editing_inputs.length; i++ ) {
-            editing_inputs[i].disabled = false;
+        editing_class = target_class.slice(0,target_class.lastIndexOf('-'));
+        editing_inputs = $('input.' + editing_class);
+        confirm_button = $('button.' + editing_class + '-confirm')[0];
+        undo_button = $('button.' + editing_class + '-undo')[0];
+        edit_button = $('button.' + editing_class + '-edit')[0];
+
+        if ( is_editing ) {
+            for ( let i = 0; i < editing_inputs.length; i++ ) {
+                editing_inputs[i].value = saved_inputs[i].value;
+                editing_inputs[i].disabled = true;
+            };
+            confirm_button.style.display = "none";
+            undo_button.style.display = "none";
+            edit_button.style.display = "inline-flex";
+        } else {
+            saved_inputs = editing_inputs.clone();
+            for ( let i = 0; i < editing_inputs.length; i++ ) {
+                editing_inputs[i].disabled = false;
+            };
+            confirm_button.style.display = "inline-flex";
+            undo_button.style.display = "inline-flex";
+            edit_button.style.display = "none";
         };
-        confirm_button.style.display = "inline-flex";
-        undo_button.style.display = "inline-flex";
-        edit_button.style.display = "none";
+        is_editing = !is_editing;
     };
-    is_editing = !is_editing;
+    
 };

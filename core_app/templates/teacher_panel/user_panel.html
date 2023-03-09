@@ -6,7 +6,7 @@
 {% block content %}
 <script src="{% static 'js/manage-data-edit.js' %}?{% cache_bust %}"></script>
 <script src="{% static 'js/manage-blackout.js' %}?{% cache_bust %}"></script>
-<form method="post" id="main-form">
+<form method="dialog" id="main-form">
     {% csrf_token %}  
     <div id="user-table-header">
         <div style="grid-column: 1;">
@@ -32,7 +32,7 @@
             <div style="grid-column: 3; padding: 0;" class="user-table-element">
                 <form method="post">
                     {% csrf_token %}
-                    <button id="edit_button" type="submit" name="edit:{{user.email}}" class="edit-user-{{user.id}}-confirm button-icon" style="display: none;"><div style="width: 1.5em">{% include "icons/pencil-icon.html" %}</div></button>
+                    <button id="edit_button" type="submit" name="edit:{{user.email}}" class="edit-user-{{user.id}}-confirm button-icon" onclick="data_edit(this)" style="display: none;"><div style="width: 1.5em">{% include "icons/pencil-icon.html" %}</div></button>
                     <button id="edit_button" type="button" name="edit:{{user.email}}" class="edit-user-{{user.id}}-undo button-icon" onclick="data_edit(this)" style="display: none;"><div style="width: 1.5em">{% include "icons/undo-icon.html" %}</div></button>
                     <button id="edit_button" type="button" name="edit:{{user.email}}" class="edit-user-{{user.id}}-edit button-icon" onclick="data_edit(this)" style="display: inline-flex;"><div style="width: 1.5em">{% include "icons/pencil-icon.html" %}</div></button>
                 </form>
