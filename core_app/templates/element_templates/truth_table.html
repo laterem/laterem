@@ -1,0 +1,14 @@
+{% if truth_table_x %}
+    <div style="display: grid; grid-template-columns: repeat(3, max-content); grid-template-rows: 2em repeat(4, auto); justify-items: center; align-items: center;">
+        <div style="grid-column: 1;"> x </div><div style="grid-column: 2;"> y </div>
+        {% for x in "01" %}
+            {% if truth_table_y %}
+                {% for y in "01" %}
+                    <div style="grid-column: 1;">{{ x }}</div>
+                    <div style="grid-column: 2;">{{ y }}</div>
+                    <div style="grid-column: 3;"><input type="checkbox" name="{{ truth_table_id }}"/></div>
+                {% endfor %}
+            {% endif %}
+        {% endfor %}
+    </div>
+{% endif %}
