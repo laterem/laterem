@@ -2,6 +2,22 @@
     {% csrf_token %}
     <table id="import-users" style="display: none;" class="dialog-table">
         <tr>
+            <td>
+                <div>
+                    Прикрепите файл формата CSV, в котором:
+                    <ul>
+                        <li>Используется символ ";" в качестве разделителя</li>
+                        <li>Есть столбец "first_name" (Имя пользователя)</li>
+                        <li>Есть столбец "last_name" (Фамилия пользователя)</li>
+                        <li>Есть столбец "email" (Почта пользователя)</li>
+                        <li>Есть столбец "password" (Пароль для входа пользователя)</li>
+                        <li>Есть заглавная строка с подписанными столбцами</li>
+                    </ul> <br>
+                    Порядок столбцов не имеет значения
+                </div>
+            </td>
+        </tr>
+        <tr>
             <td>CSV файл: </td>
             <td><input type="file" name="import_file"></td>
         </tr>

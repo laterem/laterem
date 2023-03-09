@@ -1,5 +1,6 @@
 from core_app.views.views_commons import *
 
+import codecs
 
 @permission_required("can_manage_users")
 def users_panel(request):
@@ -23,6 +24,7 @@ def users_panel(request):
         elif "submit_import_users" in request.POST:
             # Импорт из файла
             import_file = request.FILES.get("import_file")
+            import_file = codecs.EncodedFile(import_file, "utf-8")
             header = True 
             for line in import_file:
                 line = line.decode().strip()
@@ -58,12 +60,20 @@ def users_panel(request):
                         user = LateremUser.objects.get(email=email)
                     except LateremUser.DoesNotExist:
                         continue
-                    user.email = request.POST.get("user_email")
+                    email = request.POST.get("user_email")
+                    first_name = request.POST.get("user_name")
+                    last_name = request.POST.get("user_lastname")
+                    print(email, first_name, last_name)
+                    print(request.POST)
+
+                    if email and first_name and last_name:
+                        user.email = email
+                        user.first_name = first_name
+                        user.last_name = last_name
+
                     # if request.POST.get('user_password'):
                     #   user.password = request.POST.get('user_password')
-                    user.first_name = request.POST.get("user_name")
-                    user.last_name = request.POST.get("user_lastname")
-                    user.save()
+                        user.save()
     form = NewUser()
     return render(
         request,
