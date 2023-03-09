@@ -697,7 +697,7 @@ div#all-groups-table {
 }
 
 div#task-table {
-    grid-template-columns: auto max-content 40px;
+    grid-template-columns: auto 40px;
 }
 
 .group-table-element, .user-table-element,
@@ -720,8 +720,7 @@ div#task-table {
 #work-stats-table *:nth-of-type(10n+3), #work-stats-table *:nth-of-type(10n+4),
 #work-stats-table *:nth-of-type(10n+5),
 #task-field-table *:nth-of-type(4n+1), #task-field-table *:nth-of-type(4n+2),
-.task-table-element:nth-of-type(6n+1), .task-table-element:nth-of-type(6n+2),
-.task-table-element:nth-of-type(6n+3) {
+.task-table-element:nth-of-type(6n+1), .task-table-element:nth-of-type(6n+2) {
     background-color: var(--content-hover-color);
 }
 

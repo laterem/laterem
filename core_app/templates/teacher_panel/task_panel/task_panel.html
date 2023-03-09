@@ -23,15 +23,7 @@
         <!-- here must be an input with class edit-template-{{ temp.id }} and value {{ temp.name }} -->
         <a href="{{ temp.id }}/">{{ temp.name }}</a>
     </div>
-    <div style="grid-column: 2; padding: 0;" class="task-table-element">
-        <form method="post">
-            {% csrf_token %}
-            <button type="submit" name="edit:{{ temp.id }}" class="edit-template-{{ temp.id }}-confirm button-icon" style="display: none;"><div style="width: 1.5em">{% include "icons/pencil-icon.html" %}</div></button>
-            <button type="button" name="edit:{{ temp.id }}" class="edit-template-{{ temp.id }}-undo button-icon" onclick="data_edit(this)" style="display: none;"><div style="width: 1.5em">{% include "icons/undo-icon.html" %}</div></button>
-            <button type="button" name="edit:{{ temp.id }}" class="edit-template-{{ temp.id }}-edit button-icon" onclick="data_edit(this)" style="display: inline-flex;"><div style="width: 1.5em">{% include "icons/pencil-icon.html" %}</div></button>
-        </form>
-    </div>
-    <div style="grid-column: 3; padding: 0; border-left: none;" class="task-table-element">
+    <div style="grid-column: 2; padding: 0; border-left: none;" class="task-table-element">
         <form method="post">
             {% csrf_token %}
             <div name="{{ temp.name }}">
