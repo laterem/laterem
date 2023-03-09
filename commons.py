@@ -1,5 +1,6 @@
 from os import listdir
 from os.path import isfile, join
+import codecs
 
 class LateremNotFound(Exception):
     pass
@@ -232,3 +233,11 @@ def transliterate_ru_en(string) -> str:
 
 def asciify(string):
     return transliterate_ru_en(string).encode('ascii', 'replace').decode('ascii')
+
+def read_text_file(file):
+    try:
+        stream = codecs.EncodedFile(file, "utf-8")
+    except:
+        return None
+    return stream
+    

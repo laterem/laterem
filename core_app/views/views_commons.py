@@ -5,7 +5,7 @@ from dbapi.groups import *
 from dbapi.users import *
 from dbapi.bug_reports import *
 from ..models import LateremUser
-from commons import NotSpecified, asciify, LateremNotFound
+from commons import NotSpecified, asciify, LateremNotFound, read_text_file
 from context_objects import LATEREM_FLAGS, DEBUG_DBSamples, TASK_SCANNER
 
 from django.shortcuts import render, redirect

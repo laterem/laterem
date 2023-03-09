@@ -1,7 +1,5 @@
 from core_app.views.views_commons import *
 
-import codecs
-
 @permission_required("can_manage_users")
 def users_panel(request):
     general_POST_handling(request)
@@ -24,24 +22,28 @@ def users_panel(request):
         elif "submit_import_users" in request.POST:
             # Импорт из файла
             import_file = request.FILES.get("import_file")
-            import_file = codecs.EncodedFile(import_file, "utf-8")
-            header = True 
-            for line in import_file:
-                line = line.decode().strip()
-                if header:
-                    keys = line.split(';')
-                    header = False
-                    # print(keys)
-                    if set(keys) != {'email', 'password', 'first_name', 'last_name'}:
-                        # Таблица неполная, оповестить пользователя
-                        break
-                    continue
-                args = line.split(';')
-                if len(args) != 4:
-                    # Таблица некорректная, оповестить пользователя
-                    break
-                # Добавить проверку корректности данных
-                User.create(**dict(zip(keys, args)))
+            import_file = read_text_file(import_file)
+            if import_file:
+                try:
+                    header = True 
+                    for line in import_file:
+                        line = line.decode().strip()
+                        if header:
+                            keys = line.split(';')
+                            header = False
+                            # print(keys)
+                            if set(keys) != {'email', 'password', 'first_name', 'last_name'}:
+                                # Таблица неполная, оповестить пользователя
+                                break
+                            continue
+                        args = line.split(';')
+                        if len(args) != 4:
+                            # Таблица некорректная, оповестить пользователя
+                            break
+                        # Добавить проверку корректности данных
+                        User.create(**dict(zip(keys, args)))
+                except UnicodeDecodeError:
+                    pass # Отправлен странный файл, оповестить пользователя
         else:
             flag = False
             for signal in request.POST:

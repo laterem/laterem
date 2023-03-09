@@ -26,33 +26,40 @@ class TaskTemplate(DBHybrid):
     
     @classmethod
     def new(cls, name, config, view, author, check_errors=True):
-        if check_errors:
-            ltcfile = config.read().decode()
-            htmlfile = view.read().decode()
-            ltcc = LTCCompiler()
-            try:
-                ltc = ltcc.compile(ltcfile)
-                ltc.feed_html(htmlfile)
-                #ltc.execute(metadata=LTCFakeMetadata())
-            except (LTCCompileError, LTCError, LTCExecutionError) as e:
-                raise TaskTemplateValidationFailed(str(e))
-        
-        dbobj = cls.__dbmodel__.objects.create(name=name,
-                                               birthname=name,
-                                               author=author.dbmodel)
-        dbobj.save()
-        tt = cls(dbobj)
-        path = pathjoin(TASK_UPLOAD_PATH, tt.identificator())
-        os.makedirs(path)
+        dbobj_created = False
+        try:    
+            if check_errors:
+                ltcfile = config.read().decode()
+                htmlfile = view.read().decode()
+                ltcc = LTCCompiler()
+                try:
+                    ltc = ltcc.compile(ltcfile)
+                    ltc.feed_html(htmlfile)
+                    #ltc.execute(metadata=LTCFakeMetadata())
+                except (LTCCompileError, LTCError, LTCExecutionError) as e:
+                    raise TaskTemplateValidationFailed(str(e))
+            
+            dbobj = cls.__dbmodel__.objects.create(name=name,
+                                                    birthname=name,
+                                                    author=author.dbmodel)
+            dbobj.save()
+            dbobj_created = True
+            tt = cls(dbobj)
 
-        with open(pathjoin(path, "config.ltc"), "wb+") as dest:
-            for chunk in config.chunks():
-                dest.write(chunk)
-        with open(pathjoin(TEMPLATES_VIEW_PATH, f"{tt}.html"), "wb+") as dest:
-            for chunk in view.chunks():
-                dest.write(chunk)
+            path = pathjoin(TASK_UPLOAD_PATH, tt.identificator())
+            os.makedirs(path)
+            with open(pathjoin(path, "config.ltc"), "wb+") as dest:
+                for chunk in config.chunks():
+                    dest.write(chunk)
+            with open(pathjoin(TEMPLATES_VIEW_PATH, f"{tt}.html"), "wb+") as dest:
+                for chunk in view.chunks():
+                    dest.write(chunk)
 
-        return tt
+            return tt
+        except UnicodeDecodeError:
+            if dbobj_created:
+                tt.dbmodel.delete()
+            return None
 
     @classmethod
     def delete(cls, id):

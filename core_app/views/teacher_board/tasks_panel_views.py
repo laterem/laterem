@@ -9,24 +9,25 @@ def task_panel(request):
         if "newtask" in request.POST:
             name = request.POST.get("task_type_name")
             if name:
-                config = request.FILES.get("config_file")
-                view = request.FILES.get("view_file")
-                try:
-                    TaskTemplate.new(name=name,
-                                     author=me,
-                                     config=config,
-                                     view=view)
-                except TaskTemplateValidationFailed as e:
-                    return render(
-                            request,
-                            "teacher_panel/task_panel/task_panel.html",
-                            render_args(
-                                request=request,
-                                meta_all_task_types_available=True,
-                                additional={"title": "Управдение шаблонами задач",
-                                            "notification": f"Задача вызывает ошибку компиляции: {str(e)}"}
-                            ),
-                        )
+                config = read_text_file(request.FILES.get("config_file"))
+                view = read_text_file(request.FILES.get("view_file"))
+                if config and view:
+                    try:
+                        TaskTemplate.new(name=name,
+                                        author=me,
+                                        config=config,
+                                        view=view)
+                    except TaskTemplateValidationFailed as e:
+                        return render(
+                                request,
+                                "teacher_panel/task_panel/task_panel.html",
+                                render_args(
+                                    request=request,
+                                    meta_all_task_types_available=True,
+                                    additional={"title": "Управдение шаблонами задач",
+                                                "notification": f"Задача вызывает ошибку компиляции: {str(e)}"}
+                                ),
+                            )   
         else:
             flag = False
             for signal in request.POST:
