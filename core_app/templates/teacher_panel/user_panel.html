@@ -6,6 +6,7 @@
 {% block content %}
 <script src="{% static 'js/manage-data-edit.js' %}?{% cache_bust %}"></script>
 <script src="{% static 'js/manage-blackout.js' %}?{% cache_bust %}"></script>
+<script>var delete_signal_to_send='';</script>
 <form method="dialog" id="main-form">
     {% csrf_token %}  
     <div id="user-table-header">
@@ -40,7 +41,7 @@
             <div style="grid-column: 4; padding: 0; border-left: none;" class="user-table-element">
                 <form method="post">
                     {% csrf_token %}
-                    <button title="Удалить пользователя" type="submit" name="delete:{{user.email}}" class="button-icon"><div style="width: 1.5em">{% include "icons/delete-icon.html" %}</div></button>
+                    <button title="Удалить пользователя" name="delete:{{user.email}}" type="button" class="button-icon" onclick="delete_signal_to_send=this.name; $('#confirm-user-deleting-massage')[0].innerHTML = 'Вы уверены что хотите удалить пользователя ' + this.name.slice(this.name.indexOf(':') + 1) + '?'; $('#confirm-user-deleting-button')[0].name = this.name; disp_dialog($('#delete-user-confirm'))"><div style="width: 1.5em; padding: 0;">{% include "icons/delete-icon.html" %}</div></button>
                 </form>
             </div>
         {% endfor %}
@@ -48,6 +49,16 @@
     <button id="blackout" style="display: none;" onclick="disp_dialog([$('#add-user'), $('#import-users')])"></button>
     {% include "./add_user.html" %}
     {% include "./import_users.html" %}
+    <form method="post">
+        {% csrf_token %}
+        <table id="delete-user-confirm" class="dialog-table" style="display: none;">
+            <tr><td colspan="2" id="confirm-user-deleting-massage">Вы уверены что хотите удалить пользователя?</td></tr>
+            <tr>
+                <td style="display: grid; justify-items: end;"><button id="confirm-user-deleting-button" type="submit" class="wrong">Подтвердить</button></td>
+                <td><button type="button" onclick="disp_dialog($('#delete-user-confirm'))">Отменить</button></td>
+            </tr>
+        </table>
+    </form>
     <script src="{% static 'js/table-blackout-manage.js' %}?{% cache_bust %}"></script>
 </form>
 {% endblock %}

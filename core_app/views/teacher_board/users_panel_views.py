@@ -4,6 +4,7 @@ from core_app.views.views_commons import *
 def users_panel(request):
     general_POST_handling(request)
     if request.method == "POST":
+        print(request.POST)
         if "newuser" in request.POST:
             form = NewUser(request.POST)
             if form.is_valid():

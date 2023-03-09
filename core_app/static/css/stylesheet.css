@@ -645,7 +645,7 @@ form.dropdown-toggle-form {
     padding: 0;
 }
 
-table.dialog-table {
+.dialog-table {
     border-radius: 10px;
     padding: 5px;
     background-color: var(--content-background-color);
@@ -657,7 +657,7 @@ table.dialog-table {
     box-shadow: 3px 3px 3px var(--blackout-shadow-color);
 }
 
-table.dialog-table::before {
+.dialog-table::before {
     content: 'x';
     position: relative;
     left: calc(100% - 10px);
