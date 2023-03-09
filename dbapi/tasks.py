@@ -114,8 +114,13 @@ class Task(DBHybrid):
     def field_overrides(self):
         return json.loads(self.dbmodel.field_overrides)
 
-    def set_field_overrides(self, overrides):
+    def set_field_overrides(self, overrides, mask=True, pick_first=False):
         cur = self.field_overrides
+        if mask:
+            overrides = {key: 
+                           (value if not pick_first else value[0])
+                         for key, value in overrides.items()
+                         if key in cur}
         cur.update(overrides)
         self.dbmodel.field_overrides = json.dumps(cur)
         self.modified = True
@@ -169,7 +174,7 @@ class Task(DBHybrid):
                                   else compiled.ltc.field_table[key])
                             for key in compiled.ltc.exporting_fields
                             if key not in self.field_overrides}
-        self.set_field_overrides(exporting_fields)
+        self.set_field_overrides(exporting_fields, mask=False)
 
 class CompiledTask():
     def __init__(self, ltc, view) -> None:

@@ -158,6 +158,19 @@ def manage_task_in_work(request, task_id):
 
     work = task.work
 
+    if request.method == "POST":
+        if "task-name" in request.POST:
+            task_name = request.POST.get("task-name")
+            if task_name:
+                task.dbmodel.name = task_name
+                task.dbmodel.save()
+                return redirect(request.path)
+        elif "edit-task-fields" in request.POST:
+            with task:
+                task.set_field_overrides(dict(request.POST),
+                                         pick_first=True)
+                
+
     return render(
         request,
         "teacher_panel/work_panel/work_task_manage.html",

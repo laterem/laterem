@@ -4,7 +4,6 @@ from core_app.views.views_commons import *
 def users_panel(request):
     general_POST_handling(request)
     if request.method == "POST":
-        print(request.POST)
         if "newuser" in request.POST:
             form = NewUser(request.POST)
             if form.is_valid():
@@ -66,8 +65,6 @@ def users_panel(request):
                     email = request.POST.get("user_email")
                     first_name = request.POST.get("user_name")
                     last_name = request.POST.get("user_lastname")
-                    print(email, first_name, last_name)
-                    print(request.POST)
 
                     if email and first_name and last_name:
                         user.email = email
