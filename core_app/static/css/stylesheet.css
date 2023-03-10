@@ -720,7 +720,7 @@ div#task-table {
 #work-stats-table *:nth-of-type(10n+3), #work-stats-table *:nth-of-type(10n+4),
 #work-stats-table *:nth-of-type(10n+5),
 #task-field-table *:nth-of-type(4n+1), #task-field-table *:nth-of-type(4n+2),
-.task-table-element:nth-of-type(6n+1), .task-table-element:nth-of-type(6n+2) {
+.task-table-element:nth-of-type(4n+1), .task-table-element:nth-of-type(4n+2) {
     background-color: var(--content-hover-color);
 }
 
@@ -875,6 +875,30 @@ div#task-manage-table-column-header * {
 #work-manage-header div:nth-of-type(2n) {
     justify-items: end;
     justify-self: end;
+}
+
+#truth-table {
+    display: inline-grid;
+    border-radius: 10px;
+    border-width: 1px;
+    border-color: var(--dark-font-color);
+    overflow: hidden;
+    grid-template-columns: repeat(5, max-content);
+    grid-template-rows: 2em repeat(4, auto);
+    justify-items: center;
+    align-items: center;
+}
+
+#truth-table div {
+    padding: 5px;
+    width: 1.5em;
+    height: 1.2em;
+}
+
+#truth-table div:nth-of-type(10n+1), #truth-table div:nth-of-type(10n+2),
+#truth-table div:nth-of-type(10n+3), #truth-table div:nth-of-type(10n+4),
+#truth-table div:nth-of-type(10n+5) {
+    background-color: var(--content-hover-color);
 }
 
 .active {

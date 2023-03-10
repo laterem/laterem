@@ -1,13 +1,45 @@
 {% if truth_table_x %}
-    <div style="display: grid; grid-template-columns: repeat(3, max-content); grid-template-rows: 2em repeat(4, auto); justify-items: center; align-items: center;">
-        <div style="grid-column: 1;"> x </div><div style="grid-column: 2;"> y </div>
+    <div id="truth-table">
+        <div style="grid-column: 1;"> x </div>
+        {% if truth_table_y %}<div style="grid-column: 2;"> y </div>{% else %}<div style="grid-column: 2;"></div>{% endif %}
+        {% if truth_table_y %}<div style="grid-column: 3;"> z </div>{% else %}<div style="grid-column: 3;"></div>{% endif %}
+        {% if truth_table_y %}<div style="grid-column: 4;"> w </div>{% else %}<div style="grid-column: 4;"></div>{% endif %}
+        <div style="grid-column: 5;"></div>
         {% for x in "01" %}
             {% if truth_table_y %}
                 {% for y in "01" %}
-                    <div style="grid-column: 1;">{{ x }}</div>
-                    <div style="grid-column: 2;">{{ y }}</div>
-                    <div style="grid-column: 3;"><input type="checkbox" name="{{ truth_table_id }}"/></div>
+                    {% if truth_table_z %}
+                        {% for z in "01" %}
+                            {% if truth_table_w %}
+                                {% for w in "01" %}
+                                    <div style="grid-column: 1;">{{ x }}</div>
+                                    <div style="grid-column: 2;">{{ y }}</div>
+                                    <div style="grid-column: 3;">{{ z }}</div>
+                                    <div style="grid-column: 4;">{{ w }}</div>
+                                    <div style="grid-column: 5;"><input type="checkbox" name="{{ truth_table_id }}"/></div>
+                                {% endfor %}
+                            {% else %}
+                                <div style="grid-column: 1;">{{ x }}</div>
+                                <div style="grid-column: 2;">{{ y }}</div>
+                                <div style="grid-column: 3;">{{ z }}</div>
+                                <div style="grid-column: 4;"></div>
+                                <div style="grid-column: 5;"><input type="checkbox" name="{{ truth_table_id }}"/></div>
+                            {% endif %}
+                        {% endfor %}
+                    {% else %}
+                        <div style="grid-column: 1;">{{ x }}</div>
+                        <div style="grid-column: 2;">{{ y }}</div>
+                        <div style="grid-column: 3;"></div>
+                        <div style="grid-column: 4;"></div>
+                        <div style="grid-column: 5;"><input type="checkbox" name="{{ truth_table_id }}"/></div>
+                    {% endif %}
                 {% endfor %}
+            {% else %}
+            <div style="grid-column: 1;">{{ x }}</div>
+            <div style="grid-column: 2;"></div>
+            <div style="grid-column: 3;"></div>
+            <div style="grid-column: 4;"></div>
+            <div style="grid-column: 5;"><input type="checkbox" name="{{ truth_table_id }}"/></div>
             {% endif %}
         {% endfor %}
     </div>
