@@ -15,7 +15,6 @@ $(document).on('submit', 'form', function(e){
 });
 $(document).on('beforeunload', function(e){
     e.preventDefault();
-    console.log('catched!');
     var new_data = [];
     new_data.push({name: 'before-redirect', value: ['']});
     var active_ids = $('.active').map(function(_, x) { return x.id; }).get();

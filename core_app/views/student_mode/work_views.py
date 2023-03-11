@@ -77,23 +77,25 @@ def task_view(request, stask_id):
                 return redirect("/task/" + l_task_id)
 
         # Анализ ответа
-        answers = dict(request.POST)
-        del answers['csrfmiddlewaretoken']
+        if "check_answers" in request.POST:
+            answers = dict(request.POST)
+            del answers['csrfmiddlewaretoken']
+           # del answers['active_ids']
 
-        with User(request.user) as user:
-            test_compiled = task.compile(user, answers)
-            request.session["compiled_tasks"][stask_id] = test_compiled.as_JSON()
-            request.session.modified = True
+            with User(request.user) as user:
+                test_compiled = task.compile(user, answers)
+                request.session["compiled_tasks"][stask_id] = test_compiled.as_JSON()
+                request.session.modified = True
 
-            if test_compiled.ltc.check():
-                user.solve(
-                    task,
-                    compiled_task.ltc.mask_answer_dict(answers),
-                    Verdicts.OK,
-                )
-                return redirect(request.path)
-            user.solve(task, answers, Verdicts.WRONG_ANSWER)
-        return redirect(request.path)
+                if test_compiled.ltc.check():
+                    user.solve(
+                        task,
+                        compiled_task.ltc.mask_answer_dict(answers),
+                        Verdicts.OK,
+                    )
+                    return redirect(request.path)
+                user.solve(task, answers, Verdicts.WRONG_ANSWER)
+            return redirect(request.path)
     
     additional_render_args["unraveled_categories"] = request.session.get("active_ids")
     additional_render_args["title"] = task.work.name + "; " + task.name
