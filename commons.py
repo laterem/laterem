@@ -94,6 +94,9 @@ class DBHybrid(Hybrid):
     def id(self):
         return self.dbmodel.id
     
+    def __hash__(self):
+        return hash(self.id)
+
     def delete(self):
         self.dbmodel.delete()
 
