@@ -233,7 +233,10 @@ class Work(DBHybrid):
     
     def add_task(self, name, task_type):
         if isinstance(task_type, str):
-            task_type = TaskTemplate.by_id(int(task_type[len('ID'):task_type.find('-')])) 
+            if '-' in task_type:
+                task_type = TaskTemplate.by_id(int(task_type[len('ID'):task_type.find('-')]))
+            else:
+                task_type = TaskTemplate.by_id(int(task_type[len('ID'):]))
 
         last_order = LateremTask.objects.aggregate(Max('order'))['order__max']
 

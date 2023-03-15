@@ -22,7 +22,6 @@ class SolutionView:
             return func
         return deco
 
-
     def __init__(self, work, group):
         self.work = work
         self.group = group
@@ -39,6 +38,8 @@ class SolutionView:
     def view(self, group_by='none', filters=None,):
         from .users import User
         from .tasks import Task
+        if filters is None:
+            filters = []
         obj = {}
         all_solutions = self.work.get_answers(self.group)
         if group_by == 'none':
