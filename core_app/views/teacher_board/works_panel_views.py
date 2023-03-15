@@ -162,6 +162,8 @@ def manage_task_in_work(request, task_id):
 
     work = task.work
 
+    #work.reorder(task, 0)
+
     if request.method == "POST":
         if "task-name" in request.POST:
             task_name = request.POST.get("task-name")
