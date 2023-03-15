@@ -1,5 +1,7 @@
 from core_app.views.views_commons import *
 
+from django.db import IntegrityError
+
 @permission_required("can_manage_users")
 def users_panel(request):
     general_POST_handling(request)
@@ -41,7 +43,10 @@ def users_panel(request):
                             # Таблица некорректная, оповестить пользователя
                             break
                         # Добавить проверку корректности данных
-                        User.create(**dict(zip(keys, args)))
+                        try:
+                            User.create(**dict(zip(keys, args)))
+                        except IntegrityError:
+                            continue
                 except UnicodeDecodeError:
                     pass # Отправлен странный файл, оповестить пользователя
         else:
