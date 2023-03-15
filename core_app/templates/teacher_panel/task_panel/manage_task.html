@@ -29,7 +29,7 @@
                         <p>LTC</p>                    
                     </div>
                     <div style="grid-column: 2;">
-                        <button type="submit" name="edit_data" class="edit-ltc-confirm button-icon" style="display: none;"><div style="width: 2em; padding: 0;">{% include "icons/pencil-icon.html" %}</div>Подтвердить</button>
+                        <button type="submit" name="edit_ltc" class="edit-ltc-confirm button-icon" style="display: none;"><div style="width: 2em; padding: 0;">{% include "icons/pencil-icon.html" %}</div>Подтвердить</button>
                         <button type="button" id="edit_button" class="edit-ltc-undo button-icon" onclick="data_edit(this)" style="display: none;"><div style="width: 2em; padding: 0;">{% include "icons/undo-icon.html" %}</div>Отменить</button>
                         <button type="button" id="edit_button" class="edit-ltc-edit button-icon" onclick="data_edit(this)" style="display: inline-flex;"><div style="width: 2em; padding: 0;">{% include "icons/pencil-icon.html" %}</div>Редактировать</button>
                     </div>
@@ -38,6 +38,7 @@
                     </div>
                 </div>
                 <textarea
+                    disabled="true"
                     placeholder="Enter HTML Source Code"
                     id="ltc-editing"
                     spellcheck="false"
@@ -58,7 +59,7 @@
                         <p>HTML</p>                    
                     </div>
                     <div style="grid-column: 2;">
-                        <button type="submit" name="edit_data" class="edit-html-confirm button-icon" style="display: none;"><div style="width: 2em; padding: 0;">{% include "icons/pencil-icon.html" %}</div>Подтвердить</button>
+                        <button type="submit" name="edit_html" class="edit-html-confirm button-icon" style="display: none;"><div style="width: 2em; padding: 0;">{% include "icons/pencil-icon.html" %}</div>Подтвердить</button>
                         <button type="button" id="edit_button" class="edit-html-undo button-icon" onclick="data_edit(this)" style="display: none;"><div style="width: 2em; padding: 0;">{% include "icons/undo-icon.html" %}</div>Отменить</button>
                         <button type="button" id="edit_button" class="edit-html-edit button-icon" onclick="data_edit(this)" style="display: inline-flex;"><div style="width: 2em; padding: 0;">{% include "icons/pencil-icon.html" %}</div>Редактировать</button>
                     </div>
@@ -67,6 +68,7 @@
                     </div>
                 </div>
                 <textarea
+                    disabled="true"
                     placeholder="Enter HTML Source Code"
                     id="html-editing"
                     spellcheck="false"
