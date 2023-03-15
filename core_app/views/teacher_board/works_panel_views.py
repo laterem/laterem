@@ -162,6 +162,8 @@ def manage_task_in_work(request, task_id):
 
     work = task.work
 
+    #work.reorder(task, 0)
+
     if request.method == "POST":
         if "task-name" in request.POST:
             task_name = request.POST.get("task-name")
@@ -202,6 +204,17 @@ def show_work_stats(request, work_id, group_id):
         raise Http404('Group not found')
 
     group_answers = work.get_answers(group=group)
+
+    view = SolutionView(work, group)
+    print(view.view_jsonconf(
+        {
+            'filters': [
+                ['user', 1],
+                ['task', 4]
+            ],
+            'group_by': 'verdict'
+        }
+    ))
 
     return render(
         request,

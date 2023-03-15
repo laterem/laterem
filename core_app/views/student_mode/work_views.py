@@ -2,6 +2,26 @@ from core_app.views.views_commons import *
 
 from ltc.ltc import LTCExecutionError
 
+def ltc_error_page(request, task):
+    return render(
+            request,
+            "student.html",
+            render_args(
+                me=User(request.user),
+                request=request,
+                additional={
+                    "text": "Ой!",
+                    "text2": f"Что-то пошло не так при попытке открыть задание {task.name} ({task.id}) " 
+                             f"типа {task.template.name} ({task.template.id}) из работы {task.work.name} ({task.work.id}). " 
+                             f"Если эта ошибка повторяется, сообщите об этом вашему учителю или "
+                             f"заполните форму сообщениия об ошибке администрации сайта, "
+                             f"нажав на большую красную кнопку выше, прикрепив к сообщению содержание этого текста."
+                             ,
+                    "unraveled_categories": request.session.get("active_ids")
+                },
+            ),
+        )
+
 # Рендер страницы работы
 @login_required
 def render_work(request, work_id):
@@ -45,24 +65,7 @@ def task_view(request, stask_id):
                 request.session["compiled_tasks"][stask_id]
             )
     except LTCExecutionError:
-        return render(
-            request,
-            "student.html",
-            render_args(
-                me=User(request.user),
-                request=request,
-                additional={
-                    "text": "Ой!",
-                    "text2": f"Что-то пошло не так при попытке открыть задание {task.name} ({task.id}) " 
-                             f"типа {task.template.name} ({task.template.id}) из работы {task.work.name} ({task.work.id}). " 
-                             f"Если эта ошибка повторяется, сообщите об этом вашему учителю или "
-                             f"заполните форму сообщениия об ошибке администрации сайта, "
-                             f"нажав на большую красную кнопку выше, прикрепив к сообщению содержание этого текста."
-                             ,
-                    "unraveled_categories": request.session.get("active_ids")
-                },
-            ),
-        )
+        return ltc_error_page(request, task)
 
     if request.method == "POST":
         # print(request.POST)
@@ -77,23 +80,28 @@ def task_view(request, stask_id):
                 return redirect("/task/" + l_task_id)
 
         # Анализ ответа
-        answers = dict(request.POST)
-        del answers['csrfmiddlewaretoken']
+        if "check_answers" in request.POST:
+            answers = dict(request.POST)
+            del answers['csrfmiddlewaretoken']
+           # del answers['active_ids']
 
-        with User(request.user) as user:
-            test_compiled = task.compile(user, answers)
-            request.session["compiled_tasks"][stask_id] = test_compiled.as_JSON()
-            request.session.modified = True
+            with User(request.user) as user:
+                try:
+                    test_compiled = task.compile(user, answers)
+                    request.session["compiled_tasks"][stask_id] = test_compiled.as_JSON()
+                    request.session.modified = True
 
-            if test_compiled.ltc.check():
-                user.solve(
-                    task,
-                    compiled_task.ltc.mask_answer_dict(answers),
-                    Verdicts.OK,
-                )
-                return redirect(request.path)
-            user.solve(task, answers, Verdicts.WRONG_ANSWER)
-        return redirect(request.path)
+                    if test_compiled.ltc.check():
+                        user.solve(
+                            task,
+                            compiled_task.ltc.mask_answer_dict(answers),
+                            Verdicts.OK,
+                        )
+                        return redirect(request.path)
+                    user.solve(task, answers, Verdicts.WRONG_ANSWER)
+                except LTCExecutionError:
+                    return ltc_error_page(request, task)
+            return redirect(request.path)
     
     additional_render_args["unraveled_categories"] = request.session.get("active_ids")
     additional_render_args["title"] = task.work.name + "; " + task.name

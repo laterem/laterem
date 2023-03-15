@@ -25,7 +25,7 @@
         {% endif %}
         <div style="text-align: left;" id="task-area">
             {% include task.view_path %}
-            <button type="submit" class="button">Проверить</button>
+            <button type="submit" name="check_answers" class="button">Проверить</button>
         </div>
     </form>
     <script src="{% static 'js/navtree-state-saver.js' %}?{% cache_bust %}"></script>

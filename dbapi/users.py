@@ -1,5 +1,4 @@
 from context_objects import USER_DEFAULT_SETTINGS
-from .solutions import Verdicts, Solution, NASolution
 from .tasks import Work
 from .groups import Group
 from core_app.models import LateremAssignment, LateremUser, LateremGroup, LateremWork, LateremSolution
@@ -66,6 +65,7 @@ class User(DBHybrid):
         return False
 
     def get_task_solution(self, task):
+        from .solutions import Solution, NASolution
         solutions = LateremSolution.objects.filter(user=self.dbmodel,
                                                    task=task.dbmodel,
                                                   )
@@ -92,6 +92,7 @@ class User(DBHybrid):
             return USER_DEFAULT_SETTINGS[setting]
 
     def get_work_stats(self, work, normalize=False):
+        from .solutions import Verdicts
         tasks = work.tasks()
         na = 0
         wa = 0
