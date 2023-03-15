@@ -703,7 +703,7 @@ div#task-table {
 .group-table-element, .user-table-element,
 .all-groups-table-element, .work-table-element,
 .task-table-element, #work-stats-table *,
-#task-field-table * {
+#task-field-table *, #groups-in-work-table * {
     display: flex;
     padding: 5px;
     border-collapse: collapse;
@@ -716,6 +716,7 @@ div#task-table {
 .all-groups-table-element:nth-of-type(2n+1),
 .work-table-element:nth-of-type(6n+1), .work-table-element:nth-of-type(6n+2),
 .work-table-element:nth-of-type(6n+3),
+#groups-in-work-table *:nth-of-type(2n+1),
 #work-stats-table *:nth-of-type(10n+1), #work-stats-table *:nth-of-type(10n+2),
 #work-stats-table *:nth-of-type(10n+3), #work-stats-table *:nth-of-type(10n+4),
 #work-stats-table *:nth-of-type(10n+5),
@@ -734,7 +735,7 @@ div#task-table {
 div#user-table-header, div#group-table-header,
 div#all-groups-table-header, div#work-table-header,
 div#task-table-header, div#work-stats-table-header,
-div#task-field-table-header {
+div#task-field-table-header, div#groups-in-work-table-header {
     display: grid;
     border-radius: 10px 10px 0 0;
     overflow: hidden;
@@ -745,6 +746,10 @@ div#task-field-table-header {
     margin-left: 10px;
     grid-template-columns: auto max-content max-content;
     border-bottom: 0;
+}
+
+div#work-stats-table-header {
+    grid-template-columns: repeat(2, auto);
 }
 
 div#user-table-header, div#user-table,
@@ -764,7 +769,7 @@ div#task-field-table, div#task-field-table-header {
 }
 
 div#group-table, div#work-table,
-div#work-stats-table{
+div#work-stats-table, div#groups-in-work-table {
     display: grid; 
     grid-template-columns: auto auto 40px 40px;
     
@@ -789,6 +794,10 @@ div#work-stats-table {
 
 div#task-field-table {
     grid-template-columns: repeat(2, auto);
+}
+
+div#groups-in-work-table {
+    grid-template-columns: auto;
 }
 
 div#task-manage-table {
@@ -851,7 +860,8 @@ div#task-manage-table-column-header * {
 }
 
 #group-table-header *, #work-table-header *,
-#work-stats-table-header *, #task-field-table-header * {
+#work-stats-table-header *, #task-field-table-header *,
+#groups-in-work-table-header * {
     display: flex;
     align-items: center;
     padding: 4px;

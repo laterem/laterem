@@ -6,48 +6,51 @@
         {% csrf_token %}
         <div style="display: grid; grid-template-columns: auto max-content; align-items: center;">
             <div style="grid-column: 1;">
-                <div style="grid-column: 1;"><input value="{{work.name}}" disabled="true" style="font-size: larger;" id="work_name" name="work_name" class="work-name"/><button type="submit" name="edit_data" style="visibility: hidden;"></button></div>
+                <div style="grid-column: 1;">
+                    <input value="{{work.name}}" disabled="true" style="font-size: larger;" id="work_name" name="work_name" class="work-name"/>
+                    <button type="submit" name="edit_data" style="visibility: hidden;"></button>
+                    <input type="text" name="group_name" value="{{ group.name }}" disabled="true" style="font-size: larger;" class="group-info"/>
+                </div>
             </div>
             <button type="button" id="edit_data" name="edit_data" style="grid-column: 2;" class="work-name button-icon" onclick="data_edit(this)"><div style="width: 2em; padding: 0;">{% include "icons/pencil-icon.html" %}</div></button>
         </div>
         <p>ID: {{work.id}}</p>
-        <button type="button" id="appoint" name="appoint" onclick="
-                is_blackout = !is_blackout;
-                if (is_blackout) {
-                    document.getElementById('appoint-work').style.display = 'block';
-                    document.getElementById('blackout').style.display = 'block';
-                } else {
-                    document.getElementById('appoint-work').style.display = 'none';
-                    document.getElementById('blackout').style.display = 'none';
-                };
-            ">Назначить группе</button>
     </form>
-
-    {% for name, answers in group_answers %}
-        <div id="work-stats-table-header">
-            <div style="grid-column: 1;"><span style="font-size: larger;">{{ name }}</span></div>
+    <div id="work-stats-table-header">
+        <div style="grid-column: 1;">
+            <span>Сортировка: </span>
+            <select name="sort">
+                <option selected="selected">Нет</option>
+                <option>По времени сдачи</option>
+                <option>По вердикту проверки</option>
+                <option>По задаче</option>
+            </select>
         </div>
-        <div id="work-stats-table">
-            <!-- Ученик | Задача | Вердикт | Ответ ученика | Правильный ответ -->
-            {% for log in answers %}
-                <div style="grid-column: 1;">
-                    {{ log.user.email }}
-                </div>
-                <div style="grid-column: 2;">
-                    {{ log.task.name }}
-                </div>
-                <div style="grid-column: 3;">
-                    {{ log.verdict }}
-                </div>
-                <div style="grid-column: 4;">
-                    {% for key, val in log.items_answers %}
-                        {{ key }}: {{ val }} <br/>
-                    {% endfor %}
-                </div>
-                 <div style="grid-column: 5;">
-                    <!-- {{ log.correct_answer }} -->
-                </div> 
-            {% endfor %}
+        <div style="grid-column: 2;">
+            <span>Фильтры: </span>
+            <button name="add-filter" class="button-icon" type="button">+</button>
         </div>
-    {% endfor %}
+    </div>
+    <div id="work-stats-table">
+        <!-- Ученик | Задача | Вердикт | Ответ ученика | Правильный ответ -->
+        {% for log in group_answers %}
+            <div style="grid-column: 1;">
+                {{ log.user.email }}
+            </div>
+            <div style="grid-column: 2;">
+                {{ log.task.name }}
+            </div>
+            <div style="grid-column: 3;">
+                {{ log.verdict }}
+            </div>
+            <div style="grid-column: 4;">
+                {% for key, val in log.items_answers %}
+                    {{ key }}: {{ val }} <br/>
+                {% endfor %}
+            </div>
+                <div style="grid-column: 5;">
+                <!-- {{ log.correct_answer }} -->
+            </div> 
+        {% endfor %}
+    </div>
 {% endblock %}

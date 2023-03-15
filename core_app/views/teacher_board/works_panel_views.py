@@ -136,6 +136,10 @@ def manage_work(request, work_id):
     for group in User(request.user).groups():
         if work not in group.get_works():
             groups_to_appoint.append((group.id, group.name))
+    appointed_groups = list()
+    for group in User(request.user).groups():
+        if work in group.get_works():
+            appointed_groups.append(group)
     return render(
         request,
         "teacher_panel/work_panel/work_manage.html",
@@ -143,7 +147,7 @@ def manage_work(request, work_id):
             meta_all_task_types_available=True,
             me=User(request.user),
             request=request,
-            additional={"title": "Работа " + work.name, "work": work, "groups_to_appoint": groups_to_appoint},
+            additional={"title": "Работа " + work.name, "work": work, "groups_to_appoint": groups_to_appoint, "appointed_groups": appointed_groups},
         ),
     )
 
@@ -185,15 +189,19 @@ def manage_task_in_work(request, task_id):
 
 
 @permission_required("can_manage_works")
-def show_work_stats(request, work_id):
+def show_work_stats(request, work_id, group_id):
     general_POST_handling(request)
     try:
         work = Work.by_id(work_id)
     except LateremNotFound:
         raise Http404('Work not found')
 
-    group_answers_pair = [(group.name, work.get_answers(group=group)) for group in work.groups()]
+    try:
+        group = Group.by_id(group_id)
+    except LateremNotFound:
+        raise Http404('Group not found')
 
+    group_answers = work.get_answers(group=group)
 
     return render(
         request,
@@ -207,7 +215,8 @@ def show_work_stats(request, work_id):
             additional={
                 "title": "Статистика по работе " + work.name,
                 "work": work,
-                "group_answers": group_answers_pair
+                "group": group,
+                "group_answers": group_answers
             },
         ),
     )
