@@ -20,7 +20,13 @@
                 <button type="button" id="edit_button" class="edit-task-name-edit button-icon" onclick="data_edit(this)" style="display: inline-flex;"><div style="width: 2em; padding: 0;">{% include "icons/pencil-icon.html" %}</div>Редактировать</button>
                 <button type="button" class="button-icon" onclick="disp_dialog($('#delete-task-confirm'))"><div style="width: 2em; padding: 0;">{% include "icons/delete-icon.html" %}</div><span>Удалить</span></button>
             </div>
-            <p>ID: {{ task.id }}</p>
+            <p>ID: {{ task.id }}
+            </p>
+            <!-- ЖУРА почини сделай красиво пж -->
+            <br>
+            {% if notification %}
+                <div> {{ notification }} </div>
+            {% endif %}
         </div>
         <div id="task-manage-table">
             <div style="grid-column: 1;" class="highlighted">

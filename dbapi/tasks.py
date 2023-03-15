@@ -83,12 +83,28 @@ class TaskTemplate(DBHybrid):
     @property
     def ltc_path(self):
         return pathjoin(TASK_UPLOAD_PATH, str(self), 'config.ltc')
+
+    def write_ltc(self, text, check_errors=True):
+        if check_errors:
+            ltcc = LTCCompiler()
+            try:
+                ltc = ltcc.compile(text.splitlines())
+                ltc.execute(metadata=LTCFakeMetadata())
+            except (LTCCompileError, LTCError, LTCExecutionError) as e:
+                raise TaskTemplateValidationFailed(str(e))
+        with self.open_ltc(mode='w') as dest:
+            dest.write(text.replace('\n', ""))
     
-    def open_view(self):
-        return open(self.view_path_absolute, encoding='UTF-8')
+    def write_html(self, text):
+        print(text)
+        with self.open_view(mode='w') as dest:
+            dest.write(text.replace('\n', ""))
     
-    def open_ltc(self):
-        return open(self.ltc_path, encoding='UTF-8')
+    def open_view(self, **kwargs):
+        return open(self.view_path_absolute, encoding='UTF-8', **kwargs)
+    
+    def open_ltc(self, **kwargs):
+        return open(self.ltc_path, encoding='UTF-8', **kwargs)
     
     def identificator(self):
         return slugify(f'ID{self.dbmodel.id}-{transliterate_ru_en(self.dbmodel.birthname)}')

@@ -61,6 +61,13 @@ def manage_task(request, task_id):
         raise Http404('Task not found')
     me = User(request.user)
 
+    with open(task.ltc_path, "r", encoding="utf-8") as f:
+        ltc_text = f.read()
+
+    with open(task.view_path_absolute, "r", encoding="utf-8") as f:
+        html_text = f.read()
+
+
     if request.method == "POST":
         if "delete_task" in request.POST:
             TaskTemplate.delete(task_id)
@@ -81,13 +88,34 @@ def manage_task(request, task_id):
             resp = FileResponse(open(task.view_path_absolute, "rb"))
             resp['Content-Disposition'] = f'attachment; filename="{asciify(task.name.strip())}-view.html"'
             return resp
+
+
+        
+
+        if "edit_ltc" in request.POST:
+            try:
+                task.write_ltc(request.POST.get("ltc_text"))
+            except TaskTemplateValidationFailed as e:
+                return render(
+                        request,
+                        "teacher_panel/task_panel/manage_task.html",
+                        render_args(
+                            request=request,
+                            additional={
+                                "title": "Шаблон " + task.name,
+                                "task": task,
+                                "notification": f"Задача вызывает ошибку компиляции: {str(e)}",
+                                "ltc_text": ltc_text,
+                                "html_text": html_text
+                            },
+                        ),
+                    )
+            return redirect(request.path)
+
+        if "edit_html" in request.POST:
+            task.write_html(request.POST.get("html_text"))
+            return redirect(request.path)
     
-    with open(task.ltc_path, "r", encoding="utf-8") as f:
-        ltc_text = f.read()
-
-    with open(task.view_path_absolute, "r", encoding="utf-8") as f:
-        html_text = f.read()
-
     return render(
         request,
         "teacher_panel/task_panel/manage_task.html",
