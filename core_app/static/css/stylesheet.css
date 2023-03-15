@@ -72,6 +72,10 @@ input {
     background-color: white !important;
 }
 
+input.file-input {
+    background-color: transparent !important;
+}
+
 /* Блоки */
 aside#menu, aside#content {
     position: absolute;
@@ -176,14 +180,19 @@ aside#content {
     background: var(--content-background-color);
 }
 
-div#content {
+div#work_content, div#content {
     position: absolute;
     top: 0;
+    left: 0;
+    right: 0;
     bottom: 0;
-    left: calc(5% + 5px);
-    right: calc(5% + 5px);
 
     padding: 10px;
+}
+
+div#work_content {
+    left: calc(5% + 5px);
+    right: calc(5% + 5px);
     padding-bottom: 35px;
 }
 
@@ -804,6 +813,7 @@ div#task-manage-table {
     position: absolute;
     display: grid;
     grid-template-columns: calc(50% - 5px) 10px calc(50% - 5px);
+    align-items: baseline;
     overflow: hidden;
 
     border-radius: 10px;
@@ -824,11 +834,10 @@ div#task-manage-table {
     padding: 0px;
 }
 
-#task-manage-table div:nth-of-type(2n + 1) {
+#task-manage-table div.highlighted {
     border-radius: 10px;
     padding: 5px;
-
-    overflow: scroll;
+    height: calc(100% - 10px);
 
     background-color: var(--content-hover-color);
 }
@@ -837,12 +846,13 @@ div#task-manage-table {
     overflow: hidden;
     padding: 0px;
     border-radius: 0px;
+    height: fit-content;
 }
 
 div#task-manage-table-column-header {
     position: sticky;
     display: grid;
-    grid-template-columns: auto min-content;
+    grid-template-columns: auto max-content min-content;
 
     overflow: hidden;
 
@@ -856,6 +866,10 @@ div#task-manage-table-column-header {
 }
 
 div#task-manage-table-column-header * {
+    margin: 0 0 0 10px;
+}
+
+div#task-manage-table-column-header * * {
     margin: 0;
 }
 
@@ -1035,3 +1049,202 @@ button:focus {
   border: 1px solid #323a44;
   margin: 10px 5px 0 0;
 }
+
+/* text highlighting src: https://css-tricks.com/creating-an-editable-textarea-that-supports-syntax-highlighted-code/ */
+
+#ltc-editing, #html-editing,
+#ltc-highlighting, #html-highlighting {
+    /* Both elements need the same text and space styling so they are directly on top of each other */
+    margin: 10px;
+    padding: 10px;
+    border: 0;
+    width: calc(50% - 45px);
+    height: calc(100% - 80px);
+}
+#ltc-editing, #html-editing,
+#ltc-highlighting, #html-highlighting,
+#ltc-highlighting *, #html-highlighting * {
+    /* Also add text styles to highlighing tokens */
+    font-size: 15pt;
+    font-family: monospace;
+    line-height: 20pt;
+    tab-size: 2;
+}
+
+
+#ltc-editing, #ltc-highlighting {
+    /* In the same place */
+    position: absolute;
+    padding-top: 10px;
+    left: 0;
+}
+
+#html-editing, #html-highlighting {
+    /* In the same place */
+    position: absolute;
+    top: 25px;
+    left: calc(50% + 10px);
+}
+
+
+/* Move the textarea in front of the result */
+
+#ltc-editing, #html-editing {
+    z-index: 1;
+}
+#ltc-highlighting, #html-highliting {
+    z-index: 0;
+}
+
+
+/* Make textarea almost completely transparent */
+
+#ltc-editing, #html-editing {
+    color: transparent;
+    background: transparent;
+    caret-color: white; /* Or choose your favourite color */
+}
+
+/* Can be scrolled */
+#ltc-editing, #html-editing,
+#ltc-highlighting, #html-highlighting {
+    overflow: auto;
+    white-space: nowrap; /* Allows textarea to scroll horizontally */
+}
+
+/* No resize on textarea */
+#ltc-editing, #html-editing {
+    resize: none;
+    white-space: pre;
+}
+
+/* Syntax Highlighting from prism.js starts below, partly modified: */
+
+/* PrismJS 1.23.0
+https://prismjs.com/download.html#themes=prism-funky&languages=markup */
+/**
+* prism.js Funky theme
+* Based on “Polyfilling the gaps” talk slides http://lea.verou.me/polyfilling-the-gaps/
+* @author Lea Verou
+*/
+
+code[class*="language-"],
+pre[class*="language-"] {
+    font-family: Consolas, Monaco, 'Andale Mono', 'Ubuntu Mono', monospace;
+    font-size: 1em;
+    text-align: left;
+    white-space: pre;
+    word-spacing: normal;
+    word-break: normal;
+    word-wrap: normal;
+    line-height: 1.5;
+
+    -moz-tab-size: 4;
+    -o-tab-size: 4;
+    tab-size: 4;
+
+    -webkit-hyphens: none;
+    -moz-hyphens: none;
+    -ms-hyphens: none;
+    hyphens: none;
+}
+
+/* Code blocks */
+pre[class*="language-"] {
+    padding: .4em .8em;
+    margin: .5em 0;
+    overflow: auto;
+    /* background: url('data:image/svg+xml;charset=utf-8,<svg%20version%3D"1.1"%20xmlns%3D"http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg"%20width%3D"100"%20height%3D"100"%20fill%3D"rgba(0%2C0%2C0%2C.2)">%0D%0A<polygon%20points%3D"0%2C50%2050%2C0%200%2C0"%20%2F>%0D%0A<polygon%20points%3D"0%2C100%2050%2C100%20100%2C50%20100%2C0"%20%2F>%0D%0A<%2Fsvg>');
+    background-size: 1em 1em; - WebCoder49*/
+}
+
+/* Inline code */
+:not(pre) > code[class*="language-"] {
+    padding: .2em;
+    border-radius: .3em;
+    box-shadow: none;
+    white-space: normal;
+}
+
+.token.comment,
+.token.prolog,
+.token.doctype,
+.token.cdata {
+    color: #aaa;
+}
+
+.token.punctuation {
+    color: #999;
+}
+
+.token.namespace {
+    opacity: .7;
+}
+
+.token.property,
+.token.tag,
+.token.boolean,
+.token.number,
+.token.constant,
+.token.symbol {
+    color: #0cf;
+}
+
+.token.selector,
+.token.attr-name,
+.token.string,
+.token.char,
+.token.builtin {
+    color: yellow;
+}
+
+.token.operator,
+.token.entity,
+.token.url,
+.language-css .token.string,
+.token.variable,
+.token.inserted {
+    color: yellowgreen;
+}
+
+.token.atrule,
+.token.attr-value,
+.token.keyword {
+    color: deeppink;
+}
+
+.token.regex,
+.token.important {
+    color: orange;
+}
+
+.token.important,
+.token.bold {
+    font-weight: bold;
+}
+.token.italic {
+    font-style: italic;
+}
+
+.token.entity {
+    cursor: help;
+}
+
+.token.deleted {
+    color: red;
+}
+
+/* Plugin styles: Diff Highlight */
+pre.diff-highlight.diff-highlight > code .token.deleted:not(.prefix),
+pre > code.diff-highlight.diff-highlight .token.deleted:not(.prefix) {
+    background-color: rgba(255, 0, 0, .3);
+    display: inline;
+}
+
+pre.diff-highlight.diff-highlight > code .token.inserted:not(.prefix),
+pre > code.diff-highlight.diff-highlight .token.inserted:not(.prefix) {
+    background-color: rgba(0, 255, 128, .3);
+    display: inline;
+}
+
+/* End of prism.js syntax highlighting*/

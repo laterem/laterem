@@ -33,7 +33,7 @@
     </div>
 {% endfor %}
 </div>
-<button id="blackout" style="display: none;" onclick="disp_dialog($('#disp_dialog'))"></button>
+<button id="blackout" style="display: none;" onclick="disp_dialog([$('#delete-task-confirm'), $('#add-task')])"></button>
 {% include "./add_task.html" %}
 <form method="post">
     {% csrf_token %}
