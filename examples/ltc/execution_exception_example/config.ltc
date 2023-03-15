@@ -1,4 +1,4 @@
->formula = '(!A&B) | (C|!B)'
+export formula = '(!A&B) | (C|!B)'
 available_op_1 = 'NOT'
 available_op_2 = 'OR'
 
@@ -6,7 +6,7 @@ test = BooleanFormulaOperators(answer)
 
 a = Divide(42, 0)
 
-answer?IsBooleanIdentical(formula)
-test?Equal([available_op_1, available_op_2])
+check IsBooleanIdentical($answer, formula)
+check Equal(test, [available_op_1, available_op_2])
 
 # Ответ: (C|!A|!B)

@@ -5,4 +5,4 @@ a_2 = ConvertBase(a_10, 10, 2, 1)
 b_2 = ConvertBase(b_10, 10, 2, 1)
 s_2 = ConvertBase(s_10, 10, 2, 1)
 
-answer?Equal(s_2)
+check Equal($answer, s_2)

@@ -205,17 +205,6 @@ def show_work_stats(request, work_id, group_id):
 
     group_answers = work.get_answers(group=group)
 
-    view = SolutionView(work, group)
-    print(view.view_jsonconf(
-        {
-            'filters': [
-                ['user', 1],
-                ['task', 4]
-            ],
-            'group_by': 'verdict'
-        }
-    ))
-
     return render(
         request,
         "teacher_panel/work_panel/work_stats.html",

@@ -86,8 +86,9 @@ def task_view(request, stask_id):
            # del answers['active_ids']
 
             with User(request.user) as user:
+                dollar_answers = {'$' + key: value for key, value in answers.items()}
                 try:
-                    test_compiled = task.compile(user, answers)
+                    test_compiled = task.compile(user, dollar_answers)
                     request.session["compiled_tasks"][stask_id] = test_compiled.as_JSON()
                     request.session.modified = True
 
@@ -105,7 +106,7 @@ def task_view(request, stask_id):
     
     additional_render_args["unraveled_categories"] = request.session.get("active_ids")
     additional_render_args["title"] = task.work.name + "; " + task.name
-    additional_render_args.update(compiled_task.ltc.field_table)
+    additional_render_args.update(compiled_task.ltc.namespace)
     return render(
         request,
         "work_base.html",

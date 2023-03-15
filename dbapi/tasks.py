@@ -5,7 +5,7 @@ from os.path import join as pathjoin
 import json
 from ltc.ltc import LTCCompiler, LTC, LTCMetadataManager, LTCFakeMetadata, LTCError, LTCCompileError, LTCExecutionError
 from context_objects import TASK_SCANNER, TASK_UPLOAD_PATH, TASK_VIEW_UPLOAD_PATH, LTC_DEFAULT_EXPORT_VALUE
-from commons import DBHybrid, NotSpecified, transliterate_ru_en
+from commons import DBHybrid, NotSpecified, transliterate_ru_en, read_text_file
 from core_app.models import LateremGroup, LateremUser, LateremSolution, LateremTask, LateremCategory, LateremWork, LateremTaskTemplate
 from shutil import rmtree
 
@@ -29,12 +29,10 @@ class TaskTemplate(DBHybrid):
         dbobj_created = False
         try:    
             if check_errors:
-                ltcfile = config.read().decode()
-                htmlfile = view.read().decode()
                 ltcc = LTCCompiler()
                 try:
-                    ltc = ltcc.compile(ltcfile)
-                    ltc.feed_html(htmlfile)
+                    ltcfile : str = read_text_file(config)
+                    ltc = ltcc.compile(map(lambda x: x.decode(), ltcfile))
                     #ltc.execute(metadata=LTCFakeMetadata())
                 except (LTCCompileError, LTCError, LTCExecutionError) as e:
                     raise TaskTemplateValidationFailed(str(e))
@@ -48,9 +46,9 @@ class TaskTemplate(DBHybrid):
 
             path = pathjoin(TASK_UPLOAD_PATH, tt.identificator())
             os.makedirs(path)
+            config.seek(0)
             with open(pathjoin(path, "config.ltc"), "wb+") as dest:
-                for chunk in config.chunks():
-                    dest.write(chunk)
+                dest.writelines(read_text_file(config))
             with open(pathjoin(TEMPLATES_VIEW_PATH, f"{tt}.html"), "wb+") as dest:
                 for chunk in view.chunks():
                     dest.write(chunk)
@@ -155,13 +153,11 @@ class Task(DBHybrid):
             answers = {key: (value if (len(value) - 1) else value[0])
                        for key, value in answers.items()}
         with open(self.template.ltc_path, mode='r', encoding='UTF-8') as f:
-            data = f.read()
+            data = f.readlines()
         ltcc = LTCCompiler()
         ltc = ltcc.compile(data)
         extend_ns = self.field_overrides
         extend_ns.update(answers)
-        with self.template.open_view() as io:
-            ltc.feed_html(io.read())
         metadata = self.generate_metadata(user)
         ltc.execute(extend_ns, metadata)
         
@@ -171,8 +167,8 @@ class Task(DBHybrid):
     def update_exporting_fields(self):
         compiled = self.compile()
         exporting_fields = {key: (LTC_DEFAULT_EXPORT_VALUE 
-                                  if key not in compiled.ltc.field_table 
-                                  else compiled.ltc.field_table[key])
+                                  if key not in compiled.ltc.namespace 
+                                  else compiled.ltc.namespace[key])
                             for key in compiled.ltc.exporting_fields
                             if key not in self.field_overrides}
         self.set_field_overrides(exporting_fields, mask=False)
@@ -239,6 +235,7 @@ class Work(DBHybrid):
                 task_type = TaskTemplate.by_id(int(task_type[len('ID'):]))
 
         last_order = LateremTask.objects.aggregate(Max('order'))['order__max']
+        last_order = last_order or 0
 
         task = Task(LateremTask.objects.create(name=name,
                                                task_type=task_type.dbmodel,
