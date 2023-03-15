@@ -1,6 +1,6 @@
 // src: https://css-tricks.com/creating-an-editable-textarea-that-supports-syntax-highlighted-code/
 function update(element) {
-    var text = element.value;
+    let text = element.value;
     let id = element.id;
     let element_prefix = id.slice(0, id.indexOf('-') + 1);
     let result_element = document.querySelector("#" + element_prefix + "highlighting-content");
@@ -15,8 +15,10 @@ function update(element) {
   }
   
   function sync_scroll(element) {
+    let id = element.id;
+    let element_prefix = id.slice(0, id.indexOf('-') + 1);
     /* Scroll result to scroll coords of event - sync with textarea */
-    let result_element = document.querySelector("#highlighting");
+    let result_element = document.querySelector("#" + element_prefix + "highlighting");
     // Get and set x and y
     result_element.scrollTop = element.scrollTop;
     result_element.scrollLeft = element.scrollLeft;

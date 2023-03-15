@@ -813,6 +813,7 @@ div#task-manage-table {
     position: absolute;
     display: grid;
     grid-template-columns: calc(50% - 5px) 10px calc(50% - 5px);
+    align-items: baseline;
     overflow: hidden;
 
     border-radius: 10px;
@@ -836,8 +837,7 @@ div#task-manage-table {
 #task-manage-table div:nth-of-type(2n + 1) {
     border-radius: 10px;
     padding: 5px;
-
-    overflow: scroll;
+    height: calc(100% - 10px);
 
     background-color: var(--content-hover-color);
 }
@@ -846,6 +846,7 @@ div#task-manage-table {
     overflow: hidden;
     padding: 0px;
     border-radius: 0px;
+    height: fit-content;
 }
 
 div#task-manage-table-column-header {
@@ -1054,6 +1055,7 @@ button:focus {
     padding: 10px;
     border: 0;
     width: calc(50% - 45px);
+    height: calc(100% - 80px);
 }
 #ltc-editing, #html-editing,
 #ltc-highlighting, #html-highlighting,
@@ -1069,9 +1071,8 @@ button:focus {
 #ltc-editing, #ltc-highlighting {
     /* In the same place */
     position: absolute;
-    top: 10px;
+    padding-top: 10px;
     left: 0;
-    bottom: 0;
 }
 
 #html-editing, #html-highlighting {
@@ -1079,7 +1080,6 @@ button:focus {
     position: absolute;
     top: 25px;
     left: calc(50% + 10px);
-    bottom: 0;
 }
 
 
@@ -1102,17 +1102,16 @@ button:focus {
 }
 
 /* Can be scrolled */
-#ltc-editing, #html-editing {
-    overflow: hidden;
-}
+#ltc-editing, #html-editing,
 #ltc-highlighting, #html-highlighting {
-    overflow: visible;
+    overflow: auto;
     white-space: nowrap; /* Allows textarea to scroll horizontally */
 }
 
 /* No resize on textarea */
 #ltc-editing, #html-editing {
     resize: none;
+    white-space: pre;
 }
 
 /* Syntax Highlighting from prism.js starts below, partly modified: */
