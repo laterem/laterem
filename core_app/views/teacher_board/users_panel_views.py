@@ -65,8 +65,6 @@ def users_panel(request):
                     email = request.POST.get("user_email")
                     first_name = request.POST.get("user_name")
                     last_name = request.POST.get("user_lastname")
-                    print(email, first_name, last_name)
-                    print(request.POST)
 
                     if email and first_name and last_name:
                         user.email = email
@@ -79,7 +77,7 @@ def users_panel(request):
     form = NewUser()
     return render(
         request,
-        "teacher_panel/user_panel.html",
+        "teacher_panel/user_panel/user_panel.html",
         render_args(
             meta_all_users_available=True,
             request=request,

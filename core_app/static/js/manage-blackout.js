@@ -36,3 +36,11 @@ function disp_dialog(target) {
     };
     is_blackout = !is_blackout;
 };
+
+$(document).keyup(function(e) {
+    if (is_blackout) {
+        if (e.keyCode === 27) {
+            disp_dialog($('.dialog-table'));
+        };
+    };
+});

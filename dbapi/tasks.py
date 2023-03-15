@@ -1,4 +1,5 @@
 from django.utils.text import slugify
+from django.db.models import Max
 import os
 from os.path import join as pathjoin
 import json
@@ -113,8 +114,13 @@ class Task(DBHybrid):
     def field_overrides(self):
         return json.loads(self.dbmodel.field_overrides)
 
-    def set_field_overrides(self, overrides):
+    def set_field_overrides(self, overrides, mask=True, pick_first=False):
         cur = self.field_overrides
+        if mask:
+            overrides = {key: 
+                           (value if not pick_first else value[0])
+                         for key, value in overrides.items()
+                         if key in cur}
         cur.update(overrides)
         self.dbmodel.field_overrides = json.dumps(cur)
         self.modified = True
@@ -169,7 +175,7 @@ class Task(DBHybrid):
                                   else compiled.ltc.field_table[key])
                             for key in compiled.ltc.exporting_fields
                             if key not in self.field_overrides}
-        self.set_field_overrides(exporting_fields)
+        self.set_field_overrides(exporting_fields, mask=False)
 
 class CompiledTask():
     def __init__(self, ltc, view) -> None:
@@ -201,7 +207,8 @@ class Work(DBHybrid):
         super().__init__(dbobj)
     
     def tasks(self):
-        return [Task(x) for x in LateremTask.objects.filter(work=self.dbmodel)]
+        return sorted([Task(x) for x in LateremTask.objects.filter(work=self.dbmodel)],
+                      key=lambda x: x.dbmodel.order)
     
     def groups(self):
         from .groups import Group
@@ -228,9 +235,12 @@ class Work(DBHybrid):
         if isinstance(task_type, str):
             task_type = TaskTemplate.by_id(int(task_type[len('ID'):task_type.find('-')])) 
 
+        last_order = LateremTask.objects.aggregate(Max('order'))['order__max']
+
         task = Task(LateremTask.objects.create(name=name,
                                                task_type=task_type.dbmodel,
-                                               work=self.dbmodel))
+                                               work=self.dbmodel,
+                                               order=last_order+1))
         task.update_exporting_fields()
         task.close()
         task.dbmodel.save()
@@ -238,6 +248,16 @@ class Work(DBHybrid):
 
     def remove_task(self, task):
         task.dbmodel.delete()
+    
+    def reorder(self, task, new_order):
+        tasks = self.tasks()
+        tasks.remove(task)
+        tasks.insert(new_order, task)
+        for i, task in enumerate(tasks):
+            task.dbmodel.order = i
+            task.dbmodel.save()
+        print([t.name for t in tasks])
+
 
 class Category(DBHybrid):
     __dbmodel__ = LateremCategory

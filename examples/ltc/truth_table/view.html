@@ -1,0 +1,11 @@
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}});
+</script>
+<script type="text/javascript"
+src="http://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+<p> Логическая функция F задаётся выражением {{ function }}. Заполните таблицу истинности для функции F</p>
+{% with truth_table_id="truth_table_checks" truth_table_x=1 truth_table_y=1 truth_table_z=1 truth_table_w=1 %}
+    {% include "element_templates/truth_table.html" %}
+{% endwith %}

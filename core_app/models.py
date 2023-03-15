@@ -57,6 +57,7 @@ class LateremTask(models.Model):
     work = models.ForeignKey(LateremWork, on_delete=models.CASCADE)
     task_type = models.ForeignKey(LateremTaskTemplate, on_delete=models.CASCADE)
     field_overrides = models.TextField(default='{}')
+    order = models.IntegerField(default=0)
 
 class LateremAssignment(models.Model):
     teacher = models.ForeignKey(

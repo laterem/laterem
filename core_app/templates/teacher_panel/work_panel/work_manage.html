@@ -16,11 +16,10 @@
                 <button type="submit" name="edit_data" class="work-name-confirm button-icon" style="display: none;"><div style="width: 2em; padding: 0;">{% include "icons/pencil-icon.html" %}</div>Подтвердить</button>
                 <button type="button" id="edit_button" class="work-name-undo button-icon" onclick="data_edit(this)" style="display: none;"><div style="width: 2em; padding: 0;">{% include "icons/undo-icon.html" %}</div>Отменить</button>
                 <button type="button" id="edit_button" class="work-name-edit button-icon" onclick="data_edit(this)" style="display: inline-flex;"><div style="width: 2em; padding: 0;">{% include "icons/pencil-icon.html" %}</div>Редактировать</button>
-                <button type="button" class="button-icon" style="grid-column: 3;" onclick="disp_dialog($('#delete-work-confirm'))"><div style="width: 2em; padding: 0;">{% include "icons/delete-icon.html" %}</div><span>Удалить</span></button>
+                <button type="button" class="button-icon" onclick="disp_dialog($('#delete-work-confirm'))"><div style="width: 2em; padding: 0;">{% include "icons/delete-icon.html" %}</div><span>Удалить</span></button>
             </div>
         </div>
         <p>ID: {{work.id}}</p>
-        <button type="button" id="appoint" name="appoint" onclick="disp_dialog($('#appoint-work'))">Назначить группе</button>
     </form>
     <br/>
     <div id="work-table-header">
@@ -40,13 +39,27 @@
         <div style="grid-column: 3; padding: 0;" class="work-table-element">
             <form method="post">
                 {% csrf_token %}
-                <button type="submit" name="delete:{{task.id}}" class="button-icon"><div style="width: 1.5em">{% include "icons/delete-icon.html" %}</div></button>
+                <div name="{{ task.name }}">
+                    <button title="Удалить задание" name="delete:{{task.id}}" type="button" class="button-icon" onclick="delete_signal_to_send=this.name; $('#confirm-task-deleting-massage')[0].innerHTML = 'Вы уверены что хотите удалить шаблон ' + this.closest('div').attributes.name.value + '?'; $('#confirm-task-deleting-button')[0].name = this.name; disp_dialog($('#delete-task-confirm'))"><div style="width: 1.5em; padding: 0;">{% include "icons/delete-icon.html" %}</div></button>
+                </div>
             </form>
         </div>
     {% endfor %}
     </div>
     <br/>
-    <a href="answer_stats/" class="button">Данные по сданным ответам</a>
+    <div id="groups-in-work-table-header">
+        <div style="grid-column: 1;"><span style="font-size: larger;">Группы</span></div>
+        <div style="grid-column: 2;">
+            <button type="button" class="button-icon" id="appoint" name="appoint" onclick="disp_dialog($('#appoint-work'))">{% include "icons/add-group-icon.html" %} &nbsp; Назначить &nbsp;</button>
+        </div>
+    </div>
+    <div id="groups-in-work-table">
+    {% for group in appointed_groups %}
+        <div>
+            <a href="answer_stats/{{ group.id }}">{{ group.name }}</a>
+        </div>
+    {% endfor %}
+    </div>
 
 
     <button id="blackout" style="display: none;" onclick="disp_dialog([$('#appoint-work'), $('#add-task'), $('#delete-work-confirm')])"></button>
@@ -59,6 +72,16 @@
             <tr>
                 <td style="display: grid; justify-items: end;"><button name="delete_work" class="wrong">Подтвердить</button></td>
                 <td><button type="button" onclick="disp_dialog($('#delete-work-confirm'))">Отменить</button></td>
+            </tr>
+        </table>
+    </form>
+    <form method="post">
+        {% csrf_token %}
+        <table id="delete-task-confirm" class="dialog-table" style="display: none;">
+            <tr><td colspan="2" id="confirm-task-deleting-massage">Вы уверены что хотите удалить пользователя?</td></tr>
+            <tr>
+                <td style="display: grid; justify-items: end;"><button id="confirm-task-deleting-button" type="submit" class="wrong">Подтвердить</button></td>
+                <td><button type="button" onclick="disp_dialog($('#delete-task-confirm'))">Отменить</button></td>
             </tr>
         </table>
     </form>

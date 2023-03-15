@@ -25,7 +25,7 @@
         {% endif %}
         <div style="text-align: left;" id="task-area">
             {% include task.view_path %}
-            <button type="submit" class="button">Проверить</button>
+            <button type="submit" name="check_answers" class="button">Проверить</button>
         </div>
     </form>
     <script src="{% static 'js/navtree-state-saver.js' %}?{% cache_bust %}"></script>
@@ -45,6 +45,6 @@
 {% endblock %}
 {% block foot %}
     {% with button_list_items=task_list %}
-        {% include "button_list.html" %}
+        {% include "element_templates/button_list.html" %}
     {% endwith %}
 {% endblock %}
