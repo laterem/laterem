@@ -3,7 +3,7 @@
 {% load laterem %}
 {% load cache_bust %}
 
-{% block content %}
+{% block panel_content %}
 <script src="{% static 'js/manage-blackout.js' %}?{% cache_bust %}"></script>
 <script src="{% static 'js/manage-data-edit.js' %}?{% cache_bust %}"></script>
 <form method="post" id="main-form">

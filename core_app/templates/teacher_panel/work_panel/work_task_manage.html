@@ -3,7 +3,7 @@
 {% load laterem %}
 {% load cache_bust %}
 
-{% block content %}
+{% block panel_content %}
     <script src="{% static 'js/manage-data-edit.js' %}?{% cache_bust %}"></script>
     {% if task.field_overrides_items %}
     <form method="post">

@@ -3,9 +3,11 @@
 {% load laterem %}
 {% load cache_bust %}
 
-{% block content %}
+{% block panel_content %}
     <script src="{% static 'js/manage-blackout.js' %}?{% cache_bust %}"></script>
     <script src="{% static 'js/manage-data-edit.js' %}?{% cache_bust %}"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.23.0/prism.min.js"></script>
+    <script src="{% static 'js/highlight-code.js' %}?{% cache_bust %}"></script>
     <form method="post" id="main-form">
         {% csrf_token %}
         <div id="task-manage-header">
@@ -23,21 +25,59 @@
         <div id="task-manage-table">
             <div style="grid-column: 1;">
                 <div id="task-manage-table-column-header">
-                    <p>LTC</p>
-                    <button name="download_ltc">Скачать</button>
+                    <div style="grid-column: 1;">
+                        <p>LTC</p>                    
+                    </div>
+                    <div style="grid-column: 2;">
+                        <button type="submit" name="edit_data" class="edit-ltc-confirm button-icon" style="display: none;"><div style="width: 2em; padding: 0;">{% include "icons/pencil-icon.html" %}</div>Подтвердить</button>
+                        <button type="button" id="edit_button" class="edit-ltc-undo button-icon" onclick="data_edit(this)" style="display: none;"><div style="width: 2em; padding: 0;">{% include "icons/undo-icon.html" %}</div>Отменить</button>
+                        <button type="button" id="edit_button" class="edit-ltc-edit button-icon" onclick="data_edit(this)" style="display: inline-flex;"><div style="width: 2em; padding: 0;">{% include "icons/pencil-icon.html" %}</div>Редактировать</button>
+                    </div>
+                    <div style="grid-column: 3;">
+                        <button name="download_ltc">Скачать</button>
+                    </div>
                 </div>
-                <pre>
-{{ ltc_text }}
+                <textarea
+                    placeholder="Enter HTML Source Code"
+                    id="ltc-editing"
+                    spellcheck="false"
+                    oninput="update(this);
+                    sync_scroll(this);"
+                    onscroll="sync_scroll(this);"
+                    onkeydown="check_tab(this, event);"
+                    class="edit-ltc"
+                    >{{ ltc_text }}</textarea>
+                <pre id="ltc-highlighting" aria-hidden="true" class="edit-html">
+                    <code class="language-html" id="ltc-highlighting-content">{{ ltc_text }}</code>
                 </pre>
             </div>
             <div width="10px" style="grid-column: 2;"></div>
             <div style="grid-column: 3;">
                 <div id="task-manage-table-column-header">
-                    <p>HTML</p>
-                    <button name="download_html">Скачать</button>
+                    <div style="grid-column: 1;">
+                        <p>HTML</p>                    
+                    </div>
+                    <div style="grid-column: 2;">
+                        <button type="submit" name="edit_data" class="edit-html-confirm button-icon" style="display: none;"><div style="width: 2em; padding: 0;">{% include "icons/pencil-icon.html" %}</div>Подтвердить</button>
+                        <button type="button" id="edit_button" class="edit-html-undo button-icon" onclick="data_edit(this)" style="display: none;"><div style="width: 2em; padding: 0;">{% include "icons/undo-icon.html" %}</div>Отменить</button>
+                        <button type="button" id="edit_button" class="edit-html-edit button-icon" onclick="data_edit(this)" style="display: inline-flex;"><div style="width: 2em; padding: 0;">{% include "icons/pencil-icon.html" %}</div>Редактировать</button>
+                    </div>
+                    <div style="grid-column: 3;">
+                        <button name="download_html">Скачать</button>
+                    </div>
                 </div>
-                <pre>
-{{ html_text }}
+                <textarea
+                    placeholder="Enter HTML Source Code"
+                    id="html-editing"
+                    spellcheck="false"
+                    oninput="update(this);
+                    sync_scroll(this);"
+                    onscroll="sync_scroll(this);"
+                    onkeydown="check_tab(this, event);"
+                    class="edit-html"
+                    >{{ html_text }}</textarea>
+                <pre id="html-highlighting" aria-hidden="true" class="edit-html">
+                    <code class="language-html" id="html-highlighting-content">{{ html_text }}</code>
                 </pre>
             </div>
         </div>
