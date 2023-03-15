@@ -834,7 +834,7 @@ div#task-manage-table {
     padding: 0px;
 }
 
-#task-manage-table div:nth-of-type(2n + 1) {
+#task-manage-table div.highlighted {
     border-radius: 10px;
     padding: 5px;
     height: calc(100% - 10px);
@@ -866,6 +866,10 @@ div#task-manage-table-column-header {
 }
 
 div#task-manage-table-column-header * {
+    margin: 0 0 0 10px;
+}
+
+div#task-manage-table-column-header * * {
     margin: 0;
 }
 
