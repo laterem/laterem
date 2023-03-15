@@ -41,7 +41,7 @@ class LateremCategory(models.Model):
 class LateremWork(models.Model):
     id = models.AutoField(primary_key=True, unique=True)
     name = models.CharField(max_length=128)
-    author = models.ForeignKey(LateremUser, on_delete=models.DO_NOTHING)
+    author = models.ForeignKey(LateremUser, null=True, on_delete=models.SET_NULL)
     category = models.ForeignKey(
         LateremCategory, null=True, on_delete=models.SET_NULL
     )
@@ -50,7 +50,7 @@ class LateremTaskTemplate(models.Model):
     id = models.AutoField(primary_key=True, unique=True)
     name = models.CharField(max_length=128)
     birthname = models.CharField(max_length=128)
-    author = models.ForeignKey(LateremUser, on_delete=models.DO_NOTHING)
+    author = models.ForeignKey(LateremUser, null=True, on_delete=models.SET_NULL)
 
 class LateremTask(models.Model):
     name = models.CharField(max_length=128)
@@ -61,7 +61,7 @@ class LateremTask(models.Model):
 
 class LateremAssignment(models.Model):
     teacher = models.ForeignKey(
-        LateremUser, on_delete=models.DO_NOTHING, related_name="assigner"
+        LateremUser, null=True, on_delete=models.SET_NULL, related_name="assigner"
     )
     user = models.ForeignKey(
         LateremUser,
