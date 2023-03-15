@@ -160,7 +160,6 @@ class Task(DBHybrid):
         extend_ns.update(answers)
         metadata = self.generate_metadata(user)
         ltc.execute(extend_ns, metadata)
-        
         view = self.view_path
         return CompiledTask(ltc, view)
 
