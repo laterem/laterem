@@ -20,7 +20,6 @@
             </div>
         </div>
         <p>ID: {{work.id}}</p>
-        <button type="button" id="appoint" name="appoint" onclick="disp_dialog($('#appoint-work'))">Назначить группе</button>
     </form>
     <br/>
     <div id="work-table-header">
@@ -48,7 +47,19 @@
     {% endfor %}
     </div>
     <br/>
-    <a href="answer_stats/" class="button">Данные по сданным ответам</a>
+    <div id="groups-in-work-table-header">
+        <div style="grid-column: 1;"><span style="font-size: larger;">Группы</span></div>
+        <div style="grid-column: 2;">
+            <button type="button" class="button-icon" id="appoint" name="appoint" onclick="disp_dialog($('#appoint-work'))">{% include "icons/add-group-icon.html" %} &nbsp; Назначить &nbsp;</button>
+        </div>
+    </div>
+    <div id="groups-in-work-table">
+    {% for group in appointed_groups %}
+        <div>
+            <a href="answer_stats/{{ group.id }}">{{ group.name }}</a>
+        </div>
+    {% endfor %}
+    </div>
 
 
     <button id="blackout" style="display: none;" onclick="disp_dialog([$('#appoint-work'), $('#add-task'), $('#delete-work-confirm')])"></button>
