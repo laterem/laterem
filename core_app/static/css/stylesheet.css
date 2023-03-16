@@ -919,7 +919,13 @@ div#task-manage-table-column-header * * {
     align-items: center;
 }
 
-#truth-table div {
+#truth-table * {
+    display: flex;
+    justify-content: center;
+    align-content: center;
+}
+
+#truth-table div:not(:empty) {
     padding: 5px;
     width: 1.5em;
     height: 1.2em;

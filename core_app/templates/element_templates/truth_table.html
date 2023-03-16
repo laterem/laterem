@@ -1,16 +1,16 @@
-{% if truth_table_x %}
+{% if args %}
     <div id="truth-table">
-        <div style="grid-column: 1;"> x </div>
-        {% if truth_table_y %}<div style="grid-column: 2;"> y </div>{% else %}<div style="grid-column: 2;"></div>{% endif %}
-        {% if truth_table_y %}<div style="grid-column: 3;"> z </div>{% else %}<div style="grid-column: 3;"></div>{% endif %}
-        {% if truth_table_y %}<div style="grid-column: 4;"> w </div>{% else %}<div style="grid-column: 4;"></div>{% endif %}
-        <div style="grid-column: 5;"></div>
+        <div style="grid-column: 1;">{{ args.0 }}</div>
+        {% if args|length > 2 %}<div style="grid-column: 2;">{{ args.1 }}</div>{% elif args|length == 2 %}<div style="grid-column: 2;">{{ args.1 }}</div>{% else %}<div style="grid-column: 2; width: 0;"></div>{% endif %}
+        {% if args|length > 3 %}<div style="grid-column: 3;">{{ args.2 }}</div>{% elif args|length == 3 %}<div style="grid-column: 3;">{{ args.2 }}</div>{% else %}<div style="grid-column: 3; width: 0;"></div>{% endif %}
+        {% if args|length > 4 %}<div style="grid-column: 4;">{{ args.3 }}</div>{% elif args|length == 4 %}<div style="grid-column: 4;">{{ args.3 }}</div>{% else %}<div style="grid-column: 4; width: 0;"></div>{% endif %}
+        {% if args|length == 4 %}<div style="grid-column: 5;">{{ args.4 }}</div>{% else %}<div style="grid-column: 5; width: 0;"></div>{% endif %}
         {% for x in "01" %}
-            {% if truth_table_y %}
+            {% if args|length > 2 %}
                 {% for y in "01" %}
-                    {% if truth_table_z %}
+                    {% if args|length > 3 %}
                         {% for z in "01" %}
-                            {% if truth_table_w %}
+                            {% if args|length > 4 %}
                                 {% for w in "01" %}
                                     <div style="grid-column: 1;">{{ x }}</div>
                                     <div style="grid-column: 2;">{{ y }}</div>
@@ -22,24 +22,24 @@
                                 <div style="grid-column: 1;">{{ x }}</div>
                                 <div style="grid-column: 2;">{{ y }}</div>
                                 <div style="grid-column: 3;">{{ z }}</div>
-                                <div style="grid-column: 4;"></div>
-                                <div style="grid-column: 5;"><input type="checkbox" name="{{ truth_table_id }}" value="{{ x }}{{ y }}{{ z }}"/></div>
+                                <div style="grid-column: 4;"><input type="checkbox" name="{{ truth_table_id }}" value="{{ x }}{{ y }}{{ z }}"/></div>
+                                <div style="grid-column: 5; width: 0;"></div>
                             {% endif %}
                         {% endfor %}
                     {% else %}
                         <div style="grid-column: 1;">{{ x }}</div>
                         <div style="grid-column: 2;">{{ y }}</div>
-                        <div style="grid-column: 3;"></div>
-                        <div style="grid-column: 4;"></div>
-                        <div style="grid-column: 5;"><input type="checkbox" name="{{ truth_table_id }}" value="{{ x }}{{ y }}"/></div>
+                        <div style="grid-column: 3;"><input type="checkbox" name="{{ truth_table_id }}" value="{{ x }}{{ y }}"/></div>
+                        <div style="grid-column: 4; width: 0;"></div>
+                        <div style="grid-column: 5; width: 0;"></div>
                     {% endif %}
                 {% endfor %}
             {% else %}
             <div style="grid-column: 1;">{{ x }}</div>
-            <div style="grid-column: 2;"></div>
-            <div style="grid-column: 3;"></div>
-            <div style="grid-column: 4;"></div>
-            <div style="grid-column: 5;"><input type="checkbox" name="{{ truth_table_id }}" value="{{ x }}"/></div>
+            <div style="grid-column: 2;"><input type="checkbox" name="{{ truth_table_id }}" value="{{ x }}"/></div>
+            <div style="grid-column: 3; width: 0;"></div>
+            <div style="grid-column: 4; width: 0;"></div>
+            <div style="grid-column: 5; width: 0;"></div>
             {% endif %}
         {% endfor %}
     </div>
