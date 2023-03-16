@@ -187,6 +187,9 @@ class Task(DBHybrid):
                             for key in compiled.ltc.exporting_fields
                             if key not in self.field_overrides}
         self.set_field_overrides(exporting_fields, mask=False)
+    
+    def __str__(self):
+        return self.dbmodel.name
 
 class CompiledTask():
     def __init__(self, ltc, view) -> None:
