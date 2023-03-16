@@ -91,6 +91,9 @@ class Solution(DBHybrid):
     @property
     def items_answers(self):
         return list(self.answers.items())
+    
+    def __str__(self):
+        return f"{self.dbmodel.verdict} ({self.dbmodel.task.name})"
 
 class NASolution:
     user = None
@@ -99,6 +102,9 @@ class NASolution:
     answers = {}
     timestamp = None
     teacher_comment = ''
+
+    def __str__(self):
+        return self.verdict
 
 
 @SolutionView.register_filter('user')

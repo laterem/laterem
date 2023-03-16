@@ -13,7 +13,7 @@ class User(DBHybrid):
         super().__init__(dbobj)
     
     def __str__(self):
-        return self.username()
+        return self.username
 
     @property
     def username(self):

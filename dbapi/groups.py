@@ -9,7 +9,7 @@ class Member(DBHybrid):
         self.group = group
         self.dbmembership = LateremGroupMembership.objects.get(user=dbobj,
                                                                group=group.dbmodel)               
-    
+
     def get_permission(self, permission):
         if self.dbmembership.is_group_admin:
             return True
@@ -17,6 +17,14 @@ class Member(DBHybrid):
             return self.dbmembership.__getattribute__(permission)
         else:
             return False
+    
+    def __str__(self):
+        return self.username
+
+    @property
+    def username(self):
+        return self.dbmodel.username or (' '.join((self.dbmodel.first_name, self.dbmodel.last_name))) or self.dbmodel.email
+    
 
 class Group(DBHybrid):
     __dbmodel__ = LateremGroup
@@ -52,6 +60,9 @@ class Group(DBHybrid):
     def set_global_permission(self, **permissions):
         for key, value in permissions.items():
             self.dbmodel.__setattr__(key, value)
+    
+    def __str__(self):
+        return self.dbmodel.name
 
     
 

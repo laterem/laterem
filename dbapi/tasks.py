@@ -275,6 +275,9 @@ class Work(DBHybrid):
             task.dbmodel.order = i
             task.dbmodel.save()
         print([t.name for t in tasks])
+    
+    def __str__(self):
+        return self.dbmodel.name
 
 
 class Category(DBHybrid):
@@ -314,6 +317,9 @@ class Category(DBHybrid):
 
     def children(self, *args, **kwargs):
         return self.categories(*args, **kwargs) + self.works(*args, **kwargs)
+
+    def __str__(self):
+        return self.dbmodel.name
 
 class RootsMimic:
     __dbmodel__ = None
