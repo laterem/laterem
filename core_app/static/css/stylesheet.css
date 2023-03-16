@@ -758,7 +758,13 @@ div#task-field-table-header, div#groups-in-work-table-header {
 }
 
 div#work-stats-table-header {
-    grid-template-columns: repeat(2, auto);
+    grid-template-columns: repeat(2, auto) min-content;
+}
+
+div#work-stats-table-header.detached {
+    border-radius: 10px;
+    border-bottom: 1px solid var(--dark-font-color);
+    margin-bottom: 10px;
 }
 
 div#user-table-header, div#user-table,

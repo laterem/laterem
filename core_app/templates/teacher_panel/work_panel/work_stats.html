@@ -15,42 +15,116 @@
             <button type="button" id="edit_data" name="edit_data" style="grid-column: 2;" class="work-name button-icon" onclick="data_edit(this)"><div style="width: 2em; padding: 0;">{% include "icons/pencil-icon.html" %}</div></button>
         </div>
         <p>ID: {{work.id}}</p>
-    </form>
-    <div id="work-stats-table-header">
-        <div style="grid-column: 1;">
-            <span>Сортировка: </span>
-            <select name="sort">
-                <option selected="selected">Нет</option>
-                <option>По времени сдачи</option>
-                <option>По вердикту проверки</option>
-                <option>По задаче</option>
-            </select>
-        </div>
-        <div style="grid-column: 2;">
-            <span>Фильтры: </span>
-            <button name="add-filter" class="button-icon" type="button">+</button>
-        </div>
-    </div>
-    <div id="work-stats-table">
-        <!-- Ученик | Задача | Вердикт | Ответ ученика | Правильный ответ -->
-        {% for log in group_answers %}
-            <div style="grid-column: 1;">
-                {{ log.user.email }}
+        {% if solutions %}
+            <div id="work-stats-table-header" class="detached">
+                <div style="grid-column: 1;">
+                    <span>Группировка: </span>
+                    <select name="group_by">
+                        {% if not group_by %}
+                            <option value="none" selected="selected">Нет</option>
+                            <option value="user">По пользвателю</option>
+                            <option value="task">По задаче</option>
+                            <option value="verdict">По вердикту проверки</option>
+                        {% elif group_by == "none" %}
+                            <option value="none" selected="selected">Нет</option>
+                            <option value="user">По пользвателю</option>
+                            <option value="task">По задаче</option>
+                            <option value="verdict">По вердикту проверки</option>
+                        {% else %}
+                            <option value="none">Нет</option>
+                            {% if group_by == "user" %}
+                                <option value="user" selected="selected">По пользвателю</option>
+                                <option value="task">По задаче</option>
+                                <option value="verdict">По вердикту проверки</option>
+                            {% else %}
+                                <option value="user">По пользвателю</option>
+                                {% if group_by == "task" %}
+                                    <option value="task" selected="selected">По задаче</option>
+                                    <option value="verdict">По вердикту проверки</option>
+                                {% else %}
+                                    <option value="task">По задаче</option>
+                                    <option value="verdict" selected="selected">По вердикту проверки</option>
+                                {% endif %}
+                            {% endif %}
+                        {% endif %}
+                    </select>
+                </div>
+                <div style="grid-column: 2;">
+                    <span>Фильтры: </span>
+                    <button name="add-filter" class="button-icon" type="button">+</button>
+                </div>
+                <div style="grid-column: 3;">
+                    <button class="button-icon" name="group_by-and-filter"> Применить </button>
+                </div>
             </div>
-            <div style="grid-column: 2;">
-                {{ log.task.name }}
+            {% for title, group_answers in solutions %}
+                <div id="work-stats-table-header">
+                    <p style="font-size: large;">{{ title.name }}</p>
+                </div>
+                <div id="work-stats-table">
+                    <!-- Ученик | Задача | Вердикт | Ответ ученика | Правильный ответ -->
+                    {% for log in group_answers %}
+                        <div style="grid-column: 1;">
+                            {{ log.user.email }}
+                        </div>
+                        <div style="grid-column: 2;">
+                            {{ log.task.name }}
+                        </div>
+                        <div style="grid-column: 3;">
+                            {{ log.verdict }}
+                        </div>
+                        <div style="grid-column: 4;">
+                            {% for key, val in log.items_answers %}
+                                {{ key }}: {{ val }} <br/>
+                            {% endfor %}
+                        </div>
+                            <div style="grid-column: 5;">
+                            <!-- {{ log.correct_answer }} -->
+                        </div> 
+                    {% endfor %}
+                </div>
+            {% endfor %}
+        {% else %}
+            <div id="work-stats-table-header">
+                <div style="grid-column: 1;">
+                    <span>Группировка: </span>
+                    <select name="group_by">
+                        <option value="none" selected="selected">Нет</option>
+                        <option value="user">По пользвателю</option>
+                        <option value="task">По задаче</option>
+                        <option value="verdict">По вердикту проверки</option>
+                    </select>
+                </div>
+                <div style="grid-column: 2;">
+                    <span>Фильтры: </span>
+                    <button name="add-filter" class="button-icon" type="button">+</button>
+                </div>
+                <div style="grid-column: 3;">
+                    <button class="button-icon" name="group_by-and-filter"> Применить </button>
+                </div>
             </div>
-            <div style="grid-column: 3;">
-                {{ log.verdict }}
-            </div>
-            <div style="grid-column: 4;">
-                {% for key, val in log.items_answers %}
-                    {{ key }}: {{ val }} <br/>
+            <div id="work-stats-table">
+                <!-- Ученик | Задача | Вердикт | Ответ ученика | Правильный ответ -->
+                {% for log in group_answers %}
+                    <div style="grid-column: 1;">
+                        {{ log.user.email }}
+                    </div>
+                    <div style="grid-column: 2;">
+                        {{ log.task.name }}
+                    </div>
+                    <div style="grid-column: 3;">
+                        {{ log.verdict }}
+                    </div>
+                    <div style="grid-column: 4;">
+                        {% for key, val in log.items_answers %}
+                            {{ key }}: {{ val }} <br/>
+                        {% endfor %}
+                    </div>
+                        <div style="grid-column: 5;">
+                        <!-- {{ log.correct_answer }} -->
+                    </div> 
                 {% endfor %}
             </div>
-                <div style="grid-column: 5;">
-                <!-- {{ log.correct_answer }} -->
-            </div> 
-        {% endfor %}
-    </div>
+        {% endif %}
+    </form>
 {% endblock %}

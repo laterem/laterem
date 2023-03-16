@@ -49,6 +49,7 @@ def bug_report_render(request):
         request,
         "bug_report.html",
         render_args(
+            me=user,
             additional={"title": "Баг репорт"}
         )
     )

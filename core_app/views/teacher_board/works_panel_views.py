@@ -204,6 +204,11 @@ def show_work_stats(request, work_id, group_id):
         raise Http404('Group not found')
 
     group_answers = work.get_answers(group=group)
+    solutions = None
+    group_by = request.POST.get('group_by')
+
+    if "group_by-and-filter" in request.POST:
+        solutions = SolutionView(work, group).view(group_by=group_by).items()
 
     return render(
         request,
@@ -218,7 +223,9 @@ def show_work_stats(request, work_id, group_id):
                 "title": "Статистика по работе " + work.name,
                 "work": work,
                 "group": group,
-                "group_answers": group_answers
+                "group_answers": group_answers,
+                "solutions": solutions,
+                "group_by": group_by
             },
         ),
     )
