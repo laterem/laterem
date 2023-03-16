@@ -11,10 +11,13 @@ class User(DBHybrid):
 
     def __init__(self, dbobj):
         super().__init__(dbobj)
+    
+    def __str__(self):
+        return self.username()
 
     @property
     def username(self):
-        return self.dbmodel.username or self.dbmodel.last_name or self.dbmodel.email
+        return self.dbmodel.username or (' '.join((self.dbmodel.first_name, self.dbmodel.last_name))) or self.dbmodel.email
     
     @classmethod
     def create(cls, email, password, first_name=NotSpecified, last_name=NotSpecified):
