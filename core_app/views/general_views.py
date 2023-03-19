@@ -20,7 +20,7 @@ def getasset(request, task_id, filename):
         raise PermissionDenied()
     taskid = int(task_id)
     task = TaskTemplate.by_id(taskid)
-    path = pathjoin(task.dir_path, filename)
+    path = pathjoin(task.assets_path, filename)
     try:
         return FileResponse(open(path, "rb"))
     except FileNotFoundError:

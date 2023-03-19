@@ -89,9 +89,6 @@ def manage_task(request, task_id):
             resp['Content-Disposition'] = f'attachment; filename="{asciify(task.name.strip())}-view.html"'
             return resp
 
-
-        
-
         if "edit_ltc" in request.POST:
             try:
                 task.write_ltc(request.POST.get("ltc_text"))
@@ -115,6 +112,15 @@ def manage_task(request, task_id):
         if "edit_html" in request.POST:
             task.write_html(request.POST.get("html_text"))
             return redirect(request.path)
+
+        if "add_asset" in request.POST:
+            asset = request.FILES.get("asset_file")
+            task.add_asset(asset.name, asset)
+            return redirect(request.path)
+        
+        if "remove_asset" in request.POST:
+            asset = request.POST.get("delete_asset_name")
+            task.remove_asset(asset)
     
     return render(
         request,

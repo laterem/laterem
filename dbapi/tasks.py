@@ -44,8 +44,9 @@ class TaskTemplate(DBHybrid):
             dbobj_created = True
             tt = cls(dbobj)
 
-            path = pathjoin(TASK_UPLOAD_PATH, tt.identificator())
+            path = tt.dir_path
             os.makedirs(path)
+            os.makedirs(tt.assets_path)
             config.seek(0)
             with open(pathjoin(path, "config.ltc"), "wb+") as dest:
                 dest.writelines(read_text_file(config))
@@ -67,6 +68,10 @@ class TaskTemplate(DBHybrid):
         if os.path.isfile(this.view_path_absolute):
             os.remove(this.view_path_absolute)
         this.dbmodel.delete()
+
+    @property
+    def assets_path(self):
+        return pathjoin(self.dir_path, 'assets')
 
     @property
     def dir_path(self):
@@ -108,6 +113,22 @@ class TaskTemplate(DBHybrid):
     
     def identificator(self):
         return slugify(f'ID{self.dbmodel.id}-{transliterate_ru_en(self.dbmodel.birthname)}')
+
+    def assets(self):
+        return os.listdir(self.assets_path)
+
+    def add_asset(self, name, file):
+        file.seek(0)
+        with open(pathjoin(self.assets_path, name), mode='wb+') as dump:
+            for chunk in file.chunks():
+                dump.write(chunk)
+        return True
+
+    def remove_asset(self, name):
+        if name in self.assets:
+            os.remove(pathjoin(self.assets_path, name))
+            return True
+        return False
 
 class Task(DBHybrid):
     __dbmodel__ = LateremTask
