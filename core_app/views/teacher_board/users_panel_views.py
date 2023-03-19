@@ -62,7 +62,7 @@ def users_panel(request):
                     flag = True
                     break
                 elif signal.startswith("edit:"):
-                    email = signal.lstrip("edit:")
+                    email = signal[len("edit:"):]
                     try:
                         user = LateremUser.objects.get(email=email)
                     except LateremUser.DoesNotExist:

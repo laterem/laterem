@@ -118,9 +118,11 @@ def manage_task(request, task_id):
             task.add_asset(asset.name, asset)
             return redirect(request.path)
         
-        if "remove_asset" in request.POST:
-            asset = request.POST.get("delete_asset_name")
-            task.remove_asset(asset)
+        for signal in request.POST:
+            if signal.startswith('delete_asset:'):
+                asset = signal[len("delete_asset:"):]
+                task.remove_asset(asset)
+                return redirect(request.path)
     
     return render(
         request,
