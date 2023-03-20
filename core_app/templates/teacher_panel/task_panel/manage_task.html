@@ -93,7 +93,10 @@
                 </div>
             </div>
             <div>
-                <input type="file" name="asset_file"/> <button name="add_asset">Добавить доп. файл</button>
+                <input type="file" name="asset_file"/> <button name="add_asset">Добавить доп. файл</button> <br/>
+                {% for asset in task.assets %}
+                    <p style="display: inline-block;"> {{ asset }}</p> <button type="submit" name="delete_asset:{{ asset }}">{% include "icons/delete-icon.html" %}</button> <br/>
+                {% endfor %}
             </div>
         </div>
     </form>
