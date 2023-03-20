@@ -115,8 +115,9 @@ def manage_task(request, task_id):
 
         if "add_asset" in request.POST:
             asset = request.FILES.get("asset_file")
-            task.add_asset(asset.name, asset)
-            return redirect(request.path)
+            if asset is not None:
+                task.add_asset(asset.name, asset)
+                return redirect(request.path)
         
         for signal in request.POST:
             if signal.startswith('delete_asset:'):

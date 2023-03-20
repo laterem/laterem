@@ -115,7 +115,11 @@ class TaskTemplate(DBHybrid):
         return slugify(f'ID{self.dbmodel.id}-{transliterate_ru_en(self.dbmodel.birthname)}')
 
     def assets(self):
-        return os.listdir(self.assets_path)
+        try:
+            return os.listdir(self.assets_path)
+        except FileNotFoundError:
+            os.makedirs(self.assets_path)
+            return []
 
     def add_asset(self, name, file):
         file.seek(0)
@@ -125,7 +129,7 @@ class TaskTemplate(DBHybrid):
         return True
 
     def remove_asset(self, name):
-        if name in self.assets:
+        if name in self.assets():
             os.remove(pathjoin(self.assets_path, name))
             return True
         return False
