@@ -10,85 +10,90 @@
     <script src="{% static 'js/highlight-code.js' %}?{% cache_bust %}"></script>
     <form method="post" id="main-form">
         {% csrf_token %}
-        <div id="task-manage-header">
-            <div style="grid-column: 1;">
-               <input type="text" name="task_name" value="{{ task.name }}" disabled="true" style="font-size: larger;" class="edit-task-name task-info"/>
-            </div>
-            <div style="grid-column: 2;">
-                <button type="submit" name="edit_data" class="edit-task-name-confirm button-icon" style="display: none;"><div style="width: 2em; padding: 0;">{% include "icons/pencil-icon.html" %}</div>Подтвердить</button>
-                <button type="button" id="edit_button" class="edit-task-name-undo button-icon" onclick="data_edit(this)" style="display: none;"><div style="width: 2em; padding: 0;">{% include "icons/undo-icon.html" %}</div>Отменить</button>
-                <button type="button" id="edit_button" class="edit-task-name-edit button-icon" onclick="data_edit(this)" style="display: inline-flex;"><div style="width: 2em; padding: 0;">{% include "icons/pencil-icon.html" %}</div>Редактировать</button>
-                <button type="button" class="button-icon" onclick="disp_dialog($('#delete-task-confirm'))"><div style="width: 2em; padding: 0;">{% include "icons/delete-icon.html" %}</div><span>Удалить</span></button>
-            </div>
-            <p>ID: {{ task.id }}
-            </p>
-            <!-- ЖУРА почини сделай красиво пж -->
-            <br>
-            {% if notification %}
-                <div> {{ notification }} </div>
-            {% endif %}
-        </div>
-        <div id="task-manage-table">
-            <div style="grid-column: 1;" class="highlighted">
-                <div id="task-manage-table-column-header">
-                    <div style="grid-column: 1;">
-                        <p>LTC</p>                    
-                    </div>
-                    <div style="grid-column: 2;">
-                        <button type="submit" name="edit_ltc" class="edit-ltc-confirm button-icon" style="display: none;"><div style="width: 2em; padding: 0;">{% include "icons/pencil-icon.html" %}</div>Подтвердить</button>
-                        <button type="button" id="edit_button" class="edit-ltc-undo button-icon" onclick="data_edit(this)" style="display: none;"><div style="width: 2em; padding: 0;">{% include "icons/undo-icon.html" %}</div>Отменить</button>
-                        <button type="button" id="edit_button" class="edit-ltc-edit button-icon" onclick="data_edit(this)" style="display: inline-flex;"><div style="width: 2em; padding: 0;">{% include "icons/pencil-icon.html" %}</div>Редактировать</button>
-                    </div>
-                    <div style="grid-column: 3;">
-                        <button name="download_ltc">Скачать</button>
-                    </div>
+        <div style="display: grid; width: 100%; height: 100%; grid-template-rows: max-content 300px max-content;">
+            <div id="task-manage-header">
+                <div style="grid-column: 1;">
+                <input type="text" name="task_name" value="{{ task.name }}" disabled="true" style="font-size: larger;" class="edit-task-name task-info"/>
                 </div>
-                <textarea
-                    name="ltc_text"
-                    disabled="true"
-                    placeholder="Enter HTML Source Code"
-                    id="ltc-editing"
-                    spellcheck="false"
-                    oninput="update(this);
-                    sync_scroll(this);"
-                    onscroll="sync_scroll(this);"
-                    onkeydown="check_tab(this, event);"
-                    class="edit-ltc"
-                    >{{ ltc_text }}</textarea>
-                <pre id="ltc-highlighting" aria-hidden="true" class="edit-html">
-                    <code class="language-html" id="ltc-highlighting-content">{{ ltc_text }}</code>
-                </pre>
-            </div>
-            <div width="10px" style="grid-column: 2;"></div>
-            <div style="grid-column: 3;" class="highlighted">
-                <div id="task-manage-table-column-header">
-                    <div style="grid-column: 1;">
-                        <p>HTML</p>                    
-                    </div>
-                    <div style="grid-column: 2;">
-                        <button type="submit" name="edit_html" class="edit-html-confirm button-icon" style="display: none;"><div style="width: 2em; padding: 0;">{% include "icons/pencil-icon.html" %}</div>Подтвердить</button>
-                        <button type="button" id="edit_button" class="edit-html-undo button-icon" onclick="data_edit(this)" style="display: none;"><div style="width: 2em; padding: 0;">{% include "icons/undo-icon.html" %}</div>Отменить</button>
-                        <button type="button" id="edit_button" class="edit-html-edit button-icon" onclick="data_edit(this)" style="display: inline-flex;"><div style="width: 2em; padding: 0;">{% include "icons/pencil-icon.html" %}</div>Редактировать</button>
-                    </div>
-                    <div style="grid-column: 3;">
-                        <button name="download_html">Скачать</button>
-                    </div>
+                <div style="grid-column: 2;">
+                    <button type="submit" name="edit_data" class="edit-task-name-confirm button-icon" style="display: none;"><div style="width: 2em; padding: 0;">{% include "icons/pencil-icon.html" %}</div>Подтвердить</button>
+                    <button type="button" id="edit_button" class="edit-task-name-undo button-icon" onclick="data_edit(this)" style="display: none;"><div style="width: 2em; padding: 0;">{% include "icons/undo-icon.html" %}</div>Отменить</button>
+                    <button type="button" id="edit_button" class="edit-task-name-edit button-icon" onclick="data_edit(this)" style="display: inline-flex;"><div style="width: 2em; padding: 0;">{% include "icons/pencil-icon.html" %}</div>Редактировать</button>
+                    <button type="button" class="button-icon" onclick="disp_dialog($('#delete-task-confirm'))"><div style="width: 2em; padding: 0;">{% include "icons/delete-icon.html" %}</div><span>Удалить</span></button>
                 </div>
-                <textarea
-                    name="html_text"
-                    disabled="true"
-                    placeholder="Enter HTML Source Code"
-                    id="html-editing"
-                    spellcheck="false"
-                    oninput="update(this);
-                    sync_scroll(this);"
-                    onscroll="sync_scroll(this);"
-                    onkeydown="check_tab(this, event);"
-                    class="edit-html"
-                    >{{ html_text }}</textarea>
-                <pre id="html-highlighting" aria-hidden="true" class="edit-html">
-                    <code class="language-html" id="html-highlighting-content">{{ html_text }}</code>
-                </pre>
+                <p>ID: {{ task.id }}
+                </p>
+                <!-- ЖУРА почини сделай красиво пж -->
+                <br>
+                {% if notification %}
+                    <div> {{ notification }} </div>
+                {% endif %}
+            </div>
+            <div id="task-manage-table">
+                <div style="grid-column: 1;" class="highlighted">
+                    <div id="task-manage-table-column-header">
+                        <div style="grid-column: 1;">
+                            <p>LTC</p>                    
+                        </div>
+                        <div style="grid-column: 2;">
+                            <button type="submit" name="edit_ltc" class="edit-ltc-confirm button-icon" style="display: none;"><div style="width: 2em; padding: 0;">{% include "icons/pencil-icon.html" %}</div>Подтвердить</button>
+                            <button type="button" id="edit_button" class="edit-ltc-undo button-icon" onclick="data_edit(this)" style="display: none;"><div style="width: 2em; padding: 0;">{% include "icons/undo-icon.html" %}</div>Отменить</button>
+                            <button type="button" id="edit_button" class="edit-ltc-edit button-icon" onclick="data_edit(this)" style="display: inline-flex;"><div style="width: 2em; padding: 0;">{% include "icons/pencil-icon.html" %}</div>Редактировать</button>
+                        </div>
+                        <div style="grid-column: 3;">
+                            <button name="download_ltc">Скачать</button>
+                        </div>
+                    </div>
+                    <textarea
+                        name="ltc_text"
+                        disabled="true"
+                        placeholder="Enter HTML Source Code"
+                        id="ltc-editing"
+                        spellcheck="false"
+                        oninput="update(this);
+                        sync_scroll(this);"
+                        onscroll="sync_scroll(this);"
+                        onkeydown="check_tab(this, event);"
+                        class="edit-ltc"
+                        >{{ ltc_text }}</textarea>
+                    <pre id="ltc-highlighting" aria-hidden="true" class="edit-html">
+                        <code class="language-html" id="ltc-highlighting-content">{{ ltc_text }}</code>
+                    </pre>
+                </div>
+                <div width="10px" style="grid-column: 2;"></div>
+                <div style="grid-column: 3;" class="highlighted">
+                    <div id="task-manage-table-column-header">
+                        <div style="grid-column: 1;">
+                            <p>HTML</p>                    
+                        </div>
+                        <div style="grid-column: 2;">
+                            <button type="submit" name="edit_html" class="edit-html-confirm button-icon" style="display: none;"><div style="width: 2em; padding: 0;">{% include "icons/pencil-icon.html" %}</div>Подтвердить</button>
+                            <button type="button" id="edit_button" class="edit-html-undo button-icon" onclick="data_edit(this)" style="display: none;"><div style="width: 2em; padding: 0;">{% include "icons/undo-icon.html" %}</div>Отменить</button>
+                            <button type="button" id="edit_button" class="edit-html-edit button-icon" onclick="data_edit(this)" style="display: inline-flex;"><div style="width: 2em; padding: 0;">{% include "icons/pencil-icon.html" %}</div>Редактировать</button>
+                        </div>
+                        <div style="grid-column: 3;">
+                            <button name="download_html">Скачать</button>
+                        </div>
+                    </div>
+                    <textarea
+                        name="html_text"
+                        disabled="true"
+                        placeholder="Enter HTML Source Code"
+                        id="html-editing"
+                        spellcheck="false"
+                        oninput="update(this);
+                        sync_scroll(this);"
+                        onscroll="sync_scroll(this);"
+                        onkeydown="check_tab(this, event);"
+                        class="edit-html"
+                        >{{ html_text }}</textarea>
+                    <pre id="html-highlighting" aria-hidden="true" class="edit-html">
+                        <code class="language-html" id="html-highlighting-content">{{ html_text }}</code>
+                    </pre>
+                </div>
+            </div>
+            <div>
+                <input type="file" name="asset_file"/> <button name="add_asset">Добавить доп. файл</button>
             </div>
         </div>
     </form>

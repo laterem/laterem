@@ -816,7 +816,6 @@ div#groups-in-work-table {
 }
 
 div#task-manage-table {
-    position: absolute;
     display: grid;
     grid-template-columns: calc(50% - 5px) 10px calc(50% - 5px);
     align-items: baseline;
@@ -1067,11 +1066,11 @@ button:focus {
 #ltc-editing, #html-editing,
 #ltc-highlighting, #html-highlighting {
     /* Both elements need the same text and space styling so they are directly on top of each other */
-    margin: 10px;
     padding: 10px;
     border: 0;
-    width: calc(50% - 45px);
-    height: calc(100% - 80px);
+    width: calc(50% - 50px);
+    /* height: calc(100% - 80px); */
+    height: 217px;
 }
 #ltc-editing, #html-editing,
 #ltc-highlighting, #html-highlighting,
@@ -1088,14 +1087,14 @@ button:focus {
     /* In the same place */
     position: absolute;
     padding-top: 10px;
-    left: 0;
+    left: 10px;
 }
 
 #html-editing, #html-highlighting {
     /* In the same place */
     position: absolute;
-    top: 25px;
-    left: calc(50% + 10px);
+    padding-top: 10px;
+    left: 50%;
 }
 
 
