@@ -77,9 +77,17 @@ def render_args(
 
     if me is not NotSpecified:
         if meta_all_works_available:
-           ret['workdir'] = WorkTreeView(RootsMimic())
+            ret['workdir'] = WorkTreeView(RootsMimic())
         else:
-           ret['workdir'] = WorkTreeView(RootsMimic(), filter=WorkTreeView.user_access_filter(me, True))
+            ret['workdir'] = WorkTreeView(RootsMimic(), filter=WorkTreeView.user_access_filter(me, True))
+        # <Debug>
+            from json import dumps
+            test = WorkTreeView(RootsMimic(), filter=WorkTreeView.user_access_filter(me, True),
+                                leaf_mapper={'stats': lambda x: me.get_work_stats(x, normalize=True)})
+
+           
+            print(dumps(test.jsonize(), indent=4))
+        # </Debug>
         ret["user"] = me
         ret["theme"] = me.get_setting("theme")
         ret["is_teacher"] = True

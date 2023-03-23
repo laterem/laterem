@@ -95,7 +95,7 @@
             <div>
                 <input type="file" name="asset_file"/> <button name="add_asset">Добавить доп. файл</button> <br/>
                 {% for asset in task.assets %}
-                    <a href="/taskasset/{{ task.id }}/{{ asset }}"> {{ asset }}</a> <button type="submit" name="delete_asset:{{ asset }}">{% include "icons/delete-icon.html" %}</button> <br/>
+                    <a href="/taskasset/{{ task.id }}/{{ asset }}" target="_blank"> {{ asset }}</a> <button type="submit" name="delete_asset:{{ asset }}">{% include "icons/delete-icon.html" %}</button> <br/>
                 {% endfor %}
             </div>
         </div>

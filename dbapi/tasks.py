@@ -115,7 +115,11 @@ class TaskTemplate(DBHybrid):
         return slugify(f'ID{self.dbmodel.id}-{transliterate_ru_en(self.dbmodel.birthname)}')
 
     def assets(self):
-        return os.listdir(self.assets_path)
+        try:
+            return os.listdir(self.assets_path)
+        except FileNotFoundError:
+            os.makedirs(self.assets_path)
+            return []
 
     def add_asset(self, name, file):
         file.seek(0)
@@ -125,7 +129,7 @@ class TaskTemplate(DBHybrid):
         return True
 
     def remove_asset(self, name):
-        if name in self.assets:
+        if name in self.assets():
             os.remove(pathjoin(self.assets_path, name))
             return True
         return False
@@ -237,6 +241,7 @@ class CompiledTask():
 class Work(DBHybrid):
     __dbmodel__ = LateremWork
     has_children = False
+    json_type = 'work'
 
     def __init__(self, dbobj):
         super().__init__(dbobj)
@@ -304,6 +309,7 @@ class Work(DBHybrid):
 class Category(DBHybrid):
     __dbmodel__ = LateremCategory
     has_children = True
+    json_type = 'category'
         
     @staticmethod
     def roots():
@@ -345,20 +351,30 @@ class Category(DBHybrid):
 class RootsMimic:
     __dbmodel__ = None
     has_children = True
+    name = 'mother'
+    id = 'mother'
+    json_type = 'category'
     def children(self, **kwargs):
         return Category.roots()
 
 
 class WorkTreeView:
-    def __init__(self, root, filter=NotSpecified, buffer=NotSpecified):
+    def __init__(self, root, filter=NotSpecified, buffer=NotSpecified, node_mapper=NotSpecified, leaf_mapper=NotSpecified):
         if filter is NotSpecified:
             filter = lambda x: True
         if buffer is NotSpecified:
             buffer = {}
+        if node_mapper is NotSpecified:
+            node_mapper = {}
+        if leaf_mapper is NotSpecified:
+            leaf_mapper = {}
 
         self.root = root
         self.filter = filter
         self.buffer = buffer
+
+        self.node_mapper = node_mapper
+        self.leaf_mapper = leaf_mapper
     
     def children(self):
         for child in self.root.children():
@@ -367,7 +383,29 @@ class WorkTreeView:
             else:
                 flag = self.filter(child)
             if flag:
-                yield WorkTreeView(child, filter=self.filter, buffer=self.buffer)
+                yield WorkTreeView(child, 
+                                   filter=self.filter, 
+                                   buffer=self.buffer, 
+                                   node_mapper=self.node_mapper,
+                                   leaf_mapper=self.leaf_mapper)
+    
+    def jsonize(self):
+        obj = {"name": self.root.name,
+               "type": self.root.json_type,
+               "id": self.root.id}
+        if self.root.has_children:
+            # Node
+            obj["children"] = []
+            for child in self.children():
+                obj['children'].append(child.jsonize())
+            for name, func in self.node_mapper.items():
+                obj[name] = func(self.root)
+        else:
+            # Leaf
+            for name, func in self.leaf_mapper.items():
+                obj[name] = func(self.root)
+        return obj
+
     
     @staticmethod
     def user_access_filter(user, ensure_validation=True):
