@@ -1,10 +1,9 @@
 {% extends 'base.html' %}
 {% load static %}
-{% load laterem %}
 {% load cache_bust %}
 
 {% block menu %}
-    {% tree "workdir" %}
+    <div id="nav-tree"></div>
 {% endblock %}
 
 {% block content %}
