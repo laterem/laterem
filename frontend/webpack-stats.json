@@ -1,6 +1,46 @@
 {
   "status": "done",
   "assets": {
+    "app.05b5af076ff91341.hot-update.js": {
+      "name": "app.05b5af076ff91341.hot-update.js",
+      "path": "/Users/zhur/Documents/My/SCHOOL/Programming/Projects/10_1-laterem/frontend/dist/app.05b5af076ff91341.hot-update.js",
+      "publicPath": "http://0.0.0.0:8080/app.05b5af076ff91341.hot-update.js"
+    },
+    "app.05b5af076ff91341.hot-update.json": {
+      "name": "app.05b5af076ff91341.hot-update.json",
+      "path": "/Users/zhur/Documents/My/SCHOOL/Programming/Projects/10_1-laterem/frontend/dist/app.05b5af076ff91341.hot-update.json",
+      "publicPath": "http://0.0.0.0:8080/app.05b5af076ff91341.hot-update.json"
+    },
+    "app.2d1b9c0f13e5b42d.hot-update.js": {
+      "name": "app.2d1b9c0f13e5b42d.hot-update.js",
+      "path": "/Users/zhur/Documents/My/SCHOOL/Programming/Projects/10_1-laterem/frontend/dist/app.2d1b9c0f13e5b42d.hot-update.js",
+      "publicPath": "http://0.0.0.0:8080/app.2d1b9c0f13e5b42d.hot-update.js"
+    },
+    "app.2d1b9c0f13e5b42d.hot-update.json": {
+      "name": "app.2d1b9c0f13e5b42d.hot-update.json",
+      "path": "/Users/zhur/Documents/My/SCHOOL/Programming/Projects/10_1-laterem/frontend/dist/app.2d1b9c0f13e5b42d.hot-update.json",
+      "publicPath": "http://0.0.0.0:8080/app.2d1b9c0f13e5b42d.hot-update.json"
+    },
+    "app.40e8117a376d07c4.hot-update.js": {
+      "name": "app.40e8117a376d07c4.hot-update.js",
+      "path": "/Users/zhur/Documents/My/SCHOOL/Programming/Projects/10_1-laterem/frontend/dist/app.40e8117a376d07c4.hot-update.js",
+      "publicPath": "http://0.0.0.0:8080/app.40e8117a376d07c4.hot-update.js"
+    },
+    "app.40e8117a376d07c4.hot-update.json": {
+      "name": "app.40e8117a376d07c4.hot-update.json",
+      "path": "/Users/zhur/Documents/My/SCHOOL/Programming/Projects/10_1-laterem/frontend/dist/app.40e8117a376d07c4.hot-update.json",
+      "publicPath": "http://0.0.0.0:8080/app.40e8117a376d07c4.hot-update.json"
+    },
+    "app.7aef732be0acf49b.hot-update.js": {
+      "name": "app.7aef732be0acf49b.hot-update.js",
+      "path": "/Users/zhur/Documents/My/SCHOOL/Programming/Projects/10_1-laterem/frontend/dist/app.7aef732be0acf49b.hot-update.js",
+      "publicPath": "http://0.0.0.0:8080/app.7aef732be0acf49b.hot-update.js"
+    },
+    "app.7aef732be0acf49b.hot-update.json": {
+      "name": "app.7aef732be0acf49b.hot-update.json",
+      "path": "/Users/zhur/Documents/My/SCHOOL/Programming/Projects/10_1-laterem/frontend/dist/app.7aef732be0acf49b.hot-update.json",
+      "publicPath": "http://0.0.0.0:8080/app.7aef732be0acf49b.hot-update.json"
+    },
     "app.8e98dc4faa823bbe.hot-update.js": {
       "name": "app.8e98dc4faa823bbe.hot-update.js",
       "path": "/Users/zhur/Documents/My/SCHOOL/Programming/Projects/10_1-laterem/frontend/dist/app.8e98dc4faa823bbe.hot-update.js",
@@ -30,7 +70,7 @@
   "chunks": {
     "app": [
       "js/app.js",
-      "app.8e98dc4faa823bbe.hot-update.js"
+      "app.05b5af076ff91341.hot-update.js"
     ]
   },
   "publicPath": "http://0.0.0.0:8080/"
