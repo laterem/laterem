@@ -1,5 +1,9 @@
 <template>
-<span class="caret caret-down">
+<span
+    class="caret"
+    :class="{'caret-down': isActive}"
+    @click="isActive = !isActive"
+>
     <input
         :value="nodeName"
         :name="categoryIdName"
@@ -10,7 +14,7 @@
         of category name editing
         v-if="isEditable" -->
 </span>
-<ul :id="categoryUlId" class="nested active">
+<ul :id="categoryUlId" class="nested" :class="{active: isActive}">
     <!-- Category render -->
     <li v-for="child in childrenCategories" :key="child">
         <NodeTree
@@ -40,35 +44,38 @@ export default {
         node: Object,
         isEditable: Boolean,
     },
+    data() {
+        return {
+            "isActive": false,
+        }
+    },
     computed: {
         childrenCategories() {
             let _childrenCategories = [];
-            let node = JSON.parse(JSON.stringify(this.node, null, 4))[0];
-            for ( let i = 0; i < node.children.length; i ++ ) {
-                if ( node.children[i].type == 'category' ) {
-                    _childrenCategories.push(node.children[i]);
+            for ( let i = 0; i < this.node.children.length; i ++ ) {
+                if ( this.node.children[i].type == 'category' ) {
+                    _childrenCategories.push(this.node.children[i]);
                 }
             }
             return _childrenCategories.length ? _childrenCategories : undefined
         },
         childrenWorks() {
             let _childrenWorks = [];
-            let node = JSON.parse(JSON.stringify(this.node, null, 4))[0];
-            for ( let i = 0; i < node.children.length; i ++ ) {
-                if ( node.children[i].type == 'work' ) {
-                    _childrenWorks.push(node.children[i]);
+            for ( let i = 0; i < this.node.children.length; i ++ ) {
+                if ( this.node.children[i].type == 'work' ) {
+                    _childrenWorks.push(this.node.children[i]);
                 }
             }
             return _childrenWorks.length ? _childrenWorks : undefined
         },
         nodeName() {
-            return JSON.parse(JSON.stringify(this.node, null, 4))[0].name
+            return this.node.name
         },
         categoryIdName() {
-            return 'input-' + JSON.parse(JSON.stringify(this.node, null, 4))[0].id
+            return 'input-' + this.node.id
         },
         categoryUlId() {
-            return 'category-id-' + JSON.parse(JSON.stringify(this.node, null, 4))[0].id
+            return 'category-id-' + this.node.id
         },
     },
 };

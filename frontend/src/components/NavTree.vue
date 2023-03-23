@@ -14,7 +14,7 @@
 <ul v-if="workTree.id == 'mother'" class="wtree">
   <!-- Here must go list of childs -->
   <li>
-    <NodeTree :node="workTree.children" :isEditable="isEditable"></NodeTree>
+    <NodeTree :node="JSON.parse(JSON.stringify(workTree.children, null, 4))[0]" :isEditable="isEditable"></NodeTree>
   </li>
 </ul>
 </template>
