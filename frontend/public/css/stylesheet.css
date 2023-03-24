@@ -1,0 +1,1203 @@
+:root {
+    --body-background-color: rgb(var(--base-r), var(--base-g), var(--base-b));
+    --body-font-color: rgb(var(--font-r), var(--font-g), var(--font-b));
+
+    --is-light: 0;
+
+    --foot-background-k: 0.8;
+    /* --foot-background-k: calc(var(--is-light) * (1/0.8) - calc(var(--is-light) - 1) * 0.8); */
+    --foot-background-a: 0.9;
+    --foot-background-color: rgba(calc(var(--base-r) * var(--foot-background-k)), calc(var(--base-g) * var(--foot-background-k)), calc(var(--base-b) * var(--foot-background-k)), var(--foot-background-a));
+    
+    --foot-shadow-k: 0.9;
+    /* --foot-shadow-k: calc(var(--is-light) * (1/0.9) - calc(var(--is-light) - 1) * 0.9); */
+    --foot-shadow-a: 0.25;
+    --foot-shadow-color: rgba(calc(var(--base-r) * var(--foot-background-k) * var(--foot-shadow-k)), calc(var(--base-g) * var(--foot-background-k) * var(--foot-shadow-k)), calc(var(--base-b) * var(--foot-background-k) * var(--foot-shadow-k)), var(--foot-shadow-a));
+    
+    --foot-border-k: 0.75;
+    /* --foot-border-k: calc(var(--is-light) * (1/0.75) - calc(var(--is-light) - 1) * 0.75); */
+    --foot-border-a: 0.6;
+    --foot-border-color: rgba(calc(var(--base-r) * var(--foot-background-k) * var(--foot-border-k)), calc(var(--base-g) * var(--foot-background-k) * var(--foot-border-k)), calc(var(--base-b) * var(--foot-background-k) * var(--foot-border-k)), var(--foot-border-a));
+
+    --content-background-k: 1.1;
+    /* --content-background-k: calc(var(--is-light) * (1/1.1) - calc(var(--is-light) - 1) * 1.1); */
+    --content-background-color: rgb(calc(var(--base-r) * var(--content-background-k)), calc(var(--base-g) * var(--content-background-k)), calc(var(--base-b) * var(--content-background-k)));
+    
+    --content-shadow-k: 0.72;
+    /* --content-shadow-k: calc(var(--is-light) * (1/0.72) - calc(var(--is-light) - 1) * 0.72); */
+    --content-shadow-a: 0.5;
+    --content-shadow-color: rgba(calc(var(--base-r) * var(--content-background-k) * var(--content-shadow-k)), calc(var(--base-g) * var(--content-background-k) * var(--content-shadow-k)), calc(var(--base-b) * var(--content-background-k) * var(--content-shadow-k)), var(--content-shadow-a));
+
+
+    --header-gradient-top: rgb(calc(var(--base-r) + 5), calc(var(--base-g) + 5), calc(var(--base-b) + 5));
+    --header-gradient-bottom: rgb(calc(var(--base-r) - 5), calc(var(--base-g) - 5), calc(var(--base-b) - 5));
+
+    --content-hover-k: calc(var(--is-light) * (1/1.3) - calc(var(--is-light) - 1) * 1.3);
+    --content-hover-a: 0.9;
+ 
+    --content-hover-color: rgba(calc(var(--base-r) * var(--content-hover-k)), calc(var(--base-g) * var(--content-hover-k)), calc(var(--base-b) * var(--content-hover-k)), var(--content-hover-a));
+
+    --button-background-color: rgb(var(--button-r), var(--button-g), var(--button-b));
+    --button-icon-background-k: calc(var(--is-light) * (1/0.7) - calc(var(--is-light) - 1) * 0.7);
+    --button-icon-background-color: rgb(calc(var(--button-r) * var(--button-icon-background-k)), calc(var(--button-g) * var(--button-icon-background-k)), calc(var(--button-b) * var(--button-icon-background-k)));
+
+    --blackout-color: rgba(0, 0, 0, var(--blackout-alpha));
+    --blackout-shadow-color: rgb(10, 10, 10);
+
+    --border-k: 0.33;
+    /* --border-k: calc(var(--is-light) * (1/0.33) - calc(var(--is-light) - 1) * 0.33); */
+
+    --border: rgb(calc(var(--base-r) * var(--border-k)), calc(var(--base-g) * var(--border-k)), calc(var(--base-b) * var(--border-k)));
+    --border-hover: rgba(calc(var(--base-r) * var(--border-k) * var(--content-hover-k)), calc(var(--base-g) * var(--border-k) * var(--content-hover-k)), calc(var(--base-b) * var(--border-k) * var(--content-hover-k)),  var(--content-hover-a));
+    --ident: 20px;
+    --left: calc(-1 * var(--ident));
+}
+
+/* Общий стиль */
+body {
+    margin: 0;
+
+    background: var(--body-background-color);
+    color: var(--body-font-color);
+
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+a {
+    text-decoration: none;
+    color: var(--body-font-color);
+}
+
+input {
+    background-color: white !important;
+}
+
+input.file-input {
+    background-color: transparent !important;
+}
+
+/* Блоки */
+aside#menu, aside#content {
+    position: absolute;
+    top: 65px;
+    bottom: 10px;
+
+    overflow: scroll;
+}
+
+::-webkit-scrollbar-track {
+    background-color: transparent;
+    border-radius: 10px;
+    margin: 10px;
+}
+
+::-webkit-scrollbar-track:hover {
+    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+    border-width: 1px;
+    border-color: rgba(0, 0, 0, 0.6);
+}
+
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+    background-color: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+    background-color: var(--border-hover);
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-corner {
+    background-color: transparent;
+}
+
+* {
+    scrollbar-color: var(--border-hover) transparent;
+}
+
+    /* Боковое меню */
+aside#menu {
+    left: 10px;
+
+    width: calc(20% - 20px);
+
+    padding: 10px;
+    border-radius: 20px;
+
+    background: var(--content-background-color);
+    box-shadow: 4px 4px 4px var(--content-shadow-color);
+    
+    overflow-x: scroll;
+}
+#menu li {
+    margin: 5px 0px 5px 0px;
+}
+#menu a { 
+    display: block;
+
+    margin: 5px 0px 0px 0px;
+
+    padding: 2px;
+    padding-bottom: 0px;
+    margin: 1px;
+
+    font-size: 0.9em;
+    text-decoration: none;
+    color: var(--body-font-color);
+}
+
+#menu a:hover {
+    background-color: var(--content-hover-color);
+}
+
+#menu .title {
+    font-size: large;
+}
+    
+    /* Левая часть сайта */
+aside#left-side {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+
+    width: 5%;
+    
+    border-radius: 20px;
+    background: rgba(0, 0, 0, 0);
+
+    overflow: hidden;
+}
+
+    /* Блок с заданием */
+aside#content {
+    left: calc(20% + 20px);
+
+    width: calc(80% - 30px);
+
+    border-radius: 20px;
+    box-shadow: 4px 4px 4px var(--content-shadow-color);
+    background: var(--content-background-color);
+}
+
+div#work_content, div#content {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+
+    padding: 10px;
+}
+
+div#work_content {
+    left: calc(5% + 5px);
+    right: calc(5% + 5px);
+    padding-bottom: 35px;
+}
+
+    /* Правая часть сайта */
+aside#right-side {
+    position: absolute;
+    right: 0;
+    top: 0;
+    bottom: 0;
+
+    width: 5%;
+    
+    border-radius: 20px;
+    background: rgba(0, 0, 0, 0);
+
+    overflow: hidden;
+}
+
+#right-side, #left-side {
+    width: 100%;
+
+    background: rgba(0, 0, 0, 0);
+    color: var(--body-font-color);
+}
+
+    /* Нижняя часть сайта */
+aside#foot {
+    display: grid;
+    position: absolute;
+    top: calc(100% - 62px);
+    bottom: 10px;
+    left: calc(20% + 30px);
+
+    width: calc(75% - 40px);
+    
+    overflow-y: hidden;
+}
+
+#foot div {
+    display: flex;
+    justify-self: center;
+
+    width: fit-content;
+    max-width: calc(100% - 20px);
+
+    padding: 5px;
+
+    background-color: var(--foot-background-color);
+    border: 1px solid var(--foot-border-color);
+    border-radius: 40px;
+    box-shadow: 4px 4px 4px var(--foot-shadow-color);
+
+    white-space: nowrap;
+    overflow-x: scroll;
+    overflow-y: hidden;
+}
+
+#foot {
+    display: inline-block;
+}
+
+/* Стили заголовков */
+h1 {
+    margin: 0px 5px 5px 0px;
+    font-size: 28px;
+}
+h2 {
+    margin: 5px;
+    font-size: 20px;
+}
+
+/* Стиль кнопок */
+.button-icon {
+    background-color: var(--button-icon-background-color);
+    padding: 0.5em;
+    text-align: center;
+    align-items: center;
+    text-decoration: none;
+    display: inline-flex;
+    margin: 4px 2px;
+    cursor: pointer;
+    border-radius: 20px;
+    height: fit-content;
+}
+
+.button-icon div {
+    display: inline-block;
+}
+
+.button, button.no_answer,
+button.ok, button.partial,
+button.wrong, button {
+    border: none;
+    padding: 10px 20px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    margin: 4px 2px;
+    cursor: pointer;
+    border-radius: 16px;
+    height: fit-content;
+}
+
+.button, button {
+    background-color: var(--button-background-color);
+    color: var(--dark-font-color);
+
+    box-shadow: 2px 2px 2px var(--foot-shadow-color);
+    align-items: center;
+    display: inline-flex;
+}
+
+.button * {
+    display: inline-block;
+    align-self: center;
+}
+
+input {
+    border-radius: 5px;
+}
+
+/* button.no_answer,
+button.ok, button.partial,
+button.wrong {
+    box-shadow: none;
+} */
+
+/* Скрывающееся дерево */
+ul, #myUL {
+    list-style-type: none;
+}
+
+#myUL {
+    margin: 0;
+    padding: 0;
+}
+
+#myUL a {
+    text-decoration: none;
+    color: var(--body-font-color);
+}
+
+ul.wtree, .wtree ul {
+    margin-left: var(--ident);
+}
+
+.wtree {
+    padding: 0;
+    --radius: 10px;
+}
+
+.wtree * {
+    padding: 0;
+}
+
+.wtree a {
+    text-decoration: none;
+    color: var(--body-font-color);
+}
+
+.wtree li {
+    list-style-type: none;
+    margin: 10px 0 10px 10px;
+    position: relative;
+}
+
+.wtree li:before {
+    content: "";
+    position: absolute;
+    top: -10px;
+    left: var(--left);
+    border-left: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    border-radius: 0 var(--radius);
+    width: var(--ident);
+    height: 1.75em;
+}
+
+.wtree li:after {
+    position: absolute;
+    content: "";
+    top: 0;
+    left: var(--left);
+    border-left: 1px solid var(--border);
+    width: var(--ident);
+    height: 100%;
+}
+
+.wtree li:last-child:after {
+    display: none;
+}
+
+.wtree span {
+    display: flex;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 10px;
+    color: var(--body-font-color);
+    text-decoration: none;
+    /* height: 1em; */
+}
+
+.wtree span input {
+    min-width: -moz-available;
+    min-width: -webkit-fill-available;
+    min-width: -ms-available;
+
+    max-width: max-content;
+}
+
+.wtree span button {
+    position: relative;
+    width: 40px;
+    justify-content: center;
+    align-content: center;
+    height: 2em;
+    padding: 0.5em;
+    right: 170px;
+    margin-left: 2.5px;
+}
+
+.wtree li span:hover, .wtree li span:focus {
+    background: var(--content-hover-color); 
+    color: var(--body-font-color); 
+    border: 1px solid var(--border-hover);
+    border-radius: var(--radius);
+}
+.wtree li span:hover + ul li span, .wtree li span:focus + ul li span {
+    background: var(--content-hover-color); 
+    color: var(--body-font-color); 
+    border: 1px solid var(--border-hover);
+    border-radius: var(--radius);
+}
+
+.wtree li span:hover ul li:before, .wtree li span:focus ul li:before,
+.wtree li span:hover ul li:after, .wtree li span:focus ul li:after {
+    border-color: var(--border-hover);
+}
+
+.caret {
+    cursor: pointer;
+    -webkit-user-select: none; /* Safari 3.1+ */
+    -moz-user-select: none; /* Firefox 2+ */
+    -ms-user-select: none; /* IE 10+ */
+    user-select: none;
+}
+
+.caret::before {
+    content: url("data:image/svg+xml,%3C%3Fxml version='1.0' encoding='UTF-8' standalone='no'%3F%3E%3C!-- Created with Inkscape (http://www.inkscape.org/) --%3E%3Csvg width='15px' height='15px' viewBox='0 0 5 5' version='1.1' id='svg5' inkscape:version='1.2.1 (9c6d41e410, 2022-07-14)' sodipodi:docname='caret-icon.svg' xmlns:inkscape='http://www.inkscape.org/namespaces/inkscape' xmlns:sodipodi='http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd' xmlns='http://www.w3.org/2000/svg' xmlns:svg='http://www.w3.org/2000/svg'%3E%3Csodipodi:namedview id='namedview7' pagecolor='%23505050' bordercolor='%23eeeeee' borderopacity='1' inkscape:showpageshadow='0' inkscape:pageopacity='0' inkscape:pagecheckerboard='true' inkscape:deskcolor='%23505050' inkscape:document-units='mm' showgrid='false' inkscape:zoom='17.678304' inkscape:cx='6.8728311' inkscape:cy='14.537593' inkscape:window-width='1920' inkscape:window-height='1057' inkscape:window-x='-8' inkscape:window-y='-8' inkscape:window-maximized='1' inkscape:current-layer='layer1' /%3E%3Cdefs id='defs2'%3E%3Cinkscape:path-effect effect='fillet_chamfer' id='path-effect223' is_visible='true' lpeversion='1' nodesatellites_param='F,0,0,1,0,0.52916667,0,1 @ F,0,0,1,0,0.52916667,0,1 @ F,0,0,1,0,0.52916667,0,1' unit='px' method='auto' mode='F' radius='2' chamfer_steps='1' flexible='false' use_knot_distance='true' apply_no_radius='true' apply_with_radius='true' only_selected='false' hide_knots='false' /%3E%3C/defs%3E%3Cg inkscape:label='Слой 1' inkscape:groupmode='layer' id='layer1'%3E%3Cpath sodipodi:type='star' style='fill:%23ffffff;stroke-width:0.266999;fill-opacity:1' id='path113' inkscape:flatsided='true' sodipodi:sides='3' sodipodi:cx='2.5' sodipodi:cy='2.5' sodipodi:r1='2.5053763' sodipodi:r2='1.2526883' sodipodi:arg1='0' sodipodi:arg2='1.0471976' inkscape:rounded='0' inkscape:randomized='0' d='M 4.5471046,2.7645833 1.7055836,4.4051362 A 0.30551452,0.30551452 30 0 1 1.2473118,4.1405529 l 0,-3.28110579 A 0.30551452,0.30551452 150 0 1 1.7055836,0.59486378 l 2.841521,1.64055292 a 0.30551452,0.30551452 90 0 1 0,0.5291666 z' inkscape:transform-center-x='-0.62634409' inkscape:path-effect='%23path-effect223' /%3E%3C/g%3E%3C/svg%3E");
+    display: inline-block;
+    margin-right: 10px;
+    color: var(--body-font-color);
+    height: 15px;
+    align-self: center;
+}
+
+button#right-side, button#left-side {
+    height: 100%;
+
+    background-image: url("data:image/svg+xml,%3C%3Fxml version='1.0' encoding='UTF-8' standalone='no'%3F%3E%3C!-- Created with Inkscape (http://www.inkscape.org/) --%3E%3Csvg width='30' height='90' viewBox='0 0 7.9374999 23.8125' version='1.1' id='svg5' inkscape:version='1.2.1 (9c6d41e410, 2022-07-14)' sodipodi:docname='рисунок.svg' xmlns:inkscape='http://www.inkscape.org/namespaces/inkscape' xmlns:sodipodi='http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd' xmlns='http://www.w3.org/2000/svg' xmlns:svg='http://www.w3.org/2000/svg'%3E%3Csodipodi:namedview id='namedview7' pagecolor='%23505050' bordercolor='%23eeeeee' borderopacity='1' inkscape:showpageshadow='0' inkscape:pageopacity='0' inkscape:pagecheckerboard='true' inkscape:deskcolor='%23505050' inkscape:document-units='mm' showgrid='false' inkscape:zoom='4.4195761' inkscape:cx='24.097334' inkscape:cy='68.106079' inkscape:window-width='1920' inkscape:window-height='1057' inkscape:window-x='-8' inkscape:window-y='-8' inkscape:window-maximized='1' inkscape:current-layer='layer1' /%3E%3Cdefs id='defs2'%3E%3Cinkscape:path-effect effect='fillet_chamfer' id='path-effect844' is_visible='true' lpeversion='1' nodesatellites_param='F,0,0,1,0,1.5875,0,1 @ F,0,0,1,0,1.5875,0,1 @ F,0,0,1,0,1.5875,0,1' unit='px' method='auto' mode='F' radius='6' chamfer_steps='1' flexible='false' use_knot_distance='true' apply_no_radius='true' apply_with_radius='true' only_selected='false' hide_knots='false' /%3E%3C/defs%3E%3Cg inkscape:label='Слой 1' inkscape:groupmode='layer' id='layer1'%3E%3Cpath sodipodi:type='star' style='fill:%23dadada;stroke:none;stroke-width:0.266999' id='path234' inkscape:flatsided='true' sodipodi:sides='3' sodipodi:cx='1.0177258' sodipodi:cy='11.90625' sodipodi:r1='13.26136' sodipodi:r2='6.6306801' sodipodi:arg1='0' sodipodi:arg2='1.0471976' inkscape:rounded='0' inkscape:randomized='0' d='m 12.904271,12.7 -17.1424099,9.897175 a 0.91654355,0.91654355 30 0 1 -1.3748154,-0.79375 l 0,-19.7943498 a 0.91654355,0.91654355 150 0 1 1.3748154,-0.79375 L 12.904271,11.1125 a 0.91654355,0.91654355 90 0 1 0,1.5875 z' inkscape:transform-center-x='-1.3229166' transform='matrix(0.39902895,0,0,1.0367076,2.2397312,-0.43705023)' inkscape:path-effect='%23path-effect844' /%3E%3C/g%3E%3C/svg%3E%0A");
+    background-repeat: no-repeat;
+    background-position: 50%;
+}
+
+button#left-side {
+    transform: rotate(180deg);
+}
+
+.caret-down::before {
+    transform: rotate(90deg);  
+}
+
+.nested {
+    display: none;
+}
+
+
+/* Иконка сайта */
+#main-icon {
+    margin: 10px;
+    width: auto;
+    padding: 5px;
+    padding-bottom: 2px;
+    border-radius: 30%;
+    background: transparent;
+    position: relative;
+    box-shadow: none;
+}
+    
+@font-face {
+    font-family: 'Agency FB';
+    src: url(fonts/AgencyFB-Bold.ttf);
+}
+
+/* Стиль отметки сделанных работ */
+a.no-answer {
+    color: var(--body-font-color);
+    background: var(--menu-background-color);
+}
+
+button.no-answer {
+    background: var(--no-answer-background-color);
+    color: var(--dark-font-color);
+}
+
+button#choosed {
+    box-shadow: inset 0px -3px 0px rgba(0, 0, 0, 0.4);
+}
+
+button#non-choosed {
+    box-shadow: inset 0px 3px 0px rgba(255, 255, 255, 0.4);
+}
+
+.correct, .partial,
+.wrong {
+    color: var(--dark-font-color);
+}
+
+.correct {
+    background: var(--correct-color);
+    color: var(--dark-font-color);
+}
+
+.unchecked {
+    background: var(--unchecked-color);
+    color: var(--dark-font-color);
+}
+
+.wrong {
+    background: var(--wrong-color);
+}
+
+table.progress_line {
+    width: 100%;
+    border: 0px;
+    margin-bottom: 3px;
+}
+
+td.no-answer {
+    background-color: var(--no-answer-background-color);
+}
+
+td.correct {
+    background-color: var(--correct-color);
+}
+
+td.partial {
+    background-color: var(--unchecked-color);
+}
+
+td.wrong {
+    background-color: var(--wrong-color);
+}
+
+/* Вертикальная линия (юзлесс) */
+.vl {
+    height: 30px;
+    margin-bottom: -10px;
+    width: 2px;
+    background-color: var(--button-background-color);
+    display: inline-block;
+}
+
+div.dropdown-toggle-keeper {
+    display: grid;
+    grid-template-rows: 60px auto;
+    align-items: center;
+    cursor: pointer;
+}
+
+.dropdown-toggle-keeper select {
+    color: var(--body-font-color);
+    border: none;
+}
+
+form.dropdown-toggle-form {
+    position: relative;
+    align-self: baseline;
+    width: max-content;
+}
+
+.dropdown-content {
+    overflow: hidden;
+    display: none;
+    padding: 5px 0 5px 0;
+    margin: 0;
+
+    background-color: var(--foot-background-color);
+    border: 1px solid var(--foot-border-color);
+    border-radius: 0px 0px 10px 10px;
+    box-shadow: 4px 4px 4px var(--foot-shadow-color);
+}
+
+#user-options {
+    justify-self: end;
+    align-self: flex-start;
+}
+
+.dropdown-content hr {
+    display: block;
+    padding: 0;
+}
+
+.dialog-table {
+    border-radius: 10px;
+    padding: 5px;
+    background-color: var(--content-background-color);
+
+    position: absolute;
+    top: 30px;
+    left: calc(50% - 123px);
+
+    box-shadow: 3px 3px 3px var(--blackout-shadow-color);
+}
+
+.dialog-table::before {
+    content: 'x';
+    position: relative;
+    left: calc(100% - 10px);
+    cursor: pointer;
+}
+
+#blackout {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0px;
+    left: 0px;
+    margin: 0px;
+    background-color: var(--blackout-color);
+    backdrop-filter: blur(1px);
+}
+ 
+div#user-table, div#all-groups-table,
+div#task-table, div#task-field-table {
+    display: grid; 
+    grid-template-columns: auto auto 40px 40px;
+    
+    border-radius: 0 0 10px 10px;
+    overflow: hidden;
+    border-width: 1px;
+    border-color: var(--dark-font-color);
+    border-style: solid;
+    width: 100%;
+}
+
+div#user-table {
+    grid-template-columns: auto auto max-content 40px;
+}
+
+div#all-groups-table {
+    grid-template-columns: 100%;
+}
+
+div#task-table {
+    grid-template-columns: auto 40px;
+}
+
+.group-table-element, .user-table-element,
+.all-groups-table-element, .work-table-element,
+.task-table-element, #work-stats-table *,
+#task-field-table *, #groups-in-work-table * {
+    display: flex;
+    padding: 5px;
+    border-collapse: collapse;
+}
+
+.group-table-element:nth-of-type(8n+3), .group-table-element:nth-of-type(8n+1),
+.group-table-element:nth-of-type(8n+2),
+.user-table-element:nth-of-type(8n+4), .user-table-element:nth-of-type(8n+1),
+.user-table-element:nth-of-type(8n+2), .user-table-element:nth-of-type(8n+3),
+.all-groups-table-element:nth-of-type(2n+1),
+.work-table-element:nth-of-type(6n+1), .work-table-element:nth-of-type(6n+2),
+.work-table-element:nth-of-type(6n+3),
+#groups-in-work-table *:nth-of-type(2n+1),
+#work-stats-table *:nth-of-type(10n+1), #work-stats-table *:nth-of-type(10n+2),
+#work-stats-table *:nth-of-type(10n+3), #work-stats-table *:nth-of-type(10n+4),
+#work-stats-table *:nth-of-type(10n+5),
+#task-field-table *:nth-of-type(4n+1), #task-field-table *:nth-of-type(4n+2),
+.task-table-element:nth-of-type(4n+1), .task-table-element:nth-of-type(4n+2) {
+    background-color: var(--content-hover-color);
+}
+
+.user-table-element a, .all-groups-table-element a,
+.task-table-element a, #task-field-table a,
+#work-table a {
+    text-decoration: none;
+    color: var(--body-font-color);
+}
+
+div#user-table-header, div#group-table-header,
+div#all-groups-table-header, div#work-table-header,
+div#task-table-header, div#work-stats-table-header,
+div#task-field-table-header, div#groups-in-work-table-header {
+    display: grid;
+    border-radius: 10px 10px 0 0;
+    overflow: hidden;
+    border-width: 1px;
+    border-color: var(--dark-font-color);
+    border-style: solid;
+    width: calc(100% - 22px);
+    margin-left: 10px;
+    grid-template-columns: auto max-content max-content;
+    border-bottom: 0;
+}
+
+div#work-stats-table-header {
+    grid-template-columns: repeat(2, auto) min-content;
+}
+
+div#work-stats-table-header.detached {
+    border-radius: 10px;
+    border-bottom: 1px solid var(--dark-font-color);
+    margin-bottom: 10px;
+}
+
+div#user-table-header, div#user-table,
+div#all-groups-table, div#all-groups-table-header,
+div#task-table, div#task-table-header,
+div#task-field-table, div#task-field-table-header {
+    border: none;
+    width: 100%;
+    margin-left: 0;
+}
+
+#user-table-header *, #all-groups-table-header *,
+#task-table-header * {
+    display: inline-flex;
+    align-items: center;
+    padding: 4px;
+}
+
+div#group-table, div#work-table,
+div#work-stats-table, div#groups-in-work-table {
+    display: grid; 
+    grid-template-columns: auto auto 40px 40px;
+    
+    border-radius: 0 0 10px 10px;
+    overflow: hidden;
+    border-width: 1px;
+    border-color: var(--dark-font-color);
+    border-style: solid;
+    width: calc(100% - 22px);
+
+    margin-bottom: 10px;
+    margin-left: 10px;
+}
+
+div#work-table, div#group-table {
+    grid-template-columns: auto auto 40px;
+}
+
+div#work-stats-table {
+    grid-template-columns: repeat(5, auto);
+}
+
+div#task-field-table {
+    grid-template-columns: repeat(2, auto);
+}
+
+div#groups-in-work-table {
+    grid-template-columns: auto;
+}
+
+div#task-manage-table {
+    display: grid;
+    grid-template-columns: calc(50% - 5px) 10px calc(50% - 5px);
+    align-items: baseline;
+    overflow: hidden;
+
+    border-radius: 10px;
+    border-width: 1px;
+    border-color: var(--dark-font-color);
+    border-style: solid;
+    width: calc(100% - 20px);
+    
+    top: 115px;
+    bottom: 10px;
+}
+
+#task-manage-table *::-webkit-scrollbar-track {
+    margin: 0;
+}
+
+#task-manage-table-column-header p {
+    padding: 0px;
+}
+
+#task-manage-table div.highlighted {
+    border-radius: 10px;
+    padding: 5px;
+    height: calc(100% - 10px);
+
+    background-color: var(--content-hover-color);
+}
+
+#task-manage-table div:nth-of-type(2n + 1) div {
+    overflow: hidden;
+    padding: 0px;
+    border-radius: 0px;
+    height: fit-content;
+}
+
+div#task-manage-table-column-header {
+    position: sticky;
+    display: grid;
+    grid-template-columns: auto max-content min-content;
+
+    overflow: hidden;
+
+    width: 100%;
+    height: 36px;
+    padding: 0px;
+    top: 0px;
+    left: 0px;
+
+    font-size: large;
+}
+
+div#task-manage-table-column-header * {
+    margin: 0 0 0 10px;
+}
+
+div#task-manage-table-column-header * * {
+    margin: 0;
+}
+
+#group-table-header *, #work-table-header *,
+#work-stats-table-header *, #task-field-table-header *,
+#groups-in-work-table-header * {
+    display: flex;
+    align-items: center;
+    padding: 4px;
+    margin: 1px;
+}
+
+#group-manage-header, #task-manage-header,
+#work-manage-header {
+    display: grid;
+    grid-template-columns: auto max-content;
+    align-items: center;
+}
+
+.group-info:disabled, .user-table-element input:disabled, input:disabled {
+    border: none;
+    color: currentColor;
+    background-color: transparent !important;
+}
+
+#group-manage-header div:nth-of-type(2n), #task-manage-header div:nth-of-type(2n),
+#work-manage-header div:nth-of-type(2n) {
+    justify-items: end;
+    justify-self: end;
+}
+
+#truth-table {
+    display: inline-grid;
+    border-radius: 10px;
+    border-width: 1px;
+    border-color: var(--dark-font-color);
+    overflow: hidden;
+    grid-template-columns: repeat(5, max-content);
+    grid-template-rows: 2em repeat(4, auto);
+    justify-items: center;
+    align-items: center;
+}
+
+#truth-table * {
+    display: flex;
+    justify-content: center;
+    align-content: center;
+}
+
+#truth-table div:not(:empty) {
+    padding: 5px;
+    width: 1.5em;
+    height: 1.2em;
+}
+
+#truth-table div:nth-of-type(10n+1), #truth-table div:nth-of-type(10n+2),
+#truth-table div:nth-of-type(10n+3), #truth-table div:nth-of-type(10n+4),
+#truth-table div:nth-of-type(10n+5) {
+    background-color: var(--content-hover-color);
+}
+
+.active {
+    display: block;
+}
+
+connection {
+    height: 0;
+    display: block;
+    position: fixed;
+    top: 0;
+    left: 0;
+}
+
+connection .line .arrow {
+    top: -5px;
+    height: 0px;
+    width: 0px;
+    position: absolute;
+    border-bottom: 6px solid transparent;
+    border-top: 6px solid transparent;
+    background-clip: border-box;
+}
+connection .line .arrow-fw {
+    border-right: 12px solid black;
+}
+
+connection .line .arrow-bw {
+    left: 100%;
+    border-left: 12px solid black;
+    transform: translateX(-12px);
+}
+
+connection .line .text {
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translate(-50%, -100%);
+}
+
+connection .line {
+    position:absolute;
+    height:2px;
+
+    background-color: black;
+}
+
+.table {
+    display: grid;
+    grid-template-columns: 50% 50%;
+}
+
+.table div {
+    width: fit-content;
+}
+
+/* file-drop */
+@import url(https://fonts.googleapis.com/css?family=Montserrat:400,700);
+.wrapper *,
+.wrapper *:before,
+.wrapper *:after {
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+}
+
+.wrapper {
+  font-family: "Montserrat", sans-serif;
+  font-size: 100%;
+  font-weight: 400;
+  background: transparent;
+  color: #323a44;
+  min-width: 192px;
+  width: min-content;
+  max-width: 100%;
+  margin: 0;
+  padding: 0;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+input:focus,
+select:focus,
+textarea:focus,
+button:focus {
+  outline: none;
+}
+
+.drop {
+    min-height: 22px;
+    height: min-content;
+  border: 3px dashed #DADFE3;
+  border-radius: 15px;
+  overflow: hidden;
+  text-align: center;
+  background: white;
+  -webkit-transition: all 0.5s ease-out;
+  -moz-transition: all 0.5s ease-out;
+  transition: all 0.5s ease-out;
+  margin: auto;
+  /*&:hover
+  * cursor: pointer
+  * background: #f5f5f5*/
+}
+
+.drop input {
+  width: 100%;
+  height: 100%;
+  cursor: pointer;
+  background: red;
+  /* opacity: 0; */
+  margin: 0;
+  padding: 0;
+}
+
+#list {
+  width: max-content;
+  max-width: 100%;
+  display: block;
+  text-align: left;
+}
+#list .thumb {
+  height: 75px;
+  border: 1px solid #323a44;
+  margin: 10px 5px 0 0;
+}
+
+/* text highlighting src: https://css-tricks.com/creating-an-editable-textarea-that-supports-syntax-highlighted-code/ */
+
+#ltc-editing, #html-editing,
+#ltc-highlighting, #html-highlighting {
+    /* Both elements need the same text and space styling so they are directly on top of each other */
+    padding: 10px;
+    border: 0;
+    width: calc(50% - 50px);
+    /* height: calc(100% - 80px); */
+    height: 217px;
+}
+#ltc-editing, #html-editing,
+#ltc-highlighting, #html-highlighting,
+#ltc-highlighting *, #html-highlighting * {
+    /* Also add text styles to highlighing tokens */
+    font-size: 15pt;
+    font-family: monospace;
+    line-height: 20pt;
+    tab-size: 2;
+}
+
+
+#ltc-editing, #ltc-highlighting {
+    /* In the same place */
+    position: absolute;
+    padding-top: 10px;
+    left: 10px;
+}
+
+#html-editing, #html-highlighting {
+    /* In the same place */
+    position: absolute;
+    padding-top: 10px;
+    left: 50%;
+}
+
+
+/* Move the textarea in front of the result */
+
+#ltc-editing, #html-editing {
+    z-index: 1;
+}
+#ltc-highlighting, #html-highliting {
+    z-index: 0;
+}
+
+
+/* Make textarea almost completely transparent */
+
+#ltc-editing, #html-editing {
+    color: transparent;
+    background: transparent;
+    caret-color: white; /* Or choose your favourite color */
+}
+
+/* Can be scrolled */
+#ltc-editing, #html-editing,
+#ltc-highlighting, #html-highlighting {
+    overflow: auto;
+    white-space: nowrap; /* Allows textarea to scroll horizontally */
+}
+
+/* No resize on textarea */
+#ltc-editing, #html-editing {
+    resize: none;
+    white-space: pre;
+}
+
+/* Syntax Highlighting from prism.js starts below, partly modified: */
+
+/* PrismJS 1.23.0
+https://prismjs.com/download.html#themes=prism-funky&languages=markup */
+/**
+* prism.js Funky theme
+* Based on “Polyfilling the gaps” talk slides http://lea.verou.me/polyfilling-the-gaps/
+* @author Lea Verou
+*/
+
+code[class*="language-"],
+pre[class*="language-"] {
+    font-family: Consolas, Monaco, 'Andale Mono', 'Ubuntu Mono', monospace;
+    font-size: 1em;
+    text-align: left;
+    white-space: pre;
+    word-spacing: normal;
+    word-break: normal;
+    word-wrap: normal;
+    line-height: 1.5;
+
+    -moz-tab-size: 4;
+    -o-tab-size: 4;
+    tab-size: 4;
+
+    -webkit-hyphens: none;
+    -moz-hyphens: none;
+    -ms-hyphens: none;
+    hyphens: none;
+}
+
+/* Code blocks */
+pre[class*="language-"] {
+    padding: .4em .8em;
+    margin: 1px 0;
+    overflow: auto;
+    /* background: url('data:image/svg+xml;charset=utf-8,<svg%20version%3D"1.1"%20xmlns%3D"http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg"%20width%3D"100"%20height%3D"100"%20fill%3D"rgba(0%2C0%2C0%2C.2)">%0D%0A<polygon%20points%3D"0%2C50%2050%2C0%200%2C0"%20%2F>%0D%0A<polygon%20points%3D"0%2C100%2050%2C100%20100%2C50%20100%2C0"%20%2F>%0D%0A<%2Fsvg>');
+    background-size: 1em 1em; - WebCoder49*/
+}
+
+/* Inline code */
+:not(pre) > code[class*="language-"] {
+    padding: .2em;
+    border-radius: .3em;
+    box-shadow: none;
+    white-space: normal;
+}
+
+.token.comment,
+.token.prolog,
+.token.doctype,
+.token.cdata {
+    color: #aaa;
+}
+
+.token.punctuation {
+    color: #999;
+}
+
+.token.namespace {
+    opacity: .7;
+}
+
+.token.property,
+.token.tag,
+.token.boolean,
+.token.number,
+.token.constant,
+.token.symbol {
+    color: #0cf;
+}
+
+.token.selector,
+.token.attr-name,
+.token.string,
+.token.char,
+.token.builtin {
+    color: yellow;
+}
+
+.token.operator,
+.token.entity,
+.token.url,
+.language-css .token.string,
+.token.variable,
+.token.inserted {
+    color: yellowgreen;
+}
+
+.token.atrule,
+.token.attr-value,
+.token.keyword {
+    color: deeppink;
+}
+
+.token.regex,
+.token.important {
+    color: orange;
+}
+
+.token.important,
+.token.bold {
+    font-weight: bold;
+}
+.token.italic {
+    font-style: italic;
+}
+
+.token.entity {
+    cursor: help;
+}
+
+.token.deleted {
+    color: red;
+}
+
+/* Plugin styles: Diff Highlight */
+pre.diff-highlight.diff-highlight > code .token.deleted:not(.prefix),
+pre > code.diff-highlight.diff-highlight .token.deleted:not(.prefix) {
+    background-color: rgba(255, 0, 0, .3);
+    display: inline;
+}
+
+pre.diff-highlight.diff-highlight > code .token.inserted:not(.prefix),
+pre > code.diff-highlight.diff-highlight .token.inserted:not(.prefix) {
+    background-color: rgba(0, 255, 128, .3);
+    display: inline;
+}
+
+/* End of prism.js syntax highlighting*/

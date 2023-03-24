@@ -29,6 +29,7 @@
     "eslint-plugin-prettier": "^4.0.0",
     "eslint-plugin-vue": "^8.7.1",
     "jest": "^27.0.5",
-    "prettier": "^2.4.1"
+    "prettier": "^2.4.1",
+    "vue-svg-loader": "^0.11.0"
   }
 }
