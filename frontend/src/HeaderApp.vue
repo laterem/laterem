@@ -17,8 +17,16 @@
 
     <form method="post" class="dropdown-toggle-form">
       <div
-        style="justify-self: end; padding-right: 5px"
+        style="
+          justify-self: end;
+          padding-right: 5px;
+          display: grid;
+          grid-template-rows: 60px auto;
+          align-items: center;
+          cursor: pointer;
+        "
         class="dropdown-toggle-keeper"
+        @click="dropdownIsActive = !dropdownIsActive"
       >
         <p
           id="main-icon"
@@ -27,18 +35,14 @@
         >
           <userIcon style="width: 1.5rem" />
         </p>
-        <p class="dropdown-toggle" style="grid-column: 2; display: none">
+        <p class="dropdown-toggle" style="grid-column: 2">
           <!--{{user.username}}-->
         </p>
         <ul
           class="dropdown-content"
           id="header-dropdown-item"
-          style="
-            grid-row: 2;
-            grid-column-start: 1;
-            grid-column-end: 3;
-            display: none;
-          "
+          style="grid-row: 2; grid-column-start: 1; grid-column-end: 3"
+          v-show="dropdownIsActive"
         >
           <li><router-link to="/profile">Профиль</router-link></li>
           <li style="display: block"><hr /></li>
@@ -72,7 +76,7 @@
       style="
         background-color: var(--header-gradient-bottom);
         height: 1px;
-        position: fixxed;
+        position: fixed;
         bottom: 0px;
       "
     ></div>
@@ -84,6 +88,11 @@ import mainIcon from "@/assets/icons/main-icon.vue";
 import userIcon from "@/assets/icons/user-icon.vue";
 
 export default {
+  data() {
+    return {
+      dropdownIsActive: false,
+    };
+  },
   components: {
     mainIcon: mainIcon,
     userIcon: userIcon,
@@ -157,5 +166,16 @@ hr {
 #header-dropdown-item hr {
   display: block;
   padding: 0;
+}
+
+#main-icon {
+  margin: 10px;
+  width: auto;
+  padding: 5px;
+  padding-bottom: 2px;
+  border-radius: 30%;
+  background: transparent;
+  position: relative;
+  box-shadow: none;
 }
 </style>
