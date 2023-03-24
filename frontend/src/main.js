@@ -1,9 +1,7 @@
-import { createApp } from 'vue'
-import App from './App.vue'
-import NavTreeApp from './NavTreeApp.vue'
+import { createApp } from "vue";
+import App from "./App.vue";
+import NavTreeApp from "./NavTreeApp.vue";
+import router from "./router";
 
-const app = createApp(App);
-app.mount('#app');
-
-const navTree = createApp(NavTreeApp);
-navTree.mount('#nav-tree');
+createApp(App).use(router).mount("#app");
+createApp(NavTreeApp).use(router).mount("#nav-tree");

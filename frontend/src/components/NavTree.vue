@@ -1,29 +1,32 @@
 <template>
-<h1 v-if="workTree.id == 'mother'" class="title">
-  {{ workTree.name }}
-  <button
-    v-if="isEditable"
-    type="submit"
-    name="add-category-mother"
-    class="button-icon"
-    style="margin-left: 10px; height: min-content"
-  >
-    <img :src="iconFolder + 'book-plus.svg'" width="1.5em"/>
-  </button>
-</h1>
-<ul v-if="workTree.id == 'mother'" class="wtree">
-  <!-- Here must go list of childs -->
-  <li>
-    <NodeTree :node="JSON.parse(JSON.stringify(workTree.children, null, 4))[0]" :isEditable="isEditable"></NodeTree>
-  </li>
-</ul>
+  <h1 v-if="workTree.id == 'mother'" class="title">
+    {{ workTree.name }}
+    <button
+      v-if="isEditable"
+      type="submit"
+      name="add-category-mother"
+      class="button-icon"
+      style="margin-left: 10px; height: min-content"
+    >
+      <img :src="iconFolder + 'book-plus.svg'" width="1.5em" />
+    </button>
+  </h1>
+  <ul v-if="workTree.id == 'mother'" class="wtree">
+    <!-- Here must go list of childs -->
+    <li>
+      <NodeTree
+        :node="JSON.parse(JSON.stringify(workTree.children, null, 4))[0]"
+        :isEditable="isEditable"
+      ></NodeTree>
+    </li>
+  </ul>
 </template>
 
 <script>
-import NodeTree from './NodeTree.vue';
+import NodeTree from "./NodeTree.vue";
 
 export default {
-  name: 'NavTree',
+  name: "NavTree",
   components: {
     NodeTree,
   },
@@ -33,7 +36,7 @@ export default {
   },
   data() {
     return {
-      iconFolder: '/static/icons/',
+      iconFolder: "/static/icons/",
     };
   },
 };

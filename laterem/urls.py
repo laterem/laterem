@@ -14,7 +14,7 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path
+from django.urls import include, path
 from django.conf import settings
 from django.conf.urls.static import static
 import re
@@ -34,6 +34,7 @@ from core_app.views.teacher_board.works_panel_views import *
 
 urlpatterns = [
    # path('admin/', admin.site.urls),
+    path('api/', include('laterem.api.urls')),
     path('task/<str:stask_id>/', task_view),
     path('taskasset/<str:task_id>/<str:filename>', getasset),
     path('works/<str:work_id>/', render_work),

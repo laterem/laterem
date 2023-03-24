@@ -15,7 +15,7 @@ static/*
 frontend/*.DS_Store
 frontend/node_modules/**
 frontend/dist/**
-
+**/webpack-stats.json
 
 # local env files
 frontend/*.env.local
