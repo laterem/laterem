@@ -5,6 +5,7 @@ import TeacherView from "../views/TeacherView.vue";
 import UsersPanelView from "../views/teacherPanel/UsersPanelView.vue";
 import GroupsPanelView from "../views/teacherPanel/GroupsPanelView.vue";
 import WorksPanelView from "../views/teacherPanel/WorksPanelView.vue";
+import TasksPanelView from "../views/teacherPanel/TasksPanelView.vue";
 
 const routes = [
   {
@@ -36,6 +37,11 @@ const routes = [
         path: "/teacher/works",
         name: "works",
         component: WorksPanelView,
+      },
+      {
+        path: "/teacher/tasks",
+        name: "tasks",
+        component: TasksPanelView,
       },
     ],
   },
