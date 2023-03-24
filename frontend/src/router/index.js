@@ -3,6 +3,7 @@ import HomeView from "../views/HomeView.vue";
 import StudentView from "../views/StudentView.vue";
 import TeacherView from "../views/TeacherView.vue";
 import UsersPanelView from "../views/teacherPanel/UsersPanelView.vue";
+import GroupsPanelView from "../views/teacherPanel/GroupsPanelView.vue";
 
 const routes = [
   {
@@ -24,6 +25,11 @@ const routes = [
         path: "/teacher/users",
         name: "users",
         component: UsersPanelView,
+      },
+      {
+        path: "/teacher/groups",
+        name: "groups",
+        component: GroupsPanelView,
       },
     ],
   },
