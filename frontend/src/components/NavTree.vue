@@ -43,7 +43,8 @@ export default {
 </script>
 
 <style>
-ul, #myUL {
+ul,
+#myUL {
   list-style-type: none;
 }
 
@@ -57,7 +58,8 @@ ul, #myUL {
   color: var(--body-font-color);
 }
 
-ul.wtree, .wtree ul {
+ul.wtree,
+.wtree ul {
   margin-left: var(--ident);
 }
 
@@ -136,21 +138,25 @@ ul.wtree, .wtree ul {
   margin-left: 2.5px;
 }
 
-.wtree li span:hover, .wtree li span:focus {
-  background: var(--content-hover-color); 
-  color: var(--body-font-color); 
+.wtree li span:hover,
+.wtree li span:focus {
+  background: var(--content-hover-color);
+  color: var(--body-font-color);
   border: 1px solid var(--border-hover);
   border-radius: var(--radius);
 }
-.wtree li span:hover + ul li span, .wtree li span:focus + ul li span {
-  background: var(--content-hover-color); 
-  color: var(--body-font-color); 
+.wtree li span:hover + ul li span,
+.wtree li span:focus + ul li span {
+  background: var(--content-hover-color);
+  color: var(--body-font-color);
   border: 1px solid var(--border-hover);
   border-radius: var(--radius);
 }
 
-.wtree li span:hover ul li:before, .wtree li span:focus ul li:before,
-.wtree li span:hover ul li:after, .wtree li span:focus ul li:after {
+.wtree li span:hover ul li:before,
+.wtree li span:focus ul li:before,
+.wtree li span:hover ul li:after,
+.wtree li span:focus ul li:after {
   border-color: var(--border-hover);
 }
 
@@ -172,7 +178,7 @@ ul.wtree, .wtree ul {
 }
 
 .caret-down::before {
-  transform: rotate(90deg);  
+  transform: rotate(90deg);
 }
 
 .nested {
