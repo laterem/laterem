@@ -36,7 +36,7 @@
           <userIcon style="width: 1.5rem" />
         </p>
         <p class="dropdown-toggle" style="grid-column: 2">
-          <!--{{user.username}}-->
+          {{ userName }}
         </p>
         <ul
           class="dropdown-content"
@@ -86,6 +86,7 @@
 <script>
 import mainIcon from "@/assets/icons/main-icon.vue";
 import userIcon from "@/assets/icons/user-icon.vue";
+// import router from "./router";
 
 export default {
   data() {
@@ -96,6 +97,26 @@ export default {
   components: {
     mainIcon: mainIcon,
     userIcon: userIcon,
+  },
+  methods: {
+    async getUser() {
+      if (!this.$session.exists) {
+        this.$session.start();
+      }
+      const user = this.$session.get("user");
+      if (typeof user != "undefined") {
+        return user;
+      }
+      // Redirect to login page
+      // router.push({ name: "login" });
+      // User mock
+      return { name: "Not logged" };
+    },
+  },
+  computed: {
+    userName() {
+      return this.getUser().name;
+    },
   },
 };
 </script>

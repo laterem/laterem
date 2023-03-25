@@ -1,47 +1,45 @@
 import { createRouter, createWebHistory } from "vue-router";
-import HomeView from "../views/HomeView.vue";
-import StudentView from "../views/StudentView.vue";
-import TeacherView from "../views/TeacherView.vue";
-import UsersPanelView from "../views/teacherPanel/UsersPanelView.vue";
-import GroupsPanelView from "../views/teacherPanel/GroupsPanelView.vue";
-import WorksPanelView from "../views/teacherPanel/WorksPanelView.vue";
-import TasksPanelView from "../views/teacherPanel/TasksPanelView.vue";
 
 const routes = [
   {
     path: "/",
     name: "home",
-    component: HomeView,
+    component: () => import("@/views/HomeView.vue"),
+  },
+  {
+    path: "/login",
+    name: "login",
+    component: () => import("@/views/LoginView.vue"),
   },
   {
     path: "/student",
     name: "student",
-    component: StudentView,
+    component: () => import("@/views/StudentView.vue"),
   },
   {
     path: "/teacher",
     name: "teacher",
-    component: TeacherView,
+    component: () => import("@/views/TeacherView.vue"),
     children: [
       {
         path: "/teacher/users",
         name: "users",
-        component: UsersPanelView,
+        component: () => import("@/views/teacherPanel/UsersPanelView.vue"),
       },
       {
         path: "/teacher/groups",
         name: "groups",
-        component: GroupsPanelView,
+        component: () => import("@/views/teacherPanel/GroupsPanelView.vue"),
       },
       {
         path: "/teacher/works",
         name: "works",
-        component: WorksPanelView,
+        component: () => import("@/views/teacherPanel/WorksPanelView.vue"),
       },
       {
         path: "/teacher/tasks",
         name: "tasks",
-        component: TasksPanelView,
+        component: () => import("@/views/teacherPanel/TasksPanelView.vue"),
       },
     ],
   },
