@@ -43,14 +43,18 @@ def main_page_render(request):
 
 def bug_report_render(request):
     general_POST_handling(request)
-    user = User(request.user)
+    user = None if request.user.is_anonymous else User(request.user)
     if request.method == "POST":
         BugReport.new_report(
-            user, request.POST.get("report_text"), request.FILES.get("files")
+            user,
+            request.POST.get("report_text"),
+            request.FILES.get("files"),
         )
         return redirect("/")
     return render(
         request,
         "bug_report.html",
-        render_args(me=user, additional={"title": "Баг репорт"}),
+        render_args(
+            me=user or NotSpecified, additional={"title": "Баг репорт"}
+        ),
     )
