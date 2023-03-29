@@ -77,20 +77,14 @@ def render_args(
 
     if me is not NotSpecified:
         if meta_all_works_available:
-            ret['workdir'] = WorkTreeView(RootsMimic())
+            ret["workdir"] = WorkTreeView(RootsMimic())
         else:
-            ret['workdir'] = WorkTreeView(RootsMimic(), filter=WorkTreeView.user_access_filter(me, True))
-        # <Debug>
-            from json import dumps
-            test = WorkTreeView(RootsMimic(), filter=WorkTreeView.user_access_filter(me, True),
-                                leaf_mapper={'stats': lambda x: me.get_work_stats(x, normalize=True)})
-
-           
-            print(dumps(test.jsonize(), indent=4))
-        # </Debug>
+            ret["workdir"] = WorkTreeView(
+                RootsMimic(), filter=WorkTreeView.user_access_filter(me, True)
+            )
         ret["user"] = me
         ret["theme"] = me.get_setting("theme")
-        ret["is_teacher"] = True
+        ret["is_teacher"] = me.is_teacher()
 
     if current_task is not NotSpecified:
         task_work = current_task.work
@@ -103,7 +97,7 @@ def render_args(
             ret["next_task"] = all_tasks_in_task_work[task_index + 1].id
         else:
             ret["next_task"] = all_tasks_in_task_work[0].id
-        if (task_index >= 1):
+        if task_index >= 1:
             ret["previous_task"] = all_tasks_in_task_work[task_index - 1].id
         else:
             ret["previous_task"] = all_tasks_in_task_work[-1].id
@@ -147,11 +141,13 @@ def render_args(
         ret["allworks"] = map(Work, LateremWork.objects.all())
 
     if meta_all_task_types_available:
-        ret["alltasktypes"] = map(TaskTemplate, LateremTaskTemplate.objects.all())
+        ret["alltasktypes"] = map(
+            TaskTemplate, LateremTaskTemplate.objects.all()
+        )
 
     for key, value in additional.items():
         ret[key] = value
-    
+
     ret["all_themes"] = ["light", "dark", "absolute-dark", "soft-dark"]
 
     return ret
@@ -172,6 +168,7 @@ def change_color_theme(user, request):
     user.set_settings(theme=usertheme)
     request.session["color-theme"] = usertheme
 
+
 @login_required
 def general_POST_handling(request):
     if request.method == "POST":
@@ -180,6 +177,7 @@ def general_POST_handling(request):
             with User(request.user) as user:
                 change_color_theme(user, request)
                 return redirect(request.path)
+
 
 def permission_required(permission):
     def wrapper(function):
