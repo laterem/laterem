@@ -10,3 +10,5 @@ data/*
 ltc/*
 static/*
 **/.DS_Store
+
+frontend/*

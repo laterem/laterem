@@ -907,15 +907,14 @@ div#task-manage-table-column-header * * {
 }
 
 #truth-table {
-    display: inline-grid;
+    display: grid;
     border-radius: 10px;
     border-width: 1px;
     border-color: var(--dark-font-color);
     overflow: hidden;
-    grid-template-columns: repeat(5, max-content);
-    grid-template-rows: 2em repeat(4, auto);
-    justify-items: center;
-    align-items: center;
+    grid-template-columns: max-content;
+    grid-template-rows: 2em repeat(17, auto);
+    width: fit-content;
 }
 
 #truth-table * {
@@ -924,15 +923,13 @@ div#task-manage-table-column-header * * {
     align-content: center;
 }
 
-#truth-table div:not(:empty) {
-    padding: 5px;
-    width: 1.5em;
-    height: 1.2em;
+#truth-table grid-row {
+    display: grid;
+    grid-template-columns: repeat(5, max-content);
+    width: auto;
 }
 
-#truth-table div:nth-of-type(10n+1), #truth-table div:nth-of-type(10n+2),
-#truth-table div:nth-of-type(10n+3), #truth-table div:nth-of-type(10n+4),
-#truth-table div:nth-of-type(10n+5) {
+#truth-table grid-row:nth-of-type(2n+1) {
     background-color: var(--content-hover-color);
 }
 
