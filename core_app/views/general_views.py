@@ -32,6 +32,8 @@ def getasset(request, task_id, filename):
 def main_page_render(request):
     general_POST_handling(request)
     with User(request.user) as user:
+        if not user.is_teacher():
+            return redirect("/student/")
         return render(
             request,
             "main.html",
