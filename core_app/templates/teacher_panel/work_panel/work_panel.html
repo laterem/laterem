@@ -10,6 +10,7 @@
         </div>
         {% endfor %}
     </div> -->
+    <script>var tree_is_editing = false;</script>
     <form method="post">
         {% csrf_token %}
         {% with tree_title="Доступные работы" %}
