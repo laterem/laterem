@@ -7,5 +7,5 @@ def teacher_hub(request):
     return render(
         request,
         "teacher_panel/teacher_panel_base.html",
-        render_args(request=request, additional={"title": "Панель учителя"}),
+        render_args(me=User(request.user),request=request, additional={"title": "Панель учителя"}),
     )

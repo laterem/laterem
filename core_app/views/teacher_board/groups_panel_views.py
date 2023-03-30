@@ -15,6 +15,7 @@ def group_panel(request):
         request,
         "teacher_panel/group_panel/group_panel.html",
         render_args(
+            me=User(request.user),
             meta_all_groups_available=True,
             request=request,
             additional={"title": "Управление группами"}
@@ -77,6 +78,7 @@ def manage_group(request, group_id):
         request,
         "teacher_panel/group_panel/group_manage.html",
         render_args(
+            me=User(request.user),
             current_group=group,
             request=request,
             additional={

@@ -84,6 +84,7 @@ def users_panel(request):
         request,
         "teacher_panel/user_panel/user_panel.html",
         render_args(
+            me=User(request.user),
             meta_all_users_available=True,
             request=request,
             additional={"newuserform": form,

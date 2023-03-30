@@ -57,7 +57,8 @@ def task_view(request, stask_id):
 
     try:
         if stask_id not in request.session["compiled_tasks"]:
-            compiled_task = task.compile(User(request.user))
+            user = User(request.user)
+            compiled_task = task.compile(user)
             request.session["compiled_tasks"][stask_id] = compiled_task.as_JSON()
             request.session.modified = True
         else:
@@ -88,6 +89,7 @@ def task_view(request, stask_id):
             with User(request.user) as user:
                 dollar_answers = {'$' + key: value for key, value in answers.items()}
                 try:
+                    print(user)
                     test_compiled = task.compile(user, dollar_answers)
                     request.session["compiled_tasks"][stask_id] = test_compiled.as_JSON()
                     request.session.modified = True

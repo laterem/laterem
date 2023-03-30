@@ -21,6 +21,7 @@ def task_panel(request):
                             request,
                             "teacher_panel/task_panel/task_panel.html",
                             render_args(
+                                me=User(request.user),
                                 request=request,
                                 meta_all_task_types_available=True,
                                 additional={"title": "Управдение шаблонами задач",
@@ -44,6 +45,7 @@ def task_panel(request):
         request,
         "teacher_panel/task_panel/task_panel.html",
         render_args(
+            me=User(request.user),
             request=request,
             meta_all_task_types_available=True,
             additional={"title": "Управдение шаблонами задач"}
@@ -96,6 +98,7 @@ def manage_task(request, task_id):
                         request,
                         "teacher_panel/task_panel/manage_task.html",
                         render_args(
+                            me=User(request.user),
                             request=request,
                             additional={
                                 "title": "Шаблон " + task.name,
@@ -128,6 +131,7 @@ def manage_task(request, task_id):
         request,
         "teacher_panel/task_panel/manage_task.html",
         render_args(
+            me=User(request.user),
             request=request,
             additional={
                 "title": "Шаблон " + task.name,
