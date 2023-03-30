@@ -51,7 +51,7 @@ class TaskTemplate(DBHybrid):
     def new(cls, name, config, view, author, check_errors=True):
         dbobj_created = False
         try:
-            if check_errors:
+            if check_errors and config:
                 ltcc = LTCCompiler()
                 try:
                     ltcfile: str = read_text_file(config)
@@ -70,15 +70,17 @@ class TaskTemplate(DBHybrid):
             path = tt.dir_path
             os.makedirs(path)
             os.makedirs(tt.assets_path)
-            config.seek(0)
+            if config:
+                config.seek(0)
             with open(pathjoin(path, "config.ltc"), "wb+") as dest:
-                dest.writelines(read_text_file(config))
+                if config:
+                    dest.writelines(read_text_file(config))
             with open(
                 pathjoin(TEMPLATES_VIEW_PATH, f"{tt}.html"), "wb+"
             ) as dest:
-                for chunk in view.chunks():
-                    dest.write(chunk)
-
+                if view:
+                    for chunk in view.chunks():
+                        dest.write(chunk)
             return tt
         except UnicodeDecodeError:
             if dbobj_created:
