@@ -57,6 +57,9 @@ class LateremTaskTemplate(models.Model):
         LateremUser, null=True, on_delete=models.SET_NULL
     )
 
+    config_path = models.FilePathField(max_length=256, null=True)
+    view_path = models.FilePathField(max_length=256, null=True)
+
 
 class LateremTask(models.Model):
     name = models.CharField(max_length=128)

@@ -3,6 +3,7 @@ from django.db.models import Max
 import os
 from os.path import join as pathjoin
 import json
+from uuid import uuid4
 from ltc.ltc import (
     LTCCompiler,
     LTC,
@@ -110,11 +111,15 @@ class TaskTemplate(DBHybrid):
 
     @property
     def view_path_absolute(self):
-        return pathjoin(TEMPLATES_VIEW_PATH, str(self) + ".html")
+        return self.dbmodel.view_path or pathjoin(
+            TEMPLATES_VIEW_PATH, str(self) + ".html"
+        )
 
     @property
     def ltc_path(self):
-        return pathjoin(TASK_UPLOAD_PATH, str(self), "config.ltc")
+        return self.dbmodel.config_path or pathjoin(
+            TASK_UPLOAD_PATH, str(self), "config.ltc"
+        )
 
     def write_ltc(self, text, check_errors=True):
         if check_errors:
@@ -127,7 +132,14 @@ class TaskTemplate(DBHybrid):
         with self.open_ltc(mode="w") as dest:
             dest.write(text.replace("\n", ""))
 
-    def write_html(self, text):
+    def write_html(self, text, resettle=True):
+        if resettle:
+            os.remove(self.view_path_absolute)
+            self.dbmodel.view_path = pathjoin(
+                TEMPLATES_VIEW_PATH, str(uuid4()) + ".html"
+            )
+            self.dbmodel.save()
+
         with self.open_view(mode="w") as dest:
             dest.write(text.replace("\n", ""))
 
