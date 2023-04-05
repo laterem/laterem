@@ -2,25 +2,26 @@ from core_app.views.views_commons import *
 
 from ltc.ltc import LTCExecutionError
 
+
 def ltc_error_page(request, task):
     return render(
-            request,
-            "student.html",
-            render_args(
-                me=User(request.user),
-                request=request,
-                additional={
-                    "text": "Ой!",
-                    "text2": f"Что-то пошло не так при попытке открыть задание {task.name} ({task.id}) " 
-                             f"типа {task.template.name} ({task.template.id}) из работы {task.work.name} ({task.work.id}). " 
-                             f"Если эта ошибка повторяется, сообщите об этом вашему учителю или "
-                             f"заполните форму сообщениия об ошибке администрации сайта, "
-                             f"нажав на большую красную кнопку выше, прикрепив к сообщению содержание этого текста."
-                             ,
-                    "unraveled_categories": request.session.get("active_ids")
-                },
-            ),
-        )
+        request,
+        "student.html",
+        render_args(
+            me=User(request.user),
+            request=request,
+            additional={
+                "text": "Ой!",
+                "text2": f"Что-то пошло не так при попытке открыть задание {task.name} ({task.id}) "
+                f"типа {task.template.name} ({task.template.id}) из работы {task.work.name} ({task.work.id}). "
+                f"Если эта ошибка повторяется, сообщите об этом вашему учителю или "
+                f"заполните форму сообщениия об ошибке администрации сайта, "
+                f"нажав на большую красную кнопку выше, прикрепив к сообщению содержание этого текста.",
+                "unraveled_categories": request.session.get("active_ids"),
+            },
+        ),
+    )
+
 
 # Рендер страницы работы
 @login_required
@@ -29,12 +30,12 @@ def render_work(request, work_id):
     try:
         work = Work.by_id(work_id)
     except LateremNotFound:
-        raise Http404('Work not found')
+        raise Http404("Work not found")
     if not work.is_valid():
-        raise Http404('Work not found')
-    if 'compiled_tasks' in request.session:
+        raise Http404("Work not found")
+    if "compiled_tasks" in request.session:
         request.session.modified = True
-        request.session['compiled_tasks'] = {}
+        request.session["compiled_tasks"] = {}
     return redirect("/task/" + str(work.tasks()[0].id))
 
 
@@ -50,8 +51,8 @@ def task_view(request, stask_id):
     try:
         task = Task.by_id(stask_id)
     except LateremNotFound:
-        raise Http404('Task not found')
-    
+        raise Http404("Task not found")
+
     if not task.work.is_visible(User(request.user)):
         raise PermissionDenied
 
@@ -59,7 +60,9 @@ def task_view(request, stask_id):
         if stask_id not in request.session["compiled_tasks"]:
             user = User(request.user)
             compiled_task = task.compile(user)
-            request.session["compiled_tasks"][stask_id] = compiled_task.as_JSON()
+            request.session["compiled_tasks"][
+                stask_id
+            ] = compiled_task.as_JSON()
             request.session.modified = True
         else:
             compiled_task = CompiledTask.from_JSON(
@@ -83,15 +86,19 @@ def task_view(request, stask_id):
         # Анализ ответа
         if "check_answers" in request.POST:
             answers = dict(request.POST)
-            del answers['csrfmiddlewaretoken']
-           # del answers['active_ids']
+            del answers["csrfmiddlewaretoken"]
+            # del answers['active_ids']
 
             with User(request.user) as user:
-                dollar_answers = {'$' + key: value for key, value in answers.items()}
+                dollar_answers = {
+                    "$" + key: value for key, value in answers.items()
+                }
                 try:
                     print(user)
                     test_compiled = task.compile(user, dollar_answers)
-                    request.session["compiled_tasks"][stask_id] = test_compiled.as_JSON()
+                    request.session["compiled_tasks"][
+                        stask_id
+                    ] = test_compiled.as_JSON()
                     request.session.modified = True
 
                     if test_compiled.ltc.check():
@@ -105,11 +112,14 @@ def task_view(request, stask_id):
                 except LTCExecutionError:
                     return ltc_error_page(request, task)
             return redirect(request.path)
-    
-    additional_render_args["unraveled_categories"] = request.session.get("active_ids")
+
+    additional_render_args["unraveled_categories"] = request.session.get(
+        "active_ids"
+    )
     additional_render_args["title"] = task.work.name + "; " + task.name
     additional_render_args.update(compiled_task.ltc.namespace)
-    return render(
+
+    response = render(
         request,
         "work_base.html",
         render_args(
@@ -120,3 +130,7 @@ def task_view(request, stask_id):
             additional=additional_render_args,
         ),
     )
+
+    response["Cache-Control"] = "no-cache"
+
+    return response
