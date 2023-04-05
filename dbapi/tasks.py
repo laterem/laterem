@@ -107,13 +107,12 @@ class TaskTemplate(DBHybrid):
 
     @property
     def view_path(self):
-        return pathjoin(TASK_VIEW_UPLOAD_PATH, str(self) + ".html")
+        body = self.dbmodel.view_path or (str(self) + ".html")
+        return pathjoin(TASK_VIEW_UPLOAD_PATH, body)
 
     @property
     def view_path_absolute(self):
-        return self.dbmodel.view_path or pathjoin(
-            TEMPLATES_VIEW_PATH, str(self) + ".html"
-        )
+        return pathjoin("core_app", "templates", self.view_path)
 
     @property
     def ltc_path(self):
@@ -135,9 +134,7 @@ class TaskTemplate(DBHybrid):
     def write_html(self, text, resettle=True):
         if resettle:
             os.remove(self.view_path_absolute)
-            self.dbmodel.view_path = pathjoin(
-                TEMPLATES_VIEW_PATH, str(uuid4()) + ".html"
-            )
+            self.dbmodel.view_path = str(uuid4()) + ".html"
             self.dbmodel.save()
 
         with self.open_view(mode="w") as dest:
